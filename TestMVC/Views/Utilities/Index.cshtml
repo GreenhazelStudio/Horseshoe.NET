@@ -1,0 +1,172 @@
+﻿@using System
+@using System.Diagnostics
+@using System.Text
+@using TestMVC.ViewModels
+@using Horseshoe.NET.Application
+@using Horseshoe.NET
+@using Horseshoe.NET.Text
+@using Horseshoe.NET.Web
+
+@model UtilityIndexViewModel
+
+@{
+    ViewBag.Title = "Utilities";
+}
+
+@section Styles {
+    <style type="text/css">
+
+        .test-table {
+            border: 2px solid black;
+            border-collapse: collapse;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+            .test-table td,
+            .test-table th {
+                padding: 0 3px;
+            }
+
+            .test-table .section-header {
+                background-color: #2f0664;
+                color: white;
+                font-size: 1.35em;
+            }
+
+        .error-cell {
+            font-family: Consolas, monospace;
+            font-size: .85em;
+            color: red;
+        }
+    </style>
+}
+
+<table class="test-table">
+    <tr>
+        <th colspan="2" class="section-header">Utility Tests</th>
+    </tr>
+    <tr>
+        <th>App Type</th>
+        <td>
+            @{
+                var messageTracker = new StringBuilder();
+                try
+                {
+                    @(ClientApp.DetectAppType(messageTracker: messageTracker)?.ToString() ?? "[null]")
+                }
+                catch (Exception ex)
+                {
+                    <span class="error-cell">
+                        @Html.Raw(ex.RenderHtml(displayStackTrace: true, recursive: true))
+                    </span>
+                }
+            }
+        </td>
+    </tr>
+    <tr>
+        <th>App Type - Message Tracker</th>
+        <td>@Html.Raw(TextUtil.Reveal(Model.AppTypeMessageTrackerHTML, nullOrBlank: true))</td>
+    </tr>
+    <tr>
+        <th colspan="2" class="section-header">Console Properties</th>
+    </tr>
+    @{
+        var consoleProperties = typeof(Console).GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
+        foreach (var prop in consoleProperties)
+        {
+            <tr>
+                <th>@prop.Name</th>
+                <td>
+                    @try
+                    {
+                        @TextUtil.Reveal(prop.GetValue(null), nullOrBlank: true)
+                    }
+                    catch (Exception ex)
+                    {
+                        <span style="color:red;font-family:Consolas,monospace;font-size:.8em;">
+                            @Html.Raw(ex.RenderHtml())
+                        </span>
+                    }
+                </td>
+            </tr>
+        }
+    }
+    <tr>
+        <th colspan="2" class="section-header">Environment Properties</th>
+    </tr>
+    @{
+        var environmentProperties = typeof(Environment).GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
+        foreach (var prop in environmentProperties)
+        {
+            <tr>
+                <th>@prop.Name</th>
+                <td>
+                    @try
+                    {
+                        if (prop.Name.Equals("NewLine"))
+                        {
+                            @TextUtil.Reveal(prop.GetValue(null), crlf: true)
+                        }
+                        else if (prop.Name.Equals("StackTrace"))
+                        {
+                            @Html.Raw(((string)prop.GetValue(null)).Substring(0, 500).ToHtml())
+                        }
+                        else
+                        {
+                            @TextUtil.Reveal(prop.GetValue(null), nullOrBlank: true)
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        <span style="color:red;font-family:Consolas,monospace;font-size:.8em;">
+                            @Html.Raw(ex.RenderHtml())
+                        </span>
+                    }
+                </td>
+            </tr>
+        }
+    }
+    <tr>
+        <th colspan="2" class="section-header">AppDomain Properties</th>
+    </tr>
+    @{
+        var appDomainProperties = typeof(AppDomain).GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+        foreach (var prop in appDomainProperties)
+        {
+            <tr>
+                <th>@prop.Name</th>
+                <td>
+                    @try
+                    {
+                        @TextUtil.Reveal(prop.GetValue(AppDomain.CurrentDomain), nullOrBlank: true)
+                    }
+                    catch (Exception ex)
+                    {
+                        <span style="color:red;font-family:Consolas,monospace;font-size:.8em;">
+                            @Html.Raw(ex.RenderHtml())
+                        </span>
+                    }
+                </td>
+            </tr>
+        }
+    }
+    <tr>
+        <th colspan="2" class="section-header">Process Properties</th>
+    </tr>
+    <tr>
+        <th>MainWindowHandle</th>
+        <td>
+            @try
+            {
+                @TextUtil.Reveal(Process.GetCurrentProcess().MainWindowHandle, nullOrBlank: true)
+            }
+            catch (Exception ex)
+            {
+                <span style="color:red;font-family:Consolas,monospace;font-size:.8em;">
+                    @Html.Raw(ex.RenderHtml())
+                </span>
+            }
+        </td>
+    </tr>
+</table>

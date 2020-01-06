@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <RootNamespace>TestMVC</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Horseshoe.NET (Standard)\Horseshoe.NET (Standard).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET.ActiveDirectory (Standard)\Horseshoe.NET.ActiveDirectory (Standard).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET.DataAccess (Standard)\Horseshoe.NET.DataAccess (Standard).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET.DataAccess.OracleDb (Standard)\Horseshoe.NET.DataAccess.OracleDb (Standard).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET.Excel (Standard)\Horseshoe.NET.Excel (Standard).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET.Mvc (Core)\Horseshoe.NET.Mvc (Core).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET.Web (Core)\Horseshoe.NET.Web (Core).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET.WebService (Core)\Horseshoe.NET.WebServices (Core).csproj" />
+  </ItemGroup>
+
+</Project>

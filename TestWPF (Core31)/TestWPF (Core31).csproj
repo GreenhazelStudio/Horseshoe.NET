@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>TestWPF</RootNamespace>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Horseshoe.NET (Standard)\Horseshoe.NET (Standard).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET.ActiveDirectory (Standard)\Horseshoe.NET.ActiveDirectory (Standard).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET.DataAccess (Standard)\Horseshoe.NET.DataAccess (Standard).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET.DataAccess.OracleDb (Standard)\Horseshoe.NET.DataAccess.OracleDb (Standard).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET.Excel (Standard)\Horseshoe.NET.Excel (Standard).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET.WebService\Horseshoe.NET.WebServices.csproj" />
+  </ItemGroup>
+
+</Project>

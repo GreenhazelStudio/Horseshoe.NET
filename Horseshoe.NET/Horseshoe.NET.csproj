@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2C647857-6298-47C1-97BC-AD180D55DD33}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Horseshoe.NET</RootNamespace>
+    <AssemblyName>Horseshoe.NET</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Application\AppMode.cs" />
+    <Compile Include="Application\AppType.cs" />
+    <Compile Include="Application\ClientApp.cs" />
+    <Compile Include="Application\Config.cs" />
+    <Compile Include="Assemblies.cs" />
+    <Compile Include="BenignException.cs" />
+    <Compile Include="Collections\CollectionUtil.cs" />
+    <Compile Include="Collections\Extensions.cs" />
+    <Compile Include="Collections\ImmutableDictionary.cs" />
+    <Compile Include="Collections\Iteration.cs" />
+    <Compile Include="Collections\IterationException.cs" />
+    <Compile Include="Collections\PrunePolicy.cs" />
+    <Compile Include="Credential.cs" />
+    <Compile Include="Cryptography\CryptoOptions.cs" />
+    <Compile Include="Cryptography\CryptoUtil.cs" />
+    <Compile Include="Cryptography\Decrypt.cs" />
+    <Compile Include="Cryptography\Encrypt.cs" />
+    <Compile Include="Cryptography\Extensions.cs" />
+    <Compile Include="Cryptography\Hash.cs" />
+    <Compile Include="Cryptography\HashOptions.cs" />
+    <Compile Include="Cryptography\Settings.cs" />
+    <Compile Include="Dates\DateDiff.cs" />
+    <Compile Include="Dates\DateUtil.cs" />
+    <Compile Include="Dates\Extensions.cs" />
+    <Compile Include="Email\EmailInfo.cs" />
+    <Compile Include="Email\HtmlEmail.cs" />
+    <Compile Include="Email\PlainEmail.cs" />
+    <Compile Include="Email\Settings.cs" />
+    <Compile Include="Email\SMS\Carrier.cs" />
+    <Compile Include="Email\SMS\TextMessage.cs" />
+    <Compile Include="Email\SMS\Settings.cs" />
+    <Compile Include="Email\SMS\SMSInfo.cs" />
+    <Compile Include="Email\SMS\SMSUtil.cs" />
+    <Compile Include="Email\SMS\TextMessageSent.cs" />
+    <Compile Include="Email\SmtpConnectionInfo.cs" />
+    <Compile Include="Email\SmtpUtil.cs" />
+    <Compile Include="Events\EasyNotifier.cs" />
+    <Compile Include="ExceptionInfo.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Internal\CustomMapping.cs" />
+    <Compile Include="Internal\TemplatePart.cs" />
+    <Compile Include="IO\FIleImport\BlankRowMode.cs" />
+    <Compile Include="IO\FIleImport\Column.cs" />
+    <Compile Include="IO\FIleImport\DataType.cs" />
+    <Compile Include="IO\DirectoryCopyMode.cs" />
+    <Compile Include="IO\FIleImport\Extensions.cs" />
+    <Compile Include="IO\FileSizeUnit.cs" />
+    <Compile Include="IO\FileType.cs" />
+    <Compile Include="IO\FileUtil.cs" />
+    <Compile Include="IO\FIleImport\Import.cs" />
+    <Compile Include="IO\FIleImport\ImportDelimited.cs" />
+    <Compile Include="IO\FIleImport\ImportFixedWidth.cs" />
+    <Compile Include="IO\FIleImport\ImportUtil.cs" />
+    <Compile Include="IO\ReportingServices\ReportException.cs" />
+    <Compile Include="IO\ReportingServices\ReportFormat.cs" />
+    <Compile Include="IO\ReportingServices\ReportServer.cs" />
+    <Compile Include="IO\ReportingServices\ReportUtil.cs" />
+    <Compile Include="IO\ReportingServices\Settings.cs" />
+    <Compile Include="Lib.cs" />
+    <Compile Include="Logic.cs" />
+    <Compile Include="Numbers\NumberUtil.cs" />
+    <Compile Include="Objects\Extensions.cs" />
+    <Compile Include="Objects\IPropertyValue.cs" />
+    <Compile Include="Objects\ObjectUtil.cs" />
+    <Compile Include="Objects\PropertyValue.cs" />
+    <Compile Include="OrganizationalDefaultSettings.cs" />
+    <Compile Include="PadPolicy.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReconstitutedException.cs" />
+    <Compile Include="Text\AutoTruncate.cs" />
+    <Compile Include="Text\Comparison.cs" />
+    <Compile Include="Text\Deserialize.cs" />
+    <Compile Include="Text\Extensions.cs" />
+    <Compile Include="Text\RepeatMode.cs" />
+    <Compile Include="Text\SearchCriteria.cs" />
+    <Compile Include="Text\Serialize.cs" />
+    <Compile Include="Text\TextClean.cs" />
+    <Compile Include="Text\TextCleanCharacterIdentified.cs" />
+    <Compile Include="Text\TextCleanMode.cs" />
+    <Compile Include="Text\TextUtil.cs" />
+    <Compile Include="TruncatePolicy.cs" />
+    <Compile Include="UtilityException.cs" />
+    <Compile Include="ValidationException.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -1,0 +1,101 @@
+﻿@* Generator: MvcView *@
+
+@using Horseshoe.NET
+@using Horseshoe.NET.Web
+@using Horseshoe.NET.Web.Bootstrap4
+@using Horseshoe.NET.Text
+
+@model Horseshoe.NET.Web.Bootstrap4.BootstrapAlert
+
+@{
+    var alertExceptionElementID = "alert-exception-" + Guid.NewGuid();
+}
+
+<div class="alert @("alert-" + Model.AlertType.ToString().ToLower() + (Model.IsCloseable ? " alert-dismissible" : "") + (Model.Fade ? " fade" : "") + (Model.Show ? " show" : ""))">
+    @{
+        if (Model.IsCloseable)
+        {
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        }
+
+        if (Model.Emphasis != null)
+        {
+            <strong>@Model.Emphasis</strong>@Html.Raw("&nbsp;&nbsp;")
+        }
+
+        var message = TextUtil.Zap(Model.Message);
+        if (Model.Exception != null)
+        {
+            message = message ?? TextUtil.Zap(Model.Exception.Message);
+        }
+        message = TextUtil.Reveal(message, nullOrBlank: true);
+        message = message.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;");
+
+        if (Model.SuppressRenderingNewLines)
+        {
+            message = message.Replace("\r\n", " ").Replace("\r", " ").Replace("\n", " ");
+        }
+        else
+        {
+            message = message.Replace("\r\n", "<br />").Replace("\r", "<br />").Replace("\n", "<br />");
+        }
+    }
+
+    @Html.Raw(message)
+
+    @if (Model.Exception != null)
+    {
+        var indent = 2;
+        switch (Model.ExceptionRenderingPolicy)
+        {
+            case ExceptionRenderingPolicy.InAlert:
+
+                <script type="text/javascript">
+                    function ShowDerbyUtilitiesNotifyAlertException(clickedLink, alertExceptionElementID) {
+                        if (window.jQuery) {
+                            $('#' + alertExceptionElementID).show();
+                            $(clickedLink).hide();
+                        }
+                        else {
+                            var alertExceptionElement = document.getElementById(alertExceptionElementID);
+                            alertExceptionElement.style.display = 'block';
+                            clickedLink.style.display = 'none';
+                        }
+                    }
+                </script>
+
+                var htmlRenderedException = Model.Exception.Render(displayFullClassName: true, displayMessage: !string.Equals(Model.Message, Model.Exception.Message), displayStackTrace: true, indent: indent, recursive: true);
+                htmlRenderedException = htmlRenderedException.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;");
+
+                if (indent > 1)
+                {
+                    htmlRenderedException = htmlRenderedException.Replace(new string(' ', indent), TextUtil.Repeat("&nbsp;", indent));
+                }
+
+                if (Model.SuppressRenderingNewLines)
+                {
+                    htmlRenderedException = htmlRenderedException.Replace("\r\n", " ").Replace("\r", " ").Replace("\n", " ");
+                }
+                else
+                {
+                    htmlRenderedException = htmlRenderedException.Replace("\r\n", "<br />").Replace("\r", "<br />").Replace("\n", "<br />");
+                }
+
+                <div>
+                    <a href="javascript:;" onclick="ShowDerbyUtilitiesNotifyAlertException(this, '@alertExceptionElementID')">show details</a>
+                </div>
+                <div id="@alertExceptionElementID" style="display: none;font-family: Consolas,monospace; font-size: .8em">
+                    @Html.Raw(htmlRenderedException)
+                </div>
+                break;
+            case ExceptionRenderingPolicy.InAlertHidden:
+                var renderedException = Model.Exception.Render(displayFullClassName: true, displayMessage: !string.Equals(Model.Message, Model.Exception.Message), displayStackTrace: true, indent: indent, recursive: true);
+                <!-- Exception -->
+                <div style="display:none">
+                    @Html.Raw(renderedException)
+                </div>
+                break;
+        }
+    }
+
+</div>

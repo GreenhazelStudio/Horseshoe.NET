@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <RootNamespace>Horseshoe.NET.MvcHelper</RootNamespace>
+    <Description>Adds functionality (e.g. bootstrap alerts) to MVC applications (see documentation)</Description>
+    <Authors>Carl Thomas</Authors>
+    <Company>Greenhazel Studio</Company>
+    <Copyright>Copyright © Greenhazel Studio 2020</Copyright>
+    <Version>0.9.0</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Horseshoe.NET (Standard)\Horseshoe.NET (Standard).csproj">
+      <Private>false</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Horseshoe.NET.Web (Core)\Horseshoe.NET.Web (Core).csproj">
+      <Private>false</Private>
+    </ProjectReference>
+  </ItemGroup>
+
+</Project>

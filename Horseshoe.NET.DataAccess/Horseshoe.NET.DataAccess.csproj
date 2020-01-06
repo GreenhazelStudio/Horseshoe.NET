@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A5C37688-C639-4506-A7B3-9A440C0C405E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Horseshoe.NET.DataAccess</RootNamespace>
+    <AssemblyName>Horseshoe.NET.DataAccess</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AutoSort.cs" />
+    <Compile Include="Column.cs" />
+    <Compile Include="ConnectionInfo.cs" />
+    <Compile Include="ConnectionStringPart.cs" />
+    <Compile Include="DataUtil.cs" />
+    <Compile Include="DbProduct.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Filter.cs" />
+    <Compile Include="FilterMode.cs" />
+    <Compile Include="Internal\SystemValue.cs" />
+    <Compile Include="Odbc\Delete.cs" />
+    <Compile Include="Odbc\Execute.cs" />
+    <Compile Include="Odbc\Insert.cs" />
+    <Compile Include="Odbc\OdbcConnectionInfo.cs" />
+    <Compile Include="Odbc\OdbcUtil.cs" />
+    <Compile Include="Odbc\Query.cs" />
+    <Compile Include="Odbc\Settings.cs" />
+    <Compile Include="Odbc\Update.cs" />
+    <Compile Include="OleDb\Delete.cs" />
+    <Compile Include="OleDb\Execute.cs" />
+    <Compile Include="OleDb\Insert.cs" />
+    <Compile Include="OleDb\OleDbConnectionInfo.cs" />
+    <Compile Include="OleDb\OleDbUtil.cs" />
+    <Compile Include="OleDb\Query.cs" />
+    <Compile Include="OleDb\Settings.cs" />
+    <Compile Include="OleDb\Update.cs" />
+    <Compile Include="Parameter.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScalarReaderParser.cs" />
+    <Compile Include="Sql\Delete.cs" />
+    <Compile Include="Sql\Execute.cs" />
+    <Compile Include="Sql\Insert.cs" />
+    <Compile Include="Sql\Meta\Db.cs" />
+    <Compile Include="Sql\Meta\DbColumn.cs" />
+    <Compile Include="Sql\Meta\DbObject.cs" />
+    <Compile Include="Sql\Meta\DbObjectBase.cs" />
+    <Compile Include="Sql\Meta\DbSchema.cs" />
+    <Compile Include="Sql\Meta\DbServer.cs" />
+    <Compile Include="Sql\Meta\DbVersion.cs" />
+    <Compile Include="Sql\Meta\Extensions.cs" />
+    <Compile Include="Sql\Meta\MetaSearch.cs" />
+    <Compile Include="Sql\Meta\SqlObjectType.cs" />
+    <Compile Include="Sql\Meta\SqlServerTypes.cs" />
+    <Compile Include="Sql\Query.cs" />
+    <Compile Include="Sql\Settings.cs" />
+    <Compile Include="Sql\SqlConnectionInfo.cs" />
+    <Compile Include="Sql\SqlUtil.cs" />
+    <Compile Include="Sql\StoredProcedure.cs" />
+    <Compile Include="Sql\Update.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Horseshoe.NET\Horseshoe.NET.csproj">
+      <Project>{2c647857-6298-47c1-97bc-ad180d55dd33}</Project>
+      <Name>Horseshoe.NET</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Sql\Meta\MetaSearch Function Map.xlsx" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

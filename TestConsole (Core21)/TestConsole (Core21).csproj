@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <RootNamespace>TestConsole</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Horseshoe.NET (Standard)\Horseshoe.NET (Standard).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET.ActiveDirectory (Standard)\Horseshoe.NET.ActiveDirectory (Standard).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET.ConsoleX (Core)\Horseshoe.NET.ConsoleX (Core).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET.DataAccess (Standard)\Horseshoe.NET.DataAccess (Standard).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET.DataAccess.OracleDb (Standard)\Horseshoe.NET.DataAccess.OracleDb (Standard).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET.Excel (Standard)\Horseshoe.NET.Excel (Standard).csproj" />
+  </ItemGroup>
+
+</Project>

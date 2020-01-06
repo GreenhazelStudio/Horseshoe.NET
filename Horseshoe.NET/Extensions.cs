@@ -1,0 +1,146 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+
+using Horseshoe.NET.Collections;
+using Horseshoe.NET.Text;
+
+namespace Horseshoe.NET
+{
+    public static class Extensions
+    {
+        public static string GetDisplayName(this Assembly assembly, int minDepth = 1)
+        {
+            return GetDisplayName(assembly.GetName(), minDepth: minDepth);
+        }
+
+        public static string GetDisplayName(this AssemblyName assemblyName, int minDepth = 1)
+        {
+            return assemblyName.Name + " " + GetDisplayVersion(assemblyName, minDepth: minDepth);
+        }
+
+        public static string GetDisplayVersion(this Assembly assembly, int minDepth = 1)
+        {
+            return GetDisplayVersion(assembly.GetName(), minDepth: minDepth);
+        }
+
+        public static string GetDisplayVersion(this AssemblyName assemblyName, int minDepth = 1)
+        {
+            return Display(assemblyName.Version, minDepth: minDepth);
+        }
+
+        public static string Display(this Version version, int minDepth = 1)
+        {
+            if (minDepth < 1) throw new UtilityException("minDepth must be at least 1");
+
+            var sb = new StringBuilder(version.Major.ToString());
+
+            if (minDepth > 1 || version.Minor > 0 || version.Build > 0 || version.Revision > 0)
+            {
+                sb.Append("." + version.Minor);
+
+                if (minDepth > 2 || version.Build > 0 || version.Revision > 0)
+                {
+                    sb.Append("." + version.Build);
+
+                    if (minDepth > 3 || version.Revision > 0)
+                    {
+                        sb.Append("." + version.Revision);
+                    }
+                }
+            }
+
+            return sb.ToString();
+        }
+
+        public static bool In<E>(this E obj, params E[] collection)
+        {
+            return In(obj, collection as IEnumerable<E>);
+        }
+
+        public static bool In<E>(this E obj, IEnumerable<E> collection)
+        {
+            if (collection == null) return false;
+            return collection.Contains(obj);
+        }
+
+        public static bool InIgnoreCase(this string text, params string[] collection)
+        {
+            return InIgnoreCase(text, collection as IEnumerable<string>);
+        }
+
+        public static bool InIgnoreCase(this string text, IEnumerable<string> collection)
+        {
+            if (collection == null) return false;
+            foreach (var s in collection)
+            {
+                if (string.Equals(s, text, StringComparison.OrdinalIgnoreCase)) return true;
+            }
+            return false;
+        }
+
+        //public static Exception ToException(this ExceptionInfo exceptionInfo)
+        //{
+        //    var exception = ReconstitutedException.From(exceptionInfo);
+        //    return exception;
+        //}
+
+        public static string Render(this Exception exception, bool displayFullClassName = false, bool displayMessage = true, bool displayStackTrace = false, int indent = 2, bool recursive = false)
+        {
+            var strb = new StringBuilder();
+            RenderRecursive(exception, strb, displayFullClassName, displayMessage, displayStackTrace, indent, recursive);
+            return strb.ToString();
+        }
+
+        public static string Render(this ExceptionInfo exceptionInfo, bool displayFullClassName = false, bool displayMessage = true, bool displayStackTrace = false, int indent = 2, bool recursive = false)
+        {
+            var strb = new StringBuilder();
+            RenderRecursive(exceptionInfo, strb, displayFullClassName, displayMessage, displayStackTrace, indent, recursive);
+            return strb.ToString();
+        }
+
+        private static void RenderRecursive(Exception exception, StringBuilder strb, bool displayFullClassName, bool displayMessage, bool displayStackTrace, int indent, bool recursive)
+        {
+            strb.Append
+            (
+                exception is ReconstitutedException reconstitutedException
+                    ? (displayFullClassName ? reconstitutedException.FullClassName : reconstitutedException.ClassName)
+                    : (displayFullClassName ? exception.GetType().FullName : exception.GetType().Name)
+            );
+            if (displayMessage && exception.Message != null)
+            {
+                strb.Append
+                (
+                    Environment.NewLine + "Message:" +
+                    Environment.NewLine + new string(' ', indent) + TextUtil.Reveal(exception.Message, nullOrBlank: true)
+                );
+            }
+            if (displayStackTrace && exception.StackTrace != null)
+            {
+                strb.Append
+                (
+                    Environment.NewLine + "Stack Trace:" +
+                    Environment.NewLine + IndentStackTrace(exception.StackTrace, indent)
+                );
+            }
+            if (recursive && exception.InnerException != null)
+            {
+                strb.AppendLine();
+                RenderRecursive(exception.InnerException, strb, displayFullClassName, displayMessage, displayStackTrace, indent, recursive);
+            }
+        }
+
+        static string IndentStackTrace(string stackTrace, int indent)
+        {
+            if (stackTrace == null) return null;
+            var lines = stackTrace.Split('\r', '\n')
+                .ZapAndPrune()
+                .Select(ln => new string(' ', indent) + ln);
+            return string.Join(Environment.NewLine, lines);
+        }
+    }
+}
