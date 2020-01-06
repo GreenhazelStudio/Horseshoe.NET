@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horseshoe.NET.ActiveDirecto
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsole", "TestConsole\TestConsole.csproj", "{EBEFB23F-88CD-4CDB-B365-B41B9ECAF4B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horseshoe.NET.ConsoleX", "Horseshoe.NET.ConsoleX\Horseshoe.NET.ConsoleX.csproj", "{9F26E9BA-F1B5-46B6-A65C-D4FB20F73CF9}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horseshoe.NET.DataAccess", "Horseshoe.NET.DataAccess\Horseshoe.NET.DataAccess.csproj", "{A5C37688-C639-4506-A7B3-9A440C0C405E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horseshoe.NET.DataAccess.OracleDb", "Horseshoe.NET.DataAccess.OracleDb\Horseshoe.NET.DataAccess.OracleDb.csproj", "{9B6A0EEF-2D50-4662-B4AF-FDBD9D2121E0}"
@@ -26,8 +24,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horseshoe.NET.WebForms", "Horseshoe.NET.WebForms\Horseshoe.NET.WebForms.csproj", "{489C429B-340C-4C66-B43E-F5184C082832}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horseshoe.NET.ActiveDirectory (Standard)", "Horseshoe.NET.ActiveDirectory (Standard)\Horseshoe.NET.ActiveDirectory (Standard).csproj", "{54E17F3F-83D3-4EAA-B65E-AFA2B84ED522}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horseshoe.NET.ConsoleX (Core)", "Horseshoe.NET.ConsoleX (Core)\Horseshoe.NET.ConsoleX (Core).csproj", "{C3DA6575-2F09-42D8-BD19-F70ADD3838AF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horseshoe.NET.DataAccess (Standard)", "Horseshoe.NET.DataAccess (Standard)\Horseshoe.NET.DataAccess (Standard).csproj", "{26B86E55-5997-42A3-B86F-3E62725657F9}"
 EndProject
@@ -83,10 +79,6 @@ Global
 		{EBEFB23F-88CD-4CDB-B365-B41B9ECAF4B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EBEFB23F-88CD-4CDB-B365-B41B9ECAF4B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EBEFB23F-88CD-4CDB-B365-B41B9ECAF4B1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9F26E9BA-F1B5-46B6-A65C-D4FB20F73CF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9F26E9BA-F1B5-46B6-A65C-D4FB20F73CF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9F26E9BA-F1B5-46B6-A65C-D4FB20F73CF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9F26E9BA-F1B5-46B6-A65C-D4FB20F73CF9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A5C37688-C639-4506-A7B3-9A440C0C405E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A5C37688-C639-4506-A7B3-9A440C0C405E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5C37688-C639-4506-A7B3-9A440C0C405E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -115,10 +107,6 @@ Global
 		{54E17F3F-83D3-4EAA-B65E-AFA2B84ED522}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{54E17F3F-83D3-4EAA-B65E-AFA2B84ED522}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54E17F3F-83D3-4EAA-B65E-AFA2B84ED522}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C3DA6575-2F09-42D8-BD19-F70ADD3838AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C3DA6575-2F09-42D8-BD19-F70ADD3838AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C3DA6575-2F09-42D8-BD19-F70ADD3838AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C3DA6575-2F09-42D8-BD19-F70ADD3838AF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{26B86E55-5997-42A3-B86F-3E62725657F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{26B86E55-5997-42A3-B86F-3E62725657F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26B86E55-5997-42A3-B86F-3E62725657F9}.Release|Any CPU.ActiveCfg = Release|Any CPU

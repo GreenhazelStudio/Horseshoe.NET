@@ -54,10 +54,6 @@
       <Project>{9fba8935-bbde-4248-a897-f89d1e3ec597}</Project>
       <Name>Horseshoe.NET.ActiveDirectory</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Horseshoe.NET.ConsoleX\Horseshoe.NET.ConsoleX.csproj">
-      <Project>{9f26e9ba-f1b5-46b6-a65c-d4fb20f73cf9}</Project>
-      <Name>Horseshoe.NET.ConsoleX</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Horseshoe.NET.DataAccess.OracleDb\Horseshoe.NET.DataAccess.OracleDb.csproj">
       <Project>{9b6a0eef-2d50-4662-b4af-fdbd9d2121e0}</Project>
       <Name>Horseshoe.NET.DataAccess.OracleDb</Name>
