@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Horseshoe.NET")]
-[assembly: AssemblyDescription("A suite of .NET utilities with a dual purpose: simplifying coding tasks and offering a variety of new and unique features")]
+[assembly: AssemblyDescription("A suite of .NET utilities with a dual purpose: simplify coding tasks and offer a variety of new and unique features")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Greenhazel Studio")]
 [assembly: AssemblyProduct("Horseshoe.NET")]

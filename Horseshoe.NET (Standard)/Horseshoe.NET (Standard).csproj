@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Horseshoe.NET</RootNamespace>
-    <Description>A suite of .NET utilities with a dual purpose: simplifying coding tasks and offering a variety of new and unique features</Description>
+    <Description>A suite of .NET utilities with a dual purpose: simplify coding tasks and offer a variety of new and unique features</Description>
     <Authors>Carl Thomas</Authors>
     <Company>Greenhazel Studio</Company>
     <Copyright>Copyright © Greenhazel Studio 2020</Copyright>

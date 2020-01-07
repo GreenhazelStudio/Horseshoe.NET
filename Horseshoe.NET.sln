@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horseshoe.NET.DataAccess", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horseshoe.NET.Mvc", "Horseshoe.NET.Mvc\Horseshoe.NET.Mvc.csproj", "{BD0A0830-F2D5-46A2-BE39-DC62E7CD092C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horseshoe.NET.WebServices", "Horseshoe.NET.WebService\Horseshoe.NET.WebServices.csproj", "{8FAFEEC3-8654-4FA0-A9F6-D5E78C4EEF96}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horseshoe.NET.WebServices", "Horseshoe.NET.WebServices\Horseshoe.NET.WebServices.csproj", "{8FAFEEC3-8654-4FA0-A9F6-D5E78C4EEF96}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horseshoe.NET.Web", "Horseshoe.NET.Web\Horseshoe.NET.Web.csproj", "{1DDC3941-F891-4A6B-A9EE-91DB603F84E2}"
 EndProject
@@ -29,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horseshoe.NET.Mvc (Core)", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horseshoe.NET.Web (Core)", "Horseshoe.NET.Web (Core)\Horseshoe.NET.Web (Core).csproj", "{E8812B0A-862C-4F1C-9667-1D0590D5F1D6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horseshoe.NET.WebServices (Core)", "Horseshoe.NET.WebService (Core)\Horseshoe.NET.WebServices (Core).csproj", "{2D4A3C38-495D-46ED-A724-39B5649F5BB3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horseshoe.NET.WebServices (Core)", "Horseshoe.NET.WebServices (Core)\Horseshoe.NET.WebServices (Core).csproj", "{2D4A3C38-495D-46ED-A724-39B5649F5BB3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horseshoe.NET.Excel (Standard)", "Horseshoe.NET.Excel (Standard)\Horseshoe.NET.Excel (Standard).csproj", "{1895FD85-52F3-4BD5-B1DF-671C831DF864}"
 EndProject
