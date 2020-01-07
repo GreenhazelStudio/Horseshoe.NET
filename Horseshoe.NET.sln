@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsole", "TestConsole\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horseshoe.NET.DataAccess", "Horseshoe.NET.DataAccess\Horseshoe.NET.DataAccess.csproj", "{A5C37688-C639-4506-A7B3-9A440C0C405E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horseshoe.NET.DataAccess.OracleDb", "Horseshoe.NET.DataAccess.OracleDb\Horseshoe.NET.DataAccess.OracleDb.csproj", "{9B6A0EEF-2D50-4662-B4AF-FDBD9D2121E0}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horseshoe.NET.Mvc", "Horseshoe.NET.Mvc\Horseshoe.NET.Mvc.csproj", "{BD0A0830-F2D5-46A2-BE39-DC62E7CD092C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horseshoe.NET.WebServices", "Horseshoe.NET.WebService\Horseshoe.NET.WebServices.csproj", "{8FAFEEC3-8654-4FA0-A9F6-D5E78C4EEF96}"
@@ -26,8 +24,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horseshoe.NET.ActiveDirectory (Standard)", "Horseshoe.NET.ActiveDirectory (Standard)\Horseshoe.NET.ActiveDirectory (Standard).csproj", "{54E17F3F-83D3-4EAA-B65E-AFA2B84ED522}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horseshoe.NET.DataAccess (Standard)", "Horseshoe.NET.DataAccess (Standard)\Horseshoe.NET.DataAccess (Standard).csproj", "{26B86E55-5997-42A3-B86F-3E62725657F9}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horseshoe.NET.DataAccess.OracleDb (Standard)", "Horseshoe.NET.DataAccess.OracleDb (Standard)\Horseshoe.NET.DataAccess.OracleDb (Standard).csproj", "{B0B15814-879C-4FE0-91E8-8CA340D2894A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horseshoe.NET.Mvc (Core)", "Horseshoe.NET.Mvc (Core)\Horseshoe.NET.Mvc (Core).csproj", "{BF5928E8-D238-4548-AE48-93F77C03AA1F}"
 EndProject
@@ -57,6 +53,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestMVC (Core21)", "TestMVC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWPF", "TestWPF\TestWPF.csproj", "{B7DFC40D-E911-4C42-ABF8-4C470E94AD86}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horseshoe.NET.OracleDataAccess", "Horseshoe.NET.OracleDataAccess\Horseshoe.NET.OracleDataAccess.csproj", "{43757CBB-F9F2-4557-A182-7794F4A6D761}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horseshoe.NET.OracleDataAccess (Standard)", "Horseshoe.NET.OracleDataAccess (Standard)\Horseshoe.NET.OracleDataAccess (Standard).csproj", "{3C0610E9-585A-4F79-B182-8BD0627EE53A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,10 +83,6 @@ Global
 		{A5C37688-C639-4506-A7B3-9A440C0C405E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5C37688-C639-4506-A7B3-9A440C0C405E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5C37688-C639-4506-A7B3-9A440C0C405E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9B6A0EEF-2D50-4662-B4AF-FDBD9D2121E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9B6A0EEF-2D50-4662-B4AF-FDBD9D2121E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9B6A0EEF-2D50-4662-B4AF-FDBD9D2121E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9B6A0EEF-2D50-4662-B4AF-FDBD9D2121E0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BD0A0830-F2D5-46A2-BE39-DC62E7CD092C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BD0A0830-F2D5-46A2-BE39-DC62E7CD092C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD0A0830-F2D5-46A2-BE39-DC62E7CD092C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -111,10 +107,6 @@ Global
 		{26B86E55-5997-42A3-B86F-3E62725657F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26B86E55-5997-42A3-B86F-3E62725657F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26B86E55-5997-42A3-B86F-3E62725657F9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B0B15814-879C-4FE0-91E8-8CA340D2894A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B0B15814-879C-4FE0-91E8-8CA340D2894A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B0B15814-879C-4FE0-91E8-8CA340D2894A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B0B15814-879C-4FE0-91E8-8CA340D2894A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BF5928E8-D238-4548-AE48-93F77C03AA1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BF5928E8-D238-4548-AE48-93F77C03AA1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF5928E8-D238-4548-AE48-93F77C03AA1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -171,6 +163,14 @@ Global
 		{B7DFC40D-E911-4C42-ABF8-4C470E94AD86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7DFC40D-E911-4C42-ABF8-4C470E94AD86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7DFC40D-E911-4C42-ABF8-4C470E94AD86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43757CBB-F9F2-4557-A182-7794F4A6D761}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43757CBB-F9F2-4557-A182-7794F4A6D761}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43757CBB-F9F2-4557-A182-7794F4A6D761}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43757CBB-F9F2-4557-A182-7794F4A6D761}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C0610E9-585A-4F79-B182-8BD0627EE53A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C0610E9-585A-4F79-B182-8BD0627EE53A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C0610E9-585A-4F79-B182-8BD0627EE53A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C0610E9-585A-4F79-B182-8BD0627EE53A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
-    <RootNamespace>Horseshoe.NET.Mvc</RootNamespace>
-    <Description>Adds functionality (e.g. bootstrap alerts) to MVC applications (see documentation)</Description>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Horseshoe.NET.OracleDataAccess</RootNamespace>
+    <Description>A typesafe, object-oriented database access solution for Oracle</Description>
     <Authors>Carl Thomas</Authors>
     <Company>Greenhazel Studio</Company>
     <Copyright>Copyright © Greenhazel Studio 2020</Copyright>
@@ -11,14 +11,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.1.0" />
+    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="2.19.60" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Horseshoe.NET (Standard)\Horseshoe.NET (Standard).csproj">
       <Private>false</Private>
     </ProjectReference>
-    <ProjectReference Include="..\Horseshoe.NET.Web (Core)\Horseshoe.NET.Web (Core).csproj">
+    <ProjectReference Include="..\Horseshoe.NET.DataAccess (Standard)\Horseshoe.NET.DataAccess (Standard).csproj">
       <Private>false</Private>
     </ProjectReference>
   </ItemGroup>

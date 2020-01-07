@@ -4,16 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EBEFB23F-88CD-4CDB-B365-B41B9ECAF4B1}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>TestConsole</RootNamespace>
-    <AssemblyName>TestConsole</AssemblyName>
+    <ProjectGuid>{43757CBB-F9F2-4557-A182-7794F4A6D761}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Horseshoe.NET.OracleDataAccess</RootNamespace>
+    <AssemblyName>Horseshoe.NET.OracleDataAccess</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +23,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -32,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <HintPath>..\packages\Oracle.ManagedDataAccess.19.6.0\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -42,33 +44,41 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppTests.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Delete.cs" />
+    <Compile Include="Execute.cs" />
+    <Compile Include="Insert.cs" />
+    <Compile Include="Meta\Extensions.cs" />
+    <Compile Include="Meta\MetaSearch.cs" />
+    <Compile Include="Meta\OracleTypes.cs" />
+    <Compile Include="Meta\OraColumn.cs" />
+    <Compile Include="Meta\OraColumnType.cs" />
+    <Compile Include="Meta\OraObject.cs" />
+    <Compile Include="Meta\OraObjectBase.cs" />
+    <Compile Include="Meta\OraObjectType.cs" />
+    <Compile Include="Meta\OraPackage.cs" />
+    <Compile Include="Meta\OraSchema.cs" />
+    <Compile Include="Meta\OraServer.cs" />
+    <Compile Include="OracleUtil.cs" />
+    <Compile Include="OraConnectionInfo.cs" />
+    <Compile Include="OraParameter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="Update.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Horseshoe.NET.ActiveDirectory\Horseshoe.NET.ActiveDirectory.csproj">
-      <Project>{9fba8935-bbde-4248-a897-f89d1e3ec597}</Project>
-      <Name>Horseshoe.NET.ActiveDirectory</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Horseshoe.NET.DataAccess\Horseshoe.NET.DataAccess.csproj">
       <Project>{a5c37688-c639-4506-a7b3-9a440c0c405e}</Project>
       <Name>Horseshoe.NET.DataAccess</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Horseshoe.NET.Excel\Horseshoe.NET.Excel.csproj">
-      <Project>{6083928f-0399-4db6-8808-b34a0693895d}</Project>
-      <Name>Horseshoe.NET.Excel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Horseshoe.NET.WebService\Horseshoe.NET.WebServices.csproj">
-      <Project>{8fafeec3-8654-4fa0-a9f6-d5e78c4eef96}</Project>
-      <Name>Horseshoe.NET.WebServices</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Horseshoe.NET\Horseshoe.NET.csproj">
       <Project>{2c647857-6298-47c1-97bc-ad180d55dd33}</Project>
       <Name>Horseshoe.NET</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
