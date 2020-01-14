@@ -5,7 +5,7 @@ using System.Text;
 using System.Web;
 
 using Horseshoe.NET.Application;
-using Horseshoe.NET.Web;
+using Horseshoe.NET.Mvc;
 
 namespace TestMVC.ViewModels
 {
@@ -14,5 +14,6 @@ namespace TestMVC.ViewModels
         public HttpRequestBase HttpRequest { get; set; }
         public string AbsoluteApplicationPath => HttpRequest.GetAbsoluteApplicationPath();
         public string AbsoluteApplicationPath_API => HttpRequest.GetAbsoluteApplicationPath(virtualSubpath: "/api");
+        public string RequestBodyTestResult { get; set; }
     }
 }

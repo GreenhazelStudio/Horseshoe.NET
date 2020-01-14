@@ -195,10 +195,6 @@
       <Project>{8fafeec3-8654-4fa0-a9f6-d5e78c4eef96}</Project>
       <Name>Horseshoe.NET.WebServices</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Horseshoe.NET.Web\Horseshoe.NET.Web.csproj">
-      <Project>{1ddc3941-f891-4a6b-a9ee-91db603f84e2}</Project>
-      <Name>Horseshoe.NET.Web</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Horseshoe.NET\Horseshoe.NET.csproj">
       <Project>{2c647857-6298-47c1-97bc-ad180d55dd33}</Project>
       <Name>Horseshoe.NET</Name>

@@ -1,45 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
 using Horseshoe.NET.Text;
-using Horseshoe.NET.Web;
-using Horseshoe.NET.Web.Bootstrap3;
 
 namespace Horseshoe.NET.WebForms.Bootstrap3
 {
     public class WebFormsBootstrapAlert : WebControl
     {
-        public string Emphasis { get; }
-        public string Message { get; }
-        public AlertType AlertType { get; }
-        public bool SuppressRenderingNewLines { get; }
-        public bool IsCloseable { get; }
-        public ExceptionInfo Exception { get; }
-        public ExceptionRenderingPolicy ExceptionRenderingPolicy { get; }
-        private Guid Guid { get; } = Guid.NewGuid();
-        internal string AlertExceptionElementID => "alert-exception-" + Guid.ToString();
+        public Alert Alert { get; }
+        string AlertDetailsElementID { get; } = "alert-details-" + Guid.NewGuid();
 
-        public WebFormsBootstrapAlert(BootstrapAlert bootstrapAlert)
+        public WebFormsBootstrapAlert(Alert alert)
         {
-            Emphasis = bootstrapAlert.Emphasis;
-            Message = bootstrapAlert.Message;
-            AlertType = bootstrapAlert.AlertType;
-            SuppressRenderingNewLines = bootstrapAlert.SuppressRenderingNewLines;
-            IsCloseable = bootstrapAlert.IsCloseable;
-            Exception = bootstrapAlert.Exception;
-            ExceptionRenderingPolicy = bootstrapAlert.ExceptionRenderingPolicy;
+            Alert = alert;
         }
 
         protected override void Render(HtmlTextWriter writer)
         {
             // alert ui
-            writer.AddAttribute(HtmlTextWriterAttribute.Class, "alert alert-" + AlertType.ToString().ToLower() + (IsCloseable ? " alert-dismissible" : ""));
+            writer.AddAttribute(HtmlTextWriterAttribute.Class, "alert " + Alert.AlertType.ToCssClass() + (Alert.Closeable ? " alert-dismissible" : ""));
             writer.AddAttribute("role", "alert");
             writer.RenderBeginTag(HtmlTextWriterTag.Div);
 
-            if (IsCloseable)
+            if (Alert.Closeable)
             {
                 // begin close button
                 writer.AddAttribute(HtmlTextWriterAttribute.Type, "button");
@@ -59,102 +45,76 @@ namespace Horseshoe.NET.WebForms.Bootstrap3
             }
 
             // message eye catcher
-            if (Emphasis != null)
+            if (Alert.Emphasis != null)
             {
                 writer.RenderBeginTag(HtmlTextWriterTag.Strong);
-                writer.Write(Emphasis);
+                writer.Write(Alert.Emphasis);
                 writer.RenderEndTag();
-                writer.Write("&nbsp;&nbsp;");
+                writer.Write(" - ");
             }
 
             // message
-            var message = TextUtil.Zap(Message);
-            if (Exception != null)
+            var message = TextUtil.Reveal(Alert.Message, nullOrBlank: true);
+            if (Alert.MessageHtmlEncoded)
             {
-                message = message ?? TextUtil.Zap(Exception.Message);
+                message = HttpUtility.HtmlEncode(message);
             }
-            message = TextUtil.Reveal(message, nullOrBlank: true);
-            message = message.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;");
-
-            if (SuppressRenderingNewLines)
-            {
-                message = message.Replace("\r\n", " ").Replace("\r", " ").Replace("\n", " ");
-            }
-            else
-            {
-                message = message.Replace("\r\n", "<br />").Replace("\r", "<br />").Replace("\n", "<br />");
-            }
+            message = message.Replace("\n", "\n<br />");
             writer.Write(message);
 
-            // render exception
-            if (Exception != null)
+            // render message detilas
+            if (Alert.MessageDetails != null)
             {
-                var indent = 2;
-                switch (ExceptionRenderingPolicy)
+                bool usePre = false;
+                bool htmlEncoded = false;
+                if ((Alert.MessageDetailsRendering & AlertMessageDetailsRenderingPolicy.Hidden) != AlertMessageDetailsRenderingPolicy.Hidden)
                 {
-                    case ExceptionRenderingPolicy.InAlert:
-                        writer.RenderBeginTag(HtmlTextWriterTag.Script);
-                        writer.Write
-                        (
-                            @"
-                                function ShowDerbyUtilitiesNotifyAlertException(clickedLink, alertExceptionElementID) {
-                                    if (window.jQuery) {  
-                                        $('#' + alertExceptionElementID).show();
-                                        $(clickedLink).hide();
-                                    } 
-                                    else {
-                                        var alertExceptionElement = document.getElementById(alertExceptionElementID);
-                                        alertExceptionElement.style.display = 'block';
-                                        clickedLink.style.display = 'none';
-                                    }
+                    usePre = (Alert.MessageDetailsRendering & AlertMessageDetailsRenderingPolicy.PreFormatted) == AlertMessageDetailsRenderingPolicy.PreFormatted;
+                    htmlEncoded = (Alert.MessageDetailsRendering & AlertMessageDetailsRenderingPolicy.HtmlEncoded) == AlertMessageDetailsRenderingPolicy.HtmlEncoded;
+                    writer.RenderBeginTag(HtmlTextWriterTag.Script);
+                    writer.Write
+                    (
+                        @"
+                            function ShowBootstrapAlertMessageDetails(clickedLink, alertDetailsElementID) {
+                                if (window.jQuery) {  
+                                    $('#' + alertDetailsElementID).show();
+                                    $(clickedLink).hide();
+                                } 
+                                else {
+                                    var messageDetailsElement = document.getElementById(alertDetailsElementID);
+                                    messageDetailsElement.style.display = 'block';
+                                    clickedLink.style.display = 'none';
                                 }
-                            "
-                        );
-                        writer.RenderEndTag();
-
-                        var htmlRenderedException = Exception.Render(displayFullClassName: true, displayMessage: !string.Equals(Message, Exception.Message), displayStackTrace: true, indent: indent, recursive: true);
-                        htmlRenderedException = htmlRenderedException.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;");
-                        
-                        if (indent > 1)
-                        {
-                            htmlRenderedException = htmlRenderedException.Replace(new string(' ', indent), TextUtil.Repeat("&nbsp;", indent));
-                        }
-
-                        if (SuppressRenderingNewLines)
-                        {
-                            htmlRenderedException = htmlRenderedException.Replace("\r\n", " ").Replace("\r", " ").Replace("\n", " ");
-                        }
-                        else
-                        {
-                            htmlRenderedException = htmlRenderedException.Replace("\r\n", "<br />").Replace("\r", "<br />").Replace("\n", "<br />");
-                        }
-
-                        writer.RenderBeginTag(HtmlTextWriterTag.Div);
-                        writer.AddAttribute("href", "javascript:;");
-                        writer.AddAttribute("onclick", "ShowDerbyUtilitiesNotifyAlertException(this, '" + AlertExceptionElementID + "')");
-                        writer.RenderBeginTag(HtmlTextWriterTag.A);
-                        writer.Write("show details");
-                        writer.RenderEndTag();
-                        writer.RenderEndTag();
-                        writer.AddAttribute("id", AlertExceptionElementID);
-                        writer.AddStyleAttribute(HtmlTextWriterStyle.Display, "none");
-                        writer.AddStyleAttribute(HtmlTextWriterStyle.FontFamily, "'Consolas', monospace");
-                        writer.AddStyleAttribute(HtmlTextWriterStyle.FontSize, ".8em");
-                        writer.RenderBeginTag(HtmlTextWriterTag.Div);
-                        writer.Write(htmlRenderedException);
-                        writer.RenderEndTag();
-                        break;
-                    case ExceptionRenderingPolicy.InAlertHidden:
-                        var renderedException = Exception.Render(displayFullClassName: true, displayMessage: !string.Equals(Message, Exception.Message), displayStackTrace: true, indent: indent, recursive: true);
-                        writer.Write
-                        (
-                            Environment.NewLine + "<!-- Exception -->" +
-                            Environment.NewLine + "<div style=\"display:none\">" +
-                            Environment.NewLine + renderedException +
-                            Environment.NewLine + "</div>" + Environment.NewLine
-                        );
-                        break;
+                            }
+                        "
+                    );
+                    writer.RenderEndTag(); // Script
+                    writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                    writer.AddAttribute("href", "javascript:;");
+                    writer.AddAttribute("onclick", "ShowBootstrapAlertMessageDetails(this, '" + AlertDetailsElementID + "')");
+                    writer.RenderBeginTag(HtmlTextWriterTag.A);
+                    writer.Write("show details");
+                    writer.RenderEndTag(); // A
+                    writer.RenderEndTag(); // Div
+                    writer.AddAttribute("id", AlertDetailsElementID);                                // for next Div
+                    writer.AddStyleAttribute(HtmlTextWriterStyle.FontFamily, "Consolas, monospace"); // for next Div
+                    writer.AddStyleAttribute(HtmlTextWriterStyle.FontSize, ".8em");                  // for next Div
                 }
+                if (usePre)
+                {
+                    writer.AddStyleAttribute(HtmlTextWriterStyle.WhiteSpace, "pre");
+                }
+                writer.AddStyleAttribute(HtmlTextWriterStyle.Display, "none");
+                writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                
+                var messageDetails = (htmlEncoded ? HttpUtility.HtmlEncode(Alert.MessageDetails) : Alert.MessageDetails);
+                if (!usePre)
+                {
+                    messageDetails = messageDetails.Replace("\n", "<br />\n");
+                }
+                writer.Write("\n" + messageDetails);
+
+                writer.RenderEndTag();  // Div
             }
 
             // finalize alert ui

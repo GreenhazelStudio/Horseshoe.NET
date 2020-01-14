@@ -7,9 +7,11 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
+using Horseshoe.NET;
 using Horseshoe.NET.Application;
 using Horseshoe.NET.Text;
-using Horseshoe.NET.Web;
+using Horseshoe.NET.WebForms;
+using Horseshoe.NET.WebForms.Bootstrap3;
 
 namespace TestWebForms
 {
@@ -18,6 +20,24 @@ namespace TestWebForms
         protected void Page_Load(object sender, EventArgs e)
         {
             var tr = new TableRow();
+            tr.Cells.Add
+            (
+                new TableHeaderCell { ColumnSpan = 2, CssClass = "section-header", Text = "Bootstrap Tests" }
+            );
+            Table1.Rows.Add(tr);
+
+            tr = new TableRow();
+            tr.Cells.Add
+            (
+                new TableHeaderCell { Text = "Test Links" }
+            );
+            var bootstrapTD = new TableCell();
+            bootstrapTD.Controls.Add(new LinkButton { Text = "Info" });
+            bootstrapTD.Controls.Add(new LiteralControl("<br/>"));
+            tr.Cells.Add(bootstrapTD);
+            Table1.Rows.Add(tr);
+
+            tr = new TableRow();
             tr.Cells.Add
             (
                 new TableHeaderCell { ColumnSpan = 2, CssClass = "section-header", Text = "Utility Tests" }
@@ -74,7 +94,7 @@ namespace TestWebForms
                 {
                     tr.Cells.Add
                     (
-                        new TableCell { Text = ex.RenderHtml(), ForeColor = Color.Red }
+                        new TableCell { Text = HttpUtility.HtmlEncode(ex.Render()).Replace("\n", "<br />"), ForeColor = Color.Red }
                     );
                 }
                 Table1.Rows.Add(tr);
@@ -107,7 +127,7 @@ namespace TestWebForms
                 {
                     tr.Cells.Add
                     (
-                        new TableCell { Text = ex.RenderHtml(), ForeColor = Color.Red }
+                        new TableCell { Text = HttpUtility.HtmlEncode(ex.Render()).Replace("\n", "<br />"), ForeColor = Color.Red }
                     );
                 }
                 Table1.Rows.Add(tr);
@@ -140,11 +160,41 @@ namespace TestWebForms
                 {
                     tr.Cells.Add
                     (
-                        new TableCell { Text = ex.RenderHtml(), ForeColor = Color.Red }
+                        new TableCell { Text = HttpUtility.HtmlEncode(ex.Render()).Replace("\n", "<br />"), ForeColor = Color.Red }
                     );
                 }
                 Table1.Rows.Add(tr);
             }
+        }
+
+        protected void infoAlertTest_Click(object sender, EventArgs e)
+        {
+            var alert = Alert.CreateInfoAlert("Polly want a cracker! <em>Squawk!</em>");
+            var alertControl = alert.ToControl();
+            BootstrapAlertArea.Controls.Add(alertControl);
+        }
+
+        protected void closeableWarningAlert_Click(object sender, EventArgs e)
+        {
+            var alert = Alert.CreateWarningAlert("What's shakin' bacon?", closeable: true);
+            var alertControl = alert.ToControl();
+            BootstrapAlertArea.Controls.Add(alertControl);
+        }
+
+        protected void errorAlertInAlert_Click(object sender, EventArgs e)
+        {
+            Exception ex = null;
+            try
+            {
+                throw new Exception("It is what it is homey!");
+            }
+            catch(Exception _ex)
+            {
+                ex = _ex;
+            }
+            var alert = Alert.CreateErrorAlert(ex, displayFullClassName: true, displayStackTrace: true, errorRendering: ExceptionRenderingPolicy.InAlert);
+            var alertControl = alert.ToControl();
+            BootstrapAlertArea.Controls.Add(alertControl);
         }
     }
 }

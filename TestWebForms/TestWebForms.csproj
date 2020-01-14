@@ -232,9 +232,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Horseshoe.NET.Web\Horseshoe.NET.Web.csproj">
-      <Project>{1DDC3941-F891-4A6B-A9EE-91DB603F84E2}</Project>
-      <Name>Horseshoe.NET.Web</Name>
+    <ProjectReference Include="..\Horseshoe.NET.WebForms\Horseshoe.NET.WebForms.csproj">
+      <Project>{489c429b-340c-4c66-b43e-f5184c082832}</Project>
+      <Name>Horseshoe.NET.WebForms</Name>
     </ProjectReference>
     <ProjectReference Include="..\Horseshoe.NET\Horseshoe.NET.csproj">
       <Project>{2C647857-6298-47C1-97BC-AD180D55DD33}</Project>

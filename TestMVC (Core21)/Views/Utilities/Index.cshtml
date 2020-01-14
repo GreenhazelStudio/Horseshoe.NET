@@ -1,11 +1,14 @@
 ﻿@using System
 @using System.Diagnostics
 @using System.Text
-@using TestMVC.ViewModels
+@using System.Web
+
 @using Horseshoe.NET.Application
 @using Horseshoe.NET
 @using Horseshoe.NET.Text
-@using Horseshoe.NET.Web
+@using Horseshoe.NET.Mvc
+
+@using TestMVC.ViewModels
 
 @{
     ViewData["Title"] = "Utilities";
@@ -56,7 +59,7 @@
                 catch (Exception ex)
                 {
                     <span class="error-cell">
-                        @Html.Raw(ex.RenderHtml(displayStackTrace: true, recursive: true))
+                        @Html.Raw(HttpUtility.HtmlEncode(ex.Render(displayStackTrace: true, recursive: true)))
                     </span>
                 }
             }
@@ -82,9 +85,9 @@
                     }
                     catch (Exception ex)
                     {
-                        <span style="color:red;font-family:Consolas,monospace;font-size:.8em;">
-                            @Html.Raw(ex.RenderHtml())
-                        </span>
+                    <span style="color:red;font-family:Consolas,monospace;font-size:.8em;">
+                        @Html.Raw(HttpUtility.HtmlEncode(ex.Render()))
+                    </span>
                     }
                 </td>
             </tr>
@@ -108,7 +111,7 @@
                         }
                         else if (prop.Name.Equals("StackTrace"))
                         {
-                            @Html.Raw(((string)prop.GetValue(null)).Substring(0, 500).ToHtml())
+                            @Html.Raw(HttpUtility.HtmlEncode((string)prop.GetValue(null)).Substring(0, 500))
                         }
                         else
                         {
@@ -118,7 +121,7 @@
                     catch (Exception ex)
                     {
                         <span style="color:red;font-family:Consolas,monospace;font-size:.8em;">
-                            @Html.Raw(ex.RenderHtml())
+                            @Html.Raw(HttpUtility.HtmlEncode(ex.Render(displayStackTrace: true, recursive: true)))
                         </span>
                     }
                 </td>
@@ -142,7 +145,7 @@
                     catch (Exception ex)
                     {
                         <span style="color:red;font-family:Consolas,monospace;font-size:.8em;">
-                            @Html.Raw(ex.RenderHtml())
+                            @Html.Raw(HttpUtility.HtmlEncode(ex.Render()))
                         </span>
                     }
                 </td>
@@ -162,7 +165,7 @@
             catch (Exception ex)
             {
                 <span style="color:red;font-family:Consolas,monospace;font-size:.8em;">
-                    @Html.Raw(ex.RenderHtml())
+                    @Html.Raw(HttpUtility.HtmlEncode(ex.Render()))
                 </span>
             }
         </td>

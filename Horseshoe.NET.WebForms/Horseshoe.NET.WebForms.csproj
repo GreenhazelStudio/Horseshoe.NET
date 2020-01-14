@@ -42,18 +42,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bootstrap3\Extensions.cs" />
+    <Compile Include="AlertMessageDetailsRenderingPolicy.cs" />
+    <Compile Include="Bootstrap3\Alert.cs" />
+    <Compile Include="Bootstrap3\AlertType.cs" />
     <Compile Include="Bootstrap3\WebFormsBootstrapAlert.cs" />
-    <Compile Include="Bootstrap4\Extensions.cs" />
+    <Compile Include="Bootstrap4\Alert.cs" />
+    <Compile Include="Bootstrap4\AlertType.cs" />
     <Compile Include="Bootstrap4\WebFormsBootstrapAlert.cs" />
+    <Compile Include="ExceptionRenderingPolicy.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Horseshoe.NET.Web\Horseshoe.NET.Web.csproj">
-      <Project>{1ddc3941-f891-4a6b-a9ee-91db603f84e2}</Project>
-      <Name>Horseshoe.NET.Web</Name>
-      <Private>False</Private>
-    </ProjectReference>
     <ProjectReference Include="..\Horseshoe.NET\Horseshoe.NET.csproj">
       <Project>{2c647857-6298-47c1-97bc-ad180d55dd33}</Project>
       <Name>Horseshoe.NET</Name>

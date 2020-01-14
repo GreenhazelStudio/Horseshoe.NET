@@ -62,14 +62,12 @@ namespace Horseshoe.NET.WebServices
 
         public static string PostJson(string serviceURL, object content, string contentType = "application/json", Credential? credentials = null)
         {
-            string serializerFunc(object _content) => Serialize.Json(_content);
-            return Post(serviceURL, content, contentType, contentSerializer: serializerFunc, credentials: credentials);
+            return Post(serviceURL, content, contentType, contentSerializer: (obj) => Serialize.Json(obj), credentials: credentials);
         }
 
         public static async Task<string> PostJsonAsync(string serviceURL, object content, string contentType = "application/json", Credential? credentials = null)
         {
-            string serializerFunc(object _content) => Serialize.Json(_content);
-            return await PostAsync(serviceURL, content, contentType, contentSerializer: serializerFunc, credentials: credentials);
+            return await PostAsync(serviceURL, content, contentType, contentSerializer: (obj) => Serialize.Json(obj), credentials: credentials);
         }
 
         public static E PostJson<E>(string serviceURL, object content, string contentType = "application/json", Credential? credentials = null, bool zapBackingFields = false)
@@ -102,14 +100,12 @@ namespace Horseshoe.NET.WebServices
 
         public static string PutJson(string serviceURL, object content, string contentType = "application/json", object id = null, Credential? credentials = null)
         {
-            string serializerFunc(object _content) => Serialize.Json(_content);
-            return Put(serviceURL, content, contentType, id: id, contentSerializer: serializerFunc, credentials: credentials);
+            return Put(serviceURL, content, contentType, id: id, contentSerializer: (obj) => Serialize.Json(obj), credentials: credentials);
         }
 
         public static async Task<string> PutJsonAsync(string serviceURL, object content, string contentType = "application/json", object id = null, Credential? credentials = null)
         {
-            string serializerFunc(object _content) => Serialize.Json(_content);
-            return await PutAsync(serviceURL, content, contentType, id: id, contentSerializer: serializerFunc, credentials: credentials);
+            return await PutAsync(serviceURL, content, contentType, id: id, contentSerializer: (obj) => Serialize.Json(obj), credentials: credentials);
         }
 
         public static E PutJson<E>(string serviceURL, object content, string contentType = "application/json", object id = null, Credential? credentials = null, bool zapBackingFields = false)
@@ -130,38 +126,54 @@ namespace Horseshoe.NET.WebServices
             return e;
         }
 
-        public static string Delete(string serviceURL, object id, string contentType, Credential? credentials = null)
+        public static string Delete(string serviceURL, string contentType, object content = null, object id = null, Func<object, string> contentSerializer = null, Credential? credentials = null)
         {
-            return _NonPost(serviceURL, contentType, "DELETE", id: id, credentials: credentials);
+            if (content != null)
+            {
+                return _Post(serviceURL, content, contentType, "DELETE", id: id, contentSerializer: contentSerializer, credentials: credentials);
+            }
+            if (id != null)
+            {
+                return _NonPost(serviceURL, contentType, "DELETE", id: id, credentials: credentials);
+            }
+            throw new UtilityException("No id and no content was sent to 'delete' web service");
         }
 
-        public static async Task<string> DeleteAsync(string serviceURL, object id, string contentType, Credential? credentials = null)
+        public static async Task<string> DeleteAsync(string serviceURL, string contentType, object content = null, object id = null, Func<object, string> contentSerializer = null, Credential? credentials = null)
         {
-            return await _NonPostAsync(serviceURL, contentType, "DELETE", id: id, credentials: credentials);
+            if (content != null)
+            {
+                return await _PostAsync(serviceURL, content, contentType, "DELETE", id: id, contentSerializer: contentSerializer, credentials: credentials);
+            }
+            if (id != null)
+            {
+                return await _NonPostAsync(serviceURL, contentType, "DELETE", id: id, credentials: credentials);
+            }
+            throw new UtilityException("No id and no content was sent to 'delete' web service");
         }
 
-        public static string DeleteJson(string serviceURL, object id, string contentType = "application/json", Credential? credentials = null)
+        public static string DeleteJson(string serviceURL, string contentType = "application/json", object content = null, object id = null, Credential? credentials = null)
         {
-            return Delete(serviceURL, id, contentType, credentials: credentials);
+            return Delete(serviceURL, contentType, content: content, id: id, contentSerializer: content != null ? (obj) => Serialize.Json(obj) : NoSerializer, credentials: credentials);
         }
 
-        public static async Task<string> DeleteJsonAsync(string serviceURL, object id, string contentType = "application/json", Credential? credentials = null)
+        public static async Task<string> DeleteJsonAsync(string serviceURL, string contentType = "application/json", object content = null, object id = null, Credential? credentials = null)
         {
-            return await DeleteAsync(serviceURL, id, contentType, credentials: credentials);
+            return await DeleteAsync(serviceURL, contentType, content: content, id: id, contentSerializer: content != null ? (obj) => Serialize.Json(obj) : NoSerializer, credentials: credentials);
         }
 
-        public static E DeleteJson<E>(string serviceURL, object id, string contentType = "application/json", Credential? credentials = null, bool zapBackingFields = false)
+        public static E DeleteJson<E>(string serviceURL, string contentType = "application/json", object content = null, object id = null, Credential? credentials = null, bool zapBackingFields = false)
         {
-            var json = DeleteJson(serviceURL, id, contentType: contentType, credentials: credentials);
+            var json = DeleteJson(serviceURL, contentType: contentType, content: content, id: id, credentials: credentials);
             var e = zapBackingFields
                 ? Deserialize.Json<E>(json, preDeserializationFunc: WebServiceUtil.ZapBackingFields)
                 : Deserialize.Json<E>(json);
             return e;
         }
 
-        public static async Task<E> DeleteJsonAsync<E>(string serviceURL, object id, string contentType = "application/json", Credential? credentials = null, bool zapBackingFields = false)
+        public static async Task<E> DeleteJsonAsync<E>(string serviceURL, string contentType = "application/json", object content = null, object id = null, Credential ? credentials = null, bool zapBackingFields = false)
         {
-            var json = await DeleteJsonAsync(serviceURL, id, contentType: contentType, credentials: credentials);
+            var json = await DeleteJsonAsync(serviceURL, contentType: contentType, content: content, id: id, credentials: credentials);
             var e = zapBackingFields
                 ? Deserialize.Json<E>(json, preDeserializationFunc: WebServiceUtil.ZapBackingFields)
                 : Deserialize.Json<E>(json);
@@ -401,5 +413,7 @@ namespace Horseshoe.NET.WebServices
                 return rawResponse;
             }
         }
+
+        static Func<object, string> NoSerializer { get; }
     }
 }

@@ -262,10 +262,22 @@ namespace Horseshoe.NET.DataAccess
             return new Filter(columnName, FilterMode.In, values, product: product);
         }
 
+        public static Filter In<T>(string columnName, T[] values, DbProduct? product = null)
+        {
+            if (values == null || !values.Any()) throw new UtilityException("'in' functions expect at least 1 value, found: " + (values?.Count().ToString() ?? "null"));
+            return new Filter(columnName, FilterMode.In, values.Select(t => (object)t).ToArray(), product: product);
+        }
+
         public static Filter NotIn(string columnName, object[] values, DbProduct? product = null)
         {
             if (values == null || !values.Any()) throw new UtilityException("'in' functions expect at least 1 value, found: " + (values?.Count().ToString() ?? "null"));
             return new Filter(columnName, FilterMode.NotIn, values, product: product);
+        }
+
+        public static Filter NotIn<T>(string columnName, T[] values, DbProduct? product = null)
+        {
+            if (values == null || !values.Any()) throw new UtilityException("'in' functions expect at least 1 value, found: " + (values?.Count().ToString() ?? "null"));
+            return new Filter(columnName, FilterMode.NotIn, values.Select(t => (object)t).ToArray(), product: product);
         }
 
         public static Filter Between(string columnName, object[] values, DbProduct? product = null)

@@ -1,0 +1,53 @@
+﻿@model WebIndexViewModel
+
+@{
+    ViewData["Title"] = "Web";
+}
+
+@section Styles {
+    <style type="text/css">
+
+        .test-table {
+            border: 2px solid black;
+            border-collapse: collapse;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+            .test-table td,
+            .test-table th {
+                padding: 0 3px;
+            }
+
+            .test-table .section-header {
+                background-color: #2f0664;
+                color: white;
+                font-size: 1.35em;
+            }
+    </style>
+}
+
+<h2>Web Tests</h2>
+
+<table class="test-table">
+    <tr>
+        <th class="section-header" colspan="2">Request Body Test</th>
+    </tr>
+    <tr>
+        <th>test:</th>
+        <td>
+            @using (Html.BeginForm("RequestBodyTest", "Web", FormMethod.Post))
+            {
+                <input name="intValue1" value="1" /><br />
+                <input name="textValue1" value="summer eve" /><br />
+                <button type="submit">submit</button>
+            }
+        </td>
+    </tr>
+    <tr>
+        <th>result:</th>
+        <td>
+            @(Html.Raw(Model.RequestBodyTestResult?.Replace(Environment.NewLine, "<br/>")))
+        </td>
+    </tr>
+</table>

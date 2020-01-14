@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Horseshoe.NET.Web;
+using Horseshoe.NET.Mvc;
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;

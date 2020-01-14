@@ -17,7 +17,12 @@ namespace ASP
     using System.Linq;
     using System.Net;
     using System.Text;
+    
+    #line 3 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
     using System.Web;
+    
+    #line default
+    #line hidden
     using System.Web.Helpers;
     using System.Web.Mvc;
     using System.Web.Mvc.Ajax;
@@ -27,8 +32,14 @@ namespace ASP
     using System.Web.UI;
     using System.Web.WebPages;
     
-    #line 3 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+    #line 4 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
     using Horseshoe.NET;
+    
+    #line default
+    #line hidden
+    
+    #line 5 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+    using Horseshoe.NET.Mvc;
     
     #line default
     #line hidden
@@ -39,53 +50,41 @@ namespace ASP
     #line default
     #line hidden
     
-    #line 4 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
-    using Horseshoe.NET.Web;
-    
-    #line default
-    #line hidden
-    
-    #line 5 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
-    using Horseshoe.NET.Web.Bootstrap3;
-    
-    #line default
-    #line hidden
-    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("RazorGenerator", "2.0.0.0")]
     [System.Web.WebPages.PageVirtualPathAttribute("~/Views/Shared/_Bootstrap3Alert.cshtml")]
-    public partial class _Views_Shared__Bootstrap3Alert_cshtml : System.Web.Mvc.WebViewPage<Horseshoe.NET.Web.Bootstrap3.BootstrapAlert>
+    public partial class _Views_Shared__Bootstrap3Alert_cshtml : System.Web.Mvc.WebViewPage<Horseshoe.NET.Mvc.Bootstrap3.Alert>
     {
         public _Views_Shared__Bootstrap3Alert_cshtml()
         {
         }
         public override void Execute()
         {
-WriteLiteral("\n\n");
+WriteLiteral("\r\n\r\n");
 
-WriteLiteral("\n");
+WriteLiteral("\r\n");
 
             
             #line 10 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
   
-    var alertExceptionElementID = "alert-exception-" + Guid.NewGuid();
+    var alertDetailsElementID = "alert-exception-" + Guid.NewGuid();
 
             
             #line default
             #line hidden
-WriteLiteral("\n\n<div");
+WriteLiteral("\r\n\r\n<div");
 
-WriteAttribute("class", Tuple.Create(" class=\"", 268), Tuple.Create("\"", 382)
-, Tuple.Create(Tuple.Create("", 276), Tuple.Create("alert", 276), true)
+WriteAttribute("class", Tuple.Create(" class=\"", 252), Tuple.Create("\"", 345)
+, Tuple.Create(Tuple.Create("", 260), Tuple.Create("alert", 260), true)
             
             #line 14 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
-, Tuple.Create(Tuple.Create(" ", 281), Tuple.Create<System.Object, System.Int32>("alert-" + Model.AlertType.ToString().ToLower() + (Model.IsCloseable ? " alert-dismissible" : "")
+, Tuple.Create(Tuple.Create(" ", 265), Tuple.Create<System.Object, System.Int32>(Model.AlertType.ToCssClass() + (Model.Closeable ? " alert-dismissible" : "")
             
             #line default
             #line hidden
-, 282), false)
+, 266), false)
 );
 
-WriteLiteral(">\n");
+WriteLiteral(">\r\n");
 
             
             #line 15 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
@@ -96,7 +95,7 @@ WriteLiteral(">\n");
             
             #line 15 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
       
-        if (Model.IsCloseable)
+        if (Model.Closeable)
         {
 
             
@@ -112,7 +111,7 @@ WriteLiteral(" data-dismiss=\"alert\"");
 
 WriteLiteral(" aria-label=\"close\"");
 
-WriteLiteral(">&times;</a>\n");
+WriteLiteral(">&times;</a>\r\n");
 
             
             #line 19 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
@@ -143,63 +142,57 @@ WriteLiteral("</strong>");
             #line hidden
             
             #line 23 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
-                                       Write(Html.Raw("&nbsp;&nbsp;"));
+                                       Write(Html.Raw(" - "));
 
             
             #line default
             #line hidden
             
             #line 23 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
-                                                                     
+                                                            
         }
 
-        var message = TextUtil.Zap(Model.Message);
-        if (Model.Exception != null)
+        var message = TextUtil.Reveal(TextUtil.Zap(Model.Message), nullOrBlank: true);
+        if (Model.MessageHtmlEncoded)
         {
-            message = message ?? TextUtil.Zap(Model.Exception.Message);
+            message = HttpUtility.HtmlEncode(message);
         }
-        message = TextUtil.Reveal(message, nullOrBlank: true);
-        message = message.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;");
+        message = message.Replace("\n", "<br />\n");
 
-        if (Model.SuppressRenderingNewLines)
-        {
-            message = message.Replace("\r\n", " ").Replace("\r", " ").Replace("\n", " ");
-        }
-        else
-        {
-            message = message.Replace("\r\n", "<br />").Replace("\r", "<br />").Replace("\n", "<br />");
-        }
-    
-            
-            #line default
-            #line hidden
-WriteLiteral("\n\n");
-
-WriteLiteral("    ");
-
-            
-            #line 44 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
-Write(Html.Raw(message));
-
-            
-            #line default
-            #line hidden
-WriteLiteral("\n\n");
-
-            
-            #line 46 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
-    
+        
             
             #line default
             #line hidden
             
-            #line 46 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
-     if (Model.Exception != null)
-    {
-        var indent = 2;
-        switch (Model.ExceptionRenderingPolicy)
+            #line 33 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+   Write(Html.Raw(message));
+
+            
+            #line default
+            #line hidden
+            
+            #line 33 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+                          
+
+        if (Model.MessageDetails != null)
         {
-            case ExceptionRenderingPolicy.InAlert:
+            bool usePre = false;
+            bool htmlEncoded = false;
+            var messageDetails = Model.MessageDetails;
+
+            if ((Model.MessageDetailsRendering & AlertMessageDetailsRenderingPolicy.Hidden) != AlertMessageDetailsRenderingPolicy.Hidden)
+            {
+                usePre = (Model.MessageDetailsRendering & AlertMessageDetailsRenderingPolicy.PreFormatted) == AlertMessageDetailsRenderingPolicy.PreFormatted;
+                htmlEncoded = (Model.MessageDetailsRendering & AlertMessageDetailsRenderingPolicy.HtmlEncoded) == AlertMessageDetailsRenderingPolicy.HtmlEncoded;
+
+                if (htmlEncoded)
+                {
+                    messageDetails = HttpUtility.HtmlEncode(messageDetails);
+                }
+                if (!usePre)
+                {
+                    messageDetails = messageDetails.Replace("\n", "<br />\n");
+                }
 
 
             
@@ -210,128 +203,111 @@ WriteLiteral("                <script");
 WriteLiteral(" type=\"text/javascript\"");
 
 WriteLiteral(@">
-                    function ShowDerbyUtilitiesNotifyAlertException(clickedLink, alertExceptionElementID) {
+                    function ShowBootstrapAlertMessageDetails(clickedLink, alertDetailsElementID) {
                         if (window.jQuery) {
-                            $('#' + alertExceptionElementID).show();
+                            $('#' + alertDetailsElementID).show();
                             $(clickedLink).hide();
                         }
                         else {
-                            var alertExceptionElement = document.getElementById(alertExceptionElementID);
-                            alertExceptionElement.style.display = 'block';
+                            var alertDetailsElement = document.getElementById(alertDetailsElementID);
+                            alertDetailsElement.style.display = 'block';
                             clickedLink.style.display = 'none';
                         }
                     }
                 </script>
 ");
 
-            
-            #line 66 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
-
-                var htmlRenderedException = Model.Exception.Render(displayFullClassName: true, displayMessage: !string.Equals(Model.Message, Model.Exception.Message), displayStackTrace: true, indent: indent, recursive: true);
-                htmlRenderedException = htmlRenderedException.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;");
-
-                if (indent > 1)
-                {
-                    htmlRenderedException = htmlRenderedException.Replace(new string(' ', indent), TextUtil.Repeat("&nbsp;", indent));
-                }
-
-                if (Model.SuppressRenderingNewLines)
-                {
-                    htmlRenderedException = htmlRenderedException.Replace("\r\n", " ").Replace("\r", " ").Replace("\n", " ");
-                }
-                else
-                {
-                    htmlRenderedException = htmlRenderedException.Replace("\r\n", "<br />").Replace("\r", "<br />").Replace("\n", "<br />");
-                }
-
-
-            
-            #line default
-            #line hidden
-WriteLiteral("                <div>\n                    <a");
+WriteLiteral("                <div>\r\n                    <a");
 
 WriteLiteral(" href=\"javascript:;\"");
 
-WriteAttribute("onclick", Tuple.Create(" onclick=\"", 3228), Tuple.Create("\"", 3310)
-, Tuple.Create(Tuple.Create("", 3238), Tuple.Create("ShowDerbyUtilitiesNotifyAlertException(this,", 3238), true)
-, Tuple.Create(Tuple.Create(" ", 3282), Tuple.Create("\'", 3283), true)
+WriteAttribute("onclick", Tuple.Create(" onclick=\"", 2639), Tuple.Create("\"", 2713)
+, Tuple.Create(Tuple.Create("", 2649), Tuple.Create("ShowBootstrapAlertMessageDetails(this,", 2649), true)
+, Tuple.Create(Tuple.Create(" ", 2687), Tuple.Create("\'", 2688), true)
             
-            #line 85 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
-                  , Tuple.Create(Tuple.Create("", 3284), Tuple.Create<System.Object, System.Int32>(alertExceptionElementID
+            #line 69 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+            , Tuple.Create(Tuple.Create("", 2689), Tuple.Create<System.Object, System.Int32>(alertDetailsElementID
             
             #line default
             #line hidden
-, 3284), false)
-, Tuple.Create(Tuple.Create("", 3308), Tuple.Create("\')", 3308), true)
+, 2689), false)
+, Tuple.Create(Tuple.Create("", 2711), Tuple.Create("\')", 2711), true)
 );
 
-WriteLiteral(">show details</a>\n                </div>\n");
+WriteLiteral(">show details</a>\r\n                </div>\r\n");
 
 WriteLiteral("                <div");
 
-WriteAttribute("id", Tuple.Create(" id=\"", 3372), Tuple.Create("\"", 3401)
+WriteAttribute("id", Tuple.Create(" id=\"", 2777), Tuple.Create("\"", 2804)
             
-            #line 87 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
-, Tuple.Create(Tuple.Create("", 3377), Tuple.Create<System.Object, System.Int32>(alertExceptionElementID
+            #line 71 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+, Tuple.Create(Tuple.Create("", 2782), Tuple.Create<System.Object, System.Int32>(alertDetailsElementID
             
             #line default
             #line hidden
-, 3377), false)
+, 2782), false)
 );
 
-WriteLiteral(" style=\"display: none;font-family: Consolas,monospace; font-size: .8em\"");
+WriteAttribute("style", Tuple.Create(" style=\"", 2805), Tuple.Create("\"", 2895)
+, Tuple.Create(Tuple.Create("", 2813), Tuple.Create("font-family:Consolas,monospace;font-size:.8em;", 2813), true)
+            
+            #line 71 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+                       , Tuple.Create(Tuple.Create("", 2859), Tuple.Create<System.Object, System.Int32>(usePre ? "white-space:pre;" : ""
+            
+            #line default
+            #line hidden
+, 2859), false)
+, Tuple.Create(Tuple.Create("", 2894), Tuple.Create(")", 2894), true)
+);
 
-WriteLiteral(">\n");
+WriteLiteral(">\r\n");
 
 WriteLiteral("                    ");
 
             
-            #line 88 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
-               Write(Html.Raw(htmlRenderedException));
+            #line 72 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+               Write(Html.Raw(messageDetails));
 
             
             #line default
             #line hidden
-WriteLiteral("\n                </div>\n");
+WriteLiteral("\r\n                </div>\r\n");
 
             
-            #line 90 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
-                break;
-            case ExceptionRenderingPolicy.InAlertHidden:
-                var renderedException = Model.Exception.Render(displayFullClassName: true, displayMessage: !string.Equals(Model.Message, Model.Exception.Message), displayStackTrace: true, indent: indent, recursive: true);
+            #line 74 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+            }
+            else
+            {
 
             
             #line default
             #line hidden
-WriteLiteral("                <!-- Exception -->\n");
-
 WriteLiteral("                <div");
 
-WriteLiteral(" style=\"display:none\"");
+WriteLiteral(" style=\"display:none;\"");
 
-WriteLiteral(">\n");
+WriteLiteral(">\r\n");
 
 WriteLiteral("                    ");
 
             
-            #line 95 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
-               Write(Html.Raw(renderedException));
+            #line 78 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+               Write(Html.Raw(messageDetails));
 
             
             #line default
             #line hidden
-WriteLiteral("\n                </div>\n");
+WriteLiteral("\r\n                </div>\r\n");
 
             
-            #line 97 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
-                break;
+            #line 80 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+            }
         }
-    }
-
+    
             
             #line default
             #line hidden
-WriteLiteral("\n</div>\n\n");
+WriteLiteral("\r\n\r\n</div>\r\n\r\n");
 
         }
     }

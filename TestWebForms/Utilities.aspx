@@ -30,5 +30,18 @@
 </asp:Content>
 
 <asp:Content ID="MasterMainContent" ContentPlaceHolderID="MainContent" runat="server">
-    <asp:Table ID="Table1" runat="server" CssClass="test-table"></asp:Table>
+    <asp:Panel runat="server" ID="BootstrapAlertArea"></asp:Panel>
+    <asp:Table ID="Table1" runat="server" CssClass="test-table">
+        <asp:TableRow>
+            <asp:TableHeaderCell CssClass="section-header" ColumnSpan="2">Bootstrap Alerts</asp:TableHeaderCell>
+        </asp:TableRow>
+        <asp:TableRow>
+            <asp:TableHeaderCell>quick alerts</asp:TableHeaderCell>
+            <asp:TableCell>
+                <asp:LinkButton ID="infoAlertTest" runat="server" OnClick="infoAlertTest_Click">info alert test</asp:LinkButton><br />
+                <asp:LinkButton ID="closeableWarningAlert" runat="server" OnClick="closeableWarningAlert_Click">closeable warning alert test</asp:LinkButton><br />
+                <asp:LinkButton ID="errorAlertInAlert" runat="server" OnClick="errorAlertInAlert_Click">error alert (in alert)</asp:LinkButton><br />
+            </asp:TableCell>
+        </asp:TableRow>
+    </asp:Table>
 </asp:Content>
