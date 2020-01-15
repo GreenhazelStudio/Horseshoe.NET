@@ -7,7 +7,7 @@
     <Authors>Carl Thomas</Authors>
     <Company>Greenhazel Studio</Company>
     <Copyright>Copyright © Greenhazel Studio 2020</Copyright>
-    <Version>0.9.0</Version>
+    <Version>0.9.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
