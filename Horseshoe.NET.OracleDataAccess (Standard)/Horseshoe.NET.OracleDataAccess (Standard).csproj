@@ -6,8 +6,8 @@
     <Description>A typesafe, object-oriented database access solution for Oracle</Description>
     <Authors>Carl Thomas</Authors>
     <Company>Greenhazel Studio</Company>
-    <Copyright>Copyright © Greenhazel Studio 2020</Copyright>
-    <Version>0.9.1</Version>
+    <Copyright>Copyright © 2020 Greenhazel Studio</Copyright>
+    <Version>0.9.2</Version>
   </PropertyGroup>
 
   <ItemGroup>

@@ -12,7 +12,7 @@ namespace Horseshoe.NET.Mvc
 {
     public static class Extensions
     {
-        public static string GetBodyText(this HttpRequestBase request)
+        public static string GetOriginalRequestBody(this HttpRequestBase request)
         {
             using (var stream = new MemoryStream())
             {
@@ -61,40 +61,6 @@ namespace Horseshoe.NET.Mvc
             }
 
             return sb.ToString();
-        }
-
-        public static string ToCssClass(this Bootstrap3.AlertType alertType)
-        {
-            switch (alertType)
-            {
-                case Bootstrap3.AlertType.Error:
-                    return "alert-danger";
-                default:
-                    return "alert-" + alertType.ToString().ToLower();
-            }
-        }
-
-        public static string ToCssClass(this Bootstrap4.AlertType alertType)
-        {
-            switch (alertType)
-            {
-                case Bootstrap4.AlertType.Error:
-                    return "alert-danger";
-                default:
-                    return "alert-" + alertType.ToString().ToLower();
-            }
-        }
-
-        internal static AlertMessageDetailsRenderingPolicy ToAlertMessageDetailsRendering(this ExceptionRenderingPolicy exceptionRendering)
-        {
-            switch (exceptionRendering)
-            {
-                case ExceptionRenderingPolicy.InAlert:
-                    return AlertMessageDetailsRenderingPolicy.HtmlEncoded | AlertMessageDetailsRenderingPolicy.PreFormatted;
-                case ExceptionRenderingPolicy.InAlertHidden:
-                default:
-                    return AlertMessageDetailsRenderingPolicy.Default;
-            }
         }
 
         public static string GetRemoteIPAddress(this HttpContext httpContext)

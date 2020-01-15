@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 using Horseshoe.NET.Collections;
+using Horseshoe.NET.Common;
 using Horseshoe.NET.Objects;
 
 namespace Horseshoe.NET.Text

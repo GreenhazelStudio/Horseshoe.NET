@@ -1,11 +1,10 @@
 ﻿@* Generator: MvcView *@
 
 @using System.Web
-@using Horseshoe.NET
-@using Horseshoe.NET.Mvc
+@using Horseshoe.NET.Bootstrap
 @using Horseshoe.NET.Text
 
-@model Horseshoe.NET.Mvc.Bootstrap3.Alert
+@model Horseshoe.NET.Bootstrap.Bootstrap3.Alert
 
 @{
     var alertDetailsElementID = "alert-exception-" + Guid.NewGuid();
@@ -24,7 +23,7 @@
         }
 
         var message = TextUtil.Reveal(TextUtil.Zap(Model.Message), nullOrBlank: true);
-        if (Model.MessageHtmlEncoded)
+        if (Model.MessageEncodeHtml)
         {
             message = HttpUtility.HtmlEncode(message);
         }
@@ -38,7 +37,7 @@
             bool htmlEncoded = false;
             var messageDetails = Model.MessageDetails;
 
-            if ((Model.MessageDetailsRendering & AlertMessageDetailsRenderingPolicy.Hidden) != AlertMessageDetailsRenderingPolicy.Hidden)
+            if ((Model.MessageDetailsRendering & AlertMessageDetailsRenderingPolicy.KeepHidden) != AlertMessageDetailsRenderingPolicy.KeepHidden)
             {
                 usePre = (Model.MessageDetailsRendering & AlertMessageDetailsRenderingPolicy.PreFormatted) == AlertMessageDetailsRenderingPolicy.PreFormatted;
                 htmlEncoded = (Model.MessageDetailsRendering & AlertMessageDetailsRenderingPolicy.HtmlEncoded) == AlertMessageDetailsRenderingPolicy.HtmlEncoded;
@@ -68,7 +67,7 @@
                 <div>
                     <a href="javascript:;" onclick="ShowBootstrapAlertMessageDetails(this, '@alertDetailsElementID')">show details</a>
                 </div>
-                <div id="@alertDetailsElementID" style="font-family:Consolas,monospace;font-size:.8em;@(usePre ? "white-space:pre;" : ""))">
+                <div id="@alertDetailsElementID" style="display:none;font-family:Consolas,monospace;font-size:.8em;@(usePre ? "white-space:pre;" : ""))">
                     @Html.Raw(messageDetails)
                 </div>
             }

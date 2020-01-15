@@ -62,10 +62,6 @@
       <Project>{6083928f-0399-4db6-8808-b34a0693895d}</Project>
       <Name>Horseshoe.NET.Excel</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Horseshoe.NET.WebService\Horseshoe.NET.WebServices.csproj">
-      <Project>{8fafeec3-8654-4fa0-a9f6-d5e78c4eef96}</Project>
-      <Name>Horseshoe.NET.WebServices</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Horseshoe.NET\Horseshoe.NET.csproj">
       <Project>{2c647857-6298-47c1-97bc-ad180d55dd33}</Project>
       <Name>Horseshoe.NET</Name>

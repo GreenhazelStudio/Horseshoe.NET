@@ -48,6 +48,8 @@ namespace Horseshoe.NET
 
         static OrganizationalDefaultSettings()
         {
+            //Set("Bootstrap.ExceptionRendering", "Dynamic");
+
             //Set("Cryptography.SymmetricAlgorithm", new System.Security.Cryptography.RijndaelManaged());
             //Set("Cryptography.SymmetricKey", Encoding.Default.GetBytes("my-$3¢ü®3-password"));
             //Set("Cryptography.SymmetricKey", "my-$3¢ü®3-password");
@@ -98,12 +100,9 @@ namespace Horseshoe.NET
             //Set("Email.Credentials", new Credential("SmtpUser", "gyHt82bNmre457sjd709Aq1==", isEncryptedPassword: true));
             //Set("Email.From", "noreply@myorganization.com");
             //Set("Email.FooterText", "This is an automated email message.  If you have questions please call customer service at 1-800-000-0000.");
+            //Set("Email.SMS.From", "sms@myorganization.com");
 
             //Set("ReportingServices.ReportServer", "http://reports.mycompany.com/ReportServer");
-
-            //Set("SMS.From", "sms@myorganization.com");
-
-            //Set("Web.ExceptionRenderingPolicy", "InAlert");
 
             //Set("WebServices.Credentials", new Credential("WebServiceUser", "gyHt82bNmre457sjd709Aq1==", isEncryptedPassword: true));
         }

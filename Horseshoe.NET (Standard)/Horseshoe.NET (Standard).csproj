@@ -6,8 +6,9 @@
     <Description>A suite of .NET utilities with a dual purpose: simplify coding tasks and offer a variety of new and unique features</Description>
     <Authors>Carl Thomas</Authors>
     <Company>Greenhazel Studio</Company>
-    <Copyright>Copyright © Greenhazel Studio 2020</Copyright>
-    <Version>0.9.0</Version>
+    <Copyright>Copyright © 2020 Greenhazel Studio</Copyright>
+    <Version>0.9.2</Version>
+    <Product>Horseshoe.NET (Standard)</Product>
   </PropertyGroup>
 
   <ItemGroup>

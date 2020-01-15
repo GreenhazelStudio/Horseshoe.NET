@@ -42,17 +42,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AlertMessageDetailsRenderingPolicy.cs" />
-    <Compile Include="Bootstrap3\Alert.cs" />
-    <Compile Include="Bootstrap3\AlertType.cs" />
-    <Compile Include="Bootstrap3\WebFormsBootstrapAlert.cs" />
-    <Compile Include="Bootstrap4\Alert.cs" />
-    <Compile Include="Bootstrap4\AlertType.cs" />
-    <Compile Include="Bootstrap4\WebFormsBootstrapAlert.cs" />
-    <Compile Include="ExceptionRenderingPolicy.cs" />
+    <Compile Include="WebFormsBootstrap3Alert.cs" />
+    <Compile Include="WebFormsBootstrap4Alert.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Horseshoe.NET\Horseshoe.NET.csproj">

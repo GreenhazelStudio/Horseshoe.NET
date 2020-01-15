@@ -6,54 +6,21 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.UI;
 
+using Horseshoe.NET.Bootstrap;
 using Horseshoe.NET.Text;
 
 namespace Horseshoe.NET.WebForms
 {
     public static class Extensions
     {
-        public static string ToCssClass(this Bootstrap3.AlertType alertType)
+        public static WebFormsBootstrap3Alert ToControl(this Bootstrap3.Alert alert)
         {
-            switch (alertType)
-            {
-                case Bootstrap3.AlertType.Error:
-                    return "alert-danger";
-                default:
-                    return "alert-" + alertType.ToString().ToLower();
-            }
+            return new WebFormsBootstrap3Alert(alert);
         }
 
-        public static Bootstrap3.WebFormsBootstrapAlert ToControl(this Bootstrap3.Alert alert)
+        public static WebFormsBootstrap4Alert ToControl(this Bootstrap4.Alert alert)
         {
-            return new Bootstrap3.WebFormsBootstrapAlert(alert);
-        }
-
-        public static string ToCssClass(this Bootstrap4.AlertType alertType)
-        {
-            switch (alertType)
-            {
-                case Bootstrap4.AlertType.Error:
-                    return "alert-danger";
-                default:
-                    return "alert-" + alertType.ToString().ToLower();
-            }
-        }
-
-        public static Bootstrap4.WebFormsBootstrapAlert ToControl(this Bootstrap4.Alert alert)
-        {
-            return new Bootstrap4.WebFormsBootstrapAlert(alert);
-        }
-
-        internal static AlertMessageDetailsRenderingPolicy ToAlertMessageDetailsRendering(this ExceptionRenderingPolicy exceptionRendering)
-        {
-            switch (exceptionRendering)
-            {
-                case ExceptionRenderingPolicy.InAlert:
-                    return AlertMessageDetailsRenderingPolicy.HtmlEncoded | AlertMessageDetailsRenderingPolicy.PreFormatted;
-                case ExceptionRenderingPolicy.InAlertHidden:
-                default:
-                    return AlertMessageDetailsRenderingPolicy.Default;
-            }
+            return new WebFormsBootstrap4Alert(alert);
         }
 
         public static string GetRemoteIPAddress(this Page page)

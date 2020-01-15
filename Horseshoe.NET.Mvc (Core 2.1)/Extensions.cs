@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 using Horseshoe.NET.Text;
 
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 
 namespace Horseshoe.NET.Mvc
 {
     public static class Extensions
     {
-        public static IApplicationBuilder UseGetRequestBodyTextMiddleware(this IApplicationBuilder builder)
+        public static string GetOriginalRequestBody(this HttpRequest request)
         {
-            return builder.UseMiddleware<GetRequestBodyTextMiddleware>();
+            var streamReader = new StreamReader(request.Body);
+            return streamReader.ReadToEnd();
         }
 
         public static string GetAbsoluteApplicationPath(this HttpRequest request, string virtualSubpath = null, bool includeQueryString = false)
@@ -49,40 +50,6 @@ namespace Horseshoe.NET.Mvc
             }
 
             return sb.ToString();
-        }
-
-        public static string ToCssClass(this Bootstrap3.AlertType alertType)
-        {
-            switch (alertType)
-            {
-                case Bootstrap3.AlertType.Error:
-                    return "alert-danger";
-                default:
-                    return "alert-" + alertType.ToString().ToLower();
-            }
-        }
-
-        public static string ToCssClass(this Bootstrap4.AlertType alertType)
-        {
-            switch (alertType)
-            {
-                case Bootstrap4.AlertType.Error:
-                    return "alert-danger";
-                default:
-                    return "alert-" + alertType.ToString().ToLower();
-            }
-        }
-
-        internal static AlertMessageDetailsRenderingPolicy ToAlertMessageDetailsRendering(this ExceptionRenderingPolicy exceptionRendering)
-        {
-            switch (exceptionRendering)
-            {
-                case ExceptionRenderingPolicy.InAlert:
-                    return AlertMessageDetailsRenderingPolicy.HtmlEncoded | AlertMessageDetailsRenderingPolicy.PreFormatted;
-                case ExceptionRenderingPolicy.InAlertHidden:
-                default:
-                    return AlertMessageDetailsRenderingPolicy.Default;
-            }
         }
 
         public static string GetRemoteIPAddress(this HttpContext httpContext)

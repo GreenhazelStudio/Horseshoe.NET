@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 
-using Horseshoe.NET.Numbers;
+using Horseshoe.NET.Common;
 using Horseshoe.NET.Text;
 
 namespace Horseshoe.NET.IO

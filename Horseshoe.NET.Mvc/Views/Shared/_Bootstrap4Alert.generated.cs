@@ -33,18 +33,12 @@ namespace ASP
     using System.Web.WebPages;
     
     #line 4 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
-    using Horseshoe.NET;
+    using Horseshoe.NET.Bootstrap;
     
     #line default
     #line hidden
     
     #line 5 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
-    using Horseshoe.NET.Mvc;
-    
-    #line default
-    #line hidden
-    
-    #line 6 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
     using Horseshoe.NET.Text;
     
     #line default
@@ -52,7 +46,7 @@ namespace ASP
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("RazorGenerator", "2.0.0.0")]
     [System.Web.WebPages.PageVirtualPathAttribute("~/Views/Shared/_Bootstrap4Alert.cshtml")]
-    public partial class _Views_Shared__Bootstrap4Alert_cshtml : System.Web.Mvc.WebViewPage<Horseshoe.NET.Mvc.Bootstrap4.Alert>
+    public partial class _Views_Shared__Bootstrap4Alert_cshtml : System.Web.Mvc.WebViewPage<Horseshoe.NET.Bootstrap.Bootstrap4.Alert>
     {
         public _Views_Shared__Bootstrap4Alert_cshtml()
         {
@@ -64,7 +58,7 @@ WriteLiteral("\r\n\r\n");
 WriteLiteral("\r\n");
 
             
-            #line 10 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
+            #line 9 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
   
     var alertDetailsElementID = "alert-exception-" + Guid.NewGuid();
 
@@ -73,27 +67,27 @@ WriteLiteral("\r\n");
             #line hidden
 WriteLiteral("\r\n\r\n<div");
 
-WriteAttribute("class", Tuple.Create(" class=\"", 252), Tuple.Create("\"", 405)
-, Tuple.Create(Tuple.Create("", 260), Tuple.Create("alert", 260), true)
+WriteAttribute("class", Tuple.Create(" class=\"", 242), Tuple.Create("\"", 395)
+, Tuple.Create(Tuple.Create("", 250), Tuple.Create("alert", 250), true)
             
-            #line 14 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
-, Tuple.Create(Tuple.Create(" ", 265), Tuple.Create<System.Object, System.Int32>(Model.AlertType.ToCssClass() + (Model.Closeable ? " alert-dismissible" : "") + (Model.Fade ? " fade" : "") + (Model.Show ? " show" : "")
+            #line 13 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
+, Tuple.Create(Tuple.Create(" ", 255), Tuple.Create<System.Object, System.Int32>(Model.AlertType.ToCssClass() + (Model.Closeable ? " alert-dismissible" : "") + (Model.Fade ? " fade" : "") + (Model.Show ? " show" : "")
             
             #line default
             #line hidden
-, 266), false)
+, 256), false)
 );
 
 WriteLiteral(">\r\n");
 
             
-            #line 15 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
+            #line 14 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
     
             
             #line default
             #line hidden
             
-            #line 15 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
+            #line 14 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
       
         if (Model.Closeable)
         {
@@ -114,7 +108,7 @@ WriteLiteral(" aria-label=\"close\"");
 WriteLiteral(">&times;</a>\r\n");
 
             
-            #line 19 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
+            #line 18 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
         }
 
         if (Model.Emphasis != null)
@@ -126,7 +120,7 @@ WriteLiteral(">&times;</a>\r\n");
 WriteLiteral("            <strong>");
 
             
-            #line 23 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
+            #line 22 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
                Write(Model.Emphasis);
 
             
@@ -135,25 +129,25 @@ WriteLiteral("            <strong>");
 WriteLiteral("</strong>");
 
             
-            #line 23 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
+            #line 22 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
                                             
             
             #line default
             #line hidden
             
-            #line 23 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
+            #line 22 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
                                        Write(Html.Raw(" - "));
 
             
             #line default
             #line hidden
             
-            #line 23 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
+            #line 22 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
                                                             
         }
 
         var message = TextUtil.Reveal(TextUtil.Zap(Model.Message), nullOrBlank: true);
-        if (Model.MessageHtmlEncoded)
+        if (Model.MessageEncodeHtml)
         {
             message = HttpUtility.HtmlEncode(message);
         }
@@ -164,14 +158,14 @@ WriteLiteral("</strong>");
             #line default
             #line hidden
             
-            #line 33 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
+            #line 32 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
    Write(Html.Raw(message));
 
             
             #line default
             #line hidden
             
-            #line 33 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
+            #line 32 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
                           
 
         if (Model.MessageDetails != null)
@@ -180,7 +174,7 @@ WriteLiteral("</strong>");
             bool htmlEncoded = false;
             var messageDetails = Model.MessageDetails;
 
-            if ((Model.MessageDetailsRendering & AlertMessageDetailsRenderingPolicy.Hidden) != AlertMessageDetailsRenderingPolicy.Hidden)
+            if ((Model.MessageDetailsRendering & AlertMessageDetailsRenderingPolicy.KeepHidden) != AlertMessageDetailsRenderingPolicy.KeepHidden)
             {
                 usePre = (Model.MessageDetailsRendering & AlertMessageDetailsRenderingPolicy.PreFormatted) == AlertMessageDetailsRenderingPolicy.PreFormatted;
                 htmlEncoded = (Model.MessageDetailsRendering & AlertMessageDetailsRenderingPolicy.HtmlEncoded) == AlertMessageDetailsRenderingPolicy.HtmlEncoded;
@@ -221,43 +215,43 @@ WriteLiteral("                <div>\r\n                    <a");
 
 WriteLiteral(" href=\"javascript:;\"");
 
-WriteAttribute("onclick", Tuple.Create(" onclick=\"", 2699), Tuple.Create("\"", 2773)
-, Tuple.Create(Tuple.Create("", 2709), Tuple.Create("ShowBootstrapAlertMessageDetails(this,", 2709), true)
-, Tuple.Create(Tuple.Create(" ", 2747), Tuple.Create("\'", 2748), true)
+WriteAttribute("onclick", Tuple.Create(" onclick=\"", 2696), Tuple.Create("\"", 2770)
+, Tuple.Create(Tuple.Create("", 2706), Tuple.Create("ShowBootstrapAlertMessageDetails(this,", 2706), true)
+, Tuple.Create(Tuple.Create(" ", 2744), Tuple.Create("\'", 2745), true)
             
-            #line 69 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
-            , Tuple.Create(Tuple.Create("", 2749), Tuple.Create<System.Object, System.Int32>(alertDetailsElementID
+            #line 68 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
+            , Tuple.Create(Tuple.Create("", 2746), Tuple.Create<System.Object, System.Int32>(alertDetailsElementID
             
             #line default
             #line hidden
-, 2749), false)
-, Tuple.Create(Tuple.Create("", 2771), Tuple.Create("\')", 2771), true)
+, 2746), false)
+, Tuple.Create(Tuple.Create("", 2768), Tuple.Create("\')", 2768), true)
 );
 
 WriteLiteral(">show details</a>\r\n                </div>\r\n");
 
 WriteLiteral("                <div");
 
-WriteAttribute("id", Tuple.Create(" id=\"", 2837), Tuple.Create("\"", 2864)
+WriteAttribute("id", Tuple.Create(" id=\"", 2834), Tuple.Create("\"", 2861)
             
-            #line 71 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
-, Tuple.Create(Tuple.Create("", 2842), Tuple.Create<System.Object, System.Int32>(alertDetailsElementID
+            #line 70 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
+, Tuple.Create(Tuple.Create("", 2839), Tuple.Create<System.Object, System.Int32>(alertDetailsElementID
             
             #line default
             #line hidden
-, 2842), false)
+, 2839), false)
 );
 
-WriteAttribute("style", Tuple.Create(" style=\"", 2865), Tuple.Create("\"", 2955)
-, Tuple.Create(Tuple.Create("", 2873), Tuple.Create("font-family:Consolas,monospace;font-size:.8em;", 2873), true)
+WriteAttribute("style", Tuple.Create(" style=\"", 2862), Tuple.Create("\"", 2965)
+, Tuple.Create(Tuple.Create("", 2870), Tuple.Create("display:none;font-family:Consolas,monospace;font-size:.8em;", 2870), true)
             
-            #line 71 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
-                       , Tuple.Create(Tuple.Create("", 2919), Tuple.Create<System.Object, System.Int32>(usePre ? "white-space:pre;" : ""
+            #line 70 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
+                                    , Tuple.Create(Tuple.Create("", 2929), Tuple.Create<System.Object, System.Int32>(usePre ? "white-space:pre;" : ""
             
             #line default
             #line hidden
-, 2919), false)
-, Tuple.Create(Tuple.Create("", 2954), Tuple.Create(")", 2954), true)
+, 2929), false)
+, Tuple.Create(Tuple.Create("", 2964), Tuple.Create(")", 2964), true)
 );
 
 WriteLiteral(">\r\n");
@@ -265,7 +259,7 @@ WriteLiteral(">\r\n");
 WriteLiteral("                    ");
 
             
-            #line 72 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
+            #line 71 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
                Write(Html.Raw(messageDetails));
 
             
@@ -274,7 +268,7 @@ WriteLiteral("                    ");
 WriteLiteral("\r\n                </div>\r\n");
 
             
-            #line 74 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
+            #line 73 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
             }
             else
             {
@@ -291,7 +285,7 @@ WriteLiteral(">\r\n");
 WriteLiteral("                    ");
 
             
-            #line 78 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
+            #line 77 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
                Write(Html.Raw(messageDetails));
 
             
@@ -300,7 +294,7 @@ WriteLiteral("                    ");
 WriteLiteral("\r\n                </div>\r\n");
 
             
-            #line 80 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
+            #line 79 "..\..\Views\Shared\_Bootstrap4Alert.cshtml"
             }
         }
     

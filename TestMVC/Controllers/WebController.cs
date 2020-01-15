@@ -36,12 +36,12 @@ namespace TestMVC.Controllers
         }
 
         [HttpPost]
-        public ActionResult RequestBodyTest(int? intValue1, string textValue1)
+        public ActionResult OriginalRequestBodyTest(int? intValue1, string textValue1)
         {
             var result = 
                 "intValue=" + TextUtil.Reveal(intValue1, nullOrBlank: true) + Environment.NewLine + 
                 "textValue1=" + TextUtil.Reveal(textValue1, nullOrBlank: true);
-            result += Environment.NewLine + "request body=" + Request.GetBodyText();
+            result += Environment.NewLine + "original_request_body=" + Request.GetOriginalRequestBody();
             Model.RequestBodyTestResult = result;
             return RedirectToAction("Index");
         }

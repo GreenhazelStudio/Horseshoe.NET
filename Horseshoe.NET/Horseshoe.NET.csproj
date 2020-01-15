@@ -52,6 +52,12 @@
     <Compile Include="Application\Config.cs" />
     <Compile Include="Assemblies.cs" />
     <Compile Include="BenignException.cs" />
+    <Compile Include="Bootstrap\AlertMessageDetailsRenderingPolicy.cs" />
+    <Compile Include="Bootstrap\Bootstrap3.cs" />
+    <Compile Include="Bootstrap\Bootstrap4.cs" />
+    <Compile Include="Bootstrap\ExceptionRenderingPolicy.cs" />
+    <Compile Include="Bootstrap\Extensions.cs" />
+    <Compile Include="Bootstrap\Settings.cs" />
     <Compile Include="Collections\CollectionUtil.cs" />
     <Compile Include="Collections\Extensions.cs" />
     <Compile Include="Collections\ImmutableDictionary.cs" />
@@ -77,9 +83,9 @@
     <Compile Include="Cryptography\Hash.cs" />
     <Compile Include="Cryptography\HashOptions.cs" />
     <Compile Include="Cryptography\Settings.cs" />
-    <Compile Include="Dates\DateDiff.cs" />
-    <Compile Include="Dates\DateUtil.cs" />
-    <Compile Include="Dates\Extensions.cs" />
+    <Compile Include="Common\DateDiff.cs" />
+    <Compile Include="Common\DateUtil.cs" />
+    <Compile Include="Common\Extensions.cs" />
     <Compile Include="Email\EmailInfo.cs" />
     <Compile Include="Email\HtmlEmail.cs" />
     <Compile Include="Email\PlainEmail.cs" />
@@ -95,8 +101,8 @@
     <Compile Include="Events\EasyNotifier.cs" />
     <Compile Include="ExceptionInfo.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="Internal\CustomMapping.cs" />
-    <Compile Include="Internal\TemplatePart.cs" />
+    <Compile Include="Common\CustomMapping.cs" />
+    <Compile Include="Common\TemplatePart.cs" />
     <Compile Include="IO\FIleImport\BlankRowMode.cs" />
     <Compile Include="IO\FIleImport\Column.cs" />
     <Compile Include="IO\FIleImport\DataType.cs" />
@@ -114,9 +120,14 @@
     <Compile Include="IO\ReportingServices\ReportServer.cs" />
     <Compile Include="IO\ReportingServices\ReportUtil.cs" />
     <Compile Include="IO\ReportingServices\Settings.cs" />
+    <Compile Include="IO\WebServices\Enums\ResponseStatus.cs" />
+    <Compile Include="IO\WebServices\WSResponse.cs" />
+    <Compile Include="IO\WebServices\Settings.cs" />
+    <Compile Include="IO\WebServices\WebService.cs" />
+    <Compile Include="IO\WebServices\WebServiceUtil.cs" />
     <Compile Include="Lib.cs" />
     <Compile Include="Logic.cs" />
-    <Compile Include="Numbers\NumberUtil.cs" />
+    <Compile Include="Common\NumberUtil.cs" />
     <Compile Include="Objects\Extensions.cs" />
     <Compile Include="Objects\IPropertyValue.cs" />
     <Compile Include="Objects\ObjectUtil.cs" />
@@ -143,5 +154,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

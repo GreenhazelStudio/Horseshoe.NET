@@ -41,7 +41,13 @@ namespace TestMVC
                 // Make the session cookie essential
                 options.Cookie.IsEssential = true;
             });
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc
+            (
+                options =>
+                {
+                    options.Filters.Add<EnableOriginalRequestBodyResourceFilter>();
+                }
+            ).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddHttpContextAccessor();
         }
 
@@ -57,7 +63,6 @@ namespace TestMVC
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseGetRequestBodyTextMiddleware();
             app.UseSession();
             app.UseStaticFiles();
             app.UseCookiePolicy();

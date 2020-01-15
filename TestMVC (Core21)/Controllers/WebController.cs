@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Horseshoe.NET;
+using Horseshoe.NET.Mvc;
 using Horseshoe.NET.Text;
 
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
 
 using TestMVC.ViewModels;
@@ -38,24 +38,17 @@ namespace TestMVC.Controllers
             return View(Model);
         }
 
-        [HttpPost]
-        public ActionResult RequestBodyTest(int? intValue1, string textValue1)
+        [EnableOriginalRequestBody]
+        public ActionResult OriginalRequestBodyTest(int? intValue1, string textValue1)
         {
             var result =
                 "intValue=" + TextUtil.Reveal(intValue1, nullOrBlank: true) + Environment.NewLine +
                 "textValue1=" + TextUtil.Reveal(textValue1, nullOrBlank: true);
-            result += Environment.NewLine + "request body=" + GetRequestBody(Request);
+            result += Environment.NewLine + "original_request_body=" + Request.GetOriginalRequestBody().Trunc(80, truncPolicy: TruncatePolicy.Ellipsis);
             var model = Model;
             model.RequestBodyTestResult = result;
             Model = model;
             return RedirectToAction("Index");
-        }
-
-        public static string GetRequestBody(HttpRequest request)
-        {
-            var syncIOFeature = request.HttpContext.Features.Get<IHttpBodyControlFeature>();
-            var streamReader = new StreamReader(request.Body);
-            return streamReader.ReadToEnd();
         }
     }
 }

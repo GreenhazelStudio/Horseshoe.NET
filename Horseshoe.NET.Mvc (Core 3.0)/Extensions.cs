@@ -8,17 +8,18 @@ using System.Threading.Tasks;
 using Horseshoe.NET.Text;
 
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace Horseshoe.NET.Mvc
 {
     public static class Extensions
     {
         /// <summary>
-        /// Gets the original http request body as a string.  Note: For this to work remember to follow the setup instructions (see documentation - hint: startup, configure services, add controllers with views, options.Filters.Add(typeof(GetRequestBodyTextResourceFilter)));
+        /// Gets the original http request body as a string.  Note: For this to work you must tag the controller action with the [EnableOriginalRequestBody] attribute and do the setup (see documentation - hint: Startup, ConfigureServices, AddControllersWithViews(options.Filters.Add<EnableOriginalRequestBodyResourceFilter>()))
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public static string GetBodyText(this HttpRequest request)
+        public static string GetOriginalRequestBody(this HttpRequest request)
         {
             var bodyStream = new StreamReader(request.Body, leaveOpen: true);
             var bodyStreamResult = bodyStream.ReadToEnd();
@@ -58,40 +59,6 @@ namespace Horseshoe.NET.Mvc
             }
 
             return sb.ToString();
-        }
-
-        public static string ToCssClass(this Bootstrap3.AlertType alertType)
-        {
-            switch (alertType)
-            {
-                case Bootstrap3.AlertType.Error:
-                    return "alert-danger";
-                default:
-                    return "alert-" + alertType.ToString().ToLower();
-            }
-        }
-
-        public static string ToCssClass(this Bootstrap4.AlertType alertType)
-        {
-            switch (alertType)
-            {
-                case Bootstrap4.AlertType.Error:
-                    return "alert-danger";
-                default:
-                    return "alert-" + alertType.ToString().ToLower();
-            }
-        }
-
-        internal static AlertMessageDetailsRenderingPolicy ToAlertMessageDetailsRendering(this ExceptionRenderingPolicy exceptionRendering)
-        {
-            switch (exceptionRendering)
-            {
-                case ExceptionRenderingPolicy.InAlert:
-                    return AlertMessageDetailsRenderingPolicy.HtmlEncoded | AlertMessageDetailsRenderingPolicy.PreFormatted;
-                case ExceptionRenderingPolicy.InAlertHidden:
-                default:
-                    return AlertMessageDetailsRenderingPolicy.Default;
-            }
         }
 
         public static string GetRemoteIPAddress(this HttpContext httpContext)

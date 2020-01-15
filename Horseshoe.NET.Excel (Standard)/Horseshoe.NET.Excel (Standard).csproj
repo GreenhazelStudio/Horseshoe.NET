@@ -6,8 +6,8 @@
     <Description>An Excel file import utility for .NET (uses NPOI 2.4.1)</Description>
     <Authors>Carl Thomas</Authors>
     <Company>Greenhazel Studio</Company>
-    <Copyright>Copyright © Greenhazel Studio 2020</Copyright>
-    <Version>0.9.0</Version>
+    <Copyright>Copyright © 2020 Greenhazel Studio</Copyright>
+    <Version>0.9.2</Version>
   </PropertyGroup>
 
   <ItemGroup>

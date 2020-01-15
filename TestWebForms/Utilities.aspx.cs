@@ -9,9 +9,9 @@ using System.Web.UI.WebControls;
 
 using Horseshoe.NET;
 using Horseshoe.NET.Application;
+using Horseshoe.NET.Bootstrap;
 using Horseshoe.NET.Text;
 using Horseshoe.NET.WebForms;
-using Horseshoe.NET.WebForms.Bootstrap3;
 
 namespace TestWebForms
 {
@@ -169,14 +169,14 @@ namespace TestWebForms
 
         protected void infoAlertTest_Click(object sender, EventArgs e)
         {
-            var alert = Alert.CreateInfoAlert("Polly want a cracker! <em>Squawk!</em>");
+            var alert = Bootstrap3.CreateInfoAlert("Polly want a cracker! <em>Squawk!</em>");
             var alertControl = alert.ToControl();
             BootstrapAlertArea.Controls.Add(alertControl);
         }
 
         protected void closeableWarningAlert_Click(object sender, EventArgs e)
         {
-            var alert = Alert.CreateWarningAlert("What's shakin' bacon?", closeable: true);
+            var alert = Bootstrap3.CreateWarningAlert("What's shakin' bacon?", closeable: true);
             var alertControl = alert.ToControl();
             BootstrapAlertArea.Controls.Add(alertControl);
         }
@@ -192,7 +192,7 @@ namespace TestWebForms
             {
                 ex = _ex;
             }
-            var alert = Alert.CreateErrorAlert(ex, displayFullClassName: true, displayStackTrace: true, errorRendering: ExceptionRenderingPolicy.InAlert);
+            var alert = Bootstrap3.CreateErrorAlert(ex, displayFullClassName: true, displayStackTrace: true, errorRendering: ExceptionRenderingPolicy.ToggleToView);
             var alertControl = alert.ToControl();
             BootstrapAlertArea.Controls.Add(alertControl);
         }
