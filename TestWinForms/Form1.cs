@@ -28,7 +28,7 @@ namespace TestWinForms
                 textBox1.AppendText(prop.Name.PadRight(25) + " ");
                 try
                 {
-                    textBox1.AppendLine(TextUtil.Reveal(prop.GetValue(null), nullOrBlank: true));
+                    textBox1.AppendLine(TextUtil.RevealNullOrBlank(prop.GetValue(null)));
                 }
                 catch (Exception ex)
                 {
@@ -45,11 +45,11 @@ namespace TestWinForms
                 {
                     if (prop.Name.Equals("NewLine"))
                     {
-                        textBox2.AppendLine(TextUtil.Reveal(prop.GetValue(null), crlf: true));
+                        textBox2.AppendLine(TextUtil.RevealWhiteSpace(prop.GetValue(null)));
                     }
                     else
                     {
-                        textBox2.AppendLine(TextUtil.Reveal(prop.GetValue(null), nullOrBlank: true));
+                        textBox2.AppendLine(TextUtil.RevealNullOrBlank(prop.GetValue(null)));
                     }
                 }
                 catch (Exception ex)
@@ -65,7 +65,7 @@ namespace TestWinForms
                 textBox3.AppendText(prop.Name.PadRight(25) + " ");
                 try
                 {
-                    textBox3.AppendLine(TextUtil.Reveal(prop.GetValue(AppDomain.CurrentDomain), nullOrBlank: true));
+                    textBox3.AppendLine(TextUtil.RevealNullOrBlank(prop.GetValue(AppDomain.CurrentDomain)));
                 }
                 catch (Exception ex)
                 {

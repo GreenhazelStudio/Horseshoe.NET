@@ -7,9 +7,7 @@ using System.Threading.Tasks;
 
 using Horseshoe.NET.Events;
 
-using Excel = Microsoft.Office.Interop.Excel;
-
-namespace Horseshoe.NET.ExcelHelper.Interop
+namespace Horseshoe.NET.Excel.Interop
 {
     public static class ConvertExcelFile
     {
@@ -86,12 +84,12 @@ namespace Horseshoe.NET.ExcelHelper.Interop
                     throw new ValidationException("Destination file already exists (to bypass this set overwriteExisting = true and try again).");
                 }
 
-                var app = new Excel.Application
+                var app = new Microsoft.Office.Interop.Excel.Application
                 {
                     Visible = false,
                     DisplayAlerts = false
                 };
-                var workbook = app.Workbooks.Open(Source.FilePath, Excel.XlUpdateLinks.xlUpdateLinksNever, true);
+                var workbook = app.Workbooks.Open(Source.FilePath, Microsoft.Office.Interop.Excel.XlUpdateLinks.xlUpdateLinksNever, true);
                 workbook.SaveAs(DestFilePath, DestFileType);
                 workbook.Close(false);
                 app.Quit();

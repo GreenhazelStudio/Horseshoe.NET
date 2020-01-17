@@ -83,12 +83,6 @@ namespace Horseshoe.NET
             return false;
         }
 
-        //public static Exception ToException(this ExceptionInfo exceptionInfo)
-        //{
-        //    var exception = ReconstitutedException.From(exceptionInfo);
-        //    return exception;
-        //}
-
         public static string Render(this Exception exception, bool displayFullClassName = false, bool displayMessage = true, bool displayStackTrace = false, int indent = 2, bool recursive = false)
         {
             var strb = new StringBuilder();
@@ -101,6 +95,20 @@ namespace Horseshoe.NET
             var strb = new StringBuilder();
             RenderRecursive(exceptionInfo, strb, displayFullClassName, displayMessage, displayStackTrace, indent, recursive);
             return strb.ToString();
+        }
+
+        public static string RenderHtml(this Exception exception, bool displayFullClassName = false, bool displayMessage = true, bool displayStackTrace = false, int indent = 2, bool recursive = false)
+        {
+            var text = Render(exception, displayFullClassName: displayFullClassName, displayMessage: displayMessage, displayStackTrace: displayStackTrace, indent: indent, recursive: recursive);
+            var html = text.ToHtml();
+            return html;
+        }
+
+        public static string RenderHtml(this ExceptionInfo exceptionInfo, bool displayFullClassName = false, bool displayMessage = true, bool displayStackTrace = false, int indent = 2, bool recursive = false)
+        {
+            var text = Render(exceptionInfo, displayFullClassName: displayFullClassName, displayMessage: displayMessage, displayStackTrace: displayStackTrace, indent: indent, recursive: recursive);
+            var html = text.ToHtml();
+            return html;
         }
 
         private static void RenderRecursive(Exception exception, StringBuilder strb, bool displayFullClassName, bool displayMessage, bool displayStackTrace, int indent, bool recursive)
@@ -116,7 +124,7 @@ namespace Horseshoe.NET
                 strb.Append
                 (
                     Environment.NewLine + "Message:" +
-                    Environment.NewLine + new string(' ', indent) + TextUtil.Reveal(exception.Message, nullOrBlank: true)
+                    Environment.NewLine + new string(' ', indent) + TextUtil.RevealNullOrBlank(exception.Message)
                 );
             }
             if (displayStackTrace && exception.StackTrace != null)
@@ -132,6 +140,12 @@ namespace Horseshoe.NET
                 strb.AppendLine();
                 RenderRecursive(exception.InnerException, strb, displayFullClassName, displayMessage, displayStackTrace, indent, recursive);
             }
+        }
+
+        public static string ToHtml(this string text)
+        {
+            var html = text.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("\r\n", "<br />").Replace("\n", "<br />");
+            return html;
         }
 
         static string IndentStackTrace(string stackTrace, int indent)

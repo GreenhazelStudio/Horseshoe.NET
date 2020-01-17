@@ -6,9 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Horseshoe.NET.IO.FileImport;
-using static Horseshoe.NET.Objects.ObjectUtil;
 
-namespace Horseshoe.NET.ExcelHelper
+namespace Horseshoe.NET.Excel
 {
     public class ExcelColumn
     {

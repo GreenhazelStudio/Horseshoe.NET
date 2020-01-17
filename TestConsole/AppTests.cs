@@ -43,7 +43,7 @@ namespace TestConsole
                         Console.Write(prop.Name.PadRight(25) + " ");
                         try
                         {
-                            Console.WriteLine(TextUtil.Reveal(prop.GetValue(null), nullOrBlank: true));
+                            Console.WriteLine(TextUtil.RevealNullOrBlank(prop.GetValue(null)));
                         }
                         catch (Exception ex)
                         {
@@ -60,7 +60,7 @@ namespace TestConsole
                         {
                             if (prop.Name.Equals("NewLine"))
                             {
-                                Console.WriteLine(TextUtil.Reveal(prop.GetValue(null), crlf: true));
+                                Console.WriteLine(TextUtil.RevealWhiteSpace(prop.GetValue(null)));
                             }
                             else if (prop.Name.Equals("StackTrace"))
                             {
@@ -68,7 +68,7 @@ namespace TestConsole
                             }
                             else
                             {
-                                Console.WriteLine(TextUtil.Reveal(prop.GetValue(null), nullOrBlank: true));
+                                Console.WriteLine(TextUtil.RevealNullOrBlank(prop.GetValue(null)));
                             }
                         }
                         catch (Exception ex)
@@ -86,11 +86,11 @@ namespace TestConsole
                         {
                             if (prop.Name.Equals("PermissionSet"))
                             {
-                                Console.WriteLine(TextUtil.Reveal(prop.GetValue(AppDomain.CurrentDomain)?.ToString().Replace(Environment.NewLine, " ").Trim(), nullOrBlank: true));
+                                Console.WriteLine(TextUtil.RevealNullOrBlank(prop.GetValue(AppDomain.CurrentDomain)?.ToString().Replace(Environment.NewLine, " ").Trim()));
                             }
                             else
                             {
-                                Console.WriteLine(TextUtil.Reveal(prop.GetValue(AppDomain.CurrentDomain), nullOrBlank: true));
+                                Console.WriteLine(TextUtil.RevealNullOrBlank(prop.GetValue(AppDomain.CurrentDomain)));
                             }
                         }
                         catch (Exception ex)

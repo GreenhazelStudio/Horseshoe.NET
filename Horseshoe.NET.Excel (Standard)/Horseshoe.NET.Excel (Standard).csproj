@@ -3,11 +3,11 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Horseshoe.NET.ExcelHelper</RootNamespace>
-    <Description>An Excel file import utility for .NET (uses NPOI 2.4.1)</Description>
+    <Description>An Excel file import utility for .NET (uses NPOI)</Description>
     <Authors>Carl Thomas</Authors>
     <Company>Greenhazel Studio</Company>
     <Copyright>Copyright © 2020 Greenhazel Studio</Copyright>
-    <Version>0.9.2</Version>
+    <Version>0.9.2.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

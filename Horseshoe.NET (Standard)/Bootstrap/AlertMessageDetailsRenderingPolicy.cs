@@ -23,6 +23,6 @@ namespace Horseshoe.NET.Bootstrap
         /// <summary>
         /// Do not make viewable in the browser (force use of developer tools or the generated source code to view the message details)
         /// </summary>
-        KeepHidden = 4
+        Hidden = 4
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using Microsoft.Office.Interop.Excel;
 
-namespace Horseshoe.NET.ExcelHelper.Interop
+namespace Horseshoe.NET.Excel.Interop
 {
     public enum ExcelFileTypeByExtension
     {

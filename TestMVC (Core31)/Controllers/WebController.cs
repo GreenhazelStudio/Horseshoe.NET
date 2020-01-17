@@ -41,8 +41,8 @@ namespace TestMVC.Controllers
         public ActionResult OriginalRequestBodyTest(int? intValue1, string textValue1)
         {
             var result =
-                "intValue=" + TextUtil.Reveal(intValue1, nullOrBlank: true) + Environment.NewLine +
-                "textValue1=" + TextUtil.Reveal(textValue1, nullOrBlank: true);
+                "intValue=" + TextUtil.RevealNullOrBlank(intValue1) + Environment.NewLine +
+                "textValue1=" + TextUtil.RevealNullOrBlank(textValue1);
             result += Environment.NewLine + "orig_request_body=" + Request.GetOriginalRequestBody().Trunc(80, truncPolicy: TruncatePolicy.LongEllipsis);
             var model = Model;
             model.RequestBodyTestResult = result;

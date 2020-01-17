@@ -38,9 +38,9 @@ namespace Horseshoe.NET.Bootstrap
         {
             switch (exceptionRendering)
             {
-                case ExceptionRenderingPolicy.ToggleToView:
+                case ExceptionRenderingPolicy.Visible:
                     return AlertMessageDetailsRenderingPolicy.HtmlEncoded | AlertMessageDetailsRenderingPolicy.PreFormatted;
-                case ExceptionRenderingPolicy.KeepHidden:
+                case ExceptionRenderingPolicy.Hidden:
                 default:
                     return AlertMessageDetailsRenderingPolicy.Default;
             }

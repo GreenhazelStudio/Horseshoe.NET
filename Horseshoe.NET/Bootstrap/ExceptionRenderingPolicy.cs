@@ -8,14 +8,14 @@
         Preclude,
 
         /// <summary>
-        /// Render exception details to a nonvisible element and supply a widget (e.g. hyperlink) to toggle visibility
+        /// Render exception details (recommendation: hide initially, click to toggle or show)
         /// </summary>
-        ToggleToView,
+        Visible,
 
         /// <summary>
         /// Render exception details to a nonvisible element only
         /// </summary>
-        KeepHidden,
+        Hidden,
 
         /// <summary>
         /// Render exception details only if in Development (see Horseshoe.NET AppMode), otherwise do not (requires configuration i.e. in app|web.config or appsettings.json set Horseshoe.NET:AppMode)

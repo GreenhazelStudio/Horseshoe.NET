@@ -67,7 +67,7 @@
     </tr>
     <tr>
         <th>App Type - Message Tracker</th>
-        <td>@Html.Raw(TextUtil.Reveal(Model.AppTypeMessageTrackerHTML, nullOrBlank: true))</td>
+        <td>@Html.Raw(TextUtil.RevealNullOrBlank(Model.AppTypeMessageTrackerHTML))</td>
     </tr>
     <tr>
         <th colspan="2" class="section-header">Console Properties</th>
@@ -81,7 +81,7 @@
                 <td>
                     @try
                     {
-                        @TextUtil.Reveal(prop.GetValue(null), nullOrBlank: true)
+                        @TextUtil.RevealNullOrBlank(prop.GetValue(null))
                     }
                     catch (Exception ex)
                     {
@@ -107,7 +107,7 @@
                     {
                         if (prop.Name.Equals("NewLine"))
                         {
-                            @TextUtil.Reveal(prop.GetValue(null), crlf: true)
+                            @TextUtil.RevealWhiteSpace(prop.GetValue(null))
                         }
                         else if (prop.Name.Equals("StackTrace"))
                         {
@@ -115,7 +115,7 @@
                         }
                         else
                         {
-                            @TextUtil.Reveal(prop.GetValue(null), nullOrBlank: true)
+                            @TextUtil.RevealNullOrBlank(prop.GetValue(null))
                         }
                     }
                     catch (Exception ex)
@@ -140,7 +140,7 @@
                 <td>
                     @try
                     {
-                        @TextUtil.Reveal(prop.GetValue(AppDomain.CurrentDomain), nullOrBlank: true)
+                        @TextUtil.RevealNullOrBlank(prop.GetValue(AppDomain.CurrentDomain))
                     }
                     catch (Exception ex)
                     {
@@ -160,7 +160,7 @@
         <td>
             @try
             {
-                @TextUtil.Reveal(Process.GetCurrentProcess().MainWindowHandle, nullOrBlank: true)
+                @TextUtil.RevealNullOrBlank(Process.GetCurrentProcess().MainWindowHandle)
             }
             catch (Exception ex)
             {

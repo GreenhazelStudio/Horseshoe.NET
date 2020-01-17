@@ -42,11 +42,11 @@ namespace TestConsole
                     //Console.WriteLine("Assemblies");
                     //RenderList(appAssemblies, title: "Assemblies", renderer: (a) => a.FullName);
                     var consoleProps = typeof(Console).GetProperties(bindingAttr: BindingFlags.Public | BindingFlags.Static);
-                    RenderList(consoleProps, title: "Console Properties", renderer: (p) => p.Name.PadRight(28) + " " + TextUtil.Reveal(p.GetValue(null), nullOrBlank: true, crlf: true));
+                    RenderList(consoleProps, title: "Console Properties", renderer: (p) => p.Name.PadRight(28) + " " + TextUtil.RevealWhiteSpace(p.GetValue(null)));
                     var environmentProps = typeof(Environment).GetProperties(bindingAttr: BindingFlags.Public | BindingFlags.Static);
-                    RenderList(environmentProps, title: "Environment Properties", renderer: (p) => p.Name.PadRight(28) + " " + TextUtil.Reveal(p.GetValue(null), nullOrBlank: true, crlf: true));
+                    RenderList(environmentProps, title: "Environment Properties", renderer: (p) => p.Name.PadRight(28) + " " + TextUtil.RevealWhiteSpace(p.GetValue(null)));
                     var appDomainProps = typeof(AppDomain).GetProperties(bindingAttr: BindingFlags.Public | BindingFlags.Instance);
-                    RenderList(appDomainProps, title: "App Domain Properties", renderer: (p) => p.Name.PadRight(28) + " " + TextUtil.Reveal(p.GetValue(AppDomain.CurrentDomain), nullOrBlank: true, crlf: true));
+                    RenderList(appDomainProps, title: "App Domain Properties", renderer: (p) => p.Name.PadRight(28) + " " + TextUtil.RevealWhiteSpace(p.GetValue(AppDomain.CurrentDomain)));
                     RenderListTitle("Process Properties");
                     Console.WriteLine("MainWindowHandle".PadRight(28) + " " + Process.GetCurrentProcess().MainWindowHandle);
                     Console.WriteLine("MainWindowTitle".PadRight(28) + " " + Process.GetCurrentProcess().MainWindowTitle);

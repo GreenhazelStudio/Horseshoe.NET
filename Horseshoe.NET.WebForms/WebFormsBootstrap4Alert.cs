@@ -21,41 +21,31 @@ namespace Horseshoe.NET.WebForms
 
         protected override void Render(HtmlTextWriter writer)
         {
-            // alert ui
             writer.AddAttribute(HtmlTextWriterAttribute.Class, "alert " + Alert.AlertType.ToCssClass() + (Alert.Closeable ? " alert-dismissible" : "") + (Alert.Fade ? " fade" : "") + (Alert.Show ? " show" : ""));
             writer.AddAttribute("role", "alert");
-            writer.RenderBeginTag(HtmlTextWriterTag.Div);
+            writer.RenderBeginTag(HtmlTextWriterTag.Div);                                                // Begin 'bootstrap alert' div
 
             if (Alert.Closeable)
             {
-                // begin close button
                 writer.AddAttribute(HtmlTextWriterAttribute.Type, "button");
                 writer.AddAttribute(HtmlTextWriterAttribute.Class, "close");
                 writer.AddAttribute("data-dismiss", "alert");
                 writer.AddAttribute("aria-label", "Close");
-                writer.RenderBeginTag("button");
-
-                // close button x
-                writer.AddAttribute("aria-hidden", "true");
-                writer.RenderBeginTag(HtmlTextWriterTag.Span);
+                writer.RenderBeginTag("button");                                                         // Begin 'close' button
                 writer.Write("&times;");
-                writer.RenderEndTag();
-
-                // finalize close button
-                writer.RenderEndTag();
+                writer.RenderEndTag();                                                                   // End 'close' button
             }
 
-            // message eye catcher
             if (Alert.Emphasis != null)
             {
-                writer.RenderBeginTag(HtmlTextWriterTag.Strong);
+                writer.RenderBeginTag(HtmlTextWriterTag.Strong);                                         // Begin 'emphasis' strong
                 writer.Write(Alert.Emphasis);
-                writer.RenderEndTag();
+                writer.RenderEndTag();                                                                   // End 'emphasis' strong
                 writer.Write(" - ");
             }
 
             // message
-            var message = TextUtil.Reveal(Alert.Message, nullOrBlank: true);
+            var message = TextUtil.RevealNullOrBlank(Alert.Message);
             if (Alert.MessageEncodeHtml)
             {
                 message = HttpUtility.HtmlEncode(message);
@@ -68,45 +58,65 @@ namespace Horseshoe.NET.WebForms
             {
                 bool usePre = false;
                 bool htmlEncoded = false;
-                if ((Alert.MessageDetailsRendering & AlertMessageDetailsRenderingPolicy.KeepHidden) != AlertMessageDetailsRenderingPolicy.KeepHidden)
+                if ((Alert.MessageDetailsRendering & AlertMessageDetailsRenderingPolicy.Hidden) == AlertMessageDetailsRenderingPolicy.Hidden)
+                {
+                    writer.AddStyleAttribute(HtmlTextWriterStyle.Display, "none");                       // for 'alert details' div
+                }
+                else
                 {
                     usePre = (Alert.MessageDetailsRendering & AlertMessageDetailsRenderingPolicy.PreFormatted) == AlertMessageDetailsRenderingPolicy.PreFormatted;
                     htmlEncoded = (Alert.MessageDetailsRendering & AlertMessageDetailsRenderingPolicy.HtmlEncoded) == AlertMessageDetailsRenderingPolicy.HtmlEncoded;
-                    writer.RenderBeginTag(HtmlTextWriterTag.Script);
+                    writer.RenderBeginTag(HtmlTextWriterTag.Script);                                     // Begin 'toggle' script
                     writer.Write
                     (
                         @"
-                            function ShowBootstrapAlertMessageDetails(clickedLink, alertDetailsElementID) {
-                                if (window.jQuery) {  
-                                    $('#' + alertDetailsElementID).show();
-                                    $(clickedLink).hide();
-                                } 
+                            function ToggleAlertDetails(clickedLink, alertDetailsElementID) {
+                                if (window.jQuery) {
+                                    var $clickedLink = $(clickedLink);
+                                    if ($clickedLink.prop(""toggled"")) {
+                                        $(""#"" + alertDetailsElementID).hide();
+                                        $clickedLink.text(""show details"");
+                                        $clickedLink.prop(""toggled"", false);
+                                    }
+                                    else {
+                                        $(""#"" + alertDetailsElementID).show();
+                                        $clickedLink.text(""hide details"");
+                                        $clickedLink.prop(""toggled"", true);
+                                    }
+                                }
                                 else {
-                                    var messageDetailsElement = document.getElementById(alertDetailsElementID);
-                                    messageDetailsElement.style.display = 'block';
-                                    clickedLink.style.display = 'none';
+                                    if (clickedLink.toggled) {
+                                        document.getElementById(alertDetailsElementID).style.display = ""none"";
+                                        clickedLink.innerText = ""show details"";
+                                        clickedLink.toggled = false;
+                                    }
+                                    else {
+                                        document.getElementById(alertDetailsElementID).style.display = ""block"";
+                                        clickedLink.innerText = ""hide details"";
+                                        clickedLink.toggled = true;
+                                    }
                                 }
                             }
                         "
                     );
-                    writer.RenderEndTag(); // Script
-                    writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                    writer.RenderEndTag();                                                               // End 'toggle' script
+                    writer.RenderBeginTag(HtmlTextWriterTag.Div);                                        // Begin 'toggle link' div
                     writer.AddAttribute("href", "javascript:;");
-                    writer.AddAttribute("onclick", "ShowBootstrapAlertMessageDetails(this, '" + AlertDetailsElementID + "')");
+                    writer.AddAttribute("onclick", "ToggleAlertDetails(this, '" + AlertDetailsElementID + "')");
                     writer.RenderBeginTag(HtmlTextWriterTag.A);
                     writer.Write("show details");
                     writer.RenderEndTag(); // A
-                    writer.RenderEndTag(); // Div
-                    writer.AddAttribute("id", AlertDetailsElementID);                                // for next Div
-                    writer.AddStyleAttribute(HtmlTextWriterStyle.FontFamily, "Consolas, monospace"); // for next Div
-                    writer.AddStyleAttribute(HtmlTextWriterStyle.FontSize, ".8em");                  // for next Div
+                    writer.RenderEndTag(); // Div                                                        // End 'toggle link' div
+                    writer.AddAttribute("id", AlertDetailsElementID);                                    // for 'alert details' div
+                    writer.AddStyleAttribute(HtmlTextWriterStyle.Display, "none");                       // ""
+                    if (usePre)
+                    {
+                        writer.AddStyleAttribute(HtmlTextWriterStyle.FontFamily, "Consolas, monospace"); // for 'alert details' div
+                        writer.AddStyleAttribute(HtmlTextWriterStyle.FontSize, ".8em");
+                        writer.AddStyleAttribute(HtmlTextWriterStyle.WhiteSpace, "pre");
+                    }
                 }
-                if (usePre)
-                {
-                    writer.AddStyleAttribute(HtmlTextWriterStyle.WhiteSpace, "pre");
-                }
-                writer.AddStyleAttribute(HtmlTextWriterStyle.Display, "none");
-                writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                writer.RenderBeginTag(HtmlTextWriterTag.Div);                                            // Begin 'alert details' div
 
                 var messageDetails = (htmlEncoded ? HttpUtility.HtmlEncode(Alert.MessageDetails) : Alert.MessageDetails);
                 if (!usePre)
@@ -115,11 +125,10 @@ namespace Horseshoe.NET.WebForms
                 }
                 writer.Write("\n" + messageDetails);
 
-                writer.RenderEndTag();  // Div
+                writer.RenderEndTag();                                                                   // End 'alert details' div
             }
 
-            // finalize alert ui
-            writer.RenderEndTag();
+            writer.RenderEndTag();                                                                       // End 'bootstrap alert' div
         }
     }
 }

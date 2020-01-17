@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <RootNamespace>Horseshoe.NET.Mvc</RootNamespace>
-    <Version>0.9.2</Version>
+    <Version>0.9.2.1</Version>
     <Authors>Carl Thomas</Authors>
     <Company>Greenhazel Studio</Company>
     <Description>Adds functionality (e.g. bootstrap alerts) to MVC applications (see documentation)</Description>

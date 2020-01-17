@@ -17,7 +17,7 @@ using NPOI.HSSF.UserModel;
 using NPOI.XSSF.UserModel;
 using NPOI.SS.UserModel;
 
-namespace Horseshoe.NET.ExcelHelper
+namespace Horseshoe.NET.Excel
 {
     static class ImportExcel
     {

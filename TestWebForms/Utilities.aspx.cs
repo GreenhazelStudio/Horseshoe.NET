@@ -84,7 +84,7 @@ namespace TestWebForms
                 );
                 try
                 {
-                    var cellValue = TextUtil.Reveal(prop.GetValue(null), nullOrBlank: true);
+                    var cellValue = TextUtil.RevealNullOrBlank(prop.GetValue(null));
                     tr.Cells.Add
                     (
                         new TableCell { Text = cellValue }
@@ -117,7 +117,7 @@ namespace TestWebForms
                 );
                 try
                 {
-                    var cellValue = TextUtil.Reveal(prop.GetValue(null), nullOrBlank: true, crlf: true);
+                    var cellValue = TextUtil.RevealWhiteSpace(prop.GetValue(null));
                     tr.Cells.Add
                     (
                         new TableCell { Text = cellValue }
@@ -150,7 +150,7 @@ namespace TestWebForms
                 );
                 try
                 {
-                    var cellValue = TextUtil.Reveal(prop.GetValue(AppDomain.CurrentDomain), nullOrBlank: true, crlf: true);
+                    var cellValue = TextUtil.RevealWhiteSpace(prop.GetValue(AppDomain.CurrentDomain));
                     tr.Cells.Add
                     (
                         new TableCell { Text = cellValue }
@@ -192,7 +192,7 @@ namespace TestWebForms
             {
                 ex = _ex;
             }
-            var alert = Bootstrap3.CreateErrorAlert(ex, displayFullClassName: true, displayStackTrace: true, errorRendering: ExceptionRenderingPolicy.ToggleToView);
+            var alert = Bootstrap3.CreateErrorAlert(ex, displayFullClassName: true, displayStackTrace: true, errorRendering: ExceptionRenderingPolicy.Visible);
             var alertControl = alert.ToControl();
             BootstrapAlertArea.Controls.Add(alertControl);
         }

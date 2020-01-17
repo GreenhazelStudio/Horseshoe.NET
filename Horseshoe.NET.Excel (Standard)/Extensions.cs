@@ -8,7 +8,7 @@ using Horseshoe.NET.Text;
 
 using NPOI.SS.UserModel;
 
-namespace Horseshoe.NET.ExcelHelper
+namespace Horseshoe.NET.Excel
 {
     internal static class Extensions
     {

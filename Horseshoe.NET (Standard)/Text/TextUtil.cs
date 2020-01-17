@@ -583,28 +583,37 @@ namespace Horseshoe.NET.Text
             }
         }
 
-        public static string Reveal(object input, string valueIfNull = null, bool nullOrBlank = false, bool crlf = false, bool preserveLineBreaks = false)
+        public static string RevealNullOrBlank(object input, string valueIfNull = "[null]", string valueIfBlank = "[blank]", bool autoTrim = false)
         {
-            if (input == null)
+            if (input == null) return valueIfNull;
+            if (input is string text)
             {
-                return nullOrBlank
-                    ? "[null]"
-                    : valueIfNull;
+                if (autoTrim) text = text.Trim();
+                if (text.Length == 0) return valueIfBlank;
+                return text;
             }
-            var text = input.ToString();
-            if (crlf)
+            return input.ToString();
+        }
+
+        public static string RevealWhiteSpace(object input, string spaceIndicator = "·", bool suppressSpaceIndicator = false, string tabIndicator = "--->", bool suppressTabIndicator = false, string crIndicator = "[CR]", string lfIndicator = "[LF]", string crlfIndicator = "[CR-LF]", bool suppressCrlfIndicator = false, string valueIfNull = "[null]", string valueIfBlank = "[blank]", bool autoTrim = false, bool preserveLineBreaks = false)
+        {
+            var text = RevealNullOrBlank(input, valueIfNull: valueIfNull, valueIfBlank: valueIfBlank, autoTrim: autoTrim);
+
+            if (!suppressSpaceIndicator)
             {
-                text = text.Replace("\r\n", "[CR-LF]").Replace("\n", "[LF]").Replace("\r", "[CR]");
+                text = text.Replace(" ", spaceIndicator);
+            }
+            if (!suppressTabIndicator)
+            {
+                text = text.Replace("\t", tabIndicator);
+            }
+            if (!suppressCrlfIndicator)
+            {
+                text = text.Replace("\r\n", crlfIndicator).Replace("\n", lfIndicator).Replace("\r", crIndicator);
                 if (preserveLineBreaks)
                 {
                     text = text.Replace("[CR-LF]", "[CR-LF]\r\n").Replace("[LF]", "[LF]\n").Replace("[CR]", "[CR]\r");
                 }
-            }
-            if (text.Trim().Length == 0)
-            {
-                return nullOrBlank
-                    ? "[blank]"
-                    : text;
             }
             return text;
         }

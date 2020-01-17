@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Horseshoe.NET.ExcelHelper
+namespace Horseshoe.NET.Excel
 {
     public static class ExcelUtil
     {

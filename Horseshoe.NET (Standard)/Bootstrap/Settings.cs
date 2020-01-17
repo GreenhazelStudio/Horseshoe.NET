@@ -36,9 +36,9 @@ namespace Horseshoe.NET.Bootstrap
                     case AppMode.Training:
                         return ExceptionRenderingPolicy.Preclude;
                     case AppMode.Development:
-                        return ExceptionRenderingPolicy.ToggleToView;
+                        return ExceptionRenderingPolicy.Visible;
                     case AppMode.Test:
-                        return ExceptionRenderingPolicy.KeepHidden;
+                        return ExceptionRenderingPolicy.Hidden;
                 }
             }
             return exceptionRendering;

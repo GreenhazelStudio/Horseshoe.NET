@@ -95,9 +95,9 @@ WriteLiteral(">\r\n");
             
             #line default
             #line hidden
-WriteLiteral("            <a");
+WriteLiteral("            <button");
 
-WriteLiteral(" href=\"#\"");
+WriteLiteral(" type=\"button\"");
 
 WriteLiteral(" class=\"close\"");
 
@@ -105,7 +105,7 @@ WriteLiteral(" data-dismiss=\"alert\"");
 
 WriteLiteral(" aria-label=\"close\"");
 
-WriteLiteral(">&times;</a>\r\n");
+WriteLiteral(">&times;</button>\r\n");
 
             
             #line 18 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
@@ -146,7 +146,7 @@ WriteLiteral("</strong>");
                                                             
         }
 
-        var message = TextUtil.Reveal(TextUtil.Zap(Model.Message), nullOrBlank: true);
+        var message = TextUtil.RevealNullOrBlank(TextUtil.Zap(Model.Message));
         if (Model.MessageEncodeHtml)
         {
             message = HttpUtility.HtmlEncode(message);
@@ -174,7 +174,33 @@ WriteLiteral("</strong>");
             bool htmlEncoded = false;
             var messageDetails = Model.MessageDetails;
 
-            if ((Model.MessageDetailsRendering & AlertMessageDetailsRenderingPolicy.KeepHidden) != AlertMessageDetailsRenderingPolicy.KeepHidden)
+            if ((Model.MessageDetailsRendering & AlertMessageDetailsRenderingPolicy.Hidden) == AlertMessageDetailsRenderingPolicy.Hidden)
+            {
+
+            
+            #line default
+            #line hidden
+WriteLiteral("                <div");
+
+WriteLiteral(" style=\"display:none;\"");
+
+WriteLiteral(">\r\n");
+
+WriteLiteral("                    ");
+
+            
+            #line 43 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+               Write(Html.Raw(messageDetails));
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\r\n                </div>\r\n");
+
+            
+            #line 45 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+            }
+            else
             {
                 usePre = (Model.MessageDetailsRendering & AlertMessageDetailsRenderingPolicy.PreFormatted) == AlertMessageDetailsRenderingPolicy.PreFormatted;
                 htmlEncoded = (Model.MessageDetailsRendering & AlertMessageDetailsRenderingPolicy.HtmlEncoded) == AlertMessageDetailsRenderingPolicy.HtmlEncoded;
@@ -196,62 +222,68 @@ WriteLiteral("                <script");
 
 WriteLiteral(" type=\"text/javascript\"");
 
-WriteLiteral(@">
-                    function ShowBootstrapAlertMessageDetails(clickedLink, alertDetailsElementID) {
-                        if (window.jQuery) {
-                            $('#' + alertDetailsElementID).show();
-                            $(clickedLink).hide();
-                        }
-                        else {
-                            var alertDetailsElement = document.getElementById(alertDetailsElementID);
-                            alertDetailsElement.style.display = 'block';
-                            clickedLink.style.display = 'none';
-                        }
-                    }
-                </script>
-");
+WriteLiteral(">\r\n                    function ToggleAlertDetails(clickedLink, alertDetailsEleme" +
+"ntID) {\r\n                        if (window.jQuery) {\r\n                         " +
+"   var $clickedLink = $(clickedLink);\r\n                            if ($clickedL" +
+"ink.prop(\"toggled\")) {\r\n                                $(\"#\" + alertDetailsElem" +
+"entID).hide();\r\n                                $clickedLink.text(\"show details\"" +
+");\r\n                                $clickedLink.prop(\"toggled\", false);\r\n      " +
+"                      }\r\n                            else {\r\n                   " +
+"             $(\"#\" + alertDetailsElementID).show();\r\n                           " +
+"     $clickedLink.text(\"hide details\");\r\n                                $clicke" +
+"dLink.prop(\"toggled\", true);\r\n                            }\r\n                   " +
+"     }\r\n                        else {\r\n                            if (clickedL" +
+"ink.toggled) {\r\n                                document.getElementById(alertDet" +
+"ailsElementID).style.display = \"none\";\r\n                                clickedL" +
+"ink.innerText = \"show details\";\r\n                                clickedLink.tog" +
+"gled = false;\r\n                            }\r\n                            else {" +
+"\r\n                                document.getElementById(alertDetailsElementID)" +
+".style.display = \"block\";\r\n                                clickedLink.innerText" +
+" = \"hide details\";\r\n                                clickedLink.toggled = true;\r" +
+"\n                            }\r\n                        }\r\n                    }" +
+"\r\n                </script>\r\n");
 
 WriteLiteral("                <div>\r\n                    <a");
 
 WriteLiteral(" href=\"javascript:;\"");
 
-WriteAttribute("onclick", Tuple.Create(" onclick=\"", 2636), Tuple.Create("\"", 2710)
-, Tuple.Create(Tuple.Create("", 2646), Tuple.Create("ShowBootstrapAlertMessageDetails(this,", 2646), true)
-, Tuple.Create(Tuple.Create(" ", 2684), Tuple.Create("\'", 2685), true)
+WriteAttribute("onclick", Tuple.Create(" onclick=\"", 3701), Tuple.Create("\"", 3761)
+, Tuple.Create(Tuple.Create("", 3711), Tuple.Create("ToggleAlertDetails(this,", 3711), true)
+, Tuple.Create(Tuple.Create(" ", 3735), Tuple.Create("\'", 3736), true)
             
-            #line 68 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
-            , Tuple.Create(Tuple.Create("", 2686), Tuple.Create<System.Object, System.Int32>(alertDetailsElementID
+            #line 90 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+, Tuple.Create(Tuple.Create("", 3737), Tuple.Create<System.Object, System.Int32>(alertDetailsElementID
             
             #line default
             #line hidden
-, 2686), false)
-, Tuple.Create(Tuple.Create("", 2708), Tuple.Create("\')", 2708), true)
+, 3737), false)
+, Tuple.Create(Tuple.Create("", 3759), Tuple.Create("\')", 3759), true)
 );
 
 WriteLiteral(">show details</a>\r\n                </div>\r\n");
 
 WriteLiteral("                <div");
 
-WriteAttribute("id", Tuple.Create(" id=\"", 2774), Tuple.Create("\"", 2801)
+WriteAttribute("id", Tuple.Create(" id=\"", 3825), Tuple.Create("\"", 3852)
             
-            #line 70 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
-, Tuple.Create(Tuple.Create("", 2779), Tuple.Create<System.Object, System.Int32>(alertDetailsElementID
+            #line 92 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+, Tuple.Create(Tuple.Create("", 3830), Tuple.Create<System.Object, System.Int32>(alertDetailsElementID
             
             #line default
             #line hidden
-, 2779), false)
+, 3830), false)
 );
 
-WriteAttribute("style", Tuple.Create(" style=\"", 2802), Tuple.Create("\"", 2905)
-, Tuple.Create(Tuple.Create("", 2810), Tuple.Create("display:none;font-family:Consolas,monospace;font-size:.8em;", 2810), true)
+WriteAttribute("style", Tuple.Create(" style=\"", 3853), Tuple.Create("\"", 3956)
+, Tuple.Create(Tuple.Create("", 3861), Tuple.Create("display:none;", 3861), true)
             
-            #line 70 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
-                                    , Tuple.Create(Tuple.Create("", 2869), Tuple.Create<System.Object, System.Int32>(usePre ? "white-space:pre;" : ""
+            #line 92 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+, Tuple.Create(Tuple.Create("", 3874), Tuple.Create<System.Object, System.Int32>(usePre ? "font-family:Consolas,monospace;font-size:.8em;white-space:pre;" : ""
             
             #line default
             #line hidden
-, 2869), false)
-, Tuple.Create(Tuple.Create("", 2904), Tuple.Create(")", 2904), true)
+, 3874), false)
+, Tuple.Create(Tuple.Create("", 3955), Tuple.Create(")", 3955), true)
 );
 
 WriteLiteral(">\r\n");
@@ -259,7 +291,7 @@ WriteLiteral(">\r\n");
 WriteLiteral("                    ");
 
             
-            #line 71 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+            #line 93 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
                Write(Html.Raw(messageDetails));
 
             
@@ -268,40 +300,14 @@ WriteLiteral("                    ");
 WriteLiteral("\r\n                </div>\r\n");
 
             
-            #line 73 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
-            }
-            else
-            {
-
-            
-            #line default
-            #line hidden
-WriteLiteral("                <div");
-
-WriteLiteral(" style=\"display:none;\"");
-
-WriteLiteral(">\r\n");
-
-WriteLiteral("                    ");
-
-            
-            #line 77 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
-               Write(Html.Raw(messageDetails));
-
-            
-            #line default
-            #line hidden
-WriteLiteral("\r\n                </div>\r\n");
-
-            
-            #line 79 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+            #line 95 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
             }
         }
     
             
             #line default
             #line hidden
-WriteLiteral("\r\n\r\n</div>\r\n\r\n");
+WriteLiteral("\r\n\r\n</div>\r\n");
 
         }
     }
