@@ -286,21 +286,19 @@ WriteAttribute("style", Tuple.Create(" style=\"", 3853), Tuple.Create("\"", 3956
 , Tuple.Create(Tuple.Create("", 3955), Tuple.Create(")", 3955), true)
 );
 
-WriteLiteral(">\r\n");
-
-WriteLiteral("                    ");
+WriteLiteral(">");
 
             
-            #line 93 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
-               Write(Html.Raw(messageDetails));
+            #line 92 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+                                                                                                                                                    Write(Html.Raw(messageDetails));
 
             
             #line default
             #line hidden
-WriteLiteral("\r\n                </div>\r\n");
+WriteLiteral("</div>\r\n");
 
             
-            #line 95 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+            #line 93 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
             }
         }
     

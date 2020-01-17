@@ -89,9 +89,7 @@
                 <div>
                     <a href="javascript:;" onclick="ToggleAlertDetails(this, '@alertDetailsElementID')">show details</a>
                 </div>
-                <div id="@alertDetailsElementID" style="display:none;@(usePre ? "font-family:Consolas,monospace;font-size:.8em;white-space:pre;" : ""))">
-                    @Html.Raw(messageDetails)
-                </div>
+                <div id="@alertDetailsElementID" style="display:none;@(usePre ? "font-family:Consolas,monospace;font-size:.8em;white-space:pre;" : ""))">@Html.Raw(messageDetails)</div>
             }
         }
     }
