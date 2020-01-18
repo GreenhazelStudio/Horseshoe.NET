@@ -21,7 +21,7 @@ namespace Horseshoe.NET.Excel
             return true;
         }
 
-        private static bool IsBlank(ICell cell)
+        static bool IsBlank(ICell cell)
         {
             if (cell.CellType == CellType.Blank) return true;
             var cellType = cell.CellType == CellType.Formula

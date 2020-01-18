@@ -9,7 +9,7 @@ using Horseshoe.NET.IO.FileImport;
 
 namespace Horseshoe.NET.Excel
 {
-    public class ExcelColumn
+    public static class ExcelColumn
     {
         public static Column ExcelDate(string name, int width = 0) => new Column
         {

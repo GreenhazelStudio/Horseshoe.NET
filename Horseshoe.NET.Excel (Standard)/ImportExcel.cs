@@ -19,7 +19,7 @@ using NPOI.SS.UserModel;
 
 namespace Horseshoe.NET.Excel
 {
-    static class ImportExcel
+    public static class ImportExcel
     {
         public static DataTable AsDataTable(string filePath, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = BlankRowMode.Allow, bool suppressExcelErrors = false)
         {
