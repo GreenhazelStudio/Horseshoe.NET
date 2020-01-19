@@ -13,7 +13,7 @@ namespace Horseshoe.NET.Bootstrap
         /// <summary>
         /// Display HTML markup rather than honor it
         /// </summary>
-        HtmlEncoded = 1,
+        EncodeHtml = 1,
 
         /// <summary>
         /// Honor spaces and line breaks (useful for rendering exceptions)

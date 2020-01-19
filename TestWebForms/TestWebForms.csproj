@@ -156,6 +156,7 @@
     <Content Include="Site.Master" />
     <Content Include="Utilities.aspx" />
     <Content Include="ViewSwitcher.ascx" />
+    <Content Include="Web.aspx" />
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
     <Content Include="Site.Mobile.Master" />
@@ -215,6 +216,13 @@
     </Compile>
     <Compile Include="ViewSwitcher.ascx.designer.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Web.aspx.cs">
+      <DependentUpon>Web.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Web.aspx.designer.cs">
+      <DependentUpon>Web.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

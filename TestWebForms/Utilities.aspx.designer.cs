@@ -15,15 +15,6 @@ namespace TestWebForms
     {
 
         /// <summary>
-        /// BootstrapAlertArea control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel BootstrapAlertArea;
-
-        /// <summary>
         /// Table1 control.
         /// </summary>
         /// <remarks>
@@ -31,32 +22,5 @@ namespace TestWebForms
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Table Table1;
-
-        /// <summary>
-        /// infoAlertTest control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton infoAlertTest;
-
-        /// <summary>
-        /// closeableWarningAlert control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton closeableWarningAlert;
-
-        /// <summary>
-        /// errorAlertInAlert control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton errorAlertInAlert;
     }
 }

@@ -39,7 +39,7 @@ namespace Horseshoe.NET.Bootstrap
             switch (exceptionRendering)
             {
                 case ExceptionRenderingPolicy.Visible:
-                    return AlertMessageDetailsRenderingPolicy.HtmlEncoded | AlertMessageDetailsRenderingPolicy.PreFormatted;
+                    return AlertMessageDetailsRenderingPolicy.EncodeHtml | AlertMessageDetailsRenderingPolicy.PreFormatted;
                 case ExceptionRenderingPolicy.Hidden:
                 default:
                     return AlertMessageDetailsRenderingPolicy.Default;

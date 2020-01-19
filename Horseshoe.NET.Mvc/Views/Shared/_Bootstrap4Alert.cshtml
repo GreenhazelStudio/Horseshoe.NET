@@ -7,91 +7,89 @@
 @model Horseshoe.NET.Bootstrap.Bootstrap4.Alert
 
 @{
-    var alertDetailsElementID = "alert-exception-" + Guid.NewGuid();
-}
-
-<div class="alert @(Model.AlertType.ToCssClass() + (Model.Closeable ? " alert-dismissible" : "") + (Model.Fade ? " fade" : "") + (Model.Show ? " show" : ""))">
-    @{
-        if (Model.Closeable)
-        {
-            <button type="button" class="close" data-dismiss="alert" aria-label="close">&times;</button>
-        }
-
-        if (Model.Emphasis != null)
-        {
-            <strong>@Model.Emphasis</strong>@Html.Raw(" - ")
-        }
-
-        var message = TextUtil.RevealNullOrBlank(TextUtil.Zap(Model.Message));
-        if (Model.MessageEncodeHtml)
-        {
-            message = HttpUtility.HtmlEncode(message);
-        }
-        message = message.Replace("\n", "<br />\n");
-
-        @Html.Raw(message)
-
-        if (Model.MessageDetails != null)
-        {
-            bool usePre = false;
-            bool htmlEncoded = false;
-            var messageDetails = Model.MessageDetails;
-
-            if ((Model.MessageDetailsRendering & AlertMessageDetailsRenderingPolicy.Hidden) == AlertMessageDetailsRenderingPolicy.Hidden)
+    <div class="alert @(Model.AlertType.ToCssClass() + (Model.Closeable ? " alert-dismissible" : "") + (Model.Fade ? " fade" : "") + (Model.Show ? " show" : ""))">
+        @{
+            if (Model.Closeable)
             {
-                <div style="display:none;">
-                    @Html.Raw(messageDetails)
-                </div>
+                <button type="button" class="close" data-dismiss="alert" aria-label="close">&times;</button>
+            }
+
+            if (Model.Emphasis != null)
+            {
+                <strong>@Model.Emphasis</strong>@(" - ")
+            }
+
+            var message = TextUtil.RevealNullOrBlank(TextUtil.Zap(Model.Message));
+            if (Model.EncodeHtml)
+            {
+                @message
             }
             else
             {
-                usePre = (Model.MessageDetailsRendering & AlertMessageDetailsRenderingPolicy.PreFormatted) == AlertMessageDetailsRenderingPolicy.PreFormatted;
-                htmlEncoded = (Model.MessageDetailsRendering & AlertMessageDetailsRenderingPolicy.HtmlEncoded) == AlertMessageDetailsRenderingPolicy.HtmlEncoded;
+                @Html.Raw(message.Replace("\r\n", "<br />").Replace("\n", "<br />"))
+            }
 
-                if (htmlEncoded)
+            if (Model.MessageDetails != null)
+            {
+                if (Model.IsMessageDetailsHidden)
                 {
-                    messageDetails = HttpUtility.HtmlEncode(messageDetails);
+                    <div style="display:none;">
+                        @Html.Raw(Model.MessageDetails)
+                    </div>
                 }
-                if (!usePre)
+                else
                 {
-                    messageDetails = messageDetails.Replace("\n", "<br />\n");
-                }
+                    var alertDetailsElementID = "alert-details-" + Guid.NewGuid();
+                    <div>
+                        <a href="javascript:;" onclick="Bootstrap4.toggleAlertDetails(this, '@alertDetailsElementID')">show details</a>
+                    </div>
 
-                <script type="text/javascript">
-                    function ToggleAlertDetails(clickedLink, alertDetailsElementID) {
-                        if (window.jQuery) {
-                            var $clickedLink = $(clickedLink);
-                            if ($clickedLink.prop("toggled")) {
-                                $("#" + alertDetailsElementID).hide();
-                                $clickedLink.text("show details");
-                                $clickedLink.prop("toggled", false);
-                            }
-                            else {
-                                $("#" + alertDetailsElementID).show();
-                                $clickedLink.text("hide details");
-                                $clickedLink.prop("toggled", true);
-                            }
+                    var preStyles = Model.IsMessageDetailsPreFormatted ? "font-family:Consolas,monospace;font-size:.8em;white-space:pre;" : "";
+                    <div id="@alertDetailsElementID" style="display:none;@preStyles">@if (Model.IsMessageDetailsEncodeHtml)
+                        {
+                            @Model.MessageDetails
                         }
-                        else {
-                            if (clickedLink.toggled) {
-                                document.getElementById(alertDetailsElementID).style.display = "none";
-                                clickedLink.innerText = "show details";
-                                clickedLink.toggled = false;
-                            }
-                            else {
-                                document.getElementById(alertDetailsElementID).style.display = "block";
-                                clickedLink.innerText = "hide details";
-                                clickedLink.toggled = true;
-                            }
-                        }
-                    }
-                </script>
-                <div>
-                    <a href="javascript:;" onclick="ToggleAlertDetails(this, '@alertDetailsElementID')">show details</a>
-                </div>
-                <div id="@alertDetailsElementID" style="display:none;@(usePre ? "font-family:Consolas,monospace;font-size:.8em;white-space:pre;" : ""))">@Html.Raw(messageDetails)</div>
+                        else
+                        {
+                            @Html.Raw(Model.MessageDetails)
+                        }</div>
+                }
             }
         }
-    }
+    </div>
+}
 
-</div>
+@if (Model.MessageDetails != null && !Model.IsMessageDetailsHidden)
+{
+    <script type="text/javascript">
+        Bootstrap4 = {
+            toggleAlertDetails: function (clickedLink, alertDetailsElementID) {
+                if (window.jQuery) {
+                    var $clickedLink = $(clickedLink);
+                    if ($clickedLink.prop("toggled")) {
+                        $("#" + alertDetailsElementID).hide();
+                        $clickedLink.text("show details");
+                        $clickedLink.prop("toggled", false);
+                    }
+                    else {
+                        $("#" + alertDetailsElementID).show();
+                        $clickedLink.text("hide details");
+                        $clickedLink.prop("toggled", true);
+                    }
+                }
+                else {
+                    if (clickedLink.toggled) {
+                        document.getElementById(alertDetailsElementID).style.display = "none";
+                        clickedLink.innerText = "show details";
+                        clickedLink.toggled = false;
+                    }
+                    else {
+                        document.getElementById(alertDetailsElementID).style.display = "block";
+                        clickedLink.innerText = "hide details";
+                        clickedLink.toggled = true;
+                    }
+                }
+            }
+        }
+    </script>
+}

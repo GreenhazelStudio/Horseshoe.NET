@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 using Horseshoe.NET.Collections;
 using Horseshoe.NET.Text;
@@ -118,12 +116,11 @@ namespace Horseshoe.NET
                 exception is ReconstitutedException reconstitutedException
                     ? (displayFullClassName ? reconstitutedException.FullClassName : reconstitutedException.ClassName)
                     : (displayFullClassName ? exception.GetType().FullName : exception.GetType().Name)
-            );
+            ).Append(":");
             if (displayMessage && exception.Message != null)
             {
                 strb.Append
                 (
-                    Environment.NewLine + "Message:" +
                     Environment.NewLine + new string(' ', indent) + TextUtil.RevealNullOrBlank(exception.Message)
                 );
             }

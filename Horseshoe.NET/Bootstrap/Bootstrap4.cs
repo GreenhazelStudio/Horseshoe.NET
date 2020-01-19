@@ -26,23 +26,26 @@ namespace Horseshoe.NET.Bootstrap
         {
             public AlertType AlertType { get; set; }
             public string Message { get; set; }
-            public bool MessageEncodeHtml { get; set; }
             public string Emphasis { get; set; }
             public bool Closeable { get; set; }
+            public bool EncodeHtml { get; set; }
             public bool Fade { get; set; }
             public bool Show { get; set; }
             public string MessageDetails { get; set; }
             public AlertMessageDetailsRenderingPolicy MessageDetailsRendering { get; set; }
+            public bool IsMessageDetailsEncodeHtml => (MessageDetailsRendering & AlertMessageDetailsRenderingPolicy.EncodeHtml) == AlertMessageDetailsRenderingPolicy.EncodeHtml;
+            public bool IsMessageDetailsPreFormatted => (MessageDetailsRendering & AlertMessageDetailsRenderingPolicy.PreFormatted) == AlertMessageDetailsRenderingPolicy.PreFormatted;
+            public bool IsMessageDetailsHidden => (MessageDetailsRendering & AlertMessageDetailsRenderingPolicy.Hidden) == AlertMessageDetailsRenderingPolicy.Hidden;
         }
 
         public static Alert CreateAlert
         (
             AlertType alertType,
             string message,
-            bool messageEncodeHtml = false,
             string emphasis = null,
             bool autoEmphasis = true,
             bool closeable = false,
+            bool encodeHtml = false,
             bool fade = true,
             bool show = true,
             string messageDetails = null,
@@ -53,9 +56,9 @@ namespace Horseshoe.NET.Bootstrap
             {
                 AlertType = alertType,
                 Message = message,
-                MessageEncodeHtml = messageEncodeHtml,
                 Emphasis = emphasis ?? (autoEmphasis ? alertType.ToString() : null),
                 Closeable = closeable,
+                EncodeHtml = encodeHtml,
                 Fade = fade,
                 Show = show,
                 MessageDetails = messageDetails,
@@ -66,10 +69,10 @@ namespace Horseshoe.NET.Bootstrap
         public static Alert CreateInfoAlert
         (
             string message,
-            bool encodeMessageHtml = false,
             string emphasis = null,
             bool autoEmphasis = true,
             bool closeable = false,
+            bool encodeHtml = false,
             bool fade = true,
             bool show = true,
             string messageDetails = null,
@@ -83,9 +86,9 @@ namespace Horseshoe.NET.Bootstrap
                 emphasis: emphasis,
                 autoEmphasis: autoEmphasis,
                 closeable: closeable,
+                encodeHtml: encodeHtml,
                 fade: fade,
                 show: show,
-                messageEncodeHtml: encodeMessageHtml,
                 messageDetails: messageDetails,
                 messageDetailsRendering: messageDetailsRendering
             );
@@ -94,10 +97,10 @@ namespace Horseshoe.NET.Bootstrap
         public static Alert CreateSuccessAlert
         (
             string message,
-            bool encodeMessageHtml = false,
             string emphasis = null,
             bool autoEmphasis = true,
             bool closeable = false,
+            bool encodeHtml = false,
             bool fade = true,
             bool show = true,
             string messageDetails = null,
@@ -111,9 +114,9 @@ namespace Horseshoe.NET.Bootstrap
                 emphasis: emphasis,
                 autoEmphasis: autoEmphasis,
                 closeable: closeable,
+                encodeHtml: encodeHtml,
                 fade: fade,
                 show: show,
-                messageEncodeHtml: encodeMessageHtml,
                 messageDetails: messageDetails,
                 messageDetailsRendering: messageDetailsRendering
             );
@@ -122,10 +125,10 @@ namespace Horseshoe.NET.Bootstrap
         public static Alert CreateWarningAlert
         (
             string message,
-            bool encodeMessageHtml = false,
             string emphasis = null,
             bool autoEmphasis = true,
             bool closeable = false,
+            bool encodeHtml = false,
             bool fade = true,
             bool show = true,
             string messageDetails = null,
@@ -141,7 +144,7 @@ namespace Horseshoe.NET.Bootstrap
                 closeable: closeable,
                 fade: fade,
                 show: show,
-                messageEncodeHtml: encodeMessageHtml,
+                encodeHtml: encodeHtml,
                 messageDetails: messageDetails,
                 messageDetailsRendering: messageDetailsRendering
             );
@@ -153,9 +156,9 @@ namespace Horseshoe.NET.Bootstrap
             string emphasis = null,
             bool autoEmphasis = true,
             bool closeable = false,
+            bool encodeHtml = false,
             bool fade = true,
             bool show = true,
-            bool encodeMessageHtml = false,
             string messageDetails = null,
             AlertMessageDetailsRenderingPolicy messageDetailsRendering = default
         )
@@ -167,9 +170,9 @@ namespace Horseshoe.NET.Bootstrap
                 emphasis: emphasis,
                 autoEmphasis: autoEmphasis,
                 closeable: closeable,
+                encodeHtml: encodeHtml,
                 fade: fade,
                 show: show,
-                messageEncodeHtml: encodeMessageHtml,
                 messageDetails: messageDetails,
                 messageDetailsRendering: messageDetailsRendering
             );
@@ -181,9 +184,9 @@ namespace Horseshoe.NET.Bootstrap
             string emphasis = null,
             bool autoEmphasis = true,
             bool closeable = false,
+            bool encodeHtml = false,
             bool fade = true,
             bool show = true,
-            bool encodeMessageHtml = false,
             string messageDetails = null,
             AlertMessageDetailsRenderingPolicy messageDetailsRendering = default
         )
@@ -195,9 +198,9 @@ namespace Horseshoe.NET.Bootstrap
                 emphasis: emphasis,
                 autoEmphasis: autoEmphasis,
                 closeable: closeable,
+                encodeHtml: encodeHtml,
                 fade: fade,
                 show: show,
-                messageEncodeHtml: encodeMessageHtml,
                 messageDetails: messageDetails,
                 messageDetailsRendering: messageDetailsRendering
             );
@@ -209,9 +212,9 @@ namespace Horseshoe.NET.Bootstrap
             string emphasis = null,
             bool autoEmphasis = true,
             bool closeable = false,
+            bool encodeHtml = false,
             bool fade = true,
             bool show = true,
-            bool encodeMessageHtml = false,
             string messageDetails = null,
             AlertMessageDetailsRenderingPolicy messageDetailsRendering = default
         )
@@ -223,9 +226,9 @@ namespace Horseshoe.NET.Bootstrap
                 emphasis: emphasis,
                 autoEmphasis: autoEmphasis,
                 closeable: closeable,
+                encodeHtml: encodeHtml,
                 fade: fade,
                 show: show,
-                messageEncodeHtml: encodeMessageHtml,
                 messageDetails: messageDetails,
                 messageDetailsRendering: messageDetailsRendering
             );
@@ -237,9 +240,9 @@ namespace Horseshoe.NET.Bootstrap
             string emphasis = null,
             bool autoEmphasis = true,
             bool closeable = false,
+            bool encodeHtml = false,
             bool fade = true,
             bool show = true,
-            bool encodeMessageHtml = false,
             string messageDetails = null,
             AlertMessageDetailsRenderingPolicy messageDetailsRendering = default
         )
@@ -251,9 +254,9 @@ namespace Horseshoe.NET.Bootstrap
                 emphasis: emphasis,
                 autoEmphasis: autoEmphasis,
                 closeable: closeable,
+                encodeHtml: encodeHtml,
                 fade: fade,
                 show: show,
-                messageEncodeHtml: encodeMessageHtml,
                 messageDetails: messageDetails,
                 messageDetailsRendering: messageDetailsRendering
             );
@@ -265,9 +268,9 @@ namespace Horseshoe.NET.Bootstrap
             string emphasis = null,
             bool autoEmphasis = true,
             bool closeable = false,
+            bool encodeHtml = false,
             bool fade = true,
             bool show = true,
-            bool encodeMessageHtml = false,
             string messageDetails = null,
             AlertMessageDetailsRenderingPolicy messageDetailsRendering = default
         )
@@ -279,9 +282,9 @@ namespace Horseshoe.NET.Bootstrap
                 emphasis: emphasis,
                 autoEmphasis: autoEmphasis,
                 closeable: closeable,
+                encodeHtml: encodeHtml,
                 fade: fade,
                 show: show,
-                messageEncodeHtml: encodeMessageHtml,
                 messageDetails: messageDetails,
                 messageDetailsRendering: messageDetailsRendering
             );
@@ -293,9 +296,9 @@ namespace Horseshoe.NET.Bootstrap
             string emphasis = null,
             bool autoEmphasis = true,
             bool closeable = false,
+            bool encodeHtml = false,
             bool fade = true,
             bool show = true,
-            bool encodeMessageHtml = false,
             string messageDetails = null,
             AlertMessageDetailsRenderingPolicy messageDetailsRendering = default
         )
@@ -307,9 +310,9 @@ namespace Horseshoe.NET.Bootstrap
                 emphasis: emphasis,
                 autoEmphasis: autoEmphasis,
                 closeable: closeable,
+                encodeHtml: encodeHtml,
                 fade: fade,
                 show: show,
-                messageEncodeHtml: encodeMessageHtml,
                 messageDetails: messageDetails,
                 messageDetailsRendering: messageDetailsRendering
             );
@@ -321,17 +324,18 @@ namespace Horseshoe.NET.Bootstrap
             string emphasis = null,
             bool autoEmphasis = true,
             bool closeable = false,
+            bool encodeHtml = true,
             bool fade = true,
             bool show = true,
             bool displayFullClassName = false,
             bool displayMessageInErrorDetails = true,
-            bool displayStackTrace = false,
+            bool displayStackTrace = true,
             int indent = 2,
             bool recursive = false,
-            ExceptionRenderingPolicy? errorRendering = null
+            ExceptionRenderingPolicy? exceptionRendering = null
         )
         {
-            var resultantErrorRendering = errorRendering ?? Settings.DefaultExceptionRendering;
+            var resultantErrorRendering = exceptionRendering ?? Settings.DefaultExceptionRendering;
             return CreateAlert
             (
                 AlertType.Error,
@@ -339,9 +343,9 @@ namespace Horseshoe.NET.Bootstrap
                 emphasis: emphasis,
                 autoEmphasis: autoEmphasis,
                 closeable: closeable,
+                encodeHtml: encodeHtml,
                 fade: fade,
                 show: show,
-                messageEncodeHtml: true,
                 messageDetails: resultantErrorRendering != default
                     ? exception?.Render(displayFullClassName: displayFullClassName, displayMessage: displayMessageInErrorDetails, displayStackTrace: displayStackTrace, indent: indent, recursive: recursive)
                     : null,

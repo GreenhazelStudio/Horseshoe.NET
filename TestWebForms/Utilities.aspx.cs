@@ -9,9 +9,7 @@ using System.Web.UI.WebControls;
 
 using Horseshoe.NET;
 using Horseshoe.NET.Application;
-using Horseshoe.NET.Bootstrap;
 using Horseshoe.NET.Text;
-using Horseshoe.NET.WebForms;
 
 namespace TestWebForms
 {
@@ -165,36 +163,6 @@ namespace TestWebForms
                 }
                 Table1.Rows.Add(tr);
             }
-        }
-
-        protected void infoAlertTest_Click(object sender, EventArgs e)
-        {
-            var alert = Bootstrap3.CreateInfoAlert("Polly want a cracker! <em>Squawk!</em>");
-            var alertControl = alert.ToControl();
-            BootstrapAlertArea.Controls.Add(alertControl);
-        }
-
-        protected void closeableWarningAlert_Click(object sender, EventArgs e)
-        {
-            var alert = Bootstrap3.CreateWarningAlert("What's shakin' bacon?", closeable: true);
-            var alertControl = alert.ToControl();
-            BootstrapAlertArea.Controls.Add(alertControl);
-        }
-
-        protected void errorAlertInAlert_Click(object sender, EventArgs e)
-        {
-            Exception ex = null;
-            try
-            {
-                throw new Exception("It is what it is homey!");
-            }
-            catch(Exception _ex)
-            {
-                ex = _ex;
-            }
-            var alert = Bootstrap3.CreateErrorAlert(ex, displayFullClassName: true, displayStackTrace: true, errorRendering: ExceptionRenderingPolicy.Visible);
-            var alertControl = alert.ToControl();
-            BootstrapAlertArea.Controls.Add(alertControl);
         }
     }
 }

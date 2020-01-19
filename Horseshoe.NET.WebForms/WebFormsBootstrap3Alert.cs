@@ -12,7 +12,6 @@ namespace Horseshoe.NET.WebForms
     public class WebFormsBootstrap3Alert : WebControl
     {
         public Bootstrap3.Alert Alert { get; }
-        string AlertDetailsElementID { get; } = "alert-details-" + Guid.NewGuid();
 
         public WebFormsBootstrap3Alert(Bootstrap3.Alert alert)
         {
@@ -45,90 +44,95 @@ namespace Horseshoe.NET.WebForms
             }
 
             // message
-            var message = TextUtil.RevealNullOrBlank(Alert.Message);
-            if (Alert.MessageEncodeHtml)
+            if (Alert.EncodeHtml)
             {
-                message = HttpUtility.HtmlEncode(message);
+                writer.Write(HttpUtility.HtmlEncode(Alert.Message).Replace("\n\r", "<br />").Replace("\n", "<br />"));
             }
-            message = message.Replace("\n", "\n<br />");
-            writer.Write(message);
+            else
+            {
+                writer.Write(Alert.Message.Replace("\n\r", "<br />").Replace("\n", "<br />"));
+            }
 
-            // render message detilas
+            // render message details
             if (Alert.MessageDetails != null)
             {
-                bool usePre = false;
-                bool htmlEncoded = false;
-                if ((Alert.MessageDetailsRendering & AlertMessageDetailsRenderingPolicy.Hidden) == AlertMessageDetailsRenderingPolicy.Hidden)
+                if (Alert.IsMessageDetailsHidden)
                 {
-                    writer.AddStyleAttribute(HtmlTextWriterStyle.Display, "none");                       // for 'alert details' div
+                    writer.AddStyleAttribute(HtmlTextWriterStyle.Display, "none");
+                    writer.RenderBeginTag(HtmlTextWriterTag.Div);                                        // Begin 'alert details' div
+                    writer.Write(Alert.MessageDetails);
+                    writer.RenderEndTag();                                                               // End 'alert details' div
                 }
                 else
-                { 
-                    usePre = (Alert.MessageDetailsRendering & AlertMessageDetailsRenderingPolicy.PreFormatted) == AlertMessageDetailsRenderingPolicy.PreFormatted;
-                    htmlEncoded = (Alert.MessageDetailsRendering & AlertMessageDetailsRenderingPolicy.HtmlEncoded) == AlertMessageDetailsRenderingPolicy.HtmlEncoded;
-                    writer.RenderBeginTag(HtmlTextWriterTag.Script);                                     // Begin 'toggle' script
-                    writer.Write
-                    (
-                        @"
-                            function ToggleAlertDetails(clickedLink, alertDetailsElementID) {
-                                if (window.jQuery) {
-                                    var $clickedLink = $(clickedLink);
-                                    if ($clickedLink.prop(""toggled"")) {
-                                        $(""#"" + alertDetailsElementID).hide();
-                                        $clickedLink.text(""show details"");
-                                        $clickedLink.prop(""toggled"", false);
-                                    }
-                                    else {
-                                        $(""#"" + alertDetailsElementID).show();
-                                        $clickedLink.text(""hide details"");
-                                        $clickedLink.prop(""toggled"", true);
-                                    }
-                                }
-                                else {
-                                    if (clickedLink.toggled) {
-                                        document.getElementById(alertDetailsElementID).style.display = ""none"";
-                                        clickedLink.innerText = ""show details"";
-                                        clickedLink.toggled = false;
-                                    }
-                                    else {
-                                        document.getElementById(alertDetailsElementID).style.display = ""block"";
-                                        clickedLink.innerText = ""hide details"";
-                                        clickedLink.toggled = true;
-                                    }
-                                }
-                            }
-                        "
-                    );
-                    writer.RenderEndTag();                                                               // End 'toggle' script
+                {
+                    var alertDetailsElementID  = "alert-details-" + Guid.NewGuid();
                     writer.RenderBeginTag(HtmlTextWriterTag.Div);                                        // Begin 'toggle link' div
                     writer.AddAttribute("href", "javascript:;");
-                    writer.AddAttribute("onclick", "ToggleAlertDetails(this, '" + AlertDetailsElementID + "')");
+                    writer.AddAttribute("onclick", "Bootstrap3.toggleAlertDetails(this, '" + alertDetailsElementID + "')");
                     writer.RenderBeginTag(HtmlTextWriterTag.A);
                     writer.Write("show details");
                     writer.RenderEndTag(); // A
                     writer.RenderEndTag(); // Div                                                        // End 'toggle link' div
-                    writer.AddAttribute("id", AlertDetailsElementID);                                    // for 'alert details' div
-                    writer.AddStyleAttribute(HtmlTextWriterStyle.Display, "none");                       // ""
-                    if (usePre)
+                    var preStyles = Alert.IsMessageDetailsPreFormatted ? "font-family:Consolas,monospace;font-size:.8em;white-space:pre;" : "";
+                    writer.Write("<div id=\"" + alertDetailsElementID + "\" style=\"display:none;" + preStyles + "\">");
+                    if (Alert.IsMessageDetailsEncodeHtml)
                     {
-                        writer.AddStyleAttribute(HtmlTextWriterStyle.FontFamily, "Consolas, monospace"); // for 'alert details' div
-                        writer.AddStyleAttribute(HtmlTextWriterStyle.FontSize, ".8em");
-                        writer.AddStyleAttribute(HtmlTextWriterStyle.WhiteSpace, "pre");
+                        if (Alert.IsMessageDetailsPreFormatted)
+                        {
+                            writer.Write(HttpUtility.HtmlEncode(Alert.MessageDetails));
+                        }
+                        else
+                        {
+                            writer.Write(HttpUtility.HtmlEncode(Alert.MessageDetails).Replace("\n\r", "<br />").Replace("\n", "<br />"));
+                        }
                     }
+                    else
+                    {
+                        writer.Write(Alert.MessageDetails.Replace("\n\r", "<br />").Replace("\n", "<br />"));
+                    }
+                    writer.Write("</div>");
                 }
-                writer.RenderBeginTag(HtmlTextWriterTag.Div);                                            // Begin 'alert details' div
-
-                var messageDetails = (htmlEncoded ? HttpUtility.HtmlEncode(Alert.MessageDetails) : Alert.MessageDetails);
-                if (!usePre)
-                {
-                    messageDetails = messageDetails.Replace("\n", "<br />\n");
-                }
-                writer.Write("\n" + messageDetails);
-
-                writer.RenderEndTag();                                                                   // End 'alert details' div
             }
 
             writer.RenderEndTag();                                                                       // End 'bootstrap alert' div
+
+            if (Alert.MessageDetails != null && !Alert.IsMessageDetailsHidden)
+            {
+                writer.RenderBeginTag(HtmlTextWriterTag.Script);                                         // Begin 'toggle' script
+                writer.Write
+                (
+                    @"Bootstrap3 = {
+                        toggleAlertDetails: function (clickedLink, alertDetailsElementID) {
+                            if (window.jQuery) {
+                                var $clickedLink = $(clickedLink);
+                                if ($clickedLink.prop(""toggled"")) {
+                                    $(""#"" + alertDetailsElementID).hide();
+                                    $clickedLink.text(""show details"");
+                                    $clickedLink.prop(""toggled"", false);
+                                }
+                                else {
+                                    $(""#"" + alertDetailsElementID).show();
+                                    $clickedLink.text(""hide details"");
+                                    $clickedLink.prop(""toggled"", true);
+                                }
+                            }
+                            else {
+                                if (clickedLink.toggled) {
+                                    document.getElementById(alertDetailsElementID).style.display = ""none"";
+                                    clickedLink.innerText = ""show details"";
+                                    clickedLink.toggled = false;
+                                }
+                                else {
+                                    document.getElementById(alertDetailsElementID).style.display = ""block"";
+                                    clickedLink.innerText = ""hide details"";
+                                    clickedLink.toggled = true;
+                                }
+                            }
+                        }
+                    };"
+                );
+                writer.RenderEndTag();                                                                   // End 'toggle' script
+            }
         }
     }
 }
