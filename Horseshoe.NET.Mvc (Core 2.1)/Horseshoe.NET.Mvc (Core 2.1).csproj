@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -6,19 +6,17 @@
     <Version>0.9.2.4</Version>
     <Authors>Carl Thomas</Authors>
     <Company>Greenhazel Studio</Company>
-    <Description>Adds functionality (e.g. bootstrap alerts) to MVC applications (see documentation)</Description>
     <Copyright>Copyright © 2020 Greenhazel Studio</Copyright>
+    <Description>Adds functionality (e.g. bootstrap alerts) to MVC applications (see documentation)</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Horseshoe.NET (Standard)\Horseshoe.NET (Standard).csproj">
-      <Private>false</Private>
-    </ProjectReference>
+    <ProjectReference Include="..\Horseshoe.NET (Standard)\Horseshoe.NET (Standard).csproj" />
   </ItemGroup>
 
 </Project>

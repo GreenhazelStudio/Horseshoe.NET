@@ -1,0 +1,91 @@
+﻿@using Horseshoe.NET.Bootstrap
+@using Horseshoe.NET.Text
+
+@model Bootstrap4.Alert
+
+@{
+    <div class="alert @(Model.AlertType.ToCssClass() + (Model.Closeable ? " alert-dismissible" : "") + (Model.Fade ? " fade" : "") + (Model.Show ? " show" : ""))">
+        @{
+            if (Model.Closeable)
+            {
+                <button type="button" class="close" data-dismiss="alert" aria-label="close">&times;</button>
+            }
+
+            if (Model.Emphasis != null)
+            {
+                <strong>@Model.Emphasis</strong>@(" - ")
+            }
+
+            var message = TextUtil.RevealNullOrBlank(TextUtil.Zap(Model.Message));
+            if (Model.EncodeHtml)
+            {
+                @message
+            }
+            else
+            {
+                @Html.Raw(message.Replace("\r\n", "<br />").Replace("\n", "<br />"))
+            }
+
+            if (Model.MessageDetails != null)
+            {
+                if (Model.IsMessageDetailsHidden)
+                {
+                    <div style="display:none;">
+                        @Html.Raw(Model.MessageDetails)
+                    </div>
+                }
+                else
+                {
+                    var alertDetailsElementID = "alert-details-" + Guid.NewGuid();
+                    <div>
+                        <a href="javascript:;" onclick="Bootstrap3.toggleAlertDetails(this, '@alertDetailsElementID')">show details</a>
+                    </div>
+
+                    var preStyles = Model.IsMessageDetailsPreFormatted ? "font-family:Consolas,monospace;font-size:.8em;white-space:pre;" : "";
+                    <div id="@alertDetailsElementID" style="display:none;@preStyles">@if (Model.IsMessageDetailsEncodeHtml)
+                        {
+                            @Model.MessageDetails
+                        }
+                        else
+                        {
+                            @Html.Raw(Model.MessageDetails)
+                        }</div>
+                }
+            }
+        }
+    </div>
+}
+@if (Model.MessageDetails != null && !Model.IsMessageDetailsHidden)
+{
+    <script type="text/javascript">
+        Bootstrap3 = {
+            toggleAlertDetails: function (clickedLink, alertDetailsElementID) {
+                if (window.jQuery) {
+                    var $clickedLink = $(clickedLink);
+                    if ($clickedLink.prop("toggled")) {
+                        $("#" + alertDetailsElementID).hide();
+                        $clickedLink.text("show details");
+                        $clickedLink.prop("toggled", false);
+                    }
+                    else {
+                        $("#" + alertDetailsElementID).show();
+                        $clickedLink.text("hide details");
+                        $clickedLink.prop("toggled", true);
+                    }
+                }
+                else {
+                    if (clickedLink.toggled) {
+                        document.getElementById(alertDetailsElementID).style.display = "none";
+                        clickedLink.innerText = "show details";
+                        clickedLink.toggled = false;
+                    }
+                    else {
+                        document.getElementById(alertDetailsElementID).style.display = "block";
+                        clickedLink.innerText = "hide details";
+                        clickedLink.toggled = true;
+                    }
+                }
+            }
+        }
+    </script>
+}

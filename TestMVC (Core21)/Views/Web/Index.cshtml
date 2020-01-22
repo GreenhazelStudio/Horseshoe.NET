@@ -27,6 +27,25 @@
     </style>
 }
 
+<div style="float: left">
+    @Html.ActionLink("Info alert", "DisplayInfoAlert")
+    <br />
+    @Html.ActionLink("Info alert (HTML) w/details", "DisplayInfoHtmlAlert")
+    <br />
+    @Html.ActionLink("Info alert (HTML encoded) w/details", "DisplayInfoHtmlEncodedAlert")
+    <br />
+    @Html.ActionLink("Error alert - closeable", "DisplayCloseableErrorAlert")
+</div>
+
+<div id="alert-area" style="float: left; padding: 20px; border: 2px solid black; margin-left: 30px; width: 700px;">
+    @if (Model.BootstrapAlert != null)
+    {
+        <partial name="_Bootstrap3Alert" for="@Model.BootstrapAlert" />
+    }
+</div>
+
+<div style="clear:both"></div>
+
 <h2>Web Tests</h2>
 
 <table class="test-table">

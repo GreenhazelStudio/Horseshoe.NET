@@ -85,14 +85,12 @@
     <Compile Include="Cryptography\Settings.cs" />
     <Compile Include="DateDiff.cs" />
     <Compile Include="DateUtil.cs" />
-    <Compile Include="Email\EmailInfo.cs" />
     <Compile Include="Email\HtmlEmail.cs" />
     <Compile Include="Email\PlainEmail.cs" />
     <Compile Include="Email\Settings.cs" />
     <Compile Include="Email\SMS\Carrier.cs" />
     <Compile Include="Email\SMS\TextMessage.cs" />
     <Compile Include="Email\SMS\Settings.cs" />
-    <Compile Include="Email\SMS\SMSInfo.cs" />
     <Compile Include="Email\SMS\SMSUtil.cs" />
     <Compile Include="Email\SMS\TextMessageSent.cs" />
     <Compile Include="Email\SmtpConnectionInfo.cs" />

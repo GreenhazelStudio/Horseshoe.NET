@@ -90,27 +90,56 @@ namespace Horseshoe.NET.Email
             return smtpClient;
         }
 
-        internal static void Validate(EmailInfo emailInfo, SmtpConnectionInfo connectionInfo)
+        internal static void Validate
+        (
+            string subject,
+            string body,
+            string to = null,
+            IEnumerable<string> recipients = null,
+            string cc = null,
+            IEnumerable<string> ccRecipients = null,
+            string bcc = null,
+            IEnumerable<string> bccRecipients = null,
+            string from = null,
+            string attach = null,
+            IEnumerable<string> attachments = null
+        )
         {
-            if (emailInfo == null)
-            {
-                throw new UtilityException("EmailInfo argument must be non-null");
-            }
-
-            if (connectionInfo == null)
-            {
-                throw new UtilityException("SMTP connection info was not supplied, try adding via config file");
-            }
-
             var validationMessages = new List<string>();
-            if (string.IsNullOrEmpty(emailInfo.Subject) && string.IsNullOrEmpty(emailInfo.Body) && (emailInfo.Attachments == null || !emailInfo.Attachments.Any()))
+
+            if (to == null && (recipients == null || !recipients.Any()))
             {
-                validationMessages.Add("Email may not be devoid of Subject, Body and Attachments (it must contain at least one of these)");
+                validationMessages.Add("Please populate 'to' or 'recipients', mail cannot be sent otherwise");
             }
 
-            if (emailInfo.Tos == null || !emailInfo.Tos.Any())
+            if (to != null && !(recipients == null || !recipients.Any()))
             {
-                validationMessages.Add("Email must be sent to at least one [To] recipient");
+                validationMessages.Add("Please only populate 'to' or 'recipients', not both");
+            }
+
+            if (cc != null && !(ccRecipients == null || !ccRecipients.Any()))
+            {
+                validationMessages.Add("Please only populate 'cc' or 'ccRecipients', not both");
+            }
+
+            if (bcc != null && !(bccRecipients == null || !bccRecipients.Any()))
+            {
+                validationMessages.Add("Please only populate 'bcc' or 'bccRecipients', not both");
+            }
+
+            if (from == null && Settings.DefaultFrom == null)
+            {
+                validationMessages.Add("Please supply a 'from' address, you may configure this value (key=\"Horseshoe.NET:Email:From\")");
+            }
+
+            if (attach != null && !(attachments == null || !attachments.Any()))
+            {
+                validationMessages.Add("Please only populate 'attach' or 'attachments', not both");
+            }
+
+            if (string.IsNullOrEmpty(subject) && string.IsNullOrEmpty(body) && attach == null && (attachments == null || !attachments.Any()))
+            {
+                validationMessages.Add("Email may preclude 'subject', 'body' or 'attachments' but not all three");
             }
 
             if (validationMessages.Any())

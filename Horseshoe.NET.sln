@@ -47,9 +47,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horseshoe.NET.OracleDataAcc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horseshoe.NET.OracleDataAccess (Standard)", "Horseshoe.NET.OracleDataAccess (Standard)\Horseshoe.NET.OracleDataAccess (Standard).csproj", "{3C0610E9-585A-4F79-B182-8BD0627EE53A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horseshoe.NET.Mvc (Core 2.1)", "Horseshoe.NET.Mvc (Core 2.1)\Horseshoe.NET.Mvc (Core 2.1).csproj", "{F4F64BC7-E33C-4A79-9968-99950208FCB4}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horseshoe.NET.Mvc (Core 3.0)", "Horseshoe.NET.Mvc (Core 3.0)\Horseshoe.NET.Mvc (Core 3.0).csproj", "{2C3AAF57-104B-4951-A08D-9131F1E39EB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horseshoe.NET.Mvc (Core 2.1)", "Horseshoe.NET.Mvc (Core 2.1)\Horseshoe.NET.Mvc (Core 2.1).csproj", "{4609ADD0-EA25-457A-9B43-92202F620DD0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -145,14 +145,14 @@ Global
 		{3C0610E9-585A-4F79-B182-8BD0627EE53A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C0610E9-585A-4F79-B182-8BD0627EE53A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C0610E9-585A-4F79-B182-8BD0627EE53A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F4F64BC7-E33C-4A79-9968-99950208FCB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F4F64BC7-E33C-4A79-9968-99950208FCB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F4F64BC7-E33C-4A79-9968-99950208FCB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F4F64BC7-E33C-4A79-9968-99950208FCB4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2C3AAF57-104B-4951-A08D-9131F1E39EB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2C3AAF57-104B-4951-A08D-9131F1E39EB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C3AAF57-104B-4951-A08D-9131F1E39EB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C3AAF57-104B-4951-A08D-9131F1E39EB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4609ADD0-EA25-457A-9B43-92202F620DD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4609ADD0-EA25-457A-9B43-92202F620DD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4609ADD0-EA25-457A-9B43-92202F620DD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4609ADD0-EA25-457A-9B43-92202F620DD0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
