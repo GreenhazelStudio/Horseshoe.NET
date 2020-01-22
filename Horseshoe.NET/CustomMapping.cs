@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Horseshoe.NET.Common
+namespace Horseshoe.NET
 {
     internal interface ICustomMapping
     {

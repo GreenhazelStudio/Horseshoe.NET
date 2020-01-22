@@ -3,7 +3,7 @@
 using Horseshoe.NET.Collections;
 using Horseshoe.NET.Objects;
 
-namespace Horseshoe.NET.Common
+namespace Horseshoe.NET
 {
     internal class TemplatePart                                     // e.g. Template -> "?key1={{Prop.Value1:M/d/yyyy}}&key2={{Prop.Value2}}"
     {

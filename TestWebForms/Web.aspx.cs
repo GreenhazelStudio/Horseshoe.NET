@@ -53,7 +53,7 @@ namespace TestWebForms
             }
             catch (Exception ex)
             {
-                var alert = Bootstrap3.CreateErrorAlert(ex, displayFullClassName: true, displayStackTrace: true, exceptionRendering: ExceptionRenderingPolicy.Visible);
+                var alert = Bootstrap3.CreateErrorAlert(ex, exceptionRendering: ExceptionRenderingPolicy.Visible);
                 var alertControl = alert.ToControl();
                 BootstrapAlertArea.Controls.Add(alertControl);
             }
@@ -67,7 +67,7 @@ namespace TestWebForms
             }
             catch (Exception ex)
             {
-                var alert = Bootstrap3.CreateErrorAlert(ex, displayFullClassName: true, displayStackTrace: true, exceptionRendering: ExceptionRenderingPolicy.Visible);
+                var alert = Bootstrap3.CreateErrorAlert(ex, exceptionRendering: ExceptionRenderingPolicy.Visible);
                 var alertControl = alert.ToControl();
                 BootstrapAlertArea.Controls.Add(alertControl);
             }

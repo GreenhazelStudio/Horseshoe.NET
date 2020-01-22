@@ -83,9 +83,8 @@
     <Compile Include="Cryptography\Hash.cs" />
     <Compile Include="Cryptography\HashOptions.cs" />
     <Compile Include="Cryptography\Settings.cs" />
-    <Compile Include="Common\DateDiff.cs" />
-    <Compile Include="Common\DateUtil.cs" />
-    <Compile Include="Common\Extensions.cs" />
+    <Compile Include="DateDiff.cs" />
+    <Compile Include="DateUtil.cs" />
     <Compile Include="Email\EmailInfo.cs" />
     <Compile Include="Email\HtmlEmail.cs" />
     <Compile Include="Email\PlainEmail.cs" />
@@ -101,8 +100,8 @@
     <Compile Include="Events\EasyNotifier.cs" />
     <Compile Include="ExceptionInfo.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="Common\CustomMapping.cs" />
-    <Compile Include="Common\TemplatePart.cs" />
+    <Compile Include="CustomMapping.cs" />
+    <Compile Include="TemplatePart.cs" />
     <Compile Include="IO\FIleImport\BlankRowMode.cs" />
     <Compile Include="IO\FIleImport\Column.cs" />
     <Compile Include="IO\FIleImport\DataType.cs" />
@@ -127,7 +126,7 @@
     <Compile Include="IO\WebServices\WebServiceUtil.cs" />
     <Compile Include="Lib.cs" />
     <Compile Include="Logic.cs" />
-    <Compile Include="Common\NumberUtil.cs" />
+    <Compile Include="NumberUtil.cs" />
     <Compile Include="Objects\Extensions.cs" />
     <Compile Include="Objects\IPropertyValue.cs" />
     <Compile Include="Objects\ObjectUtil.cs" />

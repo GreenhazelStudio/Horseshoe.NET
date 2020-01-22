@@ -1,10 +1,10 @@
 ﻿@using Horseshoe.NET.Bootstrap
 @using Horseshoe.NET.Text
 
-@model Bootstrap3.Alert
+@model Bootstrap4.Alert
 
 @{
-    <div class="alert @(Model.AlertType.ToCssClass() + (Model.Closeable ? " alert-dismissible" : ""))">
+    <div class="alert @(Model.AlertType.ToCssClass() + (Model.Closeable ? " alert-dismissible" : "") + (Model.Fade ? " fade" : "") + (Model.Show ? " show" : ""))">
         @{
             if (Model.Closeable)
             {

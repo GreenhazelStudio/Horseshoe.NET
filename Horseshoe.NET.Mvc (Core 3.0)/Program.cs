@@ -7,13 +7,20 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Horseshoe.NET.Mvc
+namespace Horseshoe.NET.Mvc__Core_3._0_
 {
     public class Program
     {
-        // We only need this to be able to compile
         public static void Main(string[] args)
         {
+            CreateHostBuilder(args).Build().Run();
         }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
     }
 }

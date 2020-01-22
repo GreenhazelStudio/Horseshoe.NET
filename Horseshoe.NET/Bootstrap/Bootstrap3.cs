@@ -183,7 +183,7 @@ namespace Horseshoe.NET.Bootstrap
             bool autoEmphasis = true,
             bool closeable = false,
             bool encodeHtml = true,
-            bool displayFullClassName = false,
+            bool displayShortName = false,
             bool displayMessageInErrorDetails = true,
             bool displayStackTrace = true,
             int indent = 2,
@@ -201,7 +201,7 @@ namespace Horseshoe.NET.Bootstrap
                 closeable: closeable,
                 encodeHtml: encodeHtml,
                 messageDetails: resultantErrorRendering != default
-                    ? exception?.Render(displayFullClassName: displayFullClassName, displayMessage: displayMessageInErrorDetails, displayStackTrace: displayStackTrace, indent: indent, recursive: recursive)
+                    ? exception?.Render(displayShortName: displayShortName, displayMessage: displayMessageInErrorDetails, displayStackTrace: displayStackTrace, indent: indent, recursive: recursive)
                     : null,
                 messageDetailsRendering: resultantErrorRendering.ToAlertMessageDetailsRendering()
             );

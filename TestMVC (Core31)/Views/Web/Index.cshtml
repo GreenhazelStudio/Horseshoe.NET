@@ -27,6 +27,25 @@
     </style>
 }
 
+<div style="float: left">
+    @Html.ActionLink("Info alert", "DisplayInfoAlert")
+    <br />
+    @Html.ActionLink("Info alert (HTML) w/details", "DisplayInfoHtmlAlert")
+    <br />
+    @Html.ActionLink("Info alert (HTML encoded) w/details", "DisplayInfoHtmlEncodedAlert")
+    <br />
+    @Html.ActionLink("Error alert - closeable", "DisplayCloseableErrorAlert")
+</div>
+
+<div id="alert-area" style="float: left; padding: 20px; border: 2px solid black; margin-left: 30px; width: 700px;">
+    @if (Model.BootstrapAlert != null)
+    {
+        <partial name="_Bootstrap3Alert" for="BootstrapAlert" />
+    }
+</div>
+
+<div style="clear:both"></div>
+
 <h1>Web Tests</h1>
 
 <table class="test-table">
@@ -56,9 +75,9 @@
     <tr>
         <th class="section-header">Assemblies</th>
     </tr>
-    @{ 
+    @{
         var assemblyNames = Assemblies.ListAssemblyNames().OrderBy(an => an.FullName);
-        foreach(var name in assemblyNames)
+        foreach (var name in assemblyNames)
         {
             <tr>
                 <td>

@@ -81,41 +81,41 @@ namespace Horseshoe.NET
             return false;
         }
 
-        public static string Render(this Exception exception, bool displayFullClassName = false, bool displayMessage = true, bool displayStackTrace = false, int indent = 2, bool recursive = false)
+        public static string Render(this Exception exception, bool displayShortName = false, bool displayMessage = true, bool displayStackTrace = true, int indent = 2, bool recursive = false)
         {
             var strb = new StringBuilder();
-            RenderRecursive(exception, strb, displayFullClassName, displayMessage, displayStackTrace, indent, recursive);
+            RenderRecursive(exception, strb, displayShortName, displayMessage, displayStackTrace, indent, recursive);
             return strb.ToString();
         }
 
-        public static string Render(this ExceptionInfo exceptionInfo, bool displayFullClassName = false, bool displayMessage = true, bool displayStackTrace = false, int indent = 2, bool recursive = false)
+        public static string Render(this ExceptionInfo exceptionInfo, bool displayShortName = false, bool displayMessage = true, bool displayStackTrace = true, int indent = 2, bool recursive = false)
         {
             var strb = new StringBuilder();
-            RenderRecursive(exceptionInfo, strb, displayFullClassName, displayMessage, displayStackTrace, indent, recursive);
+            RenderRecursive(exceptionInfo, strb, displayShortName, displayMessage, displayStackTrace, indent, recursive);
             return strb.ToString();
         }
 
-        public static string RenderHtml(this Exception exception, bool displayFullClassName = false, bool displayMessage = true, bool displayStackTrace = false, int indent = 2, bool recursive = false)
+        public static string RenderHtml(this Exception exception, bool displayShortName = false, bool displayMessage = true, bool displayStackTrace = true, int indent = 2, bool recursive = false)
         {
-            var text = Render(exception, displayFullClassName: displayFullClassName, displayMessage: displayMessage, displayStackTrace: displayStackTrace, indent: indent, recursive: recursive);
+            var text = Render(exception, displayShortName: displayShortName, displayMessage: displayMessage, displayStackTrace: displayStackTrace, indent: indent, recursive: recursive);
             var html = text.ToHtml();
             return html;
         }
 
-        public static string RenderHtml(this ExceptionInfo exceptionInfo, bool displayFullClassName = false, bool displayMessage = true, bool displayStackTrace = false, int indent = 2, bool recursive = false)
+        public static string RenderHtml(this ExceptionInfo exceptionInfo, bool displayShortName = false, bool displayMessage = true, bool displayStackTrace = true, int indent = 2, bool recursive = false)
         {
-            var text = Render(exceptionInfo, displayFullClassName: displayFullClassName, displayMessage: displayMessage, displayStackTrace: displayStackTrace, indent: indent, recursive: recursive);
+            var text = Render(exceptionInfo, displayShortName: displayShortName, displayMessage: displayMessage, displayStackTrace: displayStackTrace, indent: indent, recursive: recursive);
             var html = text.ToHtml();
             return html;
         }
 
-        private static void RenderRecursive(Exception exception, StringBuilder strb, bool displayFullClassName, bool displayMessage, bool displayStackTrace, int indent, bool recursive)
+        private static void RenderRecursive(Exception exception, StringBuilder strb, bool displayShortName, bool displayMessage, bool displayStackTrace, int indent, bool recursive)
         {
             strb.Append
             (
                 exception is ReconstitutedException reconstitutedException
-                    ? (displayFullClassName ? reconstitutedException.FullClassName : reconstitutedException.ClassName)
-                    : (displayFullClassName ? exception.GetType().FullName : exception.GetType().Name)
+                    ? (displayShortName ? reconstitutedException.ClassName : reconstitutedException.FullClassName)
+                    : (displayShortName ? exception.GetType().Name : exception.GetType().FullName)
             ).Append(":");
             if (displayMessage && exception.Message != null)
             {
@@ -135,14 +135,8 @@ namespace Horseshoe.NET
             if (recursive && exception.InnerException != null)
             {
                 strb.AppendLine();
-                RenderRecursive(exception.InnerException, strb, displayFullClassName, displayMessage, displayStackTrace, indent, recursive);
+                RenderRecursive(exception.InnerException, strb, displayShortName, displayMessage, displayStackTrace, indent, recursive);
             }
-        }
-
-        public static string ToHtml(this string text)
-        {
-            var html = text.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("\r\n", "<br />").Replace("\n", "<br />");
-            return html;
         }
 
         static string IndentStackTrace(string stackTrace, int indent)
@@ -152,6 +146,41 @@ namespace Horseshoe.NET
                 .ZapAndPrune()
                 .Select(ln => new string(' ', indent) + ln);
             return string.Join(Environment.NewLine, lines);
+        }
+
+        public static int AgeInYearsFrom(this DateTime from)
+        {
+            return DateUtil.AgeInYears(from);
+        }
+
+        public static double TotalAgeInYearsFrom(this DateTime from, int decimals = -1)
+        {
+            return DateUtil.TotalAgeInYears(from, decimals: decimals);
+        }
+
+        public static int AgeInMonthsFrom(this DateTime from)
+        {
+            return DateUtil.AgeInMonths(from);
+        }
+
+        public static double TotalAgeInMonthsFrom(this DateTime from, int decimals = -1)
+        {
+            return DateUtil.TotalAgeInMonths(from, decimals: decimals);
+        }
+
+        public static int AgeInDaysFrom(this DateTime from)
+        {
+            return DateUtil.AgeInDays(from);
+        }
+
+        public static double TotalAgeInDaysFrom(this DateTime from, int decimals = -1)
+        {
+            return DateUtil.TotalAgeInDays(from, decimals: decimals);
+        }
+
+        public static bool IsLeapYear(this DateTime date)
+        {
+            return DateUtil.IsLeapYear(date);
         }
     }
 }

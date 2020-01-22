@@ -148,9 +148,9 @@ namespace Horseshoe.NET.ConsoleX
             ConsoleUtil.RenderAlert(message, padBefore: padBefore, padAfter: padAfter);
         }
 
-        public static void RenderException(Exception ex, bool displayFullClassName = false, bool displayMessage = true, bool displayStackTrace = false, bool recursive = false, int padBefore = 0, int padAfter = 1)
+        public static void RenderException(Exception ex, bool displayShortName = false, bool displayMessage = true, bool displayStackTrace = true, bool recursive = false, int padBefore = 0, int padAfter = 1)
         {
-            ConsoleUtil.RenderException(ex, displayFullClassName: displayFullClassName, displayMessage: displayMessage, displayStackTrace: displayStackTrace, recursive: recursive, padBefore: padBefore, padAfter: padAfter);
+            ConsoleUtil.RenderException(ex, displayShortName: displayShortName, displayMessage: displayMessage, displayStackTrace: displayStackTrace, recursive: recursive, padBefore: padBefore, padAfter: padAfter);
         }
 
         public static void RenderList<E>

@@ -1,10 +1,9 @@
 ﻿@* Generator: MvcView *@
 
-@using System.Web
 @using Horseshoe.NET.Bootstrap
 @using Horseshoe.NET.Text
 
-@model Horseshoe.NET.Bootstrap.Bootstrap4.Alert
+@model Bootstrap4.Alert
 
 @{
     <div class="alert @(Model.AlertType.ToCssClass() + (Model.Closeable ? " alert-dismissible" : "") + (Model.Fade ? " fade" : "") + (Model.Show ? " show" : ""))">

@@ -327,7 +327,7 @@ namespace Horseshoe.NET.Bootstrap
             bool encodeHtml = true,
             bool fade = true,
             bool show = true,
-            bool displayFullClassName = false,
+            bool displayShortName = false,
             bool displayMessageInErrorDetails = true,
             bool displayStackTrace = true,
             int indent = 2,
@@ -347,7 +347,7 @@ namespace Horseshoe.NET.Bootstrap
                 fade: fade,
                 show: show,
                 messageDetails: resultantErrorRendering != default
-                    ? exception?.Render(displayFullClassName: displayFullClassName, displayMessage: displayMessageInErrorDetails, displayStackTrace: displayStackTrace, indent: indent, recursive: recursive)
+                    ? exception?.Render(displayShortName: displayShortName, displayMessage: displayMessageInErrorDetails, displayStackTrace: displayStackTrace, indent: indent, recursive: recursive)
                     : null,
                 messageDetailsRendering: resultantErrorRendering.ToAlertMessageDetailsRendering()
             );

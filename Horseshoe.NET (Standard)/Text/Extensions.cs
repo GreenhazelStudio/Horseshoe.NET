@@ -171,5 +171,11 @@ namespace Horseshoe.NET.Text
             contentFound = null; 
             return false;
         }
+
+        public static string ToHtml(this string text)
+        {
+            var html = text.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("\r\n", "<br />").Replace("\n", "<br />");
+            return html;
+        }
     }
 }

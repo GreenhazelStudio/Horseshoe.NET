@@ -479,12 +479,12 @@ namespace Horseshoe.NET.ConsoleX
         /// <param name="ex">A .NET exception</param>
         /// <param name="recursive">Whether to iterate through the inner exceptions as well</param>
         /// <param name="includeStackTrace">Whether to output the exception's stack trace</param>
-        public static void RenderException(Exception ex, bool displayFullClassName = false, bool displayMessage = true, bool displayStackTrace = false, bool recursive = false, int padBefore = 0, int padAfter = 1)
+        public static void RenderException(Exception ex, bool displayShortName = false, bool displayMessage = true, bool displayStackTrace = true, bool recursive = false, int padBefore = 0, int padAfter = 1)
         {
             Pad(padBefore);
             Console.WriteLine
             (
-                ex.Render(displayFullClassName: displayFullClassName, displayMessage: displayMessage, displayStackTrace: displayStackTrace, recursive: recursive)
+                ex.Render(displayShortName: displayShortName, displayMessage: displayMessage, displayStackTrace: displayStackTrace, recursive: recursive)
             );
             Pad(padAfter);
         }
