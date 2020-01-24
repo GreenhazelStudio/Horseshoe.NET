@@ -43,6 +43,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppTests.cs" />
+    <Compile Include="CryptoTests.cs" />
+    <Compile Include="DataTests.cs" />
+    <Compile Include="EmailTests.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
