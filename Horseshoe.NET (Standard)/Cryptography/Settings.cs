@@ -124,7 +124,8 @@ namespace Horseshoe.NET.Cryptography
             {
                 return _defaultHashAlgorithm  // example "System.Security.Cryptography.SHA256CryptoServiceProvider"
                     ?? Config.Get<HashAlgorithm>("Horseshoe.NET:Cryptography:HashAlgorithm")
-                    ?? OrganizationalDefaultSettings.Get<HashAlgorithm>("Cryptography.HashAlgorithm");
+                    ?? OrganizationalDefaultSettings.Get<HashAlgorithm>("Cryptography.HashAlgorithm")
+                    ?? new SHA1CryptoServiceProvider();
             }
             set
             {
