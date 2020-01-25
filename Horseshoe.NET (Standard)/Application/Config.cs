@@ -25,9 +25,13 @@ namespace Horseshoe.NET.Application
 
         public static string Get(string key, bool required = false)
         {
-            if (Configuration == null && required)
+            if (Configuration == null)
             {
-                throw new UtilityException("Configuration service not loaded: see Config.LoadService()");
+                if (required)
+                {
+                    throw new UtilityException("Configuration service not loaded: see Config.LoadService()");
+                }
+                return null;
             }
             var value = Configuration[key];
             if (value == null && required)

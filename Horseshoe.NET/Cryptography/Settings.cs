@@ -20,7 +20,8 @@ namespace Horseshoe.NET.Cryptography
             {
                 return _defaultSymmetricAlgorithm           // example "System.Security.Cryptography.AesCryptoServiceProvider"
                     ?? Config.Get<SymmetricAlgorithm>("Horseshoe.NET:Cryptography:SymmetricAlgorithm")
-                    ?? OrganizationalDefaultSettings.Get<SymmetricAlgorithm>("Cryptography.SymmetricAlgorithm");
+                    ?? OrganizationalDefaultSettings.Get<SymmetricAlgorithm>("Cryptography.SymmetricAlgorithm")
+                    ?? new RijndaelManaged();
             }
             set
             {
