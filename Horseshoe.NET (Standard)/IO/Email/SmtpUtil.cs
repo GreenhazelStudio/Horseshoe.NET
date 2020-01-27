@@ -8,7 +8,7 @@ using System.Text;
 
 using Horseshoe.NET.Cryptography;
 
-namespace Horseshoe.NET.Email
+namespace Horseshoe.NET.IO.Email
 {
     public static class SmtpUtil
     {

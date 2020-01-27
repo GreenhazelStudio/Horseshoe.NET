@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 using Horseshoe.NET.Events;
 
-namespace Horseshoe.NET.Email.SMS
+namespace Horseshoe.NET.IO.Email.SMS
 {
     public static class SMSUtil
     {

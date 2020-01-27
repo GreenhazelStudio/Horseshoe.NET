@@ -41,7 +41,7 @@ namespace Horseshoe.NET.IO.ReportingServices
 
         public static byte[] RenderBytes(string reportPath, string reportServer = null, IDictionary<string, object> userParameters = null, ReportFormat reportFormat = ReportFormat.PDF, Credential? credentials = null)
         {
-            var url = ReportUtil.BuildURL(reportPath, userParameters: userParameters, reportServer: reportServer, reportFormat: reportFormat);
+            var url = ReportUtil.BuildFileUrl(reportPath, reportServer: reportServer, userParameters: userParameters, reportFormat: reportFormat, announce: true);
 
             return RenderBytes(url, credentials: credentials, userParameters: userParameters);
         }

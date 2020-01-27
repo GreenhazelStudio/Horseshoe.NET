@@ -6,9 +6,9 @@ using System.Text;
 
 using Horseshoe.NET.Collections;
 
-namespace Horseshoe.NET.Email
+namespace Horseshoe.NET.IO.Email
 {
-    public static class PlainEmail
+    public static class HtmlEmail
     {
         public static void Send
         (
@@ -23,7 +23,7 @@ namespace Horseshoe.NET.Email
             string from = null,
             string attach = null,
             IEnumerable<string> attachments = null,
-            string footerText = null,
+            string footerHtml = null,
             Encoding encoding = null,
             SmtpConnectionInfo connectionInfo = null
         )
@@ -50,10 +50,10 @@ namespace Horseshoe.NET.Email
             var mailMessage = new MailMessage()
             {
                 Subject = subject ?? "",
-                Body = JoinBodyAndFooter(body ?? "", footerText ?? Settings.DefaultFooterText),
-                BodyEncoding = encoding ?? Encoding.ASCII,
+                Body = JoinBodyAndFooter(body ?? "", footerHtml ?? Settings.DefaultFooterText),
+                BodyEncoding = encoding ?? Encoding.UTF8,
                 From = new MailAddress(from ?? Settings.DefaultFrom),
-                IsBodyHtml = false
+                IsBodyHtml = true
             };
 
             if (to != null && (recipients == null || !recipients.Any()))
@@ -109,10 +109,21 @@ namespace Horseshoe.NET.Email
             smtpClient.Send(mailMessage);
         }
 
-        private static string JoinBodyAndFooter(string body, string footerText)
+        private static string JoinBodyAndFooter(string body, string footerHtml)
         {
-            if (footerText == null) return body;
-            return body + Environment.NewLine + Environment.NewLine + footerText;
+            if (footerHtml == null) return body;
+            var oIndex = body.ToLower().IndexOf("<body");
+            var cIndex = body.ToLower().IndexOf("</body>");
+            if (cIndex > oIndex && oIndex >= 0)
+            {
+                var sb = new StringBuilder(body);
+                sb.Insert(cIndex, "<br /><br />" + footerHtml);
+                return sb.ToString();
+            }
+            else
+            {
+                return body + "<br /><br />" + footerHtml;
+            }
         }
     }
 }

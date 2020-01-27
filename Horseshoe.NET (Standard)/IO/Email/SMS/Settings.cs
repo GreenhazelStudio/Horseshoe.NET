@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using Horseshoe.NET.Application;
 
-namespace Horseshoe.NET.Email.SMS
+namespace Horseshoe.NET.IO.Email.SMS
 {
     public static class Settings
     {

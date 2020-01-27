@@ -1,4 +1,4 @@
-﻿namespace Horseshoe.NET.Email.SMS
+﻿namespace Horseshoe.NET.IO.Email.SMS
 {
     /// <summary>
     /// Known mobile carriers with email-to-SMS text messaging

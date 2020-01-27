@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Horseshoe.NET.Email.SMS
+namespace Horseshoe.NET.IO.Email.SMS
 {
     public static class TextMessage
     {

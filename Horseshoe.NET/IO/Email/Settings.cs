@@ -2,7 +2,7 @@
 
 using Horseshoe.NET.Application;
 
-namespace Horseshoe.NET.Email
+namespace Horseshoe.NET.IO.Email
 {
     public static class Settings
     {

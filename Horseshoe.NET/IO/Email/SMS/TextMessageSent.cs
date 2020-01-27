@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Horseshoe.NET.Email.SMS
+namespace Horseshoe.NET.IO.Email.SMS
 {
     public delegate void TextMessageSent(string emailAddress, string message);
 }

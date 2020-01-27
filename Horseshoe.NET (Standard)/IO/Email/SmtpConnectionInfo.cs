@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Net.Mail;
 
-namespace Horseshoe.NET.Email
+namespace Horseshoe.NET.IO.Email
 {
     public class SmtpConnectionInfo
     {
