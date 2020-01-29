@@ -21,13 +21,15 @@ namespace Horseshoe.NET.Bootstrap
             Dark
         }
 
-        /* References https://getbootstrap.com/docs/4.1/components/alerts/ */
+        /* Ref: https://getbootstrap.com/docs/4.1/components/alerts/ */
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification = "Namespace style class embedding is my style")]
         public class Alert
         {
+            bool? _closeable;
             public AlertType AlertType { get; set; }
             public string Message { get; set; }
             public string Emphasis { get; set; }
-            public bool Closeable { get; set; }
+            public bool Closeable { get { return _closeable ?? Settings.DefaultAutoCloseable; } set { _closeable = value; } }
             public bool EncodeHtml { get; set; }
             public bool Fade { get; set; }
             public bool Show { get; set; }

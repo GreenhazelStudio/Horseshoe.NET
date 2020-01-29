@@ -43,5 +43,22 @@ namespace Horseshoe.NET.Bootstrap
             }
             return exceptionRendering;
         }
+
+        static bool? _autoCloseable;
+
+        public static bool DefaultAutoCloseable
+        {
+            get
+            {
+                return _autoCloseable
+                    ?? Config.GetNBoolean("Horseshoe.NET:Bootstrap:AutoCloseable")
+                    ?? OrganizationalDefaultSettings.GetNBoolean("Bootstrap.AutoCloseable")
+                    ?? false;
+            }
+            set
+            {
+                _autoCloseable = value;
+            }
+        }
     }
 }
