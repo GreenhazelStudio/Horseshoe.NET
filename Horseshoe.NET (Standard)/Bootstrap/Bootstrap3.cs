@@ -17,13 +17,15 @@ namespace Horseshoe.NET.Bootstrap
             Error
         }
 
-        /* References http://getbootstrap.com/docs/3.3/components/#alerts */
+        /* Ref: http://getbootstrap.com/docs/3.3/components/#alerts */
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification = "Namespace style class embedding is my style")]
         public class Alert
         {
+            bool? _closeable;
             public AlertType AlertType { get; set; }
             public string Message { get; set; }
             public string Emphasis { get; set; }
-            public bool Closeable { get; set; }
+            public bool Closeable { get { return _closeable ?? Settings.DefaultAutoCloseable; } set { _closeable = value; } }
             public bool EncodeHtml { get; set; }
             public string MessageDetails { get; set; }
             public AlertMessageDetailsRenderingPolicy MessageDetailsRendering { get; set; }
@@ -38,22 +40,23 @@ namespace Horseshoe.NET.Bootstrap
             string message,
             string emphasis = null,
             bool autoEmphasis = true,
-            bool closeable = false,
+            bool? closeable = null,
             bool encodeHtml = false,
             string messageDetails = null,
             AlertMessageDetailsRenderingPolicy messageDetailsRendering = default
         )
         {
-            return new Alert
+            var alert = new Alert
             {
                 AlertType = alertType,
                 Message = message,
                 Emphasis = emphasis ?? (autoEmphasis ? alertType.ToString() : null),
-                Closeable = closeable,
                 EncodeHtml = encodeHtml,
                 MessageDetails = messageDetails,
                 MessageDetailsRendering = messageDetailsRendering
             };
+            if (closeable.HasValue) alert.Closeable = closeable.Value;
+            return alert;
         }
 
         public static Alert CreateInfoAlert
@@ -61,7 +64,7 @@ namespace Horseshoe.NET.Bootstrap
             string message,
             string emphasis = null,
             bool autoEmphasis = true,
-            bool closeable = false,
+            bool? closeable = null,
             bool encodeHtml = false,
             string messageDetails = null,
             AlertMessageDetailsRenderingPolicy messageDetailsRendering = default
@@ -85,7 +88,7 @@ namespace Horseshoe.NET.Bootstrap
             string message,
             string emphasis = null,
             bool autoEmphasis = true,
-            bool closeable = false,
+            bool? closeable = null,
             bool encodeHtml = false,
             string messageDetails = null,
             AlertMessageDetailsRenderingPolicy messageDetailsRendering = default
@@ -109,7 +112,7 @@ namespace Horseshoe.NET.Bootstrap
             string message,
             string emphasis = null,
             bool autoEmphasis = true,
-            bool closeable = false,
+            bool? closeable = null,
             bool encodeHtml = false,
             string messageDetails = null,
             AlertMessageDetailsRenderingPolicy messageDetailsRendering = default
@@ -133,7 +136,7 @@ namespace Horseshoe.NET.Bootstrap
             string message,
             string emphasis = null,
             bool autoEmphasis = true,
-            bool closeable = false,
+            bool? closeable = null,
             bool encodeHtml = false,
             string messageDetails = null,
             AlertMessageDetailsRenderingPolicy messageDetailsRendering = default
@@ -157,7 +160,7 @@ namespace Horseshoe.NET.Bootstrap
             string message,
             string emphasis = null,
             bool autoEmphasis = true,
-            bool closeable = false,
+            bool? closeable = null,
             bool encodeHtml = false,
             string messageDetails = null,
             AlertMessageDetailsRenderingPolicy messageDetailsRendering = default
@@ -181,8 +184,9 @@ namespace Horseshoe.NET.Bootstrap
             ExceptionInfo exception,
             string emphasis = null,
             bool autoEmphasis = true,
-            bool closeable = false,
+            bool? closeable = null,
             bool encodeHtml = true,
+            AlertType? alertType = null,
             bool displayShortName = false,
             bool displayMessageInErrorDetails = true,
             bool displayStackTrace = true,
@@ -194,7 +198,7 @@ namespace Horseshoe.NET.Bootstrap
             var resultantErrorRendering = exceptionRendering ?? Settings.DefaultExceptionRendering;
             return CreateAlert
             (
-                AlertType.Error,
+                alertType ?? AlertType.Error,
                 exception?.Message ?? "[null]",
                 emphasis: emphasis,
                 autoEmphasis: autoEmphasis,

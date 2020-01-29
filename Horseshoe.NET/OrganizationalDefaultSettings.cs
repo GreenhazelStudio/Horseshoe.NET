@@ -48,7 +48,8 @@ namespace Horseshoe.NET
 
         static OrganizationalDefaultSettings()
         {
-            //Set("Bootstrap.ExceptionRendering", "Dynamic");
+            //Set("Bootstrap.ExceptionRendering", Bootstrap.ExceptionRenderingPolicy.Dynamic);
+            //Set("Bootstrap.AutoCloseable", true);
 
             //Set("Cryptography.SymmetricAlgorithm", new System.Security.Cryptography.RijndaelManaged());
             //Set("Cryptography.SymmetricKey", Encoding.Default.GetBytes("my-$3¢ü®3-password"));
