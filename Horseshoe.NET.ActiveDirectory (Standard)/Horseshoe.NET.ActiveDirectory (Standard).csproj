@@ -7,7 +7,7 @@
     <Authors>Carl Thomas</Authors>
     <Company>Greenhazel Studio</Company>
     <Description>Services for Active Directory authentication and LDAP querying</Description>
-    <Version>0.9.2.5</Version>
+    <Version>0.9.2.7</Version>
   </PropertyGroup>
 
   <ItemGroup>

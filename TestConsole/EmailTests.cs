@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Horseshoe.NET;
 using Horseshoe.NET.Application;
 using Horseshoe.NET.ConsoleX;
-using Horseshoe.NET.Email;
+using Horseshoe.NET.IO.Email;
 using Horseshoe.NET.Text;
 
 namespace TestConsole
