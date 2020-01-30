@@ -11,16 +11,15 @@ namespace Horseshoe.NET.Objects
 {
     public static class ObjectUtil
     {
-        public static object Zap(object obj, object defaultValue = null)
+        public static bool IsNull(object obj)
         {
-            if (obj == null || obj is DBNull) return defaultValue;
-            return obj;
+            return obj is null || obj is DBNull;
         }
 
         public static string ZapString(object obj, string defaultValue = null)
         {
-            var zapped = Zap(obj);
-            return zapped?.ToString() ?? defaultValue;
+            if (IsNull(obj)) return defaultValue;
+            return obj.ToString();
         }
 
         public static byte ZapByte(object obj, byte defaultValue = default)
@@ -30,10 +29,8 @@ namespace Horseshoe.NET.Objects
 
         public static byte? ZapNByte(object obj)
         {
-            var zapped = Zap(obj);
-            if (zapped == null) return null;
-            if (zapped is byte byteValue) return byteValue;
-            if (zapped is string stringValue) return TextUtil.ZapNByte(stringValue);
+            if (IsNull(obj)) return null;
+            if (obj is byte byteValue) return byteValue;
             try
             {
                 return Convert.ToByte(obj);
@@ -51,10 +48,8 @@ namespace Horseshoe.NET.Objects
 
         public static short? ZapNShort(object obj)
         {
-            var zapped = Zap(obj);
-            if (zapped == null) return null;
-            if (zapped is short shortValue) return shortValue;
-            if (zapped is string stringValue) return TextUtil.ZapNShort(stringValue);
+            if (IsNull(obj)) return null;
+            if (obj is short shortValue) return shortValue;
             try
             {
                 return Convert.ToInt16(obj);
@@ -72,10 +67,8 @@ namespace Horseshoe.NET.Objects
 
         public static int? ZapNInt(object obj)
         {
-            var zapped = Zap(obj);
-            if (zapped == null) return null;
-            if (zapped is int intValue) return intValue;
-            if (zapped is string stringValue) return TextUtil.ZapNInt(stringValue);
+            if (IsNull(obj)) return null;
+            if (obj is int intValue) return intValue;
             try
             {
                 return Convert.ToInt32(obj);
@@ -93,10 +86,8 @@ namespace Horseshoe.NET.Objects
 
         public static long? ZapNLong(object obj)
         {
-            var zapped = Zap(obj);
-            if (zapped == null) return null;
-            if (zapped is long longValue) return longValue;
-            if (zapped is string stringValue) return TextUtil.ZapNLong(stringValue);
+            if (IsNull(obj)) return null;
+            if (obj is long longValue) return longValue;
             try
             {
                 return Convert.ToInt64(obj);
@@ -114,10 +105,8 @@ namespace Horseshoe.NET.Objects
 
         public static float? ZapNFloat(object obj)
         {
-            var zapped = Zap(obj);
-            if (zapped == null) return null;
-            if (zapped is float floatValue) return floatValue;
-            if (zapped is string stringValue) return TextUtil.ZapNFloat(stringValue);
+            if (IsNull(obj)) return null;
+            if (obj is float floatValue) return floatValue;
             try
             {
                 return (float)Convert.ToDouble(obj);
@@ -135,10 +124,8 @@ namespace Horseshoe.NET.Objects
 
         public static double? ZapNDouble(object obj)
         {
-            var zapped = Zap(obj);
-            if (zapped == null) return null;
-            if (zapped is double doubleValue) return doubleValue;
-            if (zapped is string stringValue) return TextUtil.ZapNDouble(stringValue);
+            if (IsNull(obj)) return null;
+            if (obj is double doubleValue) return doubleValue;
             try
             {
                 return Convert.ToDouble(obj);
@@ -156,10 +143,8 @@ namespace Horseshoe.NET.Objects
 
         public static decimal? ZapNDecimal(object obj)
         {
-            var zapped = Zap(obj);
-            if (zapped == null) return null;
-            if (zapped is decimal decimalValue) return decimalValue;
-            if (zapped is string stringValue) return TextUtil.ZapNDecimal(stringValue);
+            if (IsNull(obj)) return null;
+            if (obj is decimal decimalValue) return decimalValue;
             try
             {
                 return Convert.ToDecimal(obj);
@@ -177,10 +162,9 @@ namespace Horseshoe.NET.Objects
 
         public static bool? ZapNBoolean(object obj)
         {
-            var zapped = Zap(obj);
-            if (zapped == null) return null;
-            if (zapped is bool boolValue) return boolValue;
-            if (zapped is string stringValue) return TextUtil.ZapNBoolean(stringValue);
+            if (IsNull(obj)) return null;
+            if (obj is bool boolValue) return boolValue;
+            if (obj is string stringValue) return TextUtil.ZapNBoolean(stringValue);
             try
             {
                 return Convert.ToBoolean(obj);
@@ -198,10 +182,8 @@ namespace Horseshoe.NET.Objects
 
         public static DateTime? ZapNDateTime(object obj)
         {
-            var zapped = Zap(obj);
-            if (zapped == null) return null;
-            if (zapped is DateTime dateTimeValue) return dateTimeValue;
-            if (zapped is string stringValue) return TextUtil.ZapNDateTime(stringValue);
+            if (IsNull(obj)) return null;
+            if (obj is DateTime dateTimeValue) return dateTimeValue;
             try
             {
                 return Convert.ToDateTime(obj);
@@ -220,10 +202,17 @@ namespace Horseshoe.NET.Objects
         public static T? ZapNEnum<T>(object obj, bool ignoreCase = false) where T : struct
         {
             if (!typeof(T).IsEnum) throw new UtilityException("Not an enum type: " + typeof(T).FullName);
-            if (obj == null) return null;
+            if (IsNull(obj)) return null;
             if (obj is T enumValue) return enumValue;
             if (obj is string stringValue) return TextUtil.ZapNEnum<T>(stringValue, ignoreCase: ignoreCase);
-            throw new UtilityException("\"" + obj + "\" cannot be converted to " + typeof(T).FullName);
+            try
+            {
+                return (T)Enum.ToObject(typeof(T), obj);
+            }
+            catch(Exception ex)
+            {
+                throw new UtilityException("\"" + obj + "\" cannot be converted to " + typeof(T).FullName + " due to: " + ex.Message, ex);
+            }
         }
 
         public static PropertyInfo[] GetProperties<T>(BindingFlags? bindingFlags = null, Func<PropertyInfo, bool> filter = null) where T : class

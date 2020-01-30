@@ -58,9 +58,8 @@ namespace Horseshoe.NET.Text
         /// <returns></returns>
         public static string Zap(object obj, string defaultValue = null, TextCleanMode textCleanMode = default, object customTextCleanDictionary = null, char[] charsToRemove = null)
         {
-            var zapped = ObjectUtil.Zap(obj);
-            if (zapped == null) return defaultValue;
-            return Zap(zapped.ToString(), defaultValue: defaultValue, textCleanMode: textCleanMode, customTextCleanDictionary: customTextCleanDictionary, charsToRemove: charsToRemove);
+            if (ObjectUtil.IsNull(obj)) return defaultValue;
+            return Zap(obj.ToString(), defaultValue: defaultValue, textCleanMode: textCleanMode, customTextCleanDictionary: customTextCleanDictionary, charsToRemove: charsToRemove);
         }
 
         public static byte ZapByte(string text, byte defaultValue = default, NumberStyles? numberStyles = null, IFormatProvider provider = null)

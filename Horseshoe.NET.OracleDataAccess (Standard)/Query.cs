@@ -154,7 +154,8 @@ namespace Horseshoe.NET.OracleDataAccess
                     {
                         using (var command = OracleUtil.BuildCommand(conn, CommandType.Text, statement, timeout: timeout))
                         {
-                            var obj = ObjectUtil.Zap(command.ExecuteScalar());
+                            var obj = command.ExecuteScalar();
+                            if (ObjectUtil.IsNull(obj)) return null;
                             if (obj is string stringValue)
                             {
                                 switch (autoTrunc)
@@ -1377,7 +1378,8 @@ namespace Horseshoe.NET.OracleDataAccess
                     {
                         using (var command = OracleUtil.BuildCommand(conn, CommandType.StoredProcedure, procedureName, parameters: parameters, timeout: timeout))
                         {
-                            var obj = ObjectUtil.Zap(command.ExecuteScalar());
+                            var obj = command.ExecuteScalar();
+                            if (ObjectUtil.IsNull(obj)) return null;
                             if (obj is string stringValue)
                             {
                                 switch (autoTrunc)
@@ -1608,7 +1610,8 @@ namespace Horseshoe.NET.OracleDataAccess
                     {
                         using (var command = OracleUtil.BuildCommand(conn, CommandType.Text, statement, timeout: timeout))  // not including parameters here due to already embedded in the SQL statement
                         {
-                            var obj = ObjectUtil.Zap(command.ExecuteScalar());
+                            var obj = command.ExecuteScalar();
+                            if (ObjectUtil.IsNull(obj)) return null;
                             if (obj is string stringValue)
                             {
                                 switch (autoTrunc)
