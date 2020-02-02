@@ -58,7 +58,7 @@ namespace Horseshoe.NET.IO.FileImport
             }
 
             var list = new List<object[]>();
-            var _columns = columns.Where(c => !(c is Column.NoMapColumn)).ToArray();
+            var _columns = columns.Where(c => c.IsMappable).ToArray();
             stringArrays.Iterate
             (
                 (array, index) =>
@@ -162,7 +162,7 @@ namespace Horseshoe.NET.IO.FileImport
             {
                 foreach (var column in columns)
                 {
-                    if (!(column is Column.NoMapColumn))
+                    if (column.IsMappable)
                     {
                         _tempValue = rawRow.Substring(_pos, column.Width);
                         _list.Add(PostParseString(_tempValue, autoTrunc));

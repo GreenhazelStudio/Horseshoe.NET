@@ -20,7 +20,7 @@ namespace Horseshoe.NET.Excel
             Format = Column.DateFormatNoMilliseconds
         };
 
-        public static Column ExcelNDate(string name, int width = 0) => new Column
+        public static Column ExcelNDate(string name, int width = 0) => new NullableColumn
         {
             Name = name,
             Width = width,

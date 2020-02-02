@@ -585,7 +585,7 @@ namespace Horseshoe.NET.IO.FileImport
                 // get imported data - ensures columns is not null
                 var objectArrays = ImportFixedWidth.AsObjects(stream, columns, autoTrunc);
 
-                return ImportFixedWidth.AsDataTable(objectArrays, columns.Where(c => !(c is Column.NoMapColumn)).ToArray());
+                return ImportFixedWidth.AsDataTable(objectArrays, columns.Where(c => c.IsMappable).ToArray());
             }
 
             public static IEnumerable<string[]> AsStrings(string filePath, Column[] columns, AutoTruncate autoTrunc = AutoTruncate.Trim)
@@ -651,7 +651,7 @@ namespace Horseshoe.NET.IO.FileImport
                 // get imported data
                 var objectArrays = ImportFixedWidth.AsObjects(stream, columns, autoTrunc);
 
-                return ImportFixedWidth.AsCollection(objectArrays, columns.Where(c => !(c is Column.NoMapColumn)).ToArray(), parseFunc, charsToRemove);
+                return ImportFixedWidth.AsCollection(objectArrays, columns.Where(c => c.IsMappable).ToArray(), parseFunc, charsToRemove);
             }
 
             public static IEnumerable<E> AsCollection<E>(Stream stream, out Column[] columns, Func<object[], E> parseFunc = null, AutoTruncate autoTrunc = AutoTruncate.Trim, char[] charsToRemove = null) where E : class, new()

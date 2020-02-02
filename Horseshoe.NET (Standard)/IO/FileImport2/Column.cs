@@ -16,6 +16,8 @@ namespace Horseshoe.NET.IO.FileImport
         public int Width { get; set; }
         public Func<object, object> ValueConverter { get; set; }
         public Func<object, string> Format { get; set; }
+        public bool IsNullable => this is NullableColumn;
+        public bool IsMappable => !(this is NoMapColumn);
 
         public DataColumn ToDataColumn()
         {
@@ -43,23 +45,23 @@ namespace Horseshoe.NET.IO.FileImport
 
         public static Column String(string name, int width = 0) => new Column { Name = name, Width = width, DataType = DataType.String, ValueConverter = (obj) => ZapString(obj) ?? "" };
 
-        public static Column NString(string name, int width = 0) => new Column { Name = name, Width = width, DataType = DataType.String, ValueConverter = (obj) => ZapString(obj) };
+        public static Column NString(string name, int width = 0) => new NullableColumn { Name = name, Width = width, DataType = DataType.String, ValueConverter = (obj) => ZapString(obj) };
 
         public static Column Byte(string name, int width = 0) => new Column { Name = name, Width = width, DataType = DataType.Byte, ValueConverter = (obj) => ZapByte(obj) };
 
-        public static Column NByte(string name, int width = 0) => new Column { Name = name, Width = width, DataType = DataType.Byte, ValueConverter = (obj) => ZapNByte(obj) };
+        public static Column NByte(string name, int width = 0) => new NullableColumn { Name = name, Width = width, DataType = DataType.Byte, ValueConverter = (obj) => ZapNByte(obj) };
 
         public static Column Int(string name, int width = 0) => new Column { Name = name, Width = width, DataType = DataType.Integer, ValueConverter = (obj) => ZapInt(obj) };
 
-        public static Column NInt(string name, int width = 0) => new Column { Name = name, Width = width, DataType = DataType.Integer, ValueConverter = (obj) => ZapNInt(obj) };
+        public static Column NInt(string name, int width = 0) => new NullableColumn { Name = name, Width = width, DataType = DataType.Integer, ValueConverter = (obj) => ZapNInt(obj) };
 
         public static Column Decimal(string name, int width = 0) => new Column { Name = name, Width = width, DataType = DataType.Decimal, ValueConverter = (obj) => ZapDecimal(obj) };
 
-        public static Column NDecimal(string name, int width = 0) => new Column { Name = name, Width = width, DataType = DataType.Decimal, ValueConverter = (obj) => ZapNDecimal(obj) };
+        public static Column NDecimal(string name, int width = 0) => new NullableColumn { Name = name, Width = width, DataType = DataType.Decimal, ValueConverter = (obj) => ZapNDecimal(obj) };
 
         public static Column Boolean(string name, int width = 0) => new Column { Name = name, Width = width, DataType = DataType.Boolean, ValueConverter = (obj) => ZapBoolean(obj) };
 
-        public static Column NBoolean(string name, int width = 0) => new Column { Name = name, Width = width, DataType = DataType.Boolean, ValueConverter = (obj) => ZapNBoolean(obj) };
+        public static Column NBoolean(string name, int width = 0) => new NullableColumn { Name = name, Width = width, DataType = DataType.Boolean, ValueConverter = (obj) => ZapNBoolean(obj) };
 
         public static Column Date(string name, int width = 0) => new Column
         {
@@ -70,7 +72,7 @@ namespace Horseshoe.NET.IO.FileImport
             Format = DateFormat
         };
 
-        public static Column NDate(string name, int width = 0) => new Column
+        public static Column NDate(string name, int width = 0) => new NullableColumn
         {
             Name = name,
             Width = width,
@@ -88,7 +90,7 @@ namespace Horseshoe.NET.IO.FileImport
             Format = TimeFormat
         };
 
-        public static Column NTime(string name, int width = 0) => new Column
+        public static Column NTime(string name, int width = 0) => new NullableColumn
         {
             Name = name,
             Width = width,
@@ -209,11 +211,6 @@ namespace Horseshoe.NET.IO.FileImport
                 return timeValue;
             }
             return obj;
-        }
-
-        public class NoMapColumn : Column
-        {
-
         }
     }
 }
