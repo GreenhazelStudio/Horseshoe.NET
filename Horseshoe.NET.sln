@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsole", "TestConsole\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horseshoe.NET.Mvc", "Horseshoe.NET.Mvc\Horseshoe.NET.Mvc.csproj", "{BD0A0830-F2D5-46A2-BE39-DC62E7CD092C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horseshoe.NET.WebForms", "Horseshoe.NET.WebForms\Horseshoe.NET.WebForms.csproj", "{489C429B-340C-4C66-B43E-F5184C082832}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horseshoe.NET.ActiveDirectory (Standard)", "Horseshoe.NET.ActiveDirectory (Standard)\Horseshoe.NET.ActiveDirectory (Standard).csproj", "{54E17F3F-83D3-4EAA-B65E-AFA2B84ED522}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horseshoe.NET.Excel (Standard)", "Horseshoe.NET.Excel (Standard)\Horseshoe.NET.Excel (Standard).csproj", "{1895FD85-52F3-4BD5-B1DF-671C831DF864}"
@@ -45,15 +43,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horseshoe.NET.Mvc (Core 2.1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horseshoe.NET.SqlDb", "Horseshoe.NET.SqlDb\Horseshoe.NET.SqlDb.csproj", "{D9A0BF85-7D85-46EE-8BB5-3F75DC36830A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horseshoe.NET.SqlDb (Standard)", "Horseshoe.NET.SqlDb (Standard)\Horseshoe.NET.SqlDb (Standard).csproj", "{47232185-5602-4C1C-BF9C-18D6B48F77AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horseshoe.NET.SqlDb (Standard)", "Horseshoe.NET.SqlDb (Standard)\Horseshoe.NET.SqlDb (Standard).csproj", "{47232185-5602-4C1C-BF9C-18D6B48F77AF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horseshoe.NET.OracleDb", "Horseshoe.NET.OracleDb\Horseshoe.NET.OracleDb.csproj", "{EF577431-B6C3-49B3-AF18-4974383C59D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horseshoe.NET.OracleDb (Standard)", "Horseshoe.NET.OracleDb (Standard)\Horseshoe.NET.OracleDb (Standard).csproj", "{624279ED-C729-447F-ACFF-029AEAA02AC2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horseshoe.NET.OracleDb (Standard)", "Horseshoe.NET.OracleDb (Standard)\Horseshoe.NET.OracleDb (Standard).csproj", "{624279ED-C729-447F-ACFF-029AEAA02AC2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horseshoe.NET.Odbc", "Horseshoe.NET.Odbc\Horseshoe.NET.Odbc.csproj", "{31DC6C32-03AE-4C5D-A94B-BAC991655900}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horseshoe.NET.Odbc (Standard)", "Horseshoe.NET.Odbc (Standard)\Horseshoe.NET.Odbc (Standard).csproj", "{809C50BD-A8E2-4C58-B3F0-2B71C8F52280}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horseshoe.NET.Odbc (Standard)", "Horseshoe.NET.Odbc (Standard)\Horseshoe.NET.Odbc (Standard).csproj", "{809C50BD-A8E2-4C58-B3F0-2B71C8F52280}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,10 +79,6 @@ Global
 		{BD0A0830-F2D5-46A2-BE39-DC62E7CD092C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD0A0830-F2D5-46A2-BE39-DC62E7CD092C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD0A0830-F2D5-46A2-BE39-DC62E7CD092C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{489C429B-340C-4C66-B43E-F5184C082832}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{489C429B-340C-4C66-B43E-F5184C082832}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{489C429B-340C-4C66-B43E-F5184C082832}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{489C429B-340C-4C66-B43E-F5184C082832}.Release|Any CPU.Build.0 = Release|Any CPU
 		{54E17F3F-83D3-4EAA-B65E-AFA2B84ED522}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{54E17F3F-83D3-4EAA-B65E-AFA2B84ED522}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{54E17F3F-83D3-4EAA-B65E-AFA2B84ED522}.Release|Any CPU.ActiveCfg = Release|Any CPU

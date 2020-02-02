@@ -169,6 +169,9 @@
     <Compile Include="TruncatePolicy.cs" />
     <Compile Include="UtilityException.cs" />
     <Compile Include="ValidationException.cs" />
+    <Compile Include="WebForms\Extensions.cs" />
+    <Compile Include="WebForms\WebFormsBootstrap3Alert.cs" />
+    <Compile Include="WebForms\WebFormsBootstrap4Alert.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
