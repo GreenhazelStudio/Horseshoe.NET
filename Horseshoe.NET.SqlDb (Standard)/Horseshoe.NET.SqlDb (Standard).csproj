@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Horseshoe.NET.SqlDb</RootNamespace>
+    <Description>A typesafe, object-oriented database helper for SQL Server</Description>
+    <Authors>Carl Thomas</Authors>
+    <Company>Greenhazel Studio</Company>
+    <Version>0.9.3.0</Version>
+    <Copyright>Copyright © 2020 Greenhazel Studio</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Horseshoe.NET (Standard)\Horseshoe.NET (Standard).csproj" />
+  </ItemGroup>
+
+</Project>

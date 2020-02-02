@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Horseshoe.NET.OracleDb</RootNamespace>
+    <Description>A typesafe, object-oriented database helper for Oracle</Description>
+    <Copyright>Copyright © 2020 Greenhazel Studio</Copyright>
+    <Version>0.9.3.0</Version>
+    <Authors>Carl Thomas</Authors>
+    <Company>Greenhazel Studio</Company>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="2.19.60" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Horseshoe.NET (Standard)\Horseshoe.NET (Standard).csproj" />
+  </ItemGroup>
+
+</Project>

@@ -19,6 +19,16 @@ namespace Horseshoe.NET.IO.FileImport
         public bool IsNullable => this is NullableColumn;
         public bool IsMappable => !(this is NoMapColumn);
 
+        public override string ToString()
+        {
+            return
+                IsNullable ? "N" : "" +
+                DataType + "(" +
+                Name +
+                (Width != 0 ? ", " + Width.ToString() : "") +
+                ")";
+        }
+
         public DataColumn ToDataColumn()
         {
             switch (DataType)

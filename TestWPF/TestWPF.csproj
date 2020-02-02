@@ -98,10 +98,6 @@
       <Project>{9fba8935-bbde-4248-a897-f89d1e3ec597}</Project>
       <Name>Horseshoe.NET.ActiveDirectory</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Horseshoe.NET.DataAccess\Horseshoe.NET.DataAccess.csproj">
-      <Project>{a5c37688-c639-4506-a7b3-9a440c0c405e}</Project>
-      <Name>Horseshoe.NET.DataAccess</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Horseshoe.NET.Excel\Horseshoe.NET.Excel.csproj">
       <Project>{6083928f-0399-4db6-8808-b34a0693895d}</Project>
       <Name>Horseshoe.NET.Excel</Name>
