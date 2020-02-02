@@ -21,12 +21,17 @@ namespace Horseshoe.NET.IO.FileImport
 
         public override string ToString()
         {
-            return
-                IsNullable ? "N" : "" +
-                DataType + "(" +
-                Name +
+            return ToDataTypeString() + 
+                "(" +
+                "\"" + Name + "\"" +
                 (Width != 0 ? ", " + Width.ToString() : "") +
                 ")";
+        }
+
+        public string ToDataTypeString()
+        {
+            if (!IsMappable) return "NoMap";
+            return (IsNullable ? "N" : "") + DataType;
         }
 
         public DataColumn ToDataColumn()

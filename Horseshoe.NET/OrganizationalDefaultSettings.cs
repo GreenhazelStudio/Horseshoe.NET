@@ -61,39 +61,39 @@ namespace Horseshoe.NET
             //Set("Cryptography.HashSalt", 240); // or byte.Parse("F0", NumberStyles.HexNumber)
             //Set("Cryptography.Encoding", new UTF8Encoding()); // or "System.Text.UTF8Encoding"
 
-            //Set("DataAccess.ODBC.ConnectionString", "Driver={Oracle in OraClient11g_home1};Server=DBSVR01;Uid=OdbcUser;Pwd=gyHt82bNmre457sjd709Aq1==;");
-            //Set("DataAccess.ODBC.IsEncryptedPassword", true);
-            //Set("DataAccess.ODBC.DataSource", "DBSVR01");
-            //Set("DataAccess.ODBC.Credentials", new Credential("OdbcUser", "gyHt82bNmre457sjd709Aq1==", isEncryptedPassword: true));
-            //Set("DataAccess.ODBC.AdditionalConnectionAttributes", "Integrated Security=SSQI|Attribute1=Value1");
-            //Set("DataAccess.ODBC.Timeout", 30);
+            //Set("Odbc.ConnectionString", "Driver={Oracle in OraClient11g_home1};Server=DBSVR01;Uid=OdbcUser;Pwd=gyHt82bNmre457sjd709Aq1==;");
+            //Set("Odbc.IsEncryptedPassword", true);
+            //Set("Odbc.DataSource", "DBSVR01");
+            //Set("Odbc.Credentials", new Credential("OdbcUser", "gyHt82bNmre457sjd709Aq1==", isEncryptedPassword: true));
+            //Set("Odbc.AdditionalConnectionAttributes", "Integrated Security=SSQI|Attribute1=Value1");
+            //Set("Odbc.Timeout", 30);
 
-            //Set("DataAccess.OLEDB.ConnectionString", "Provider=OraOLEDB.Oracle;Server=DBSVR01;User ID=OleDbUser;Password=gyHt82bNmre457sjd709Aq1==;");
-            //Set("DataAccess.OLEDB.IsEncryptedPassword", true);
-            //Set("DataAccess.OLEDB.DataSource", "DBSVR01");
-            //Set("DataAccess.OLEDB.Credentials", new Credential("OleDbUser", "gyHt82bNmre457sjd709Aq1==", isEncryptedPassword: true));
-            //Set("DataAccess.OLEDB.AdditionalConnectionAttributes", "Integrated Security=SSQI|Attribute1=Value1");
-            //Set("DataAccess.OLEDB.Timeout", 30);
+            //Set("OleDb.ConnectionString", "Provider=OraOLEDB.Oracle;Server=DBSVR01;User ID=OleDbUser;Password=gyHt82bNmre457sjd709Aq1==;");
+            //Set("OleDb.IsEncryptedPassword", true);
+            //Set("OleDb.DataSource", "DBSVR01");
+            //Set("OleDb.Credentials", new Credential("OleDbUser", "gyHt82bNmre457sjd709Aq1==", isEncryptedPassword: true));
+            //Set("OleDb.AdditionalConnectionAttributes", "Integrated Security=SSQI|Attribute1=Value1");
+            //Set("OleDb.Timeout", 30);
 
-            //Set("DataAccess.Oracle.ConnectionString", "Data Source=//11.22.33.44:9999/SERVICE1;User ID=OracleUser;Password=gyHt82bNmre457sjd709Aq1==;");  // EZConnect
-            //Set("DataAccess.Oracle.ConnectionString", "Data Source=ORADBSVR01;User ID=OracleUser;Password=gyHt82bNmre457sjd709Aq1==;");
-            //Set("DataAccess.Oracle.IsEncryptedPassword", true);
-            //Set("DataAccess.Oracle.Server", "ORADBSVR01");  // or 'NAME'11.22.33.44:9999;SERVICE1 or ORADBSVR02:9999;SERVICE1;INSTANCE1
-            //Set("DataAccess.Oracle.DataSource", "ORADBSVR01");
-            //Set("DataAccess.Oracle.Credentials", new Credential("OracleUser", "gyHt82bNmre457sjd709Aq1==", isEncryptedPassword: true));
-            //Set("DataAccess.Oracle.AdditionalConnectionAttributes", "Integrated Security=SSQI|Attribute1=Value1");
-            //Set("DataAccess.Oracle.Timeout", 30);
-            //Set("DataAccess.Oracle.ServerList", "ORADBSVR01|'NAME'11.22.33.44:9999;SERVICE1|ORADBSVR02:9999;SERVICE1;INSTANCE1");
+            //Set("OracleDb.ConnectionString", "Data Source=//11.22.33.44:9999/SERVICE1;User ID=OracleUser;Password=gyHt82bNmre457sjd709Aq1==;");  // EZConnect
+            //Set("OracleDb.ConnectionString", "Data Source=ORADBSVR01;User ID=OracleUser;Password=gyHt82bNmre457sjd709Aq1==;");
+            //Set("OracleDb.IsEncryptedPassword", true);
+            //Set("OracleDb.Server", "ORADBSVR01");  // or 'NAME'11.22.33.44:9999;SERVICE1 or ORADBSVR02:9999;SERVICE1;INSTANCE1
+            //Set("OracleDb.DataSource", "ORADBSVR01");
+            //Set("OracleDb.Credentials", new Credential("OracleUser", "gyHt82bNmre457sjd709Aq1==", isEncryptedPassword: true));
+            //Set("OracleDb.AdditionalConnectionAttributes", "Integrated Security=SSQI|Attribute1=Value1");
+            //Set("OracleDb.Timeout", 30);
+            //Set("OracleDb.ServerList", "ORADBSVR01|'NAME'11.22.33.44:9999;SERVICE1|ORADBSVR02:9999;SERVICE1;INSTANCE1");
 
-            //Set("DataAccess.SQL.ConnectionString", "Data Source;Server=DBSVR01;Initial Catalog=MyDatabase;User ID=SqlUser;Password=gyHt82bNmre457sjd709Aq1==;");
-            //Set("DataAccess.SQL.IsEncryptedPassword", true);
-            //Set("DataAccess.SQL.Server", "DBSVR01;2008R2");  // or 'NAME'11.22.33.44:9999;2012 or DBSVR01 (lookup / versionless)
-            //Set("DataAccess.SQL.DataSource", "DBSVR01");
-            //Set("DataAccess.SQL.InitialCatalog", "MyDatabase");
-            //Set("DataAccess.SQL.Credentials", new Credential("SqlUser", "gyHt82bNmre457sjd709Aq1==", isEncryptedPassword: true));
-            //Set("DataAccess.SQL.AdditionalConnectionAttributes", "Integrated Security=SSQI|Attribute1=Value1");
-            //Set("DataAccess.SQL.Timeout", 30);
-            //Set("DataAccess.SQL.ServerList", "DBSVR01|'NAME'11.22.33.44:9999;2012|DBSVR02;2008R2");
+            //Set("SqlDb.ConnectionString", "Data Source;Server=DBSVR01;Initial Catalog=MyDatabase;User ID=SqlUser;Password=gyHt82bNmre457sjd709Aq1==;");
+            //Set("SqlDb.IsEncryptedPassword", true);
+            //Set("SqlDb.Server", "DBSVR01;2008R2");  // or 'NAME'11.22.33.44:9999;2012 or DBSVR01 (lookup / versionless)
+            //Set("SqlDb.DataSource", "DBSVR01");
+            //Set("SqlDb.InitialCatalog", "MyDatabase");
+            //Set("SqlDb.Credentials", new Credential("SqlUser", "gyHt82bNmre457sjd709Aq1==", isEncryptedPassword: true));
+            //Set("SqlDb.AdditionalConnectionAttributes", "Integrated Security=SSQI|Attribute1=Value1");
+            //Set("SqlDb.Timeout", 30);
+            //Set("SqlDb.ServerList", "DBSVR01|'NAME'11.22.33.44:9999;2012|DBSVR02;2008R2");
 
             //Set("Email.SmtpServer", "smtp.myorganization.com");
             //Set("Email.SmtpPort", 25);
