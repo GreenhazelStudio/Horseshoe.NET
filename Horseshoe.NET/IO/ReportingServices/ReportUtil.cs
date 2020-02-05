@@ -5,23 +5,26 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
+using Horseshoe.NET.Text;
+
 namespace Horseshoe.NET.IO.ReportingServices
 {
     public static class ReportUtil
     {
         public static event Action<string> ReportUrlGenerated;
 
-        public static string BuildFileUrl(string reportPath, string reportServer = null, IDictionary<string, object> userParameters = null, ReportFormat reportFormat = ReportFormat.PDF, bool announce = false)
+        public static string BuildFileUrl(string reportPath, string reportServer = null, IDictionary<string, object> parameters = null, ReportFormat reportFormat = ReportFormat.PDF, bool announce = false)
         {
             if (reportPath == null) throw new ArgumentNullException(nameof(reportPath));
             reportServer = reportServer ?? Settings.DefaultReportServer;
             if (reportServer == null) throw new ArgumentNullException(nameof(reportServer));
             if (reportServer.EndsWith("/")) reportServer = reportServer.Substring(0, reportServer.Length - 1);  // remove trailing slash, if applicable
-            var parameterPortionOfQueryString = BuildReportParametersPortionOfQueryString(userParameters);
+            var parameterPortionOfQueryString = BuildReportParameterString(parameters);
             var sb = new StringBuilder(reportServer)      // e.g. http://reports.mycompany.com
                 .Append("/ReportServer?")
-                .Append(reportPath.Replace(" ", "%20"))   // e.g. /Acct/Expense Report => /Acct/Expense%20Report
-                .Append(parameterPortionOfQueryString)    // e.g. &user=Bob Cratchit   => &user=Bob%20Cratchit
+                .AppendIf(!reportPath.StartsWith("/"), "/")
+                .Append(reportPath.Replace(" ", "%20"))   // e.g. /Accounting/Expense Report => /Acct/Expense%20Report
+                .Append(parameterPortionOfQueryString)    // e.g. &name=Bob%20Cratchit
                 .Append("&rs:Command=Render")
                 .Append("&rs:Format=")
                 .Append(reportFormat);                    // e.g. PDF, EXCEL
@@ -32,17 +35,18 @@ namespace Horseshoe.NET.IO.ReportingServices
             return sb.ToString();                         // http://reports.mycompany.com/ReportServer?/Acct/Expense%20Report&user=Bob%20Cratchit&rs:Command=Render&rs:Format=PDF
         }
 
-        public static string BuildHyperlinkUrl(string reportPath, string reportServer = null, IDictionary<string, object> userParameters = null, bool announce = false)
+        public static string BuildHyperlinkUrl(string reportPath, string reportServer = null, IDictionary<string, object> parameters = null, bool announce = false)
         {
             if (reportPath == null) throw new ArgumentNullException(nameof(reportPath));
             reportServer = reportServer ?? Settings.DefaultReportServer;
             if (reportServer == null) throw new ArgumentNullException(nameof(reportServer));
             if (reportServer.EndsWith("/")) reportServer = reportServer.Substring(0, reportServer.Length - 1);  // remove trailing slash, if applicable
-            var parameterPortionOfQueryString = BuildReportParametersPortionOfQueryString(userParameters);
+            var parameterPortionOfQueryString = BuildReportParameterString(parameters);
             var sb = new StringBuilder(reportServer)      // e.g. http://reports.mycompany.com
                 .Append("/reports/report")
-                .Append(reportPath.Replace(" ", "%20"))   // e.g. /Acct/Expense Report => /Acct/Expense%20Report
-                .Append(parameterPortionOfQueryString);   // e.g. &user=Bob Cratchit   => &user=Bob%20Cratchit
+                .AppendIf(!reportPath.StartsWith("/"), "/")
+                .Append(reportPath.Replace(" ", "%20"))   // e.g. /Accounting/Expense Report => /Accounting/Expense%20Report
+                .Append(parameterPortionOfQueryString);   // e.g. &name=Bob%20Cratchit
             if (announce)
             {
                 ReportUrlGenerated?.Invoke(sb.ToString());
@@ -50,13 +54,13 @@ namespace Horseshoe.NET.IO.ReportingServices
             return sb.ToString();                         // http://reports.mycompany.com/reports/report/Acct/Expense%20Report&user=Bob%20Cratchit
         }
 
-        public static string BuildReportParametersPortionOfQueryString(IDictionary<string, object> userParameters)
+        public static string BuildReportParameterString(IDictionary<string, object> parameters)
         {
-            if (userParameters == null || !userParameters.Any())
+            if (parameters == null || !parameters.Any())
             {
                 return "";
             }
-            return "&" + string.Join("&", userParameters.Select(pkvp => pkvp.Key + "=" + string.Join(",", ParseParamValues(pkvp.Value)).Replace(" ", "%20")));
+            return "&" + string.Join("&", parameters.Select(pkvp => pkvp.Key + "=" + HttpUtility.UrlEncode(string.Join(",", ParseParamValues(pkvp.Value)))));
         }
 
         public static string ParseReportName(string reportPath)
