@@ -144,23 +144,18 @@ namespace Horseshoe.NET.IO
             return url;
         }
 
-        public static string AppendExtensionIf(string fileName, FileType extension, bool lowerCase = false)
+        public static string AppendExtension(string fileName, FileType extension, bool preferUpperCase = false)
         {
-            var extensionText = "." + extension;
-            if (lowerCase)
-            {
-                extensionText = extensionText.ToLower();
-            }
-            return AppendExtensionIf(fileName, extensionText);
+            return AppendExtension(fileName, preferUpperCase ? extension.ToString() : extension.ToString().ToLower());
         }
 
-        public static string AppendExtensionIf(string fileName, string extension)
+        public static string AppendExtension(string fileName, string extension)
         {
             if (!extension.StartsWith("."))
             {
                 extension = "." + extension;
             }
-            return TextUtil.AppendIf(fileName, extension, !fileName.ToLower().EndsWith(extension.ToLower()));
+            return TextUtil.AppendIf(!fileName.ToLower().EndsWith(extension.ToLower()), fileName, extension);
         }
 
         /// <summary>
@@ -278,130 +273,67 @@ namespace Horseshoe.NET.IO
             }
         }
 
-        public const long KiB = 1024L;
-        public const long MiB = KiB * 1024L;
-        public const long GiB = MiB * 1024L;
-        public const long TiB = GiB * 1024L;
-        public const long PiB = TiB * 1024L;
-        public const long EiB = PiB * 1024L;
-
-        public static string GetDisplayFileSize(FileInfo file, int? minDecimalPlaces = null, int? maxDecimalPlaces = null, bool addSeparators = true, FileSizeUnit? unitToUse = null, bool useShortAbbreviation = false)
+        public static string GetDisplayFileSize(FileInfo file, int? minDecimalPlaces = null, int? maxDecimalPlaces = null, bool addSeparators = true, FileSize.Unit? unit = null, bool? bi = null)
         {
-            return GetDisplayFileSize(file.Length, minDecimalPlaces: minDecimalPlaces, maxDecimalPlaces: maxDecimalPlaces, addSeparators: addSeparators, unit: unitToUse, useShortAbbreviation: useShortAbbreviation);
+            return GetDisplayFileSize(file.Length, minDecimalPlaces: minDecimalPlaces, maxDecimalPlaces: maxDecimalPlaces, addSeparators: addSeparators, unit: unit, bi: bi);
         }
 
-        public static string GetDisplayFileSize(long size, int? minDecimalPlaces = null, int? maxDecimalPlaces = null, bool addSeparators = true, FileSizeUnit? unit = null, bool useShortAbbreviation = false)
+        public static string GetDisplayFileSize(long size, int? minDecimalPlaces = null, int? maxDecimalPlaces = null, bool addSeparators = true, FileSize.Unit? unit = null, bool? bi = null)
         {
+            if (size < 0L) return size + (unit.HasValue ? " " + unit : "");
+            if (size == 0L) return size + " " + (unit ?? FileSize.Unit.B);
+
             minDecimalPlaces = minDecimalPlaces ?? 0;
             maxDecimalPlaces = maxDecimalPlaces ?? NumberFormatInfo.CurrentInfo.NumberDecimalDigits;
 
             if (minDecimalPlaces < 0)
             {
-                throw new UtilityException("Minimum decimal places must be >= 0");
+                throw new ValidationException("Minimum decimal places must be >= 0");
             }
             if (maxDecimalPlaces < minDecimalPlaces)
             {
-                throw new UtilityException("Maximum decimal places must be >= minimum decimal places");
+                throw new ValidationException("Maximum decimal places must be >= minimum decimal places");
             }
 
-            var groupSizes = NumberFormatInfo.CurrentInfo.NumberGroupSizes;
-            var decimSep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
-            var groupSep = NumberFormatInfo.CurrentInfo.NumberGroupSeparator;
+            if (unit.HasValue && bi.HasValue)
+            {
+                if (bi.Value && !unit.Value.IsBI())
+                {
+                    throw new ValidationException(unit + " is a non-'bi' unit");
+                }
+                if(!bi.Value && unit.Value.IsBI())
+                {
+                    throw new ValidationException(unit + " is a 'bi' unit");
+                }
+            }
+
+            if (!unit.HasValue)
+            {
+                unit = FileSize.DeriveUnit(size, bi ?? false);
+            }
 
             var sb = new StringBuilder();
+
             if (addSeparators)
             {
+                var groupSizes = NumberFormatInfo.CurrentInfo.NumberGroupSizes;
+                var groupSep = NumberFormatInfo.CurrentInfo.NumberGroupSeparator;
                 sb.Append("#" + groupSep + "#".Repeat(groupSizes[0]));
+                sb.Length -= 1;
             }
-            else
-            {
-                sb.Append("#");
-            }
+            sb.Append("0");
             if (maxDecimalPlaces > 0)
             {
+                var decimSep = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator;
                 sb.Append(decimSep);
                 sb.Append("0".Repeat(minDecimalPlaces.Value));
                 sb.Append("#".Repeat(maxDecimalPlaces.Value));
             }
-            var format = sb.ToString();
 
-            var unitToUse = unit;
-            if (!unitToUse.HasValue)
-            {
-                if(size < KiB)
-                {
-                    unitToUse = FileSizeUnit.B;
-                }
-                else if (size < MiB)
-                {
-                    unitToUse = FileSizeUnit.KiB;
-                }
-                else if (size < GiB)
-                {
-                    unitToUse = FileSizeUnit.MiB;
-                }
-                else if (size < TiB)
-                {
-                    unitToUse = FileSizeUnit.GiB;
-                }
-                else if (size < PiB)
-                {
-                    unitToUse = FileSizeUnit.TiB;
-                }
-                else if (size < EiB)
-                {
-                    unitToUse = FileSizeUnit.PiB;
-                }
-                else
-                {
-                    unitToUse = FileSizeUnit.EiB;
-                }
-            }
-
-            double result = 0;
-
-            switch (unitToUse)
-            {
-                case FileSizeUnit.B:
-                    result = size;
-                    break;
-                default:
-                    long multiplier;
-                    switch (unitToUse)
-                    {
-                        case FileSizeUnit.KiB:
-                            multiplier = KiB;
-                            break;
-                        case FileSizeUnit.MiB:
-                            multiplier = MiB;
-                            break;
-                        case FileSizeUnit.GiB:
-                            multiplier = GiB;
-                            break;
-                        case FileSizeUnit.TiB:
-                            multiplier = TiB;
-                            break;
-                        case FileSizeUnit.PiB:
-                            multiplier = PiB;
-                            break;
-                        case FileSizeUnit.EiB:
-                        default:
-                            multiplier = EiB;
-                            break;
-                    }
-
-                    // calculate result
-                    while (size >= multiplier)
-                    {
-                        result += 1D;
-                        size -= multiplier;
-                    }
-                    result = NumberUtil.Trunc(result + size / (double)multiplier, maxDecimalPlaces.Value);
-                    break;
-            }
-
-            var completeFormat = "{0:" + format + " \"" + (useShortAbbreviation ? unitToUse.ToString().Replace("i", "") : unitToUse.ToString()) + "\"}";
-            return string.Format(completeFormat, result);
+            var format = "{0:" + sb + " \"" + unit.Value + "\"}";
+            var result = size / unit.Value.ToMultiplier();
+            
+            return string.Format(format, result);
         }
     }
 }

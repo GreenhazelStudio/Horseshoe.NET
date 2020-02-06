@@ -616,7 +616,7 @@ namespace Horseshoe.NET.Text
             return text;
         }
 
-        public static string AppendIf(string text, string textToAppend, bool condition)
+        public static string AppendIf(bool condition, string text, string textToAppend)
         {
             return condition
                 ? text + textToAppend
