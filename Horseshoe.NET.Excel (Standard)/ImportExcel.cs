@@ -70,27 +70,18 @@ namespace Horseshoe.NET.Excel
 
         public static DataTable AsDataTableFromXlsStream(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = BlankRowMode.Allow, bool suppressExcelErrors = false)
         {
-            IEnumerable<object[]> objectArrays;
+            var workbook = new HSSFWorkbook(stream);
+            var worksheet = workbook.GetSheetAt(sheetNum);
+            var objectArrays = AsObjects(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, suppressExcelErrors);
 
-            using (stream)
-            {
-                var workbook = new HSSFWorkbook(stream);
-                var worksheet = workbook.GetSheetAt(sheetNum);
-                objectArrays = AsObjects(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, suppressExcelErrors);
-            }
             return AsDataTable(objectArrays, columns);
         }
 
         public static DataTable AsDataTableFromXlsxStream(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = BlankRowMode.Allow, bool suppressExcelErrors = false)
         {
-            IEnumerable<object[]> objectArrays;
-
-            using (stream)
-            {
-                var workbook = new XSSFWorkbook(stream);
-                var worksheet = workbook.GetSheetAt(sheetNum);
-                objectArrays = AsObjects(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, suppressExcelErrors);
-            }
+            var workbook = new XSSFWorkbook(stream);
+            var worksheet = workbook.GetSheetAt(sheetNum);
+            var objectArrays = AsObjects(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, suppressExcelErrors);
 
             return AsDataTable(objectArrays, columns);
         }
@@ -98,14 +89,9 @@ namespace Horseshoe.NET.Excel
         public static DataTable AsDataTableFromXlsStream(Stream stream, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = BlankRowMode.Allow, bool suppressExcelErrors = false)
         {
             Column[] _columns = null;
-            IEnumerable<object[]> objectArrays;
-
-            using (stream)
-            {
-                var workbook = new HSSFWorkbook(stream);
-                var worksheet = workbook.GetSheetAt(sheetNum);
-                objectArrays = AsObjects(worksheet, ref _columns, hasHeaderRow, false, blankRowMode, suppressExcelErrors);
-            }
+            var workbook = new HSSFWorkbook(stream);
+            var worksheet = workbook.GetSheetAt(sheetNum);
+            var objectArrays = AsObjects(worksheet, ref _columns, hasHeaderRow, false, blankRowMode, suppressExcelErrors);
 
             columns = _columns;
             return AsDataTable(objectArrays, _columns);
@@ -114,14 +100,9 @@ namespace Horseshoe.NET.Excel
         public static DataTable AsDataTableFromXlsxStream(Stream stream, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = BlankRowMode.Allow, bool suppressExcelErrors = false)
         {
             Column[] _columns = null;
-            IEnumerable<object[]> objectArrays;
-
-            using (stream)
-            {
-                var workbook = new XSSFWorkbook(stream);
-                var worksheet = workbook.GetSheetAt(sheetNum);
-                objectArrays = AsObjects(worksheet, ref _columns, hasHeaderRow, false, blankRowMode, suppressExcelErrors);
-            }
+            var workbook = new XSSFWorkbook(stream);
+            var worksheet = workbook.GetSheetAt(sheetNum);
+            var objectArrays = AsObjects(worksheet, ref _columns, hasHeaderRow, false, blankRowMode, suppressExcelErrors);
 
             columns = _columns;
             return AsDataTable(objectArrays, _columns);
@@ -174,35 +155,24 @@ namespace Horseshoe.NET.Excel
 
         public static IEnumerable<string[]> AsStringsFromXlsStream(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = BlankRowMode.Allow, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false)
         {
-            using (stream)
-            {
-                var workbook = new HSSFWorkbook(stream);
-                var worksheet = workbook.GetSheetAt(sheetNum);
-                return AsStrings(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, autoTrunc, suppressExcelErrors);
-            }
+            var workbook = new HSSFWorkbook(stream);
+            var worksheet = workbook.GetSheetAt(sheetNum);
+            return AsStrings(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, autoTrunc, suppressExcelErrors);
         }
 
         public static IEnumerable<string[]> AsStringsFromXlsxStream(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = BlankRowMode.Allow, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false)
         {
-            using (stream)
-            {
-                var workbook = new XSSFWorkbook(stream);
-                var worksheet = workbook.GetSheetAt(sheetNum);
-                return AsStrings(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, autoTrunc, suppressExcelErrors);
-            }
+            var workbook = new XSSFWorkbook(stream);
+            var worksheet = workbook.GetSheetAt(sheetNum);
+            return AsStrings(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, autoTrunc, suppressExcelErrors);
         }
 
         public static IEnumerable<string[]> AsStringsFromXlsStream(Stream stream, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = BlankRowMode.Allow, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false)
         {
             Column[] _columns = null;
-            IEnumerable<string[]> stringArrays;
-
-            using (stream)
-            {
-                var workbook = new HSSFWorkbook(stream);
-                var worksheet = workbook.GetSheetAt(sheetNum);
-                stringArrays = AsStrings(worksheet, ref _columns, hasHeaderRow, false, blankRowMode, autoTrunc, suppressExcelErrors);
-            }
+            var workbook = new HSSFWorkbook(stream);
+            var worksheet = workbook.GetSheetAt(sheetNum);
+            var stringArrays = AsStrings(worksheet, ref _columns, hasHeaderRow, false, blankRowMode, autoTrunc, suppressExcelErrors);
 
             columns = _columns;
             return stringArrays;
@@ -211,14 +181,9 @@ namespace Horseshoe.NET.Excel
         public static IEnumerable<string[]> AsStringsFromXlsxStream(Stream stream, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = BlankRowMode.Allow, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false)
         {
             Column[] _columns = null;
-            IEnumerable<string[]> stringArrays;
-
-            using (stream)
-            {
-                var workbook = new XSSFWorkbook(stream);
-                var worksheet = workbook.GetSheetAt(sheetNum);
-                stringArrays = AsStrings(worksheet, ref _columns, hasHeaderRow, false, blankRowMode, autoTrunc, suppressExcelErrors);
-            }
+            var workbook = new XSSFWorkbook(stream);
+            var worksheet = workbook.GetSheetAt(sheetNum);
+            var stringArrays = AsStrings(worksheet, ref _columns, hasHeaderRow, false, blankRowMode, autoTrunc, suppressExcelErrors);
 
             columns = _columns;
             return stringArrays;
@@ -271,35 +236,24 @@ namespace Horseshoe.NET.Excel
 
         public static IEnumerable<object[]> AsObjectsFromXlsStream(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = BlankRowMode.Allow, bool suppressExcelErrors = false)
         {
-            using (stream)
-            {
-                var workbook = new HSSFWorkbook(stream);
-                var worksheet = workbook.GetSheetAt(sheetNum);
-                return AsObjects(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, suppressExcelErrors);
-            }
+            var workbook = new HSSFWorkbook(stream);
+            var worksheet = workbook.GetSheetAt(sheetNum);
+            return AsObjects(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, suppressExcelErrors);
         }
 
         public static IEnumerable<object[]> AsObjectsFromXlsxStream(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = BlankRowMode.Allow, bool suppressExcelErrors = false)
         {
-            using (stream)
-            {
-                var workbook = new XSSFWorkbook(stream);
-                var worksheet = workbook.GetSheetAt(sheetNum);
-                return AsObjects(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, suppressExcelErrors);
-            }
+            var workbook = new XSSFWorkbook(stream);
+            var worksheet = workbook.GetSheetAt(sheetNum);
+            return AsObjects(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, suppressExcelErrors);
         }
 
         public static IEnumerable<object[]> AsObjectsFromXlsStream(Stream stream, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = BlankRowMode.Allow, bool suppressExcelErrors = false)
         {
             Column[] _columns = null;
-            IEnumerable<object[]> objectArrays;
-
-            using (stream)
-            {
-                var workbook = new HSSFWorkbook(stream);
-                var worksheet = workbook.GetSheetAt(sheetNum);
-                objectArrays = AsObjects(worksheet, ref _columns, hasHeaderRow, false, blankRowMode, suppressExcelErrors);
-            }
+            var workbook = new HSSFWorkbook(stream);
+            var worksheet = workbook.GetSheetAt(sheetNum);
+            var objectArrays = AsObjects(worksheet, ref _columns, hasHeaderRow, false, blankRowMode, suppressExcelErrors);
 
             columns = _columns;
             return objectArrays;
@@ -308,14 +262,9 @@ namespace Horseshoe.NET.Excel
         public static IEnumerable<object[]> AsObjectsFromXlsxStream(Stream stream, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = BlankRowMode.Allow, bool suppressExcelErrors = false)
         {
             Column[] _columns = null;
-            IEnumerable<object[]> objectArrays;
-
-            using (stream)
-            {
-                var workbook = new XSSFWorkbook(stream);
-                var worksheet = workbook.GetSheetAt(sheetNum);
-                objectArrays = AsObjects(worksheet, ref _columns, hasHeaderRow, false, blankRowMode, suppressExcelErrors);
-            }
+            var workbook = new XSSFWorkbook(stream);
+            var worksheet = workbook.GetSheetAt(sheetNum);
+            var objectArrays = AsObjects(worksheet, ref _columns, hasHeaderRow, false, blankRowMode, suppressExcelErrors);
 
             columns = _columns;
             return objectArrays;
@@ -345,22 +294,16 @@ namespace Horseshoe.NET.Excel
 
         public static IEnumerable<E> AsCollectionFromXlsStream<E>(Stream stream, Func<object[], E> parseFunc, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = BlankRowMode.Allow, bool suppressExcelErrors = false)
         {
-            using (stream)
-            {
-                var workbook = new HSSFWorkbook(stream);
-                var worksheet = workbook.GetSheetAt(sheetNum);
-                return AsCollection<E>(worksheet, parseFunc, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
-            }
+            var workbook = new HSSFWorkbook(stream);
+            var worksheet = workbook.GetSheetAt(sheetNum);
+            return AsCollection<E>(worksheet, parseFunc, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
         }
 
         public static IEnumerable<E> AsCollectionFromXlsxStream<E>(Stream stream, Func<object[], E> parseFunc, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = BlankRowMode.Allow, bool suppressExcelErrors = false)
         {
-            using (stream)
-            {
-                var workbook = new XSSFWorkbook(stream);
-                var worksheet = workbook.GetSheetAt(sheetNum);
-                return AsCollection<E>(worksheet, parseFunc, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
-            }
+            var workbook = new XSSFWorkbook(stream);
+            var worksheet = workbook.GetSheetAt(sheetNum);
+            return AsCollection<E>(worksheet, parseFunc, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
         }
 
         private static IEnumerable<E> AsCollection<E>(ISheet worksheet, Func<object[], E> parseFunc, bool hasHeaderRow = false, BlankRowMode blankRowMode = BlankRowMode.Allow, bool suppressExcelErrors = false)
@@ -385,22 +328,16 @@ namespace Horseshoe.NET.Excel
 
         public static IEnumerable<E> AsCollectionFromXlsStream<E>(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = BlankRowMode.Allow, char[] charsToRemove = null, bool suppressExcelErrors = false) where E : class, new()
         {
-            using (stream)
-            {
-                var workbook = new HSSFWorkbook(stream);
-                var worksheet = workbook.GetSheetAt(sheetNum);
-                return AsCollection<E>(worksheet, columns, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, charsToRemove: charsToRemove, suppressExcelErrors: suppressExcelErrors);
-            }
+            var workbook = new HSSFWorkbook(stream);
+            var worksheet = workbook.GetSheetAt(sheetNum);
+            return AsCollection<E>(worksheet, columns, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, charsToRemove: charsToRemove, suppressExcelErrors: suppressExcelErrors);
         }
 
         public static IEnumerable<E> AsCollectionFromXlsxStream<E>(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = BlankRowMode.Allow, char[] charsToRemove = null, bool suppressExcelErrors = false) where E : class, new()
         {
-            using (stream)
-            {
-                var workbook = new XSSFWorkbook(stream);
-                var worksheet = workbook.GetSheetAt(sheetNum);
-                return AsCollection<E>(worksheet, columns, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, charsToRemove: charsToRemove, suppressExcelErrors: suppressExcelErrors);
-            }
+            var workbook = new XSSFWorkbook(stream);
+            var worksheet = workbook.GetSheetAt(sheetNum);
+            return AsCollection<E>(worksheet, columns, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, charsToRemove: charsToRemove, suppressExcelErrors: suppressExcelErrors);
         }
 
         static IEnumerable<E> AsCollection<E>(ISheet worksheet, Column[] columns, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = BlankRowMode.Allow, char[] charsToRemove = null, bool suppressExcelErrors = false) where E : class, new()
