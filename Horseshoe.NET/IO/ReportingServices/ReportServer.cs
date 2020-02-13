@@ -22,7 +22,7 @@ namespace Horseshoe.NET.IO.ReportingServices
             (
                 bytes,
                 targetDirectory: targetDirectory,
-                targetFileName: FileUtil.AppendExtensionIf(targetFileName ?? ReportUtil.ParseReportName(reportPath), targetExt, true),
+                targetFileName: FileUtil.AppendExtension(targetFileName ?? ReportUtil.ParseReportName(reportPath), targetExt),
                 fileType: targetExt
             );
         }

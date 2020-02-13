@@ -127,7 +127,7 @@
     <Compile Include="IO\FileImport\DataType.cs" />
     <Compile Include="IO\DirectoryCopyMode.cs" />
     <Compile Include="IO\FileImport\Extensions.cs" />
-    <Compile Include="IO\FileSizeUnit.cs" />
+    <Compile Include="IO\FileSize.cs" />
     <Compile Include="IO\FileType.cs" />
     <Compile Include="IO\FileUtil.cs" />
     <Compile Include="IO\FileImport\Import.cs" />
