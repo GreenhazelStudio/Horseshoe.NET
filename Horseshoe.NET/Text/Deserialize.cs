@@ -13,6 +13,7 @@ namespace Horseshoe.NET.Text
     {
         public static object Json(string json, Func<string, string> preDeserializationFunc = null)
         {
+            if (json == null) return null;
             if (preDeserializationFunc != null)
             {
                 json = preDeserializationFunc.Invoke(json);
@@ -24,6 +25,7 @@ namespace Horseshoe.NET.Text
 
         public static E Json<E>(string json, Func<string, string> preDeserializationFunc = null)
         {
+            if (json == null) return default;
             if (preDeserializationFunc != null)
             {
                 json = preDeserializationFunc.Invoke(json);
