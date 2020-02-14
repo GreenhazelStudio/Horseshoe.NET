@@ -91,8 +91,7 @@ namespace Horseshoe.NET.Odbc
                         e = (E)ObjectUtil.GetInstance(typeof(E));
                         for (int i = 0; i < objects.Length; i++)
                         {
-                            //if (objects[i] == null) continue;
-                            ObjectUtil.SetInstanceProperty(e, normalizedColumnNames[i], objects[i], ignoreCase: true);
+                            ObjectUtil.SetInstanceProperty(e, normalizedColumnNames[i], objects[i], ignoreCase: true, suppressErrors: suppressErrors);
                         }
                         list.Add(e);
                     }
@@ -479,8 +478,7 @@ namespace Horseshoe.NET.Odbc
                         e = (E)ObjectUtil.GetInstance(typeof(E));
                         for (int i = 0; i < objects.Length; i++)
                         {
-                            //if (objects[i] == null) continue;
-                            ObjectUtil.SetInstanceProperty(e, normalizedColumnNames[i], objects[i], ignoreCase: true);
+                            ObjectUtil.SetInstanceProperty(e, normalizedColumnNames[i], objects[i], ignoreCase: true, suppressErrors: suppressErrors);
                         }
                         list.Add(e);
                     }
@@ -899,8 +897,7 @@ namespace Horseshoe.NET.Odbc
                                 e = (E)ObjectUtil.GetInstance(typeof(E));
                                 for (int i = 0; i < objects.Length; i++)
                                 {
-                                    //if (objects[i] == null) continue;
-                                    ObjectUtil.SetInstanceProperty(e, normalizedColumnNames[i], objects[i], ignoreCase: true);
+                                    ObjectUtil.SetInstanceProperty(e, normalizedColumnNames[i], objects[i], ignoreCase: true, suppressErrors: suppressErrors);
                                 }
                                 list.Add(e);
                             }
@@ -1311,8 +1308,7 @@ namespace Horseshoe.NET.Odbc
                         e = (E)ObjectUtil.GetInstance(typeof(E));
                         for (int i = 0; i < objects.Length; i++)
                         {
-                            //if (objects[i] == null) continue;
-                            ObjectUtil.SetInstanceProperty(e, normalizedColumnNames[i], objects[i], ignoreCase: true);
+                            ObjectUtil.SetInstanceProperty(e, normalizedColumnNames[i], objects[i], ignoreCase: true, suppressErrors: suppressErrors);
                         }
                         list.Add(e);
                     }
