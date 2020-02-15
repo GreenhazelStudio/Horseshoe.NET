@@ -196,7 +196,7 @@ namespace Horseshoe.NET.Excel
                     case ".XLSX":
                         return AsStringsFromXlsxStream(stream, columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, autoTrunc: autoTrunc, suppressExcelErrors: suppressExcelErrors);
                 }
-                throw new UtilityException("At this time we only recognize .xls and .xlsx Excel extensions: " + fileStream.Name + " -- also you can try using AsDataTableFromXlsStream() or AsDataTableFromXlsxStream()");
+                throw new UtilityException("At this time we only recognize .xls and .xlsx Excel extensions: " + fileStream.Name + " -- also you can try using AsStringsFromXlsStream() or AsStringsFromXlsxStream()");
             }
             throw new UtilityException("Expected System.IO.FileStream, found " + stream.GetType().Name);
         }
@@ -212,7 +212,7 @@ namespace Horseshoe.NET.Excel
                     case ".XLSX":
                         return AsStringsFromXlsxStream(stream, out columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, autoTrunc: autoTrunc, suppressExcelErrors: suppressExcelErrors);
                 }
-                throw new UtilityException("At this time we only recognize .xls and .xlsx Excel extensions: " + fileStream.Name + " -- also you can try using AsDataTableFromXlsStream() or AsDataTableFromXlsxStream()");
+                throw new UtilityException("At this time we only recognize .xls and .xlsx Excel extensions: " + fileStream.Name + " -- also you can try using AsStringsFromXlsStream() or AsStringsFromXlsxStream()");
             }
             throw new UtilityException("Expected System.IO.FileStream, found " + stream.GetType().Name);
         }
@@ -314,7 +314,7 @@ namespace Horseshoe.NET.Excel
                     case ".XLSX":
                         return AsObjectsFromXlsxStream(stream, columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
                 }
-                throw new UtilityException("At this time we only recognize .xls and .xlsx Excel extensions: " + fileStream.Name + " -- also you can try using AsDataTableFromXlsStream() or AsDataTableFromXlsxStream()");
+                throw new UtilityException("At this time we only recognize .xls and .xlsx Excel extensions: " + fileStream.Name + " -- also you can try using AsObjectsFromXlsStream() or AsObjectsFromXlsxStream()");
             }
             throw new UtilityException("Expected System.IO.FileStream, found " + stream.GetType().Name);
         }
@@ -330,7 +330,7 @@ namespace Horseshoe.NET.Excel
                     case ".XLSX":
                         return AsObjectsFromXlsxStream(stream, out columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
                 }
-                throw new UtilityException("At this time we only recognize .xls and .xlsx Excel extensions: " + fileStream.Name + " -- also you can try using AsDataTableFromXlsStream() or AsDataTableFromXlsxStream()");
+                throw new UtilityException("At this time we only recognize .xls and .xlsx Excel extensions: " + fileStream.Name + " -- also you can try using AsObjectsFromXlsStream() or AsObjectsFromXlsxStream()");
             }
             throw new UtilityException("Expected System.IO.FileStream, found " + stream.GetType().Name);
         }
@@ -340,21 +340,9 @@ namespace Horseshoe.NET.Excel
             return AsObjectsFromXlsStream(stream, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
         }
 
-        public static IEnumerable<object[]> AsObjectsFromXlsxStream(Stream stream, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
-        {
-            return AsObjectsFromXlsxStream(stream, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
-        }
-
         public static IEnumerable<object[]> AsObjectsFromXlsStream(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
         {
             var workbook = new HSSFWorkbook(stream);
-            var worksheet = workbook.GetSheetAt(sheetNum);
-            return AsObjects(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, suppressExcelErrors);
-        }
-
-        public static IEnumerable<object[]> AsObjectsFromXlsxStream(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
-        {
-            var workbook = new XSSFWorkbook(stream);
             var worksheet = workbook.GetSheetAt(sheetNum);
             return AsObjects(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, suppressExcelErrors);
         }
@@ -368,6 +356,18 @@ namespace Horseshoe.NET.Excel
 
             columns = _columns;
             return objectArrays;
+        }
+
+        public static IEnumerable<object[]> AsObjectsFromXlsxStream(Stream stream, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        {
+            return AsObjectsFromXlsxStream(stream, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
+        }
+
+        public static IEnumerable<object[]> AsObjectsFromXlsxStream(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        {
+            var workbook = new XSSFWorkbook(stream);
+            var worksheet = workbook.GetSheetAt(sheetNum);
+            return AsObjects(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, suppressExcelErrors);
         }
 
         public static IEnumerable<object[]> AsObjectsFromXlsxStream(Stream stream, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
@@ -414,7 +414,7 @@ namespace Horseshoe.NET.Excel
                     case ".XLSX":
                         return AsCollectionFromXlsxStream<E>(stream, parseFunc, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
                 }
-                throw new UtilityException("At this time we only recognize .xls and .xlsx Excel extensions: " + fileStream.Name + " -- also you can try using AsDataTableFromXlsStream() or AsDataTableFromXlsxStream()");
+                throw new UtilityException("At this time we only recognize .xls and .xlsx Excel extensions: " + fileStream.Name + " -- also you can try using AsCollectionFromXlsStream() or AsCollectionFromXlsxStream()");
             }
             throw new UtilityException("Expected System.IO.FileStream, found " + stream.GetType().Name);
         }
@@ -430,7 +430,7 @@ namespace Horseshoe.NET.Excel
                     case ".XLSX":
                         return AsCollectionFromXlsxStream<E>(stream, columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, charsToRemove: charsToRemove, suppressExcelErrors: suppressExcelErrors);
                 }
-                throw new UtilityException("At this time we only recognize .xls and .xlsx Excel extensions: " + fileStream.Name + " -- also you can try using AsDataTableFromXlsStream() or AsDataTableFromXlsxStream()");
+                throw new UtilityException("At this time we only recognize .xls and .xlsx Excel extensions: " + fileStream.Name + " -- also you can try using AsCollectionFromXlsStream() or AsCollectionFromXlsxStream()");
             }
             throw new UtilityException("Expected System.IO.FileStream, found " + stream.GetType().Name);
         }
