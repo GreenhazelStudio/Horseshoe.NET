@@ -6,6 +6,7 @@ using System.Data.OleDb;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
+using Horseshoe.NET.Cryptography;
 using Horseshoe.NET.Db;
 using Horseshoe.NET.Text;
 
@@ -16,7 +17,7 @@ namespace Horseshoe.NET.OleDb
         /* * * * * * * * * * * * * * * * * * * * * * * * 
          *   CONNECTION-RELATED METHODS                *
          * * * * * * * * * * * * * * * * * * * * * * * */
-        public static string GetDefaultConnectionString(out string announcePrefix)
+        public static string GetDefaultConnectionString(out string announcePrefix, CryptoOptions options = null)
         {
             if (Settings.DefaultConnectionString != null)
             {
@@ -45,7 +46,7 @@ namespace Horseshoe.NET.OleDb
                     }
                     else if (Settings.DefaultCredentials.Value.IsEncryptedPassword)
                     {
-                        sb.Append(";Password=" + DataUtil.Decrypt(Settings.DefaultCredentials.Value.Password));
+                        sb.Append(";Password=" + Decrypt.String(Settings.DefaultCredentials.Value.Password, options: options));
                     }
                     else if (Settings.DefaultCredentials.Value.Password != null)
                     {
@@ -68,17 +69,17 @@ namespace Horseshoe.NET.OleDb
             return null;
         }
 
-        public static string WhichConnectionString(OleDbConnectionInfo connectionInfo = null, bool announce = false)
+        public static string WhichConnectionString(OleDbConnectionInfo connectionInfo = null, bool announce = false, CryptoOptions options = null)
         {
             string announcePrefix;
             string connectionString;
             if (connectionInfo != null)
             {
-                connectionString = connectionInfo.GetConnectionString(out announcePrefix);
+                connectionString = connectionInfo.GetConnectionString(out announcePrefix, options: options);
             }
             else
             {
-                connectionString = GetDefaultConnectionString(out announcePrefix);
+                connectionString = GetDefaultConnectionString(out announcePrefix, options: options);
             }
             if (connectionString != null && announce)
             {
@@ -130,11 +131,11 @@ namespace Horseshoe.NET.OleDb
             return credentials;
         }
 
-        public static OleDbConnection LaunchConnection(OleDbConnectionInfo connectionInfo)
+        public static OleDbConnection LaunchConnection(OleDbConnectionInfo connectionInfo, CryptoOptions options = null)
         {
             var conn = new OleDbConnection
             {
-                ConnectionString = WhichConnectionString(connectionInfo: connectionInfo, announce: true) ?? throw new UtilityException("No connection string or data source was found")
+                ConnectionString = WhichConnectionString(connectionInfo: connectionInfo, announce: true, options: options) ?? throw new UtilityException("No connection string or data source was found")
             };
             conn.Open();
             return conn;

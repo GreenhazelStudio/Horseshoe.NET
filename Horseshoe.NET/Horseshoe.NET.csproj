@@ -113,6 +113,8 @@
     <Compile Include="CustomMapping.cs" />
     <Compile Include="IO\FileImport\NoMapColumn.cs" />
     <Compile Include="IO\FileImport\NullableColumn.cs" />
+    <Compile Include="IO\Ftp\Ftp.cs" />
+    <Compile Include="IO\Ftp\Settings.cs" />
     <Compile Include="OleDb\Delete.cs" />
     <Compile Include="OleDb\Execute.cs" />
     <Compile Include="OleDb\Insert.cs" />

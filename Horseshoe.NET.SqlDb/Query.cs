@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
+using Horseshoe.NET.Cryptography;
 using Horseshoe.NET.Db;
 using static Horseshoe.NET.Db.DataUtil;
 using Horseshoe.NET.Objects;
@@ -27,10 +28,11 @@ namespace Horseshoe.NET.SqlDb
                 SqlConnectionInfo connectionInfo = null,
                 int? timeout = null,
                 AutoTruncate autoTrunc = default,
-                bool suppressErrors = false
+                bool suppressErrors = false,
+                CryptoOptions options = null
             )
             {
-                using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+                using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
                 {
                     return AsCollection(conn, statement, autoSort: autoSort, objectParser: objectParser, readerParser: readerParser, timeout: timeout, autoTrunc: autoTrunc, suppressErrors: suppressErrors);
                 }
@@ -126,10 +128,11 @@ namespace Horseshoe.NET.SqlDb
                 string statement,
                 SqlConnectionInfo connectionInfo = null,
                 int? timeout = null,
-                AutoTruncate autoTrunc = default
+                AutoTruncate autoTrunc = default,
+                CryptoOptions options = null
             )
             {
-                using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+                using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
                 {
                     return AsScalar(conn, statement, timeout: timeout, autoTrunc: autoTrunc);
                 }
@@ -165,10 +168,11 @@ namespace Horseshoe.NET.SqlDb
             (
                 string statement,
                 SqlConnectionInfo connectionInfo = null,
-                int? timeout = null
+                int? timeout = null,
+                CryptoOptions options = null
             )
             {
-                using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+                using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
                 {
                     return AsScalar<E>(conn, statement, timeout: timeout);
                 }
@@ -190,10 +194,11 @@ namespace Horseshoe.NET.SqlDb
                 string statement,
                 SqlConnectionInfo connectionInfo = null,
                 bool keepOpen = false,
-                int? timeout = null
+                int? timeout = null,
+                CryptoOptions options = null
             )
             {
-                var conn = SqlUtil.LaunchConnection(connectionInfo);
+                var conn = SqlUtil.LaunchConnection(connectionInfo, options: options);
                 return AsDataReader(conn, statement, keepOpen: keepOpen, timeout: timeout);
             }
 
@@ -218,10 +223,11 @@ namespace Horseshoe.NET.SqlDb
                 string statement,
                 SqlConnectionInfo connectionInfo = null,
                 int? timeout = null,
-                AutoTruncate autoTrunc = default
+                AutoTruncate autoTrunc = default,
+                CryptoOptions options = null
             )
             {
-                using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+                using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
                 {
                     return AsDataTable(conn, statement, timeout: timeout, autoTrunc: autoTrunc);
                 }
@@ -260,10 +266,11 @@ namespace Horseshoe.NET.SqlDb
                 SqlConnectionInfo connectionInfo = null,
                 int? timeout = null,
                 AutoTruncate autoTrunc = default,
-                bool suppressErrors = false
+                bool suppressErrors = false,
+                CryptoOptions options = null
             )
             {
-                using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+                using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
                 {
                     return AsObjects(conn, statement, timeout: timeout, autoTrunc: autoTrunc, suppressErrors: suppressErrors);
                 }
@@ -288,10 +295,11 @@ namespace Horseshoe.NET.SqlDb
                 SqlConnectionInfo connectionInfo = null,
                 int? timeout = null,
                 AutoTruncate autoTrunc = default,
-                bool suppressErrors = false
+                bool suppressErrors = false,
+                CryptoOptions options = null
             )
             {
-                using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+                using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
                 {
                     return AsObjects(conn, statement, out columns, timeout: timeout, autoTrunc: autoTrunc, suppressErrors: suppressErrors);
                 }
@@ -326,10 +334,11 @@ namespace Horseshoe.NET.SqlDb
                 SqlConnectionInfo connectionInfo = null,
                 int? timeout = null,
                 AutoTruncate autoTrunc = default,
-                bool suppressErrors = false
+                bool suppressErrors = false,
+                CryptoOptions options = null
             )
             {
-                using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+                using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
                 {
                     return AsStrings(conn, statement, timeout: timeout, autoTrunc: autoTrunc, suppressErrors: suppressErrors);
                 }
@@ -354,10 +363,11 @@ namespace Horseshoe.NET.SqlDb
                 SqlConnectionInfo connectionInfo = null,
                 int? timeout = null,
                 AutoTruncate autoTrunc = default,
-                bool suppressErrors = false
+                bool suppressErrors = false,
+                CryptoOptions options = null
             )
             {
-                using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+                using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
                 {
                     return AsStrings(conn, statement, out columns, timeout: timeout, autoTrunc: autoTrunc, suppressErrors: suppressErrors);
                 }
@@ -406,10 +416,11 @@ namespace Horseshoe.NET.SqlDb
                 SqlConnectionInfo connectionInfo = null,
                 int? timeout = null,
                 AutoTruncate autoTrunc = default,
-                bool suppressErrors = false
+                bool suppressErrors = false,
+                CryptoOptions options = null
             )
             {
-                using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+                using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
                 {
                     return AsCollection(conn, tableOrViewName, columns: columns, where: where, groupBy: groupBy, orderBy: orderBy, autoSort: autoSort, objectParser: objectParser, readerParser: readerParser, timeout: timeout, autoTrunc: autoTrunc, suppressErrors: suppressErrors);
                 }
@@ -554,10 +565,11 @@ namespace Horseshoe.NET.SqlDb
                 IEnumerable<string> orderBy = null,
                 SqlConnectionInfo connectionInfo = null,
                 bool keepOpen = false,
-                int? timeout = null
+                int? timeout = null,
+                CryptoOptions options = null
             )
             {
-                var conn = SqlUtil.LaunchConnection(connectionInfo);
+                var conn = SqlUtil.LaunchConnection(connectionInfo, options: options);
                 return AsDataReader(conn, tableOrViewName, columns: columns, where: where, groupBy: groupBy, orderBy: orderBy, keepOpen: keepOpen, timeout: timeout);
             }
 
@@ -594,10 +606,11 @@ namespace Horseshoe.NET.SqlDb
                 IEnumerable<string> orderBy = null,
                 SqlConnectionInfo connectionInfo = null,
                 int? timeout = null,
-                AutoTruncate autoTrunc = default
+                AutoTruncate autoTrunc = default,
+                CryptoOptions options = null
             )
             {
-                using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+                using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
                 {
                     return AsDataTable(conn, tableOrViewName, columns, where: where, groupBy: groupBy, orderBy: orderBy, timeout: timeout, autoTrunc: autoTrunc);
                 }
@@ -649,10 +662,11 @@ namespace Horseshoe.NET.SqlDb
                 SqlConnectionInfo connectionInfo = null,
                 int? timeout = null,
                 AutoTruncate autoTrunc = default,
-                bool suppressErrors = false
+                bool suppressErrors = false,
+                CryptoOptions options = null
             )
             {
-                using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+                using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
                 {
                     return AsObjects(conn, tableOrViewName, columns: columns, where: where, groupBy: groupBy, orderBy: orderBy, timeout: timeout, autoTrunc: autoTrunc, suppressErrors: suppressErrors);
                 }
@@ -685,10 +699,11 @@ namespace Horseshoe.NET.SqlDb
                 SqlConnectionInfo connectionInfo = null,
                 int? timeout = null,
                 AutoTruncate autoTrunc = default,
-                bool suppressErrors = false
+                bool suppressErrors = false,
+                CryptoOptions options = null
             )
             {
-                using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+                using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
                 {
                     return AsObjects(conn, out dataColumns, tableOrViewName, columns: columns, where: where, groupBy: groupBy, orderBy: orderBy, timeout: timeout, autoTrunc: autoTrunc, suppressErrors: suppressErrors);
                 }
@@ -731,10 +746,11 @@ namespace Horseshoe.NET.SqlDb
                 SqlConnectionInfo connectionInfo = null,
                 int? timeout = null,
                 AutoTruncate autoTrunc = default,
-                bool suppressErrors = false
+                bool suppressErrors = false,
+                CryptoOptions options = null
             )
             {
-                using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+                using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
                 {
                     return AsStrings(conn, tableOrViewName, columns: columns, where: where, groupBy: groupBy, orderBy: orderBy, timeout: timeout, autoTrunc: autoTrunc, suppressErrors: suppressErrors);
                 }
@@ -767,10 +783,11 @@ namespace Horseshoe.NET.SqlDb
                 SqlConnectionInfo connectionInfo = null,
                 int? timeout = null,
                 AutoTruncate autoTrunc = default,
-                bool suppressErrors = false
+                bool suppressErrors = false,
+                CryptoOptions options = null
             )
             {
-                using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+                using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
                 {
                     return AsStrings(conn, out dataColumns, tableOrViewName, columns: columns, where: where, groupBy: groupBy, orderBy: orderBy, timeout: timeout, autoTrunc: autoTrunc, suppressErrors: suppressErrors);
                 }
@@ -820,10 +837,11 @@ namespace Horseshoe.NET.SqlDb
                 SqlConnectionInfo connectionInfo = null,
                 int? timeout = null,
                 AutoTruncate autoTrunc = default,
-                bool suppressErrors = false
+                bool suppressErrors = false,
+                CryptoOptions options = null
             )
             {
-                using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+                using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
                 {
                     return AsCollection(conn, procedureName, parameters: parameters, autoSort: autoSort, objectParser: objectParser, readerParser: readerParser, timeout: timeout, autoTrunc: autoTrunc, suppressErrors: suppressErrors);
                 }
@@ -935,10 +953,11 @@ namespace Horseshoe.NET.SqlDb
                 IEnumerable<DbParameter> parameters = null,
                 SqlConnectionInfo connectionInfo = null,
                 bool keepOpen = false,
-                int? timeout = null
+                int? timeout = null,
+                CryptoOptions options = null
             )
             {
-                var conn = SqlUtil.LaunchConnection(connectionInfo);
+                var conn = SqlUtil.LaunchConnection(connectionInfo, options: options);
                 return AsDataReader(conn, procedureName, parameters: parameters, keepOpen: keepOpen, timeout: timeout);
             }
 
@@ -965,10 +984,11 @@ namespace Horseshoe.NET.SqlDb
                 IEnumerable<DbParameter> parameters = null,
                 SqlConnectionInfo connectionInfo = null,
                 int? timeout = null,
-                AutoTruncate autoTrunc = default
+                AutoTruncate autoTrunc = default,
+                CryptoOptions options = null
             )
             {
-                using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+                using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
                 {
                     return AsDataTable(conn, procedureName, parameters: parameters, timeout: timeout, autoTrunc: autoTrunc);
                 }
@@ -1009,10 +1029,11 @@ namespace Horseshoe.NET.SqlDb
                 SqlConnectionInfo connectionInfo = null,
                 int? timeout = null,
                 AutoTruncate autoTrunc = default,
-                bool suppressErrors = false
+                bool suppressErrors = false,
+                CryptoOptions options = null
             )
             {
-                using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+                using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
                 {
                     return AsObjects(conn, procedureName, parameters: parameters, timeout: timeout, autoTrunc: autoTrunc, suppressErrors: suppressErrors);
                 }
@@ -1039,10 +1060,11 @@ namespace Horseshoe.NET.SqlDb
                 SqlConnectionInfo connectionInfo = null,
                 int? timeout = null,
                 AutoTruncate autoTrunc = default,
-                bool suppressErrors = false
+                bool suppressErrors = false,
+                CryptoOptions options = null
             )
             {
-                using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+                using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
                 {
                     return AsObjects(conn, procedureName, out columns, parameters: parameters, timeout: timeout, autoTrunc: autoTrunc, suppressErrors: suppressErrors);
                 }
@@ -1079,10 +1101,11 @@ namespace Horseshoe.NET.SqlDb
                 SqlConnectionInfo connectionInfo = null,
                 int? timeout = null,
                 AutoTruncate autoTrunc = default,
-                bool suppressErrors = false
+                bool suppressErrors = false,
+                CryptoOptions options = null
             )
             {
-                using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+                using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
                 {
                     return AsStrings(conn, procedureName, parameters: parameters, timeout: timeout, autoTrunc: autoTrunc, suppressErrors: suppressErrors);
                 }
@@ -1109,10 +1132,11 @@ namespace Horseshoe.NET.SqlDb
                 SqlConnectionInfo connectionInfo = null,
                 int? timeout = null,
                 AutoTruncate autoTrunc = default,
-                bool suppressErrors = false
+                bool suppressErrors = false,
+                CryptoOptions options = null
             )
             {
-                using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+                using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
                 {
                     return AsStrings(conn, procedureName, out columns, parameters: parameters, timeout: timeout, autoTrunc: autoTrunc, suppressErrors: suppressErrors);
                 }
@@ -1151,10 +1175,11 @@ namespace Horseshoe.NET.SqlDb
                 IEnumerable<DbParameter> parameters = null,
                 SqlConnectionInfo connectionInfo = null,
                 int? timeout = null,
-                AutoTruncate autoTrunc = default
+                AutoTruncate autoTrunc = default,
+                CryptoOptions options = null
             )
             {
-                using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+                using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
                 {
                     return AsScalar(conn, procedureName, parameters: parameters, timeout: timeout, autoTrunc: autoTrunc);
                 }
@@ -1192,10 +1217,11 @@ namespace Horseshoe.NET.SqlDb
                 string procedureName,
                 IEnumerable<DbParameter> parameters = null,
                 SqlConnectionInfo connectionInfo = null,
-                int? timeout = null
+                int? timeout = null,
+                CryptoOptions options = null
             )
             {
-                using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+                using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
                 {
                     return AsScalar<E>(conn, procedureName, parameters: parameters, timeout: timeout);
                 }
@@ -1227,10 +1253,11 @@ namespace Horseshoe.NET.SqlDb
                 SqlConnectionInfo connectionInfo = null,
                 int? timeout = null,
                 AutoTruncate autoTrunc = default,
-                bool suppressErrors = false
+                bool suppressErrors = false,
+                CryptoOptions options = null
             )
             {
-                using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+                using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
                 {
                     return AsCollection(conn, functionName, parameters: parameters, autoSort: autoSort, objectParser: objectParser, readerParser: readerParser, timeout: timeout, autoTrunc: autoTrunc, suppressErrors: suppressErrors);
                 }
@@ -1342,10 +1369,11 @@ namespace Horseshoe.NET.SqlDb
                 IEnumerable<DbParameter> parameters = null,
                 SqlConnectionInfo connectionInfo = null,
                 int? timeout = null,
-                AutoTruncate autoTrunc = default
+                AutoTruncate autoTrunc = default,
+                CryptoOptions options = null
             )
             {
-                using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+                using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
                 {
                     return AsScalar(conn, functionName, parameters: parameters, timeout: timeout, autoTrunc: autoTrunc);
                 }
@@ -1397,10 +1425,11 @@ namespace Horseshoe.NET.SqlDb
                 string functionName,
                 IEnumerable<DbParameter> parameters = null,
                 SqlConnectionInfo connectionInfo = null,
-                int? timeout = null
+                int? timeout = null,
+                CryptoOptions options = null
             )
             {
-                using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+                using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
                 {
                     return AsScalar<E>(conn, functionName, parameters: parameters, timeout: timeout);
                 }
@@ -1424,10 +1453,11 @@ namespace Horseshoe.NET.SqlDb
                 IEnumerable<DbParameter> parameters = null,
                 SqlConnectionInfo connectionInfo = null,
                 bool keepOpen = false,
-                int? timeout = null
+                int? timeout = null,
+                CryptoOptions options = null
             )
             {
-                using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+                using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
                 {
                     return AsDataReader(conn, functionName, parameters: parameters, keepOpen: keepOpen, timeout: timeout);
                 }
@@ -1470,10 +1500,11 @@ namespace Horseshoe.NET.SqlDb
                 IEnumerable<DbParameter> parameters = null,
                 SqlConnectionInfo connectionInfo = null,
                 int? timeout = null,
-                AutoTruncate autoTrunc = default
+                AutoTruncate autoTrunc = default,
+                CryptoOptions options = null
             )
             {
-                using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+                using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
                 {
                     return AsDataTable(conn, functionName, parameters: parameters, timeout: timeout, autoTrunc: autoTrunc);
                 }
@@ -1529,10 +1560,11 @@ namespace Horseshoe.NET.SqlDb
                 SqlConnectionInfo connectionInfo = null,
                 int? timeout = null,
                 AutoTruncate autoTrunc = default,
-                bool suppressErrors = false
+                bool suppressErrors = false,
+                CryptoOptions options = null
             )
             {
-                using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+                using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
                 {
                     return AsObjects(conn, functionName, parameters: parameters, timeout: timeout, autoTrunc: autoTrunc, suppressErrors: suppressErrors);
                 }
@@ -1559,10 +1591,11 @@ namespace Horseshoe.NET.SqlDb
                 SqlConnectionInfo connectionInfo = null,
                 int? timeout = null,
                 AutoTruncate autoTrunc = default,
-                bool suppressErrors = false
+                bool suppressErrors = false,
+                CryptoOptions options = null
             )
             {
-                using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+                using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
                 {
                     return AsObjects(conn, functionName, out columns, parameters: parameters, timeout: timeout, autoTrunc: autoTrunc, suppressErrors: suppressErrors);
                 }

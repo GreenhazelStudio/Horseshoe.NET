@@ -2,6 +2,7 @@
 using System.Text;
 
 using Horseshoe.NET.Application;
+using Horseshoe.NET.Cryptography;
 using Horseshoe.NET.Db;
 using Horseshoe.NET.Objects;
 using Horseshoe.NET.Text;
@@ -33,7 +34,7 @@ namespace Horseshoe.NET.OleDb
             }
         }
 
-        public string GetConnectionString(out string announcePrefix)
+        public string GetConnectionString(out string announcePrefix, CryptoOptions options = null)
         {
             if (ConnectionString != null)
             {
@@ -68,7 +69,7 @@ namespace Horseshoe.NET.OleDb
                 }
                 else if (Credentials.Value.IsEncryptedPassword)
                 {
-                    sb.Append(";Password=" + DataUtil.Decrypt(Credentials.Value.Password));
+                    sb.Append(";Password=" + Decrypt.String(Credentials.Value.Password, options: options));
                 }
                 else if (Credentials.Value.Password != null)
                 {

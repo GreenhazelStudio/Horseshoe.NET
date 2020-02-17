@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using Oracle.ManagedDataAccess.Client;
 
 using Horseshoe.NET.Collections;
+using Horseshoe.NET.Cryptography;
 using Horseshoe.NET.Db;
 using Horseshoe.NET.OracleDb.Meta;
 using Horseshoe.NET.Text;
@@ -147,12 +148,12 @@ namespace Horseshoe.NET.OracleDb
             return credentials;
         }
 
-        public static OracleConnection LaunchConnection(OraConnectionInfo connectionInfo = null)
+        public static OracleConnection LaunchConnection(OraConnectionInfo connectionInfo = null, CryptoOptions options = null)
         {
             var conn = new OracleConnection
             {
                 ConnectionString = WhichConnectionString(connectionInfo: connectionInfo, announce: true) ?? throw new UtilityException("No connection string or data source was found"),
-                Credential = GetOracleCredentials(WhichCredentials(connectionInfo: connectionInfo, announce: true))
+                Credential = GetOracleCredentials(WhichCredentials(connectionInfo: connectionInfo, announce: true), options: options)
             };
             conn.Open();
             return conn;
@@ -287,7 +288,7 @@ namespace Horseshoe.NET.OracleDb
             return listString;
         }
 
-        public static OracleCredential GetOracleCredentials(Credential? credentials)
+        public static OracleCredential GetOracleCredentials(Credential? credentials, CryptoOptions options = null)
         {
             if (!credentials.HasValue) return null;
 
@@ -301,13 +302,12 @@ namespace Horseshoe.NET.OracleDb
                 SecureString securePassword;
                 if (credentials.Value.IsEncryptedPassword)
                 {
-                    securePassword = DataUtil.DecryptSecure(credentials.Value.Password);
+                    securePassword = Decrypt.SecureString(credentials.Value.Password, options: options);
                 }
                 else
                 {
-                    var nonsecurePassword = DataUtil.Decrypt(credentials.Value.Password);
                     securePassword = new SecureString();
-                    foreach (char c in nonsecurePassword)
+                    foreach (char c in credentials.Value.Password)
                     {
                         securePassword.AppendChar(c);
                     }

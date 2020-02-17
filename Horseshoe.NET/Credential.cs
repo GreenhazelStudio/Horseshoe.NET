@@ -18,7 +18,7 @@ namespace Horseshoe.NET
 
         public string Domain { get; }
 
-        public Credential(string userID, string domain = null)
+        private Credential(string userID, string domain = null)
         {
             UserID = userID ?? throw new ArgumentNullException(nameof(userID));
             Password = null;

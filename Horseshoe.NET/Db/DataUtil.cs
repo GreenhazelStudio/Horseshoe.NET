@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Security;
-using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 
 using Horseshoe.NET.Collections;
+using Horseshoe.NET.Cryptography;
 using Horseshoe.NET.Db.Internal;
 using Horseshoe.NET.Events;
 using Horseshoe.NET.Text;
@@ -31,34 +31,10 @@ namespace Horseshoe.NET.Db
          *   CONNECTION STRINGS                *
          * * * * * * * * * * * * * * * * * * * */
 
-        private static Cryptography.CryptoOptions CryptoOptions { get; } = new Cryptography.CryptoOptions
-        {
-            Algorithm = new AesCryptoServiceProvider(),
-            KeyText = "J#N$BD)$IBE)($OI"
-        };
-
-        public static string Encrypt(string plainText)
-        {
-            var cipherText = Cryptography.Encrypt.String(plainText, CryptoOptions);
-            return cipherText;
-        }
-
-        public static string Decrypt(string cipherText)
-        {
-            var reconstitutedPlainText = Cryptography.Decrypt.String(cipherText, CryptoOptions);
-            return reconstitutedPlainText;
-        }
-
-        public static SecureString DecryptSecure(string cipherText)
-        {
-            var reconstitutedPlainText = Cryptography.Decrypt.SecureString(cipherText, CryptoOptions);
-            return reconstitutedPlainText;
-        }
-
-        public static string DecryptInlinePassword(string connStrWithEcryptedPassword)
+        public static string DecryptInlinePassword(string connStrWithEcryptedPassword, CryptoOptions options = null)
         {
             var cipherText = ParseConnectionStringValue(ConnectionStringPart.Password, connStrWithEcryptedPassword);
-            var plainText = Decrypt(cipherText);
+            var plainText = Decrypt.String(cipherText, options: options);
             var reconstitutedConnStr = connStrWithEcryptedPassword.Replace(cipherText, plainText);
             return reconstitutedConnStr;
         }

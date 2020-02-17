@@ -65,9 +65,7 @@ namespace Horseshoe.NET.IO
         {
             var request = WebRequest.Create(url) as HttpWebRequest;
             request.Method = "GET";
-            request.Credentials = credentials.HasValue
-                ? new NetworkCredential(credentials.Value.UserID, credentials.Value.UserID)
-                : CredentialCache.DefaultCredentials;
+            request.Credentials = credentials?.ToNetworkCredentials() ?? CredentialCache.DefaultCredentials;
             request.Timeout = 600000;
             var response = request.GetResponse() as HttpWebResponse;
             return response.GetResponseStream();

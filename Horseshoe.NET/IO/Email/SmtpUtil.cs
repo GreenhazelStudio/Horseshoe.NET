@@ -12,48 +12,24 @@ namespace Horseshoe.NET.IO.Email
 {
     public static class SmtpUtil
     {
-        private static CryptoOptions CryptoOptions { get; } = new CryptoOptions
-        {
-            Algorithm = new System.Security.Cryptography.AesCryptoServiceProvider(),
-            KeyText = "4389nP9498NP(*34"
-        };
-
-        public static string Encrypt(string plainText)
-        {
-            var cipherText = Cryptography.Encrypt.String(plainText, CryptoOptions);
-            return cipherText;
-        }
-
-        public static string Decrypt(string cipherText)
-        {
-            var reconstitutedPlainText = Cryptography.Decrypt.String(cipherText, CryptoOptions);
-            return reconstitutedPlainText;
-        }
-
-        public static SecureString DecryptSecure(string cipherText)
-        {
-            var secureString = Cryptography.Decrypt.SecureString(cipherText, CryptoOptions);
-            return secureString;
-        }
-
-        public static SmtpClient WhichSmtpClient(SmtpConnectionInfo connectionInfo = null)
+        public static SmtpClient WhichSmtpClient(SmtpConnectionInfo connectionInfo = null, CryptoOptions options = null)
         {
             if (connectionInfo != null)
             {
-                return connectionInfo.GetSmtpClient();
+                return connectionInfo.GetSmtpClient(options: options);
             }
             else
             {
-                return GetDefaultSmtpClient();
+                return GetDefaultSmtpClient(options: options);
             }
         }
 
-        public static SmtpClient GetSmtpClient(SmtpConnectionInfo connectionInfo = null)
+        public static SmtpClient GetSmtpClient(SmtpConnectionInfo connectionInfo = null, CryptoOptions options = null)
         {
-            return WhichSmtpClient(connectionInfo: connectionInfo) ?? throw new UtilityException("No SMTP server info was found");
+            return WhichSmtpClient(connectionInfo: connectionInfo, options: options) ?? throw new UtilityException("No SMTP server info was found");
         }
 
-        internal static SmtpClient GetDefaultSmtpClient()
+        internal static SmtpClient GetDefaultSmtpClient(CryptoOptions options = null)
         {
             if (Settings.DefaultSmtpServer == null) return null;
             
@@ -71,8 +47,8 @@ namespace Horseshoe.NET.IO.Email
                 else if (Settings.DefaultCredentials.Value.IsEncryptedPassword)
                 {
                     smtpClient.Credentials = Settings.DefaultCredentials.Value.Domain != null
-                        ? new NetworkCredential(Settings.DefaultCredentials.Value.UserID, DecryptSecure(Settings.DefaultCredentials.Value.Password), Settings.DefaultCredentials.Value.Domain)
-                        : new NetworkCredential(Settings.DefaultCredentials.Value.UserID, DecryptSecure(Settings.DefaultCredentials.Value.Password));
+                        ? new NetworkCredential(Settings.DefaultCredentials.Value.UserID, Decrypt.SecureString(Settings.DefaultCredentials.Value.Password, options: options), Settings.DefaultCredentials.Value.Domain)
+                        : new NetworkCredential(Settings.DefaultCredentials.Value.UserID, Decrypt.SecureString(Settings.DefaultCredentials.Value.Password, options: options));
                 }
                 else if (Settings.DefaultCredentials.Value.Password != null)
                 {

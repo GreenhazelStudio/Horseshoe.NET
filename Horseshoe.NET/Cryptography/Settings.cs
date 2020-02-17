@@ -48,7 +48,8 @@ namespace Horseshoe.NET.Cryptography
                 return _defaultSymmetricKey
                     ?? (DefaultSymmetricKeyText != null ? DefaultEncoding.GetBytes(DefaultSymmetricKeyText) : null)
                     ?? Config.GetBytes("Horseshoe.NET:Cryptography:SymmetricKey", encoding: DefaultEncoding)
-                    ?? OrganizationalDefaultSettings.GetBytes("Cryptography.SymmetricKey", encoding: DefaultEncoding);
+                    ?? OrganizationalDefaultSettings.GetBytes("Cryptography.SymmetricKey", encoding: DefaultEncoding)
+                    ?? DefaultEncoding.GetBytes(")0ju3#2!u83&+2ez");
             }
             set
             {

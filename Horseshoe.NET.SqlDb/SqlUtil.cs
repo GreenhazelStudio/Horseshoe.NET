@@ -8,6 +8,7 @@ using System.Linq;
 using System.Security;
 using System.Text;
 
+using Horseshoe.NET.Cryptography;
 using Horseshoe.NET.Db;
 
 namespace Horseshoe.NET.SqlDb
@@ -132,12 +133,12 @@ namespace Horseshoe.NET.SqlDb
             return credentials;
         }
 
-        public static SqlConnection LaunchConnection(SqlConnectionInfo connectionInfo = null)
+        public static SqlConnection LaunchConnection(SqlConnectionInfo connectionInfo = null, CryptoOptions options = null)
         {
             var conn = new SqlConnection
             {
                 ConnectionString = WhichConnectionString(connectionInfo: connectionInfo, announce: true) ?? throw new UtilityException("No connection string or data source was found"),
-                Credential = GetSqlCredentials(WhichCredentials(connectionInfo: connectionInfo, announce: true))
+                Credential = GetSqlCredentials(WhichCredentials(connectionInfo: connectionInfo, announce: true), options: options)
             };
             conn.Open();
             return conn;
@@ -197,7 +198,7 @@ namespace Horseshoe.NET.SqlDb
             return cmd;
         }
 
-        public static SqlCredential GetSqlCredentials(Credential? credentials)
+        public static SqlCredential GetSqlCredentials(Credential? credentials, CryptoOptions options = null)
         {
             if (!credentials.HasValue)
             {
@@ -214,13 +215,12 @@ namespace Horseshoe.NET.SqlDb
                 SecureString securePassword;
                 if (credentials.Value.IsEncryptedPassword)
                 {
-                    securePassword = DataUtil.DecryptSecure(credentials.Value.Password);
+                    securePassword = Decrypt.SecureString(credentials.Value.Password, options: options);
                 }
                 else
                 {
-                    var nonsecurePassword = DataUtil.Decrypt(credentials.Value.Password);
                     securePassword = new SecureString();
-                    foreach (char c in nonsecurePassword)
+                    foreach (char c in credentials.Value.Password)
                     {
                         securePassword.AppendChar(c);
                     }

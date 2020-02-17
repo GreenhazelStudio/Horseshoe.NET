@@ -23,6 +23,8 @@ namespace TestConsole
             "Hash (Default)",
             "Hash (SHA256 + salt)",
             "Hash (Default => SHA256 + salt)",
+            "Encrypt Password (deprecated)",
+            "Decrypt Password (deprecated)",
         };
 
         public override void Do()
@@ -55,6 +57,18 @@ namespace TestConsole
                     var input3 = PromptInput("Enter text to hash: ");
                     var hash3 = Hash.String(input3);
                     Console.WriteLine(hash3);
+                    Console.WriteLine();
+                    break;
+                case "Encrypt Password":
+                    var passwordToEncrypt = PromptInput("Enter password to encrypt: ");
+                    var encryptedPassword = Encrypt.String(passwordToEncrypt);
+                    Console.WriteLine(encryptedPassword);
+                    Console.WriteLine();
+                    break;
+                case "Decrypt Password":
+                    var passwordToDecrypt = PromptInput("Enter password to decrypt: ");
+                    var decryptedPassword = Decrypt.String(passwordToDecrypt);
+                    Console.WriteLine(decryptedPassword);
                     Console.WriteLine();
                     break;
             }

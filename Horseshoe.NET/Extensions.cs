@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text;
 
 using Horseshoe.NET.Collections;
+using Horseshoe.NET.Cryptography;
 using Horseshoe.NET.Text;
 
 namespace Horseshoe.NET
@@ -181,6 +183,28 @@ namespace Horseshoe.NET
         public static bool IsLeapYear(this DateTime date)
         {
             return DateUtil.IsLeapYear(date);
+        }
+
+        public static NetworkCredential ToNetworkCredentials(this Credential credentials)
+        {
+            if (credentials.HasSecurePassword)
+            {
+                return credentials.Domain != null 
+                    ? new NetworkCredential(credentials.UserID, credentials.SecurePassword, credentials.Domain)
+                    : new NetworkCredential(credentials.UserID, credentials.SecurePassword);
+            }
+            else if (credentials.IsEncryptedPassword)
+            {
+                return credentials.Domain != null
+                    ? new NetworkCredential(credentials.UserID, Decrypt.SecureString(credentials.Password), credentials.Domain)
+                    : new NetworkCredential(credentials.UserID, Decrypt.SecureString(credentials.Password));
+            }
+            else
+            {
+                return credentials.Domain != null
+                    ? new NetworkCredential(credentials.UserID, credentials.Password, credentials.Domain)
+                    : new NetworkCredential(credentials.UserID, credentials.Password);
+            }
         }
     }
 }
