@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Horseshoe.NET;
 using Horseshoe.NET.ConsoleX;
 using Horseshoe.NET.IO;
+using Horseshoe.NET.IO.Ftp;
 using Horseshoe.NET.IO.ReportingServices;
 
 namespace TestConsole
@@ -14,6 +16,13 @@ namespace TestConsole
     {
         public override Title Title => "IO Tests";
         public override bool Looping => true;
+
+        static IOTests()
+        {
+            Ftp.RequestUriCreated += (uri) => Console.WriteLine("URI: " + uri);
+            Ftp.FileUploaded += (fileName, fileSize, statusCode, statusDescription) => Console.WriteLine("Upload results: " + fileName + " - " + FileUtil.GetDisplayFileSize(fileSize) + " - " + statusDescription);
+        }
+
         public override void Do()
         {
             var selection = PromptMenu
@@ -21,7 +30,8 @@ namespace TestConsole
                 new[]
                 {
                     "Build SSRS URLs",
-                    "Display file sizes"
+                    "Display file sizes",
+                    "Test FTP Upload"
                 },
                 title: "SSRS Test Menu"
             );
@@ -47,6 +57,16 @@ namespace TestConsole
                     Console.WriteLine("1000000 B in GB w/ 3 dec  =>  " + FileUtil.GetDisplayFileSize(1000000, maxDecimalPlaces: 3, unit: FileSize.Unit.GB));
                     Console.WriteLine("1000000 B in GiB w/ 3 dec  =>  " + FileUtil.GetDisplayFileSize(1000000, maxDecimalPlaces: 3, unit: FileSize.Unit.GiB));
                     Console.WriteLine();
+                    break;
+                case "Test FTP Upload":
+                    Ftp.UploadContent
+                    (
+                        "Hello World!",
+                        "hello.txt",
+                        server: "11.22.33.44",
+                        serverPath: "/my_dir",
+                        credentials: new Credential("username", "password")
+                    );
                     break;
             }
         }
