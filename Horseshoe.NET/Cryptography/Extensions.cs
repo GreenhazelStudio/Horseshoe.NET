@@ -25,7 +25,7 @@ namespace Horseshoe.NET.Cryptography
             }
         }
 
-        public static IEnumerable<int> GetValidKeyLengths(this SymmetricAlgorithm algorithm)
+        public static IEnumerable<int> GetValidKeySizes(this SymmetricAlgorithm algorithm)
         {
             var list = new List<int>();
             foreach (var ks in algorithm.LegalKeySizes)
@@ -42,7 +42,7 @@ namespace Horseshoe.NET.Cryptography
             return list;
         }
 
-        public static IEnumerable<int> GetValidBlockLengths(this SymmetricAlgorithm algorithm)
+        public static IEnumerable<int> GetValidBlockSizes(this SymmetricAlgorithm algorithm)
         {
             var list = new List<int>();
             foreach (var ks in algorithm.LegalBlockSizes)
