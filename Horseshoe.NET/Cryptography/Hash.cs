@@ -22,8 +22,8 @@ namespace Horseshoe.NET.Cryptography
             }
             else
             {
-                algorithm = Settings.DefaultHashAlgorithm;
-                salt = Settings.DefaultHashSalt;
+                algorithm = CryptoSettings.DefaultHashAlgorithm;
+                salt = CryptoSettings.DefaultHashSalt;
             }
 
             if (salt.HasValue)
@@ -42,7 +42,7 @@ namespace Horseshoe.NET.Cryptography
         public static string String(string plainText, HashOptions options = null)
         {
             options = options ?? new HashOptions();
-            var encoding = options.Encoding ?? Settings.DefaultEncoding;
+            var encoding = options.Encoding ?? CryptoSettings.DefaultEncoding;
             var plainBytes = encoding.GetBytes(plainText);
             return String(plainBytes, options);
         }

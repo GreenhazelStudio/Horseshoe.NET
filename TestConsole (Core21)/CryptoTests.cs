@@ -35,8 +35,8 @@ namespace TestConsole
                 Menu
             );
             RenderListTitle(selection.SelectedItem);
-            Settings.DefaultHashAlgorithm = null;
-            Settings.DefaultHashSalt = null;
+            CryptoSettings.DefaultHashAlgorithm = null;
+            CryptoSettings.DefaultHashSalt = null;
             switch (selection.SelectedItem)
             {
                 case "Hash (Default)":
@@ -52,8 +52,8 @@ namespace TestConsole
                     Console.WriteLine();
                     break;
                 case "Hash (Default => SHA256 + salt)":
-                    Settings.DefaultHashAlgorithm = new System.Security.Cryptography.SHA256CryptoServiceProvider();
-                    Settings.DefaultHashSalt = 112;
+                    CryptoSettings.DefaultHashAlgorithm = new System.Security.Cryptography.SHA256CryptoServiceProvider();
+                    CryptoSettings.DefaultHashSalt = 112;
                     var input3 = PromptInput("Enter text to hash: ");
                     var hash3 = Hash.String(input3);
                     Console.WriteLine(hash3);

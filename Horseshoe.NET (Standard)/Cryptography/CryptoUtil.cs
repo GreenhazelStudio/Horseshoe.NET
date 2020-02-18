@@ -6,100 +6,101 @@ using Horseshoe.NET.Collections;
 
 namespace Horseshoe.NET.Cryptography
 {
-    public static class CryptoUtil
+    internal static class CryptoUtil
     {
-        internal static SymmetricAlgorithm PrepareSymmetricAlgorithmForEncryption(CryptoOptions options)
+        internal static SymmetricAlgorithm BuildSymmetricAlgorithmForEncryptionEmbeddedKIV(CryptoOptions options)
         {
-            options = options ?? new CryptoOptions();
-            var algorithm = _PrepareSymmetricAlgorithm(options);
+            var algorithm = BuildSymmetricAlgorithm(options);
 
-            if (options.UseEmbeddedKIV)
-            {
-                algorithm.GenerateKey();
-                algorithm.GenerateIV();
-            }
+            algorithm.GenerateKey();
+            algorithm.GenerateIV();
+
             return algorithm;
         }
 
-        internal static SymmetricAlgorithm PrepareSymmetricAlgorithmForDecryption(CryptoOptions options, ref byte[] cipherBytes)
+        internal static SymmetricAlgorithm BuildSymmetricAlgorithmForDecryptionEmbeddedKIV(CryptoOptions options, ref byte[] cipherBytes)
         {
-            options = options ?? new CryptoOptions();
-            var algorithm = _PrepareSymmetricAlgorithm(options);
-
+            var algorithm = BuildSymmetricAlgorithm(options);
             var keyLength = algorithm.KeySize / 8;
             var ivLength = algorithm.BlockSize / 8;
 
-            if (options.UseEmbeddedKIV)
-            {
-                algorithm.IV = CollectionUtil.ScoopOffTheEnd(ref cipherBytes, ivLength);
-                algorithm.Key = CollectionUtil.ScoopOffTheEnd(ref cipherBytes, keyLength);
-            }
+            algorithm.IV = CollectionUtil.ScoopOffTheEnd(ref cipherBytes, ivLength);
+            algorithm.Key = CollectionUtil.ScoopOffTheEnd(ref cipherBytes, keyLength);
+
             return algorithm;
         }
 
-        private static SymmetricAlgorithm _PrepareSymmetricAlgorithm(CryptoOptions options)
+        internal static SymmetricAlgorithm BuildSymmetricAlgorithm(CryptoOptions options)
         {
+            options = options ?? new CryptoOptions();
+
             if (options.UseEmbeddedKIV && options.Key != null)
             {
                 throw new UtilityException("Please leave the symmetric key null when using embedded mode");
             }
 
-            // priority 1 - user-supplied algorithm incl. specifics
-            if (options.Algorithm != null)
-            {
-                return ValidateAndBuildAlgorithm(options.Algorithm, options.Key, options.KeySize, options.BlockSize, options.PaddingMode, options);
-            }
+            // priority 1 - user-supplied (via 'options')
+            // priority 2 - settings (app|web.config / default) - any single default setting can be substituted for a user-supplied setting
+            var algorithm = BuildSymmetricAlgorithm
+            (
+                options.Algorithm ?? CryptoSettings.DefaultSymmetricAlgorithm,
+                options.Key,
+                options.AutoPadKey,
+                options.IV,
+                options.AutoPopulateIVFromKey,
+                options.BlockSize,
+                options.Mode,
+                options.Padding
+            );
 
-            // priority 2 - built-in algorithm incl. specifics (options.Key overrides, if applicable)
-            return ValidateAndBuildAlgorithm(Settings.DefaultSymmetricAlgorithm, options.Key ?? Settings.DefaultSymmetricKey, Settings.DefaultSymmetricKeySize, Settings.DefaultSymmetricBlockSize, Settings.DefaultSymmetricPaddingMode, options);
-        }
-
-        private static SymmetricAlgorithm ValidateAndBuildAlgorithm (SymmetricAlgorithm algorithm, byte[] key, int? keySize, int? blockSize, PaddingMode? padding, CryptoOptions options)
-        {
-            if (keySize.HasValue)
-            {
-                if (algorithm.ValidKeySize(keySize.Value))
-                {
-                    algorithm.KeySize = keySize.Value;
-                }
-                else
-                {
-                    throw new UtilityException("Invalid key size: " + keySize + " -- Valid key sizes for " + algorithm.GetType().Name + ": " + GetDisplayKeySizes(algorithm.LegalKeySizes) + ".");
-                }
-            }
-            if (blockSize.HasValue)
-            {
-                algorithm.BlockSize = blockSize.Value;
-            }
-            if (key != null)
-            {
-                var keyLength = algorithm.KeySize / 8;
-                var ivLength = algorithm.BlockSize / 8;
-                algorithm.Key = key.PadLeft((byte)0, keyLength, TruncatePolicy.Exception).ToArray();
-                algorithm.IV = key.PadLeft((byte)0, ivLength, TruncatePolicy.Simple).ToArray();
-            }
-            else if (!options.UseEmbeddedKIV)
-            {
-                throw new UtilityException("A symmetric key is required");
-            }
-            if (padding.HasValue)
-            {
-                algorithm.Padding = padding.Value;
-            }
             return algorithm;
         }
 
-        private static string GetDisplayKeySizes(KeySizes[] keySizeses)
+        public static SymmetricAlgorithm BuildSymmetricAlgorithm(SymmetricAlgorithm algorithm, byte[] key, bool autoPadKey, byte[] iv, bool autoPopulateIVFromKey, int? blockSize, CipherMode? mode, PaddingMode? padding)
         {
-            var set = new SortedSet<int>();
-            foreach(var keySizes in keySizeses)
+            if (algorithm == null) return null;
+            var validKeyLengths = algorithm.GetValidKeyLengths();
+            var validBlockLengths = algorithm.GetValidBlockLengths();
+            if (key != null)
             {
-                for(int i = keySizes.MinSize; i <= keySizes.MaxSize; i += keySizes.SkipSize)
+                if (autoPadKey)
                 {
-                    set.Add(i);
+                    if (key.Length > validKeyLengths.Max())
+                    {
+                        throw new ValidationException("Key exceeds max allowable size.  Detected size: " + key.Length + ".  Valid sizes: " + string.Join(", ", validKeyLengths));
+                    }
+                    var targetLength = validKeyLengths.First(ln => ln >= key.Length);
+                    key = key.PadLeft((byte)0, targetLength).ToArray();
                 }
+                else if (!key.Length.In(validKeyLengths))
+                {
+                    throw new ValidationException("Invalid key size: " + key.Length + ".  Valid sizes: " + string.Join(", ", validKeyLengths));
+                }
+                algorithm.Key = key;
             }
-            return string.Join(", ", set);
+            if (iv != null) 
+            {
+                if (!iv.Length.In(validBlockLengths))
+                {
+                    throw new ValidationException("Invalid IV size: " + iv.Length + ".  Valid sizes: " + string.Join(", ", validBlockLengths));
+                }
+                algorithm.IV = iv;
+            }
+            else if (key != null && autoPopulateIVFromKey)
+            {
+                algorithm.IV = key.PadLeft((byte)0, algorithm.BlockSize / 8, TruncatePolicy.Simple).ToArray();
+            }
+            if (blockSize.HasValue)
+            {
+                if (!blockSize.Value.In(validBlockLengths))
+                {
+                    throw new ValidationException("Invalid block size: " + blockSize.Value + ".  Valid sizes: " + string.Join(", ", validBlockLengths));
+                }
+                algorithm.BlockSize = blockSize.Value;
+            }
+            if (mode.HasValue) algorithm.Mode = mode.Value;
+            if (padding.HasValue) algorithm.Padding = padding.Value;
+            return algorithm;
         }
     }
 }

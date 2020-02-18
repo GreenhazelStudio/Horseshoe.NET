@@ -10,7 +10,11 @@ namespace Horseshoe.NET.Cryptography
         public static byte[] Bytes(byte[] plainBytes, CryptoOptions options = null)
         {
             options = options ?? new CryptoOptions();
-            var algorithm = CryptoUtil.PrepareSymmetricAlgorithmForEncryption(options);
+
+            var algorithm = options.UseEmbeddedKIV
+                ? CryptoUtil.BuildSymmetricAlgorithmForEncryptionEmbeddedKIV(options)
+                : CryptoUtil.BuildSymmetricAlgorithm(options);
+
             MemoryStream memoryStream;
 
             // encrypt
@@ -77,7 +81,7 @@ namespace Horseshoe.NET.Cryptography
 
         public static byte[] StringToBytes(string plainText, CryptoOptions options = null)
         {
-            var plainBytes = (options?.Encoding ?? Settings.DefaultEncoding).GetBytes(plainText);
+            var plainBytes = (options?.Encoding ?? CryptoSettings.DefaultEncoding).GetBytes(plainText);
             var cipherBytes = Bytes(plainBytes, options: options);
             return cipherBytes;
         }

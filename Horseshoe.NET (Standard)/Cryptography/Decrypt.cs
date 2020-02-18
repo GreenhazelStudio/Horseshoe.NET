@@ -13,7 +13,10 @@ namespace Horseshoe.NET.Cryptography
         public static byte[] Bytes(byte[] cipherBytes, CryptoOptions options = null)
         {
             options = options ?? new CryptoOptions();
-            var algorithm = CryptoUtil.PrepareSymmetricAlgorithmForDecryption(options, ref cipherBytes);
+
+            var algorithm = options.UseEmbeddedKIV
+                ? CryptoUtil.BuildSymmetricAlgorithmForDecryptionEmbeddedKIV(options, ref cipherBytes)
+                : CryptoUtil.BuildSymmetricAlgorithm(options);
             var plainBytes = new byte[cipherBytes.Length];
 
             // decrypt
@@ -40,7 +43,7 @@ namespace Horseshoe.NET.Cryptography
         public static string BytesToString(byte[] cipherBytes, CryptoOptions options = null)
         {
             var plainBytes = Bytes(cipherBytes, options: options);
-            var plainText = (options?.Encoding ?? Settings.DefaultEncoding).GetString(plainBytes);
+            var plainText = (options?.Encoding ?? CryptoSettings.DefaultEncoding).GetString(plainBytes);
             return TextUtil.Zap(plainText, textCleanMode: TextCleanMode.RemoveNonprintables);
         }
 
@@ -48,7 +51,7 @@ namespace Horseshoe.NET.Cryptography
         {
             var secureString = new SecureString();
             var plainBytes = Bytes(cipherBytes, options: options);
-            var plainChars = (options?.Encoding ?? Settings.DefaultEncoding).GetChars(plainBytes);
+            var plainChars = (options?.Encoding ?? CryptoSettings.DefaultEncoding).GetChars(plainBytes);
             plainBytes.Clear();
             foreach (char c in plainChars)
             {

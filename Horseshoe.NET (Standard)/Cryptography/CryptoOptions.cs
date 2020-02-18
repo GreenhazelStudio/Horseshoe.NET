@@ -6,9 +6,6 @@ namespace Horseshoe.NET.Cryptography
 {
     public class CryptoOptions
     {
-        private byte[] _Key;
-        private string _KeyText;
-
         /// <summary>
         /// The desired encryption / decryption algorithm
         /// </summary>
@@ -17,19 +14,7 @@ namespace Horseshoe.NET.Cryptography
         /// <summary>
         /// The encryption key
         /// </summary>
-        public byte[] Key
-        {
-            get
-            {
-                if (_Key != null) return _Key;
-                if (_KeyText != null) return (Encoding ?? Settings.DefaultEncoding).GetBytes(_KeyText);
-                return null;
-            }
-            set
-            {
-                _Key = value;
-            }
-        }
+        public byte[] Key { get; set; }
 
         /// <summary>
         /// The encryption key in text format
@@ -38,14 +23,29 @@ namespace Horseshoe.NET.Cryptography
         {
             set
             {
-                _KeyText = value;
+                Key = (Encoding ?? CryptoSettings.DefaultEncoding).GetBytes(value);
             }
         }
 
+        public bool AutoPadKey { get; set; }
+
         /// <summary>
-        /// Max key size in bits (e.g. 128 aka 16 bytes)
+        /// The encryption key
         /// </summary>
-        public int? KeySize { get; set; }
+        public byte[] IV { get; set; }
+
+        /// <summary>
+        /// The encryption key in text format
+        /// </summary>
+        public string IVText
+        {
+            set
+            {
+                IV = (Encoding ?? CryptoSettings.DefaultEncoding).GetBytes(value);
+            }
+        }
+
+        public bool AutoPopulateIVFromKey { get; set; }
 
         /// <summary>
         /// Block size in bits (e.g. 128 aka 16 bytes)
@@ -55,7 +55,12 @@ namespace Horseshoe.NET.Cryptography
         /// <summary>
         /// See <c>System.Security.Cryptography.PaddingMode</c>.
         /// </summary>
-        public PaddingMode? PaddingMode { get; set; }
+        public CipherMode? Mode { get; set; }
+
+        /// <summary>
+        /// See <c>System.Security.Cryptography.PaddingMode</c>.
+        /// </summary>
+        public PaddingMode? Padding { get; set; }
 
         /// <summary>
         /// Generates a random key and IV and appends them to the encryption, then extracts them prior to decrypting 
