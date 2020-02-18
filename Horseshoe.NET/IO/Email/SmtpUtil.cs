@@ -31,36 +31,36 @@ namespace Horseshoe.NET.IO.Email
 
         internal static SmtpClient GetDefaultSmtpClient(CryptoOptions options = null)
         {
-            if (Settings.DefaultSmtpServer == null) return null;
+            if (EmailSettings.DefaultSmtpServer == null) return null;
             
-            var smtpClient = new SmtpClient(Settings.DefaultSmtpServer);
-            if (Settings.DefaultPort.HasValue) smtpClient.Port = Settings.DefaultPort.Value;
-            if (Settings.DefaultEnableSsl) smtpClient.EnableSsl = true;
-            if (Settings.DefaultCredentials.HasValue)
+            var smtpClient = new SmtpClient(EmailSettings.DefaultSmtpServer);
+            if (EmailSettings.DefaultPort.HasValue) smtpClient.Port = EmailSettings.DefaultPort.Value;
+            if (EmailSettings.DefaultEnableSsl) smtpClient.EnableSsl = true;
+            if (EmailSettings.DefaultCredentials.HasValue)
             {
-                if (Settings.DefaultCredentials.Value.HasSecurePassword)
+                if (EmailSettings.DefaultCredentials.Value.HasSecurePassword)
                 {
-                    smtpClient.Credentials = Settings.DefaultCredentials.Value.Domain != null
-                        ? new NetworkCredential(Settings.DefaultCredentials.Value.UserID, Settings.DefaultCredentials.Value.SecurePassword, Settings.DefaultCredentials.Value.Domain)
-                        : new NetworkCredential(Settings.DefaultCredentials.Value.UserID, Settings.DefaultCredentials.Value.SecurePassword);
+                    smtpClient.Credentials = EmailSettings.DefaultCredentials.Value.Domain != null
+                        ? new NetworkCredential(EmailSettings.DefaultCredentials.Value.UserName, EmailSettings.DefaultCredentials.Value.SecurePassword, EmailSettings.DefaultCredentials.Value.Domain)
+                        : new NetworkCredential(EmailSettings.DefaultCredentials.Value.UserName, EmailSettings.DefaultCredentials.Value.SecurePassword);
                 }
-                else if (Settings.DefaultCredentials.Value.IsEncryptedPassword)
+                else if (EmailSettings.DefaultCredentials.Value.IsEncryptedPassword)
                 {
-                    smtpClient.Credentials = Settings.DefaultCredentials.Value.Domain != null
-                        ? new NetworkCredential(Settings.DefaultCredentials.Value.UserID, Decrypt.SecureString(Settings.DefaultCredentials.Value.Password, options: options), Settings.DefaultCredentials.Value.Domain)
-                        : new NetworkCredential(Settings.DefaultCredentials.Value.UserID, Decrypt.SecureString(Settings.DefaultCredentials.Value.Password, options: options));
+                    smtpClient.Credentials = EmailSettings.DefaultCredentials.Value.Domain != null
+                        ? new NetworkCredential(EmailSettings.DefaultCredentials.Value.UserName, Decrypt.SecureString(EmailSettings.DefaultCredentials.Value.Password, options: options), EmailSettings.DefaultCredentials.Value.Domain)
+                        : new NetworkCredential(EmailSettings.DefaultCredentials.Value.UserName, Decrypt.SecureString(EmailSettings.DefaultCredentials.Value.Password, options: options));
                 }
-                else if (Settings.DefaultCredentials.Value.Password != null)
+                else if (EmailSettings.DefaultCredentials.Value.Password != null)
                 {
-                    smtpClient.Credentials = Settings.DefaultCredentials.Value.Domain != null
-                        ? new NetworkCredential(Settings.DefaultCredentials.Value.UserID, Settings.DefaultCredentials.Value.Password, Settings.DefaultCredentials.Value.Domain)
-                        : new NetworkCredential(Settings.DefaultCredentials.Value.UserID, Settings.DefaultCredentials.Value.Password);
+                    smtpClient.Credentials = EmailSettings.DefaultCredentials.Value.Domain != null
+                        ? new NetworkCredential(EmailSettings.DefaultCredentials.Value.UserName, EmailSettings.DefaultCredentials.Value.Password, EmailSettings.DefaultCredentials.Value.Domain)
+                        : new NetworkCredential(EmailSettings.DefaultCredentials.Value.UserName, EmailSettings.DefaultCredentials.Value.Password);
                 }
                 else
                 {
-                    smtpClient.Credentials = Settings.DefaultCredentials.Value.Domain != null
-                        ? new NetworkCredential(Settings.DefaultCredentials.Value.UserID, null as string, Settings.DefaultCredentials.Value.Domain)
-                        : new NetworkCredential(Settings.DefaultCredentials.Value.UserID, null as string);
+                    smtpClient.Credentials = EmailSettings.DefaultCredentials.Value.Domain != null
+                        ? new NetworkCredential(EmailSettings.DefaultCredentials.Value.UserName, null as string, EmailSettings.DefaultCredentials.Value.Domain)
+                        : new NetworkCredential(EmailSettings.DefaultCredentials.Value.UserName, null as string);
                 }
             }
             return smtpClient;
@@ -103,7 +103,7 @@ namespace Horseshoe.NET.IO.Email
                 validationMessages.Add("Please only populate 'bcc' or 'bccRecipients', not both");
             }
 
-            if (from == null && Settings.DefaultFrom == null)
+            if (from == null && EmailSettings.DefaultFrom == null)
             {
                 validationMessages.Add("Please supply a 'from' address, you may configure this value (key=\"Horseshoe.NET:Email:From\")");
             }

@@ -82,7 +82,7 @@
     <Compile Include="Cryptography\Extensions.cs" />
     <Compile Include="Cryptography\Hash.cs" />
     <Compile Include="Cryptography\HashOptions.cs" />
-    <Compile Include="Cryptography\Settings.cs" />
+    <Compile Include="Cryptography\CryptoSettings.cs" />
     <Compile Include="Db\AutoSort.cs" />
     <Compile Include="Db\Column.cs" />
     <Compile Include="Db\ConnectionInfo.cs" />
@@ -99,12 +99,12 @@
     <Compile Include="DateUtil.cs" />
     <Compile Include="IO\Email\HtmlEmail.cs" />
     <Compile Include="IO\Email\PlainEmail.cs" />
-    <Compile Include="IO\Email\Settings.cs" />
-    <Compile Include="IO\Email\SMS\Carrier.cs" />
-    <Compile Include="IO\Email\SMS\TextMessage.cs" />
-    <Compile Include="IO\Email\SMS\Settings.cs" />
-    <Compile Include="IO\Email\SMS\SMSUtil.cs" />
-    <Compile Include="IO\Email\SMS\TextMessageSent.cs" />
+    <Compile Include="IO\Email\EmailSettings.cs" />
+    <Compile Include="IO\Email\Sms\Carrier.cs" />
+    <Compile Include="IO\Email\Sms\TextMessage.cs" />
+    <Compile Include="IO\Email\Sms\SmsSettings.cs" />
+    <Compile Include="IO\Email\Sms\SmsUtil.cs" />
+    <Compile Include="IO\Email\Sms\TextMessageSent.cs" />
     <Compile Include="IO\Email\SmtpConnectionInfo.cs" />
     <Compile Include="IO\Email\SmtpUtil.cs" />
     <Compile Include="Events\EasyNotifier.cs" />
@@ -114,7 +114,7 @@
     <Compile Include="IO\FileImport\NoMapColumn.cs" />
     <Compile Include="IO\FileImport\NullableColumn.cs" />
     <Compile Include="IO\Ftp\Ftp.cs" />
-    <Compile Include="IO\Ftp\Settings.cs" />
+    <Compile Include="IO\Ftp\FtpSettings.cs" />
     <Compile Include="OleDb\Delete.cs" />
     <Compile Include="OleDb\Execute.cs" />
     <Compile Include="OleDb\Insert.cs" />

@@ -190,20 +190,20 @@ namespace Horseshoe.NET
             if (credentials.HasSecurePassword)
             {
                 return credentials.Domain != null 
-                    ? new NetworkCredential(credentials.UserID, credentials.SecurePassword, credentials.Domain)
-                    : new NetworkCredential(credentials.UserID, credentials.SecurePassword);
+                    ? new NetworkCredential(credentials.UserName, credentials.SecurePassword, credentials.Domain)
+                    : new NetworkCredential(credentials.UserName, credentials.SecurePassword);
             }
             else if (credentials.IsEncryptedPassword)
             {
                 return credentials.Domain != null
-                    ? new NetworkCredential(credentials.UserID, Decrypt.SecureString(credentials.Password), credentials.Domain)
-                    : new NetworkCredential(credentials.UserID, Decrypt.SecureString(credentials.Password));
+                    ? new NetworkCredential(credentials.UserName, Decrypt.SecureString(credentials.Password), credentials.Domain)
+                    : new NetworkCredential(credentials.UserName, Decrypt.SecureString(credentials.Password));
             }
             else
             {
                 return credentials.Domain != null
-                    ? new NetworkCredential(credentials.UserID, credentials.Password, credentials.Domain)
-                    : new NetworkCredential(credentials.UserID, credentials.Password);
+                    ? new NetworkCredential(credentials.UserName, credentials.Password, credentials.Domain)
+                    : new NetworkCredential(credentials.UserName, credentials.Password);
             }
         }
     }

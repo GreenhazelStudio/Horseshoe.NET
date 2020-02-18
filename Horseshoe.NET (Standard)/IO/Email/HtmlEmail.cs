@@ -50,9 +50,9 @@ namespace Horseshoe.NET.IO.Email
             var mailMessage = new MailMessage()
             {
                 Subject = subject ?? "",
-                Body = JoinBodyAndFooter(body ?? "", footerHtml ?? Settings.DefaultFooterText),
+                Body = JoinBodyAndFooter(body ?? "", footerHtml ?? EmailSettings.DefaultFooterText),
                 BodyEncoding = encoding ?? Encoding.UTF8,
-                From = new MailAddress(from ?? Settings.DefaultFrom),
+                From = new MailAddress(from ?? EmailSettings.DefaultFrom),
                 IsBodyHtml = true
             };
 

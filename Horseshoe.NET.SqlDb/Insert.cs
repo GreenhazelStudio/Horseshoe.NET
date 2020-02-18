@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 
+using Horseshoe.NET.Cryptography;
 using Horseshoe.NET.Db;
 using Horseshoe.NET.Text;
 
@@ -18,10 +19,11 @@ namespace Horseshoe.NET.SqlDb
             string tableName,
             IEnumerable<Column> columns,
             SqlConnectionInfo connectionInfo = null,
-            int? timeout = null
+            int? timeout = null,
+            CryptoOptions options = null
         )
         {
-            using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+            using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
             {
                 return Table(conn, tableName, columns, timeout: timeout);
             }
@@ -53,10 +55,11 @@ namespace Horseshoe.NET.SqlDb
             IEnumerable<Column> columns,
             out int identity,
             SqlConnectionInfo connectionInfo = null,
-            int? timeout = null
+            int? timeout = null,
+            CryptoOptions options = null
         )
         {
-            using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+            using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
             {
                 return Table(conn, tableName, columns, out identity, timeout: timeout);
             }

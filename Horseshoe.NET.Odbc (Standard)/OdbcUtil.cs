@@ -39,7 +39,7 @@ namespace Horseshoe.NET.Odbc
                 // credentials
                 if (Settings.DefaultCredentials.HasValue)
                 {
-                    sb.Append(";UID=" + Settings.DefaultCredentials.Value.UserID);
+                    sb.Append(";UID=" + Settings.DefaultCredentials.Value.UserName);
                     if (Settings.DefaultCredentials.Value.HasSecurePassword)
                     {
                         sb.Append(";PWD=" + Settings.DefaultCredentials.Value.SecurePassword.ToUnsecureString());
@@ -125,7 +125,7 @@ namespace Horseshoe.NET.Odbc
                 }
                 if (announce)
                 {
-                    DataUtil.UsingCredentials?.Invoke(source, credentials.Value.UserID, passwordDescription);
+                    DataUtil.UsingCredentials?.Invoke(source, credentials.Value.UserName, passwordDescription);
                 }
             }
             return credentials;

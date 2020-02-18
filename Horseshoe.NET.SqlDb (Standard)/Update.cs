@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 
+using Horseshoe.NET.Cryptography;
 using Horseshoe.NET.Db;
 using Horseshoe.NET.Text;
 
@@ -12,15 +13,30 @@ namespace Horseshoe.NET.SqlDb
 {
     public static class Update
     {
-        public static int Table(string tableName, IEnumerable<Column> columns, Filter where = null, SqlConnectionInfo connectionInfo = null, int? timeout = null)
+        public static int Table
+        (
+            string tableName, 
+            IEnumerable<Column> columns, 
+            Filter where = null, 
+            SqlConnectionInfo connectionInfo = null,
+            int? timeout = null,
+            CryptoOptions options = null
+        )
         {
-            using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+            using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
             {
                 return Table(conn, tableName, columns, where: where, timeout: timeout);
             }
         }
 
-        public static int Table(SqlConnection conn, string tableName, IEnumerable<Column> columns, Filter where = null, int? timeout = null)
+        public static int Table
+        (
+            SqlConnection conn, 
+            string tableName, 
+            IEnumerable<Column> columns, 
+            Filter where = null, 
+            int? timeout = null
+        )
         {
             var statement = @"
                 UPDATE " + tableName + @"

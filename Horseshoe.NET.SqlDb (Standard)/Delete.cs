@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 
+using Horseshoe.NET.Cryptography;
 using Horseshoe.NET.Db;
 using Horseshoe.NET.Text;
 
@@ -13,15 +14,30 @@ namespace Horseshoe.NET.SqlDb
 {
     public static class Delete
     {
-        public static int Table(string tableName, Filter where = null, bool truncate = false, SqlConnectionInfo connectionInfo = null, int? timeout = null)
+        public static int Table
+        (
+            string tableName, 
+            Filter where = null, 
+            bool truncate = false, 
+            SqlConnectionInfo connectionInfo = null, 
+            int? timeout = null,
+            CryptoOptions options = null
+        )
         {
-            using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+            using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
             {
                 return Table(conn, tableName, where: where, truncate: truncate, timeout: timeout);
             }
         }
 
-        public static int Table(SqlConnection conn, string tableName, Filter where = null, bool truncate = false, int? timeout = null)
+        public static int Table
+        (
+            SqlConnection conn, 
+            string tableName, 
+            Filter where = null, 
+            bool truncate = false, 
+            int? timeout = null
+        )
         {
             string statement;
             if (where != null)

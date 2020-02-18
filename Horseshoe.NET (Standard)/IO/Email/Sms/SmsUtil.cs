@@ -5,7 +5,7 @@ using Horseshoe.NET.Events;
 
 namespace Horseshoe.NET.IO.Email.SMS
 {
-    public static class SMSUtil
+    public static class SmsUtil
     {
         public static string GetDescription(Carrier carrier)
         {

@@ -102,10 +102,10 @@ namespace Horseshoe.NET.IO.Ftp
         )
         {
             // Get the object used to communicate with the server.
-            var uriString = CreateRequestUriString(server ?? Settings.DefaultFtpServer, port ?? Settings.DefaultPort, serverPath, fileName);
+            var uriString = CreateRequestUriString(server ?? FtpSettings.DefaultFtpServer, port ?? FtpSettings.DefaultPort, serverPath, fileName);
             var request = (FtpWebRequest)WebRequest.Create(uriString);
             request.Method = WebRequestMethods.Ftp.UploadFile;
-            request.Credentials = credentials?.ToNetworkCredentials() ?? new NetworkCredential("anonymous", "ftpuser");
+            request.Credentials = (credentials ?? FtpSettings.DefaultCredentials)?.ToNetworkCredentials() ?? new NetworkCredential("anonymous", "ftpuser");
             request.ContentLength = bytes.Length;
 
             using (Stream requestStream = request.GetRequestStream())

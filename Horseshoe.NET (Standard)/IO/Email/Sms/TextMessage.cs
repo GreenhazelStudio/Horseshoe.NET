@@ -18,9 +18,9 @@ namespace Horseshoe.NET.IO.Email.SMS
         {
             if (mobileNumber == null) throw new ValidationException("MobileNumber cannot be null");
             if (!carrier.HasValue) throw new ValidationException("Carrier cannot be null");
-            mobileNumber = SMSUtil.ValidateMobileNumber(mobileNumber);
+            mobileNumber = SmsUtil.ValidateMobileNumber(mobileNumber);
 
-            var recipientAddress = SMSUtil.BuildTextRecipientAddress(mobileNumber, carrier.Value);
+            var recipientAddress = SmsUtil.BuildTextRecipientAddress(mobileNumber, carrier.Value);
 
             PlainEmail.Send
             (

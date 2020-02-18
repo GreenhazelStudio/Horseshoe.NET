@@ -51,15 +51,13 @@ namespace Horseshoe.NET
             //Set("Bootstrap.ExceptionRendering", Bootstrap.ExceptionRenderingPolicy.Dynamic);
             //Set("Bootstrap.AutoCloseable", true);
 
-            //Set("Cryptography.SymmetricAlgorithm", new System.Security.Cryptography.RijndaelManaged());
-            //Set("Cryptography.SymmetricKey", Encoding.Default.GetBytes("my-$3¢ü®3-password"));
-            //Set("Cryptography.SymmetricKey", "my-$3¢ü®3-password");
-            //Set("Cryptography.SymmetricKeySize", 128);
-            //Set("Cryptography.SymmetricBlockSize", 128);
-            //Set("Cryptography.SymmetricPaddingMode", System.Security.Cryptography.PaddingMode.None);
+            //Set("Cryptography.SymmetricAlgorithm", new System.Security.Cryptography.AesCryptoServiceProvider());
             //Set("Cryptography.HashAlgorithm", new System.Security.Cryptography.SHA256CryptoServiceProvider());
-            //Set("Cryptography.HashSalt", 240); // or byte.Parse("F0", NumberStyles.HexNumber)
-            //Set("Cryptography.Encoding", new UTF8Encoding()); // or "System.Text.UTF8Encoding"
+            //Set("Cryptography.Encoding", new UTF8Encoding());
+
+            //Set("Ftp.Server", "ftp.myorganization.com");  // or "11.22.33.44"
+            //Set("Ftp.Port", 21);
+            //Set("Ftp.Credentials", new Credential("FtpUser", "gyHt82bNmre457sjd709Aq1==", isEncryptedPassword: true));
 
             //Set("Odbc.ConnectionString", "Driver={Oracle in OraClient11g_home1};Server=DBSVR01;Uid=OdbcUser;Pwd=gyHt82bNmre457sjd709Aq1==;");
             //Set("Odbc.IsEncryptedPassword", true);
@@ -85,6 +83,14 @@ namespace Horseshoe.NET
             //Set("OracleDb.Timeout", 30);
             //Set("OracleDb.ServerList", "ORADBSVR01|'NAME'11.22.33.44:9999;SERVICE1|ORADBSVR02:9999;SERVICE1;INSTANCE1");
 
+            //Set("Smtp.Server", "smtp.myorganization.com");
+            //Set("Smtp.Port", 25);
+            //Set("Smtp.EnableSSL", false);
+            //Set("Smtp.Credentials", new Credential("SmtpUser", "gyHt82bNmre457sjd709Aq1==", isEncryptedPassword: true));
+            //Set("Email.From", "noreply@myorganization.com");
+            //Set("Email.Footer", "This is an automated email message.  If you have questions please call customer service at 1-800-000-0000.");
+            //Set("Sms.From", "sms@myorganization.com");
+
             //Set("SqlDb.ConnectionString", "Data Source;Server=DBSVR01;Initial Catalog=MyDatabase;User ID=SqlUser;Password=gyHt82bNmre457sjd709Aq1==;");
             //Set("SqlDb.IsEncryptedPassword", true);
             //Set("SqlDb.Server", "DBSVR01;2008R2");  // or 'NAME'11.22.33.44:9999;2012 or DBSVR01 (lookup / versionless)
@@ -94,14 +100,6 @@ namespace Horseshoe.NET
             //Set("SqlDb.AdditionalConnectionAttributes", "Integrated Security=SSQI|Attribute1=Value1");
             //Set("SqlDb.Timeout", 30);
             //Set("SqlDb.ServerList", "DBSVR01|'NAME'11.22.33.44:9999;2012|DBSVR02;2008R2");
-
-            //Set("Email.SmtpServer", "smtp.myorganization.com");
-            //Set("Email.SmtpPort", 25);
-            //Set("Email.EnableSSL", false);
-            //Set("Email.Credentials", new Credential("SmtpUser", "gyHt82bNmre457sjd709Aq1==", isEncryptedPassword: true));
-            //Set("Email.From", "noreply@myorganization.com");
-            //Set("Email.FooterText", "This is an automated email message.  If you have questions please call customer service at 1-800-000-0000.");
-            //Set("Email.SMS.From", "sms@myorganization.com");
 
             //Set("ReportingServices.ReportServer", "http://reports.mycompany.com/ReportServer");
 

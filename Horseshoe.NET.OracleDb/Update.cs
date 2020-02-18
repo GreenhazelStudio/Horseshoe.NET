@@ -5,6 +5,7 @@ using System.Data.Common;
 using System.Linq;
 using System.Text;
 
+using Horseshoe.NET.Cryptography;
 using Horseshoe.NET.Db;
 using Horseshoe.NET.Text;
 
@@ -14,9 +15,17 @@ namespace Horseshoe.NET.OracleDb
 {
     public static class Update
     {
-        public static int Table(string tableName, IEnumerable<Column> columns, Filter where = null, OraConnectionInfo connectionInfo = null, int? timeout = null)
+        public static int Table
+        (
+            string tableName, 
+            IEnumerable<Column> columns, 
+            Filter where = null, 
+            OraConnectionInfo connectionInfo = null, 
+            int? timeout = null,
+            CryptoOptions options = null
+        )
         {
-            using (var conn = OracleUtil.LaunchConnection(connectionInfo as OraConnectionInfo))
+            using (var conn = OracleUtil.LaunchConnection(connectionInfo, options: options))
             {
                 return Table(conn, tableName, columns, where: where, timeout: timeout);
             }

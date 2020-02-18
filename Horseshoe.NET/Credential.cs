@@ -6,7 +6,7 @@ namespace Horseshoe.NET
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1815:Override equals and operator equals on value types", Justification = "Should only be used to authenticate, never compared or sorted")]
     public struct Credential : IDisposable
     {
-        public string UserID { get; }
+        public string UserName { get; }
 
         public string Password { get; }
 
@@ -18,36 +18,36 @@ namespace Horseshoe.NET
 
         public string Domain { get; }
 
-        private Credential(string userID, string domain = null)
+        private Credential(string userName, string domain = null)
         {
-            UserID = userID ?? throw new ArgumentNullException(nameof(userID));
+            UserName = userName ?? throw new ArgumentNullException(nameof(userName));
             Password = null;
             IsEncryptedPassword = false;
             SecurePassword = null;
             Domain = domain;
         }
 
-        public Credential(string userID, string password, bool isEncryptedPassword = false, string domain = null) : this(userID, domain: domain)
+        public Credential(string userName, string password, bool isEncryptedPassword = false, string domain = null) : this(userName, domain: domain)
         {
             Password = password;
             IsEncryptedPassword = password != null && isEncryptedPassword;
         }
 
-        public Credential(string userID, SecureString securePassword, string domain = null) : this(userID, domain: domain)
+        public Credential(string userName, SecureString securePassword, string domain = null) : this(userName, domain: domain)
         {
             SecurePassword = securePassword ?? throw new ArgumentNullException(nameof(securePassword));
         }
 
-        public static Credential? Build(string userID, string password, bool isEncryptedPassword = false, string domain = null)
+        public static Credential? Build(string userName, string password, bool isEncryptedPassword = false, string domain = null)
         {
-            if (userID == null) return null;
-            return new Credential(userID, password, isEncryptedPassword: isEncryptedPassword, domain: domain);
+            if (userName == null) return null;
+            return new Credential(userName, password, isEncryptedPassword: isEncryptedPassword, domain: domain);
         }
 
-        public static Credential? Build(string userID, SecureString securePassword, string domain = null)
+        public static Credential? Build(string userName, SecureString securePassword, string domain = null)
         {
-            if (userID == null) return null;
-            return new Credential(userID, securePassword, domain: domain);
+            if (userName == null) return null;
+            return new Credential(userName, securePassword, domain: domain);
         }
 
         public void Dispose()

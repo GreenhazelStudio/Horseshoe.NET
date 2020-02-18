@@ -6,6 +6,7 @@ using System.Data.OleDb;
 using System.Linq;
 using System.Text;
 
+using Horseshoe.NET.Cryptography;
 using Horseshoe.NET.Db;
 using Horseshoe.NET.Text;
 
@@ -19,10 +20,11 @@ namespace Horseshoe.NET.OleDb
             IEnumerable<Column> columns,
             OleDbConnectionInfo connectionInfo = null,
             int? timeout = null,
-            DbProduct? product = null
+            DbProduct? product = null,
+            CryptoOptions options = null
         )
         {
-            using (var conn = OleDbUtil.LaunchConnection(connectionInfo))
+            using (var conn = OleDbUtil.LaunchConnection(connectionInfo, options: options))
             {
                 return Table(conn, tableName, columns, timeout: timeout, product: product);
             }
@@ -56,10 +58,11 @@ namespace Horseshoe.NET.OleDb
             out int identity,
             OleDbConnectionInfo connectionInfo = null,
             int? timeout = null,
-            DbProduct? product = null
+            DbProduct? product = null,
+            CryptoOptions options = null
         )
         {
-            using (var conn = OleDbUtil.LaunchConnection(connectionInfo))
+            using (var conn = OleDbUtil.LaunchConnection(connectionInfo, options: options))
             {
                 return Table(conn, tableName, columns, out identity, timeout: timeout, product: product);
             }

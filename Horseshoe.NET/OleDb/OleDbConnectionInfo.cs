@@ -62,7 +62,7 @@ namespace Horseshoe.NET.OleDb
             // credentials
             if (Settings.DefaultCredentials.HasValue)
             {
-                sb.Append(";User ID=" + Credentials.Value.UserID);
+                sb.Append(";User ID=" + Credentials.Value.UserName);
                 if (Credentials.Value.HasSecurePassword)
                 {
                     sb.Append(";Password=" + Credentials.Value.SecurePassword.ToUnsecureString());

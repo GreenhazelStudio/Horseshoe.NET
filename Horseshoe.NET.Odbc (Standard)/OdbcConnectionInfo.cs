@@ -62,7 +62,7 @@ namespace Horseshoe.NET.Odbc
             // credentials
             if (Settings.DefaultCredentials.HasValue)
             {
-                sb.Append(";UID=" + Credentials.Value.UserID);
+                sb.Append(";UID=" + Credentials.Value.UserName);
                 if (Credentials.Value.HasSecurePassword)
                 {
                     sb.Append(";PWD=" + Credentials.Value.SecurePassword.ToUnsecureString());

@@ -7,6 +7,7 @@ using System.Text;
 
 using Oracle.ManagedDataAccess.Client;
 
+using Horseshoe.NET.Cryptography;
 using Horseshoe.NET.Db;
 using Horseshoe.NET.Text;
 
@@ -19,10 +20,11 @@ namespace Horseshoe.NET.OracleDb
             string tableName,
             IEnumerable<Column> columns,
             OraConnectionInfo connectionInfo = null,
-            int? timeout = null
+            int? timeout = null,
+            CryptoOptions options = null
         )
         {
-            using (var conn = OracleUtil.LaunchConnection(connectionInfo))
+            using (var conn = OracleUtil.LaunchConnection(connectionInfo, options: options))
             {
                 return Table(conn, tableName, columns, timeout: timeout);
             }
@@ -54,10 +56,11 @@ namespace Horseshoe.NET.OracleDb
             IEnumerable<Column> columns,
             out int identity,
             OraConnectionInfo connectionInfo = null,
-            int? timeout = null
+            int? timeout = null,
+            CryptoOptions options = null
         )
         {
-            using (var conn = OracleUtil.LaunchConnection(connectionInfo))
+            using (var conn = OracleUtil.LaunchConnection(connectionInfo, options: options))
             {
                 return Table(conn, tableName, columns, out identity, timeout: timeout);
             }

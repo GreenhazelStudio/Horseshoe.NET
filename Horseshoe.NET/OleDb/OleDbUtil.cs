@@ -39,7 +39,7 @@ namespace Horseshoe.NET.OleDb
                 // credentials
                 if (Settings.DefaultCredentials.HasValue)
                 {
-                    sb.Append(";User ID=" + Settings.DefaultCredentials.Value.UserID);
+                    sb.Append(";User ID=" + Settings.DefaultCredentials.Value.UserName);
                     if (Settings.DefaultCredentials.Value.HasSecurePassword)
                     {
                         sb.Append(";Password=" + Settings.DefaultCredentials.Value.SecurePassword.ToUnsecureString());
@@ -125,7 +125,7 @@ namespace Horseshoe.NET.OleDb
                 }
                 if (announce)
                 {
-                    DataUtil.UsingCredentials?.Invoke(source, credentials.Value.UserID, passwordDescription);
+                    DataUtil.UsingCredentials?.Invoke(source, credentials.Value.UserName, passwordDescription);
                 }
             }
             return credentials;

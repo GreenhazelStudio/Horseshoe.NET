@@ -199,26 +199,26 @@ namespace Horseshoe.NET.IO.WebServices
                 if (credentials.Value.HasSecurePassword)
                 {
                     request.Credentials = credentials.Value.Domain != null
-                        ? new NetworkCredential(credentials.Value.UserID, credentials.Value.SecurePassword, credentials.Value.Domain)
-                        : new NetworkCredential(credentials.Value.UserID, credentials.Value.SecurePassword);
+                        ? new NetworkCredential(credentials.Value.UserName, credentials.Value.SecurePassword, credentials.Value.Domain)
+                        : new NetworkCredential(credentials.Value.UserName, credentials.Value.SecurePassword);
                 }
                 else if (credentials.Value.IsEncryptedPassword)
                 {
                     request.Credentials = credentials.Value.Domain != null
-                        ? new NetworkCredential(credentials.Value.UserID, WebServiceUtil.DecryptSecure(credentials.Value.Password), credentials.Value.Domain)
-                        : new NetworkCredential(credentials.Value.UserID, WebServiceUtil.DecryptSecure(credentials.Value.Password));
+                        ? new NetworkCredential(credentials.Value.UserName, WebServiceUtil.DecryptSecure(credentials.Value.Password), credentials.Value.Domain)
+                        : new NetworkCredential(credentials.Value.UserName, WebServiceUtil.DecryptSecure(credentials.Value.Password));
                 }
                 else if (credentials.Value.Password != null)
                 {
                     request.Credentials = credentials.Value.Domain != null
-                        ? new NetworkCredential(credentials.Value.UserID, credentials.Value.Password, credentials.Value.Domain)
-                        : new NetworkCredential(credentials.Value.UserID, credentials.Value.Password);
+                        ? new NetworkCredential(credentials.Value.UserName, credentials.Value.Password, credentials.Value.Domain)
+                        : new NetworkCredential(credentials.Value.UserName, credentials.Value.Password);
                 }
                 else
                 {
                     request.Credentials = credentials.Value.Domain != null
-                        ? new NetworkCredential(credentials.Value.UserID, null as string, credentials.Value.Domain)
-                        : new NetworkCredential(credentials.Value.UserID, null as string);
+                        ? new NetworkCredential(credentials.Value.UserName, null as string, credentials.Value.Domain)
+                        : new NetworkCredential(credentials.Value.UserName, null as string);
                 }
             }
 
@@ -250,26 +250,26 @@ namespace Horseshoe.NET.IO.WebServices
                 if (credentials.Value.HasSecurePassword)
                 {
                     request.Credentials = credentials.Value.Domain != null
-                        ? new NetworkCredential(credentials.Value.UserID, credentials.Value.SecurePassword, credentials.Value.Domain)
-                        : new NetworkCredential(credentials.Value.UserID, credentials.Value.SecurePassword);
+                        ? new NetworkCredential(credentials.Value.UserName, credentials.Value.SecurePassword, credentials.Value.Domain)
+                        : new NetworkCredential(credentials.Value.UserName, credentials.Value.SecurePassword);
                 }
                 else if (credentials.Value.IsEncryptedPassword)
                 {
                     request.Credentials = credentials.Value.Domain != null
-                        ? new NetworkCredential(credentials.Value.UserID, WebServiceUtil.DecryptSecure(credentials.Value.Password), credentials.Value.Domain)
-                        : new NetworkCredential(credentials.Value.UserID, WebServiceUtil.DecryptSecure(credentials.Value.Password));
+                        ? new NetworkCredential(credentials.Value.UserName, WebServiceUtil.DecryptSecure(credentials.Value.Password), credentials.Value.Domain)
+                        : new NetworkCredential(credentials.Value.UserName, WebServiceUtil.DecryptSecure(credentials.Value.Password));
                 }
                 else if (credentials.Value.Password != null)
                 {
                     request.Credentials = credentials.Value.Domain != null
-                        ? new NetworkCredential(credentials.Value.UserID, credentials.Value.Password, credentials.Value.Domain)
-                        : new NetworkCredential(credentials.Value.UserID, credentials.Value.Password);
+                        ? new NetworkCredential(credentials.Value.UserName, credentials.Value.Password, credentials.Value.Domain)
+                        : new NetworkCredential(credentials.Value.UserName, credentials.Value.Password);
                 }
                 else
                 {
                     request.Credentials = credentials.Value.Domain != null
-                        ? new NetworkCredential(credentials.Value.UserID, null as string, credentials.Value.Domain)
-                        : new NetworkCredential(credentials.Value.UserID, null as string);
+                        ? new NetworkCredential(credentials.Value.UserName, null as string, credentials.Value.Domain)
+                        : new NetworkCredential(credentials.Value.UserName, null as string);
                 }
             }
 
@@ -301,26 +301,26 @@ namespace Horseshoe.NET.IO.WebServices
                 if (credentials.Value.HasSecurePassword)
                 {
                     request.Credentials = credentials.Value.Domain != null
-                        ? new NetworkCredential(credentials.Value.UserID, credentials.Value.SecurePassword, credentials.Value.Domain)
-                        : new NetworkCredential(credentials.Value.UserID, credentials.Value.SecurePassword);
+                        ? new NetworkCredential(credentials.Value.UserName, credentials.Value.SecurePassword, credentials.Value.Domain)
+                        : new NetworkCredential(credentials.Value.UserName, credentials.Value.SecurePassword);
                 }
                 else if (credentials.Value.IsEncryptedPassword)
                 {
                     request.Credentials = credentials.Value.Domain != null
-                        ? new NetworkCredential(credentials.Value.UserID, WebServiceUtil.DecryptSecure(credentials.Value.Password), credentials.Value.Domain)
-                        : new NetworkCredential(credentials.Value.UserID, WebServiceUtil.DecryptSecure(credentials.Value.Password));
+                        ? new NetworkCredential(credentials.Value.UserName, WebServiceUtil.DecryptSecure(credentials.Value.Password), credentials.Value.Domain)
+                        : new NetworkCredential(credentials.Value.UserName, WebServiceUtil.DecryptSecure(credentials.Value.Password));
                 }
                 else if (credentials.Value.Password != null)
                 {
                     request.Credentials = credentials.Value.Domain != null
-                        ? new NetworkCredential(credentials.Value.UserID, credentials.Value.Password, credentials.Value.Domain)
-                        : new NetworkCredential(credentials.Value.UserID, credentials.Value.Password);
+                        ? new NetworkCredential(credentials.Value.UserName, credentials.Value.Password, credentials.Value.Domain)
+                        : new NetworkCredential(credentials.Value.UserName, credentials.Value.Password);
                 }
                 else
                 {
                     request.Credentials = credentials.Value.Domain != null
-                        ? new NetworkCredential(credentials.Value.UserID, null as string, credentials.Value.Domain)
-                        : new NetworkCredential(credentials.Value.UserID, null as string);
+                        ? new NetworkCredential(credentials.Value.UserName, null as string, credentials.Value.Domain)
+                        : new NetworkCredential(credentials.Value.UserName, null as string);
                 }
             }
 
@@ -367,26 +367,26 @@ namespace Horseshoe.NET.IO.WebServices
                 if (credentials.Value.HasSecurePassword)
                 {
                     request.Credentials = credentials.Value.Domain != null
-                        ? new NetworkCredential(credentials.Value.UserID, credentials.Value.SecurePassword, credentials.Value.Domain)
-                        : new NetworkCredential(credentials.Value.UserID, credentials.Value.SecurePassword);
+                        ? new NetworkCredential(credentials.Value.UserName, credentials.Value.SecurePassword, credentials.Value.Domain)
+                        : new NetworkCredential(credentials.Value.UserName, credentials.Value.SecurePassword);
                 }
                 else if (credentials.Value.IsEncryptedPassword)
                 {
                     request.Credentials = credentials.Value.Domain != null
-                        ? new NetworkCredential(credentials.Value.UserID, WebServiceUtil.DecryptSecure(credentials.Value.Password), credentials.Value.Domain)
-                        : new NetworkCredential(credentials.Value.UserID, WebServiceUtil.DecryptSecure(credentials.Value.Password));
+                        ? new NetworkCredential(credentials.Value.UserName, WebServiceUtil.DecryptSecure(credentials.Value.Password), credentials.Value.Domain)
+                        : new NetworkCredential(credentials.Value.UserName, WebServiceUtil.DecryptSecure(credentials.Value.Password));
                 }
                 else if (credentials.Value.Password != null)
                 {
                     request.Credentials = credentials.Value.Domain != null
-                        ? new NetworkCredential(credentials.Value.UserID, credentials.Value.Password, credentials.Value.Domain)
-                        : new NetworkCredential(credentials.Value.UserID, credentials.Value.Password);
+                        ? new NetworkCredential(credentials.Value.UserName, credentials.Value.Password, credentials.Value.Domain)
+                        : new NetworkCredential(credentials.Value.UserName, credentials.Value.Password);
                 }
                 else
                 {
                     request.Credentials = credentials.Value.Domain != null
-                        ? new NetworkCredential(credentials.Value.UserID, null as string, credentials.Value.Domain)
-                        : new NetworkCredential(credentials.Value.UserID, null as string);
+                        ? new NetworkCredential(credentials.Value.UserName, null as string, credentials.Value.Domain)
+                        : new NetworkCredential(credentials.Value.UserName, null as string);
                 }
             }
 

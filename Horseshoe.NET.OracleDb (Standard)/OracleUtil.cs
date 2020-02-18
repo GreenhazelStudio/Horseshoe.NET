@@ -142,7 +142,7 @@ namespace Horseshoe.NET.OracleDb
                 }
                 if (announce)
                 {
-                    DataUtil.UsingCredentials?.Invoke(source, credentials.Value.UserID, passwordDescription);
+                    DataUtil.UsingCredentials?.Invoke(source, credentials.Value.UserName, passwordDescription);
                 }
             }
             return credentials;
@@ -294,7 +294,7 @@ namespace Horseshoe.NET.OracleDb
 
             if (credentials.Value.HasSecurePassword)
             {
-                return new OracleCredential(credentials.Value.UserID, credentials.Value.SecurePassword);
+                return new OracleCredential(credentials.Value.UserName, credentials.Value.SecurePassword);
             }
 
             if (credentials.Value.Password != null)
@@ -313,10 +313,10 @@ namespace Horseshoe.NET.OracleDb
                     }
                     securePassword.MakeReadOnly();
                 }
-                return new OracleCredential(credentials.Value.UserID, securePassword);
+                return new OracleCredential(credentials.Value.UserName, securePassword);
             }
 
-            return new OracleCredential(credentials.Value.UserID, null);
+            return new OracleCredential(credentials.Value.UserName, null);
         }
     }
 }

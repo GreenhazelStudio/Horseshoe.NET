@@ -4,7 +4,7 @@ using Horseshoe.NET.Application;
 
 namespace Horseshoe.NET.IO.Ftp
 {
-    public static class Settings
+    public static class FtpSettings
     {
         private static string _defaultFtpServer;
 
@@ -41,6 +41,25 @@ namespace Horseshoe.NET.IO.Ftp
             set
             {
                 _defaultPort = value;
+            }
+        }
+
+        static Credential? _defaultCredentials;
+
+        /// <summary>
+        /// Gets or sets the default credentials used by FTP.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Ftp.UserName|Password|IsEncryptedPassword|Domain and OrganizationalDefaultSettings: key = Ftp.Credentials)
+        /// </summary>
+        public static Credential? DefaultCredentials
+        {
+            get
+            {
+                return _defaultCredentials
+                    ?? Credential.Build(Config.Get("Horseshoe.NET:Ftp.UserName"), Config.Get("Horseshoe.NET:Ftp.Password"), isEncryptedPassword: Config.GetBoolean("Horseshoe.NET:Ftp.IsEncryptedPassword"), domain: Config.Get("Horseshoe.NET:Ftp.Domain"))
+                    ?? OrganizationalDefaultSettings.GetNullable<Credential>("Ftp.Credentials");
+            }
+            set
+            {
+                _defaultCredentials = value;
             }
         }
     }
