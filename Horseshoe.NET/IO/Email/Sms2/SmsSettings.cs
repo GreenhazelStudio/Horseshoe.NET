@@ -8,7 +8,7 @@ using Horseshoe.NET.Application;
 
 namespace Horseshoe.NET.IO.Email.SMS
 {
-    public static class Settings
+    public static class SmsSettings
     {
         static string _defaultFrom;
 
@@ -20,8 +20,8 @@ namespace Horseshoe.NET.IO.Email.SMS
             get
             {
                 return _defaultFrom
-                    ?? Config.Get("Horseshoe.NET:Email.SMS:From")
-                    ?? OrganizationalDefaultSettings.GetString("Email.SMS.From");
+                    ?? Config.Get("Horseshoe.NET:Sms.From")
+                    ?? OrganizationalDefaultSettings.GetString("Sms.From");
             }
             set
             {

@@ -27,7 +27,7 @@ namespace Horseshoe.NET.IO.Email.SMS
                 message,
                 subject,
                 to: recipientAddress,
-                from: from ?? Settings.DefaultFrom,
+                from: from ?? SmsSettings.DefaultFrom,
                 connectionInfo: connectionInfo
             );
             Sent?.Invoke(recipientAddress, message);
