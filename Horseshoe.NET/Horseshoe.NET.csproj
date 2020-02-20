@@ -83,6 +83,7 @@
     <Compile Include="Cryptography\Hash.cs" />
     <Compile Include="Cryptography\HashOptions.cs" />
     <Compile Include="Cryptography\CryptoSettings.cs" />
+    <Compile Include="Dates\Age.cs" />
     <Compile Include="Db\AutoSort.cs" />
     <Compile Include="Db\Column.cs" />
     <Compile Include="Db\ConnectionInfo.cs" />
@@ -95,8 +96,8 @@
     <Compile Include="Db\Internal\SystemValue.cs" />
     <Compile Include="Db\Parameter.cs" />
     <Compile Include="Db\ScalarReaderParser.cs" />
-    <Compile Include="DateDiff.cs" />
-    <Compile Include="DateUtil.cs" />
+    <Compile Include="Dates\DateDiff.cs" />
+    <Compile Include="Dates\DateUtil.cs" />
     <Compile Include="IO\Email\HtmlEmail.cs" />
     <Compile Include="IO\Email\PlainEmail.cs" />
     <Compile Include="IO\Email\EmailSettings.cs" />

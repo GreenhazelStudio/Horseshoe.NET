@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Horseshoe.NET
+namespace Horseshoe.NET.Dates
 {
-    public static class DateDiff
+    public static class DateDiffx
     {
         public static int Years(DateTime from, DateTime to)
         {

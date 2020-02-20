@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Horseshoe.NET
+namespace Horseshoe.NET.Dates
 {
     public static class DateUtil
     {
@@ -58,6 +58,30 @@ namespace Horseshoe.NET
         public static bool SameMonth(DateTime date1, DateTime date2)
         {
             return date1.Year == date2.Year && date1.Month == date2.Month;
+        }
+
+        public static int GetNumberOfDaysInMonth(int year, int month)
+        {
+            switch (month)
+            {
+                case 1:   // Jan
+                case 3:   // Mar
+                case 5:   // May
+                case 7:   // Jul
+                case 8:   // Aug
+                case 10:  // Oct
+                case 12:  // Dec
+                    return 31;
+                case 4:   // Apr
+                case 6:   // Jun
+                case 9:   // Sep
+                case 11:  // Nov
+                    return 30;
+                case 2:   // Feb
+                    return IsLeapYear(year) ? 29 : 28;
+                default:
+                    return -1;
+            }
         }
     }
 }

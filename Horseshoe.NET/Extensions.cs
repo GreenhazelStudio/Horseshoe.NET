@@ -7,6 +7,7 @@ using System.Text;
 
 using Horseshoe.NET.Collections;
 using Horseshoe.NET.Cryptography;
+using Horseshoe.NET.Dates;
 using Horseshoe.NET.Text;
 
 namespace Horseshoe.NET
@@ -150,34 +151,48 @@ namespace Horseshoe.NET
             return string.Join(Environment.NewLine, lines);
         }
 
-        public static int GetAgeInYears(this DateTime from, DateTime? asOf = null)
+        public static Age GetAge(this DateTime from, DateTime? asOf = null, int decimals = -1)
         {
-            return DateDiff.Years(from, asOf ?? DateTime.Now);
+            return new Age(from, asOf ?? DateTime.Now, decimals: decimals);
         }
 
-        public static double GetPreciseAgeInYears(this DateTime from, DateTime? asOf = null, int decimals = -1)
+        public static int GetAgeInYears(this DateTime from, DateTime? asOf = null)
         {
-            return DateDiff.PreciseYears(from, asOf ?? DateTime.Now, decimals: decimals);
+            return new Age(from, asOf ?? DateTime.Now).Years;
+        }
+
+        public static double GetTotalAgeInYears(this DateTime from, DateTime? asOf = null, int decimals = -1)
+        {
+           return new Age(from, asOf ?? DateTime.Now, decimals: decimals).TotalYears;
         }
 
         public static int GetAgeInMonths(this DateTime from, DateTime? asOf = null)
         {
-            return DateDiff.Months(from, asOf ?? DateTime.Now);
+            var age = new Age(from, asOf ?? DateTime.Now);
+            return age.Years * 12 + age.Months;
         }
 
-        public static double GetPreciseAgeInMonths(this DateTime from, DateTime? asOf = null, int decimals = -1)
+        public static double GetTotalAgeInMonths(this DateTime from, DateTime? asOf = null, int decimals = -1)
         {
-            return DateDiff.PreciseMonths(from, asOf ?? DateTime.Now, decimals: decimals);
+            return new Age(from, asOf ?? DateTime.Now, decimals: decimals).TotalMonths;
         }
 
         public static int GetAgeInDays(this DateTime from, DateTime? asOf = null)
         {
-            return DateDiff.Days(from, asOf ?? DateTime.Now);
+            return ((asOf ?? DateTime.Now) - from).Days;
         }
 
-        public static double GetPreciseAgeInDays(this DateTime from, DateTime? asOf = null, int decimals = -1)
+        public static double GetTotalAgeInDays(this DateTime from, DateTime? asOf = null, int decimals = -1)
         {
-            return DateDiff.PreciseDays(from, asOf ?? DateTime.Now, decimals: decimals);
+            var totalDays = ((asOf ?? DateTime.Now) - from).TotalDays;
+            return decimals >= 0
+                ? Math.Round(totalDays, decimals)
+                : totalDays;
+        }
+
+        public static int GetNumberOfDaysInMonth(this DateTime date)
+        {
+            return DateUtil.GetNumberOfDaysInMonth(date.Year, date.Month);
         }
 
         public static bool IsLeapYear(this DateTime date)
