@@ -19,45 +19,45 @@ namespace Horseshoe.NET.OleDb
          * * * * * * * * * * * * * * * * * * * * * * * */
         public static string GetDefaultConnectionString(out string announcePrefix, CryptoOptions options = null)
         {
-            if (Settings.DefaultConnectionString != null)
+            if (OleDbSettings.DefaultConnectionString != null)
             {
                 announcePrefix = "CONFIG CONNSTR";
-                if (Settings.DefaultConnectionStringName != null)
+                if (OleDbSettings.DefaultConnectionStringName != null)
                 {
-                    announcePrefix += "(" + Settings.DefaultConnectionStringName + "?)";
+                    announcePrefix += "(" + OleDbSettings.DefaultConnectionStringName + "?)";
                 }
-                return Settings.DefaultConnectionString;
+                return OleDbSettings.DefaultConnectionString;
             }
 
-            if (Settings.DefaultDataSource != null)
+            if (OleDbSettings.DefaultDataSource != null)
             {
                 announcePrefix = "CONFIG DATASOURCE";
 
                 // data source
-                var sb = new StringBuilder("Data Source=" + Settings.DefaultDataSource);
+                var sb = new StringBuilder("Data Source=" + OleDbSettings.DefaultDataSource);
 
                 // credentials
-                if (Settings.DefaultCredentials.HasValue)
+                if (OleDbSettings.DefaultCredentials.HasValue)
                 {
-                    sb.Append(";User ID=" + Settings.DefaultCredentials.Value.UserName);
-                    if (Settings.DefaultCredentials.Value.HasSecurePassword)
+                    sb.Append(";User ID=" + OleDbSettings.DefaultCredentials.Value.UserName);
+                    if (OleDbSettings.DefaultCredentials.Value.HasSecurePassword)
                     {
-                        sb.Append(";Password=" + Settings.DefaultCredentials.Value.SecurePassword.ToUnsecureString());
+                        sb.Append(";Password=" + OleDbSettings.DefaultCredentials.Value.SecurePassword.ToUnsecureString());
                     }
-                    else if (Settings.DefaultCredentials.Value.IsEncryptedPassword)
+                    else if (OleDbSettings.DefaultCredentials.Value.IsEncryptedPassword)
                     {
-                        sb.Append(";Password=" + Decrypt.String(Settings.DefaultCredentials.Value.Password, options: options));
+                        sb.Append(";Password=" + Decrypt.String(OleDbSettings.DefaultCredentials.Value.Password, options: options));
                     }
-                    else if (Settings.DefaultCredentials.Value.Password != null)
+                    else if (OleDbSettings.DefaultCredentials.Value.Password != null)
                     {
-                        sb.Append(";Password=" + Settings.DefaultCredentials.Value.Password);
+                        sb.Append(";Password=" + OleDbSettings.DefaultCredentials.Value.Password);
                     }
                 }
 
                 // additional attributes
-                if (Settings.DefaultAdditionalConnectionAttributes != null)
+                if (OleDbSettings.DefaultAdditionalConnectionAttributes != null)
                 {
-                    foreach (var kvp in Settings.DefaultAdditionalConnectionAttributes)
+                    foreach (var kvp in OleDbSettings.DefaultAdditionalConnectionAttributes)
                     {
                         sb.Append(";" + kvp.Key + "=" + kvp.Value);
                     }
@@ -102,7 +102,7 @@ namespace Horseshoe.NET.OleDb
             else
             {
                 source = "CONFIG";
-                credentials = Settings.DefaultCredentials;
+                credentials = OleDbSettings.DefaultCredentials;
             }
 
             if (credentials.HasValue)
@@ -187,9 +187,9 @@ namespace Horseshoe.NET.OleDb
                     }
                 }
             }
-            if ((timeout ?? Settings.DefaultTimeout).HasValue)
+            if ((timeout ?? OleDbSettings.DefaultTimeout).HasValue)
             {
-                cmd.CommandTimeout = (timeout ?? Settings.DefaultTimeout).Value;
+                cmd.CommandTimeout = (timeout ?? OleDbSettings.DefaultTimeout).Value;
             }
             return cmd;
         }

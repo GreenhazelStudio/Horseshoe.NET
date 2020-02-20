@@ -29,7 +29,7 @@ namespace Horseshoe.NET.Bootstrap
             public AlertType AlertType { get; set; }
             public string Message { get; set; }
             public string Emphasis { get; set; }
-            public bool Closeable { get { return _closeable ?? Settings.DefaultAutoCloseable; } set { _closeable = value; } }
+            public bool Closeable { get { return _closeable ?? BootstrapSettings.DefaultAutoCloseable; } set { _closeable = value; } }
             public bool EncodeHtml { get; set; }
             public bool Fade { get; set; }
             public bool Show { get; set; }
@@ -339,7 +339,7 @@ namespace Horseshoe.NET.Bootstrap
             ExceptionRenderingPolicy? exceptionRendering = null
         )
         {
-            var resultantErrorRendering = exceptionRendering ?? Settings.DefaultExceptionRendering;
+            var resultantErrorRendering = exceptionRendering ?? BootstrapSettings.DefaultExceptionRendering;
             return CreateAlert
             (
                 alertType ?? AlertType.Error,

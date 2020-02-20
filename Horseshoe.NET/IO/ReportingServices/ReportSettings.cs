@@ -8,7 +8,7 @@ using Horseshoe.NET.Application;
 
 namespace Horseshoe.NET.IO.ReportingServices
 {
-    public static class Settings
+    public static class ReportSettings
     {
         static string _defaultReportServer;
 
@@ -20,7 +20,7 @@ namespace Horseshoe.NET.IO.ReportingServices
             get
             {
                 return _defaultReportServer
-                    ?? Config.Get("Horseshoe.NET:ReportingServices:ReportServer")
+                    ?? Config.Get("Horseshoe.NET:ReportingServices.ReportServer")
                     ?? OrganizationalDefaultSettings.GetString("ReportingServices.ReportServer");
             }
             set

@@ -19,8 +19,8 @@ namespace Horseshoe.NET.OracleDb.Meta
         {
             public static IEnumerable<OraSchema> List(Predicate<OraSchema> filter = null, int? timeout = null)
             {
-                var server = Settings.DefaultServer ?? new OraServer(Settings.DefaultDataSource ?? throw new UtilityException("A default Server or DataSource must be defined to use this method - see Settings or OrganizationDefaultSettings"));
-                using (var conn = OracleUtil.LaunchConnection(connectionInfo: new OraConnectionInfo { Server = server, Credentials = Settings.DefaultCredentials }))
+                var server = OracleSettings.DefaultServer ?? new OraServer(OracleSettings.DefaultDataSource ?? throw new UtilityException("A default Server or DataSource must be defined to use this method - see Settings or OrganizationDefaultSettings"));
+                using (var conn = OracleUtil.LaunchConnection(connectionInfo: new OraConnectionInfo { Server = server, Credentials = OracleSettings.DefaultCredentials }))
                 {
                     return List(conn, server, filter: filter, timeout: timeout);
                 }
@@ -99,12 +99,12 @@ namespace Horseshoe.NET.OracleDb.Meta
             [SuppressMessage("Code Quality", "IDE0068:Use recommended dispose pattern", Justification = "Will be closed by caller")]
             internal static OraSchema Lookup(out OracleConnection conn, string name, bool ignoreCase = false, int? timeout = null)
             {
-                var server = Settings.DefaultServer ?? new OraServer(Settings.DefaultDataSource ?? throw new UtilityException("A default Server or DataSource must be defined to use this method - see Settings or OrganizationDefaultSettings"));
+                var server = OracleSettings.DefaultServer ?? new OraServer(OracleSettings.DefaultDataSource ?? throw new UtilityException("A default Server or DataSource must be defined to use this method - see Settings or OrganizationDefaultSettings"));
                 var filteredList = List
                 (
                     out conn,
                     server,
-                    credentials: Settings.DefaultCredentials,
+                    credentials: OracleSettings.DefaultCredentials,
                     filter: (s) => s.Name.Equals(name, ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal),
                     timeout: timeout
                 ) as List<OraSchema>;
@@ -173,7 +173,7 @@ namespace Horseshoe.NET.OracleDb.Meta
                 (
                     out conn,
                     server,
-                    credentials: credentials ?? Settings.DefaultCredentials,
+                    credentials: credentials ?? OracleSettings.DefaultCredentials,
                     filter: (s) => s.Name.Equals(name, ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal),
                     timeout: timeout
                 ) as List<OraSchema>;
@@ -322,8 +322,8 @@ namespace Horseshoe.NET.OracleDb.Meta
 
             internal static OraObject Lookup(out OracleConnection conn, string name, bool ignoreCase = false, int? timeout = null)
             {
-                var server = Settings.DefaultServer ?? new OraServer(Settings.DefaultDataSource ?? throw new UtilityException("A default Server or DataSource must be defined to use this method - see Settings or OrganizationDefaultSettings"));
-                conn = OracleUtil.LaunchConnection(connectionInfo: new OraConnectionInfo { Server = server, Credentials = Settings.DefaultCredentials });
+                var server = OracleSettings.DefaultServer ?? new OraServer(OracleSettings.DefaultDataSource ?? throw new UtilityException("A default Server or DataSource must be defined to use this method - see Settings or OrganizationDefaultSettings"));
+                conn = OracleUtil.LaunchConnection(connectionInfo: new OraConnectionInfo { Server = server, Credentials = OracleSettings.DefaultCredentials });
                 var filteredList = List    /* uses default server, credentials */
                 (
                     conn,

@@ -20,19 +20,19 @@ namespace Horseshoe.NET.SqlDb
          * * * * * * * * * * * * * * * * * * * * * * * */
         public static string GetDefaultConnectionString(out string announcePrefix)
         {
-            if (Settings.DefaultConnectionString != null)
+            if (SqlSettings.DefaultConnectionString != null)
             {
                 announcePrefix = "CONFIG CONNSTR";
-                if (Settings.DefaultConnectionStringName != null)
+                if (SqlSettings.DefaultConnectionStringName != null)
                 {
-                    announcePrefix += "(" + Settings.DefaultConnectionStringName + "?)";
+                    announcePrefix += "(" + SqlSettings.DefaultConnectionStringName + "?)";
                 }
-                return Settings.DefaultConnectionString;
+                return SqlSettings.DefaultConnectionString;
             }
 
-            if (Settings.DefaultDataSource != null)
+            if (SqlSettings.DefaultDataSource != null)
             {
-                if (Settings.DefaultServer != null)
+                if (SqlSettings.DefaultServer != null)
                 {
                     announcePrefix = "CONFIG SERVER";
                 }
@@ -42,24 +42,24 @@ namespace Horseshoe.NET.SqlDb
                 }
 
                 // data source
-                var sb = new StringBuilder("Data Source=" + Settings.DefaultDataSource.Replace(":", ","));  // DBSVR02:9999 -> Data Source=DBSVR02,9999;...
+                var sb = new StringBuilder("Data Source=" + SqlSettings.DefaultDataSource.Replace(":", ","));  // DBSVR02:9999 -> Data Source=DBSVR02,9999;...
 
                 // initial catalog
-                if (Settings.DefaultInitialCatalog != null)
+                if (SqlSettings.DefaultInitialCatalog != null)
                 {
-                    sb.Append(";Initial Catalog=" + Settings.DefaultInitialCatalog);
+                    sb.Append(";Initial Catalog=" + SqlSettings.DefaultInitialCatalog);
                 }
 
                 // integrated security
-                if (!Settings.DefaultCredentials.HasValue)
+                if (!SqlSettings.DefaultCredentials.HasValue)
                 {
                     sb.Append(";Integrated Security=true");
                 }
 
                 // additional attributes
-                if (Settings.DefaultAdditionalConnectionAttributes != null)
+                if (SqlSettings.DefaultAdditionalConnectionAttributes != null)
                 {
-                    foreach (var kvp in Settings.DefaultAdditionalConnectionAttributes)
+                    foreach (var kvp in SqlSettings.DefaultAdditionalConnectionAttributes)
                     {
                         sb.Append(";" + kvp.Key + "=" + kvp.Value);
                     }
@@ -104,7 +104,7 @@ namespace Horseshoe.NET.SqlDb
             else
             {
                 source = "CONFIG";
-                credentials = Settings.DefaultCredentials;
+                credentials = SqlSettings.DefaultCredentials;
             }
 
             if (credentials.HasValue)
@@ -191,9 +191,9 @@ namespace Horseshoe.NET.SqlDb
                     }
                 }
             }
-            if ((timeout ?? Settings.DefaultTimeout).HasValue)
+            if ((timeout ?? SqlSettings.DefaultTimeout).HasValue)
             {
-                cmd.CommandTimeout = (timeout ?? Settings.DefaultTimeout).Value;
+                cmd.CommandTimeout = (timeout ?? SqlSettings.DefaultTimeout).Value;
             }
             return cmd;
         }

@@ -16,7 +16,7 @@ namespace Horseshoe.NET.IO.ReportingServices
         public static string BuildFileUrl(string reportPath, string reportServer = null, IDictionary<string, object> parameters = null, ReportFormat reportFormat = ReportFormat.PDF, bool announce = false)
         {
             if (reportPath == null) throw new ArgumentNullException(nameof(reportPath));
-            reportServer = reportServer ?? Settings.DefaultReportServer;
+            reportServer = reportServer ?? ReportSettings.DefaultReportServer;
             if (reportServer == null) throw new ArgumentNullException(nameof(reportServer));
             if (reportServer.EndsWith("/")) reportServer = reportServer.Substring(0, reportServer.Length - 1);  // remove trailing slash, if applicable
             var parameterPortionOfQueryString = BuildReportParameterString(parameters);
@@ -38,7 +38,7 @@ namespace Horseshoe.NET.IO.ReportingServices
         public static string BuildHyperlinkUrl(string reportPath, string reportServer = null, IDictionary<string, object> parameters = null, bool announce = false)
         {
             if (reportPath == null) throw new ArgumentNullException(nameof(reportPath));
-            reportServer = reportServer ?? Settings.DefaultReportServer;
+            reportServer = reportServer ?? ReportSettings.DefaultReportServer;
             if (reportServer == null) throw new ArgumentNullException(nameof(reportServer));
             if (reportServer.EndsWith("/")) reportServer = reportServer.Substring(0, reportServer.Length - 1);  // remove trailing slash, if applicable
             var parameterPortionOfQueryString = BuildReportParameterString(parameters);

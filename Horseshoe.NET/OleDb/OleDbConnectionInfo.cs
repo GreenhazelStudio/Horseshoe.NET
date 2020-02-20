@@ -60,7 +60,7 @@ namespace Horseshoe.NET.OleDb
             var sb = new StringBuilder("Data Source=" + DataSource);
 
             // credentials
-            if (Settings.DefaultCredentials.HasValue)
+            if (OleDbSettings.DefaultCredentials.HasValue)
             {
                 sb.Append(";User ID=" + Credentials.Value.UserName);
                 if (Credentials.Value.HasSecurePassword)

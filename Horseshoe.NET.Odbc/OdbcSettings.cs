@@ -6,19 +6,19 @@ using Horseshoe.NET.Db;
 
 namespace Horseshoe.NET.Odbc
 {
-    public static class Settings
+    public static class OdbcSettings
     {
         static string _defaultConnectionStringName;
 
         /// <summary>
-        /// Gets or sets the default ODBC connection string name used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Odbc:ConnectionStringName)
+        /// Gets or sets the default ODBC connection string name used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Odbc.ConnectionStringName)
         /// </summary>
         public static string DefaultConnectionStringName
         {
             get
             {
                 return _defaultConnectionStringName
-                    ?? Config.Get("Horseshoe.NET:Odbc:ConnectionStringName");
+                    ?? Config.Get("Horseshoe.NET:Odbc.ConnectionStringName");
             }
             set
             {
@@ -37,7 +37,7 @@ namespace Horseshoe.NET.Odbc
             get
             {
                 return _GetConnectionString(_defaultConnectionString, _isEncryptedPassword)
-                    ?? _GetConnectionString(Config.GetConnectionString(DefaultConnectionStringName, suppressErrors: true), Config.GetBoolean("Horseshoe.NET:Odbc:IsEncryptedPassword"))
+                    ?? _GetConnectionString(Config.GetConnectionString(DefaultConnectionStringName, suppressErrors: true), Config.GetBoolean("Horseshoe.NET:Odbc.IsEncryptedPassword"))
                     ?? _GetConnectionString(OrganizationalDefaultSettings.GetString("Odbc.ConnectionString"), OrganizationalDefaultSettings.GetBoolean("Odbc.IsEncryptedPassword"));
             }
         }
@@ -62,14 +62,14 @@ namespace Horseshoe.NET.Odbc
         private static string _defaultDataSource;
 
         /// <summary>
-        /// Gets or sets the default ODBC data source used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Odbc:DataSource and OrganizationalDefaultSettings: key = Odbc.DataSource)
+        /// Gets or sets the default ODBC data source used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Odbc.DataSource and OrganizationalDefaultSettings: key = Odbc.DataSource)
         /// </summary>
         public static string DefaultDataSource
         {
             get
             {
                 return _defaultDataSource     // e.g. DBSVR01
-                    ?? Config.Get("Horseshoe.NET:Odbc:DataSource") 
+                    ?? Config.Get("Horseshoe.NET:Odbc.DataSource") 
                     ?? OrganizationalDefaultSettings.GetString("Odbc.DataSource");
             }
             set
@@ -81,7 +81,7 @@ namespace Horseshoe.NET.Odbc
         private static Credential? _defaultCredentials;
 
         /// <summary>
-        /// Gets or sets the default ODBC credentials used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Odbc:UserName|Password and OrganizationalDefaultSettings: key = Odbc.Credentials)
+        /// Gets or sets the default ODBC credentials used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Odbc.UserName|Password and OrganizationalDefaultSettings: key = Odbc.Credentials)
         /// </summary>
         public static Credential? DefaultCredentials
         {
@@ -90,9 +90,9 @@ namespace Horseshoe.NET.Odbc
                 return _defaultCredentials
                     ?? Credential.Build
                     (
-                        Config.Get("Horseshoe.NET:Odbc:UserID"),
-                        Config.Get("Horseshoe.NET:Odbc:Password"),
-                        isEncryptedPassword: Config.GetBoolean("Horseshoe.NET:Odbc:IsEncryptedPassword")
+                        Config.Get("Horseshoe.NET:Odbc.UserID"),
+                        Config.Get("Horseshoe.NET:Odbc.Password"),
+                        isEncryptedPassword: Config.GetBoolean("Horseshoe.NET:Odbc.IsEncryptedPassword")
                     )
                     ?? OrganizationalDefaultSettings.GetNullable<Credential>("Odbc.Credentials");
             }
@@ -105,14 +105,14 @@ namespace Horseshoe.NET.Odbc
         private static IDictionary<string, string> _defaultAdditionalConnectionAttributes;
 
         /// <summary>
-        /// Gets or sets the default additional ODBC connection attributes used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Odbc:AdditionalConnectionAttributes and OrganizationalDefaultSettings: key = Odbc.AdditionalConnectionAttributes)
+        /// Gets or sets the default additional ODBC connection attributes used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Odbc.AdditionalConnectionAttributes and OrganizationalDefaultSettings: key = Odbc.AdditionalConnectionAttributes)
         /// </summary>
         public static IDictionary<string, string> DefaultAdditionalConnectionAttributes
         {
             get
             {
                 return _defaultAdditionalConnectionAttributes      // e.g. Integrated Security=SSQI|Attribute1=Value1
-                    ?? Config.Get("Horseshoe.NET:Odbc:AdditionalConnectionAttributes", parseFunc: (raw) => DataUtil.ParseAdditionalConnectionAttributes(raw)) 
+                    ?? Config.Get("Horseshoe.NET:Odbc.AdditionalConnectionAttributes", parseFunc: (raw) => DataUtil.ParseAdditionalConnectionAttributes(raw)) 
                     ?? OrganizationalDefaultSettings.Get("Odbc.AdditionalConnectionAttributes", parseFunc: (raw) => DataUtil.ParseAdditionalConnectionAttributes((string)raw));
             }
             set
@@ -124,14 +124,14 @@ namespace Horseshoe.NET.Odbc
         private static int? _defaultTimeout;
 
         /// <summary>
-        /// Gets or sets the default ODBC timeout used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Odbc:Timeout and OrganizationalDefaultSettings: key = Odbc.Timeout)
+        /// Gets or sets the default ODBC timeout used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Odbc.Timeout and OrganizationalDefaultSettings: key = Odbc.Timeout)
         /// </summary>
         public static int? DefaultTimeout
         {
             get
             {
                 return _defaultTimeout       // e.g. 30 (Microsoft default?)
-                    ?? Config.GetNInt("Horseshoe.NET:Odbc:Timeout")
+                    ?? Config.GetNInt("Horseshoe.NET:Odbc.Timeout")
                     ?? OrganizationalDefaultSettings.GetNInt("Odbc.Timeout");
             }
             set

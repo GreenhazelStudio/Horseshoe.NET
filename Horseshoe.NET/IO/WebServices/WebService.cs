@@ -193,7 +193,7 @@ namespace Horseshoe.NET.IO.WebServices
             var request = (HttpWebRequest)WebRequest.Create(serviceURL);
             request.ContentType = contentType;
             request.Method = method;
-            credentials = credentials ?? Settings.DefaultCredentials;
+            credentials = credentials ?? WebServiceSettings.DefaultCredentials;
             if (credentials.HasValue)
             {
                 if (credentials.Value.HasSecurePassword)
@@ -244,7 +244,7 @@ namespace Horseshoe.NET.IO.WebServices
             var request = (HttpWebRequest)WebRequest.Create(serviceURL);
             request.ContentType = contentType;
             request.Method = method;
-            credentials = credentials ?? Settings.DefaultCredentials;
+            credentials = credentials ?? WebServiceSettings.DefaultCredentials;
             if (credentials.HasValue)
             {
                 if (credentials.Value.HasSecurePassword)
@@ -295,7 +295,7 @@ namespace Horseshoe.NET.IO.WebServices
             var request = (HttpWebRequest)WebRequest.Create(serviceURL);
             request.ContentType = contentType;
             request.Method = method;
-            credentials = credentials ?? Settings.DefaultCredentials;
+            credentials = credentials ?? WebServiceSettings.DefaultCredentials;
             if (credentials.HasValue)
             {
                 if (credentials.Value.HasSecurePassword)
@@ -361,7 +361,7 @@ namespace Horseshoe.NET.IO.WebServices
             var request = (HttpWebRequest)WebRequest.Create(serviceURL);
             request.ContentType = contentType;
             request.Method = method;
-            credentials = credentials ?? Settings.DefaultCredentials;
+            credentials = credentials ?? WebServiceSettings.DefaultCredentials;
             if (credentials.HasValue)
             {
                 if (credentials.Value.HasSecurePassword)

@@ -60,7 +60,7 @@ namespace Horseshoe.NET.Odbc
             var sb = new StringBuilder("DSN=" + DataSource);
 
             // credentials
-            if (Settings.DefaultCredentials.HasValue)
+            if (OdbcSettings.DefaultCredentials.HasValue)
             {
                 sb.Append(";UID=" + Credentials.Value.UserName);
                 if (Credentials.Value.HasSecurePassword)

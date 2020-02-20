@@ -19,45 +19,45 @@ namespace Horseshoe.NET.Odbc
          * * * * * * * * * * * * * * * * * * * * * * * */
         public static string GetDefaultConnectionString(out string announcePrefix, CryptoOptions options = null)
         {
-            if (Settings.DefaultConnectionString != null)
+            if (OdbcSettings.DefaultConnectionString != null)
             {
                 announcePrefix = "CONFIG CONNSTR";
-                if (Settings.DefaultConnectionStringName != null)
+                if (OdbcSettings.DefaultConnectionStringName != null)
                 {
-                    announcePrefix += "(" + Settings.DefaultConnectionStringName + "?)";
+                    announcePrefix += "(" + OdbcSettings.DefaultConnectionStringName + "?)";
                 }
-                return Settings.DefaultConnectionString;
+                return OdbcSettings.DefaultConnectionString;
             }
 
-            if (Settings.DefaultDataSource != null)
+            if (OdbcSettings.DefaultDataSource != null)
             {
                 announcePrefix = "CONFIG DATASOURCE";
 
                 // data source
-                var sb = new StringBuilder("DSN=" + Settings.DefaultDataSource);
+                var sb = new StringBuilder("DSN=" + OdbcSettings.DefaultDataSource);
 
                 // credentials
-                if (Settings.DefaultCredentials.HasValue)
+                if (OdbcSettings.DefaultCredentials.HasValue)
                 {
-                    sb.Append(";UID=" + Settings.DefaultCredentials.Value.UserName);
-                    if (Settings.DefaultCredentials.Value.HasSecurePassword)
+                    sb.Append(";UID=" + OdbcSettings.DefaultCredentials.Value.UserName);
+                    if (OdbcSettings.DefaultCredentials.Value.HasSecurePassword)
                     {
-                        sb.Append(";PWD=" + Settings.DefaultCredentials.Value.SecurePassword.ToUnsecureString());
+                        sb.Append(";PWD=" + OdbcSettings.DefaultCredentials.Value.SecurePassword.ToUnsecureString());
                     }
-                    else if (Settings.DefaultCredentials.Value.IsEncryptedPassword)
+                    else if (OdbcSettings.DefaultCredentials.Value.IsEncryptedPassword)
                     {
-                        sb.Append(";PWD=" + Decrypt.String(Settings.DefaultCredentials.Value.Password, options: options));
+                        sb.Append(";PWD=" + Decrypt.String(OdbcSettings.DefaultCredentials.Value.Password, options: options));
                     }
-                    else if (Settings.DefaultCredentials.Value.Password != null)
+                    else if (OdbcSettings.DefaultCredentials.Value.Password != null)
                     {
-                        sb.Append(";PWD=" + Settings.DefaultCredentials.Value.Password);
+                        sb.Append(";PWD=" + OdbcSettings.DefaultCredentials.Value.Password);
                     }
                 }
 
                 // additional attributes
-                if (Settings.DefaultAdditionalConnectionAttributes != null)
+                if (OdbcSettings.DefaultAdditionalConnectionAttributes != null)
                 {
-                    foreach (var kvp in Settings.DefaultAdditionalConnectionAttributes)
+                    foreach (var kvp in OdbcSettings.DefaultAdditionalConnectionAttributes)
                     {
                         sb.Append(";" + kvp.Key + "=" + kvp.Value);
                     }
@@ -102,7 +102,7 @@ namespace Horseshoe.NET.Odbc
             else
             {
                 source = "CONFIG";
-                credentials = Settings.DefaultCredentials;
+                credentials = OdbcSettings.DefaultCredentials;
             }
 
             if (credentials.HasValue)
@@ -188,9 +188,9 @@ namespace Horseshoe.NET.Odbc
                     }
                 }
             }
-            if ((timeout ?? Settings.DefaultTimeout).HasValue)
+            if ((timeout ?? OdbcSettings.DefaultTimeout).HasValue)
             {
-                cmd.CommandTimeout = (timeout ?? Settings.DefaultTimeout).Value;
+                cmd.CommandTimeout = (timeout ?? OdbcSettings.DefaultTimeout).Value;
             }
             return cmd;
         }

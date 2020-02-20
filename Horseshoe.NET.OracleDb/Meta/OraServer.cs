@@ -25,7 +25,7 @@ namespace Horseshoe.NET.OracleDb.Meta
 
         public static IEnumerable<OraServer> LookupAll()
         {
-            return Settings.ServerList;
+            return OracleSettings.ServerList;
         }
 
         public static OraServer Lookup(string nameOrDataSource, bool suppressErrors = false)

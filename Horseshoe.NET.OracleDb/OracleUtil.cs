@@ -25,19 +25,19 @@ namespace Horseshoe.NET.OracleDb
          * * * * * * * * * * * * * * * * * * * * * * * */
         public static string GetDefaultConnectionString(out string announcePrefix)   // Uses EZ Connect style connection string
         {
-            if (Settings.DefaultConnectionString != null)
+            if (OracleSettings.DefaultConnectionString != null)
             {
                 announcePrefix = "CONFIG CONNSTR";
-                if (Settings.DefaultConnectionStringName != null)
+                if (OracleSettings.DefaultConnectionStringName != null)
                 {
-                    announcePrefix += "(" + Settings.DefaultConnectionStringName + "?)";
+                    announcePrefix += "(" + OracleSettings.DefaultConnectionStringName + "?)";
                 }
-                return Settings.DefaultConnectionString;
+                return OracleSettings.DefaultConnectionString;
             }
 
-            if (Settings.DefaultDataSource != null)
+            if (OracleSettings.DefaultDataSource != null)
             {
-                if (Settings.DefaultServer != null)
+                if (OracleSettings.DefaultServer != null)
                 {
                     announcePrefix = "CONFIG SERVER";
                 }
@@ -47,29 +47,29 @@ namespace Horseshoe.NET.OracleDb
                 }
 
                 // data source
-                var sb = new StringBuilder("Data Source=//" + Settings.DefaultDataSource);  // e.g. Settings.DefaultServer.DataSource (includes port)
+                var sb = new StringBuilder("Data Source=//" + OracleSettings.DefaultDataSource);  // e.g. Settings.DefaultServer.DataSource (includes port)
 
                 // server attributes
-                if (Settings.DefaultServer != null)
+                if (OracleSettings.DefaultServer != null)
                 {
-                    if (Settings.DefaultServer.ServiceName != null || Settings.DefaultServer.InstanceName != null)
+                    if (OracleSettings.DefaultServer.ServiceName != null || OracleSettings.DefaultServer.InstanceName != null)
                     {
                         sb.Append("/");
-                        if (Settings.DefaultServer.ServiceName != null)
+                        if (OracleSettings.DefaultServer.ServiceName != null)
                         {
-                            sb.Append(Settings.DefaultServer.ServiceName);
+                            sb.Append(OracleSettings.DefaultServer.ServiceName);
                         }
-                        if (Settings.DefaultServer.InstanceName != null)
+                        if (OracleSettings.DefaultServer.InstanceName != null)
                         {
-                            sb.Append("/" + Settings.DefaultServer.InstanceName);
+                            sb.Append("/" + OracleSettings.DefaultServer.InstanceName);
                         }
                     }
                 }
 
                 // additional attributes
-                if (Settings.DefaultAdditionalConnectionAttributes != null)
+                if (OracleSettings.DefaultAdditionalConnectionAttributes != null)
                 {
-                    foreach (var kvp in Settings.DefaultAdditionalConnectionAttributes)
+                    foreach (var kvp in OracleSettings.DefaultAdditionalConnectionAttributes)
                     {
                         sb.Append(";" + kvp.Key + "=" + kvp.Value);
                     }
@@ -83,7 +83,7 @@ namespace Horseshoe.NET.OracleDb
 
         public static OracleCredential GetDefaultOracleCredentials()
         {
-            return GetOracleCredentials(Settings.DefaultCredentials);
+            return GetOracleCredentials(OracleSettings.DefaultCredentials);
         }
 
         public static string WhichConnectionString(OraConnectionInfo connectionInfo = null, bool announce = false)
@@ -119,7 +119,7 @@ namespace Horseshoe.NET.OracleDb
             else
             {
                 source = "CONFIG";
-                credentials = Settings.DefaultCredentials;
+                credentials = OracleSettings.DefaultCredentials;
             }
 
             if (credentials.HasValue)
@@ -210,9 +210,9 @@ namespace Horseshoe.NET.OracleDb
                     }
                 }
             }
-            if ((timeout ?? Settings.DefaultTimeout).HasValue)
+            if ((timeout ?? OracleSettings.DefaultTimeout).HasValue)
             {
-                cmd.CommandTimeout = (timeout ?? Settings.DefaultTimeout).Value;
+                cmd.CommandTimeout = (timeout ?? OracleSettings.DefaultTimeout).Value;
             }
             return cmd;
         }

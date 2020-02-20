@@ -12,7 +12,7 @@ namespace Horseshoe.NET.Cryptography
         private static SymmetricAlgorithm _defaultSymmetricAlgorithm;
 
         /// <summary>
-        /// Gets or sets the default symmetric algorithm used by Cryptography.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Cryptography.SymmetricAlgorithm and OrganizationalDefaultSettings: key = Cryptography.SymmetricAlgorithm)
+        /// Gets or sets the default symmetric algorithm used by Cryptography.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Crypto.SymmetricAlgorithm and OrganizationalDefaultSettings: key = Cryptography.SymmetricAlgorithm)
         /// </summary>
         public static SymmetricAlgorithm DefaultSymmetricAlgorithm
         {
@@ -22,16 +22,16 @@ namespace Horseshoe.NET.Cryptography
                 {
                     _defaultSymmetricAlgorithm = CryptoUtil.BuildSymmetricAlgorithm
                     (
-                        Config.Get<SymmetricAlgorithm>("Horseshoe.NET:Cryptography.SymmetricAlgorithm"),   // e.g. "System.Security.Cryptography.AesCryptoServiceProvider"
-                        Config.GetBytes("Horseshoe.NET:Cryptography.SymmetricKey", encoding: DefaultEncoding),
+                        Config.Get<SymmetricAlgorithm>("Horseshoe.NET:Crypto.SymmetricAlgorithm"),   // e.g. "System.Security.Cryptography.AesCryptoServiceProvider"
+                        Config.GetBytes("Horseshoe.NET:Crypto.SymmetricKey", encoding: DefaultEncoding),
                         false,
-                        Config.GetBytes("Horseshoe.NET:Cryptography.SymmetricIV", encoding: DefaultEncoding),
+                        Config.GetBytes("Horseshoe.NET:Crypto.SymmetricIV", encoding: DefaultEncoding),
                         true,
-                        Config.GetNInt("Horseshoe.NET:Cryptography.SymmetricBlockSize"),
-                        Config.GetNEnum<CipherMode>("Horseshoe.NET:Cryptography.SymmetricCipherMode"),
-                        Config.GetNEnum<PaddingMode>("Horseshoe.NET:Cryptography.SymmetricPadding")
+                        Config.GetNInt("Horseshoe.NET:Crypto.SymmetricBlockSize"),
+                        Config.GetNEnum<CipherMode>("Horseshoe.NET:Crypto.SymmetricCipherMode"),
+                        Config.GetNEnum<PaddingMode>("Horseshoe.NET:Crypto.SymmetricPadding")
                     )
-                    ?? OrganizationalDefaultSettings.Get<SymmetricAlgorithm>("Cryptography.SymmetricAlgorithm")
+                    ?? OrganizationalDefaultSettings.Get<SymmetricAlgorithm>("Crypto.SymmetricAlgorithm")
                     ?? CryptoUtil.BuildSymmetricAlgorithm(new RijndaelManaged(), DefaultEncoding.GetBytes("k+ (&tw!tBv~$6u7"), false, null, true, null, null, null);
                 }
                 return _defaultSymmetricAlgorithm;
@@ -45,15 +45,15 @@ namespace Horseshoe.NET.Cryptography
         private static HashAlgorithm _defaultHashAlgorithm;
 
         /// <summary>
-        /// Gets or sets the default hash algorithm used by Cryptography.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Cryptography.HashAlgorithm and OrganizationalDefaultSettings: key = Cryptography.HashAlgorithm)
+        /// Gets or sets the default hash algorithm used by Cryptography.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Crypto.HashAlgorithm and OrganizationalDefaultSettings: key = Cryptography.HashAlgorithm)
         /// </summary>
         public static HashAlgorithm DefaultHashAlgorithm
         {
             get
             {
                 return _defaultHashAlgorithm  // example "System.Security.Cryptography.SHA256CryptoServiceProvider"
-                    ?? Config.Get<HashAlgorithm>("Horseshoe.NET:Cryptography.HashAlgorithm")
-                    ?? OrganizationalDefaultSettings.Get<HashAlgorithm>("Cryptography.HashAlgorithm")
+                    ?? Config.Get<HashAlgorithm>("Horseshoe.NET:Crypto.HashAlgorithm")
+                    ?? OrganizationalDefaultSettings.Get<HashAlgorithm>("Crypto.HashAlgorithm")
                     ?? new SHA1CryptoServiceProvider();
             }
             set
@@ -65,15 +65,15 @@ namespace Horseshoe.NET.Cryptography
         static byte? _defaultHashSalt;
 
         /// <summary>
-        /// Gets or sets the default hash salt used by Cryptography.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Cryptography.HashSalt and OrganizationalDefaultSettings: key = Cryptography.HashSalt)
+        /// Gets or sets the default hash salt used by Cryptography.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Crypto.HashSalt and OrganizationalDefaultSettings: key = Cryptography.HashSalt)
         /// </summary>
         public static byte? DefaultHashSalt
         {
             get
             {
                 return _defaultHashSalt
-                    ?? Config.GetNByte("Horseshoe.NET:Cryptography.HashSalt")    // example: 240 or HashSalt[hex] F0
-                    ?? OrganizationalDefaultSettings.GetNByte("Cryptography.HashSalt");
+                    ?? Config.GetNByte("Horseshoe.NET:Crypto.HashSalt")    // example: 240 or HashSalt[hex] F0
+                    ?? OrganizationalDefaultSettings.GetNByte("Crypto.HashSalt");
             }
             set
             {
@@ -84,15 +84,15 @@ namespace Horseshoe.NET.Cryptography
         static Encoding _defaultEncoding;
 
         /// <summary>
-        /// Gets or sets the text encoding used by Cryptography. Defaults to UTF8Encoding. Note: Override by passing directly to a Cryptography function or via config file: key = "Horseshoe.NET:Cryptography.Encoding"
+        /// Gets or sets the text encoding used by Cryptography. Defaults to UTF8Encoding. Note: Override by passing directly to a Cryptography function or via config file: key = "Horseshoe.NET:Crypto.Encoding"
         /// </summary>
         public static Encoding DefaultEncoding
         {
             get
             {
                 return _defaultEncoding
-                    ?? ObjectUtil.GetInstance<Encoding>(Config.Get("Horseshoe.NET:Cryptography.Encoding"), suppressErrors: true)   // example: "System.Text.UTF8Encoding"
-                    ?? OrganizationalDefaultSettings.Get<Encoding>("Cryptography.Encoding")
+                    ?? ObjectUtil.GetInstance<Encoding>(Config.Get("Horseshoe.NET:Crypto.Encoding"), suppressErrors: true)   // example: "System.Text.UTF8Encoding"
+                    ?? OrganizationalDefaultSettings.Get<Encoding>("Crypto.Encoding")
                     ?? Encoding.Default;
             }
             set

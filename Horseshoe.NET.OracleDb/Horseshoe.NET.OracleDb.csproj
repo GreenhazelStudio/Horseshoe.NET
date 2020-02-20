@@ -63,7 +63,7 @@
     <Compile Include="OraParameter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query.cs" />
-    <Compile Include="Settings.cs" />
+    <Compile Include="OracleSettings.cs" />
     <Compile Include="Update.cs" />
   </ItemGroup>
   <ItemGroup>

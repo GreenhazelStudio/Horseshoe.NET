@@ -55,6 +55,13 @@ namespace Horseshoe.NET
             //Set("Cryptography.HashAlgorithm", new System.Security.Cryptography.SHA256CryptoServiceProvider());
             //Set("Cryptography.Encoding", new UTF8Encoding());
 
+            //Set("Email.SmtpServer", "smtp.myorganization.com");
+            //Set("Email.SmtpPort", 25);
+            //Set("Email.SmtpEnableSSL", false);
+            //Set("Email.SmtpCredentials", new Credential("SmtpUser", "gyHt82bNmre457sjd709Aq1==", isEncryptedPassword: true));
+            //Set("Email.From", "noreply@myorganization.com");
+            //Set("Email.Footer", "This is an automated email message.  If you have questions please call customer service at 1-800-000-0000.");
+
             //Set("Ftp.Server", "ftp.myorganization.com");  // or "11.22.33.44"
             //Set("Ftp.Port", 21);
             //Set("Ftp.Credentials", new Credential("FtpUser", "gyHt82bNmre457sjd709Aq1==", isEncryptedPassword: true));
@@ -73,37 +80,31 @@ namespace Horseshoe.NET
             //Set("OleDb.AdditionalConnectionAttributes", "Integrated Security=SSQI|Attribute1=Value1");
             //Set("OleDb.Timeout", 30);
 
-            //Set("OracleDb.ConnectionString", "Data Source=//11.22.33.44:9999/SERVICE1;User ID=OracleUser;Password=gyHt82bNmre457sjd709Aq1==;");  // EZConnect
-            //Set("OracleDb.ConnectionString", "Data Source=ORADBSVR01;User ID=OracleUser;Password=gyHt82bNmre457sjd709Aq1==;");
-            //Set("OracleDb.IsEncryptedPassword", true);
-            //Set("OracleDb.Server", "ORADBSVR01");  // or 'NAME'11.22.33.44:9999;SERVICE1 or ORADBSVR02:9999;SERVICE1;INSTANCE1
-            //Set("OracleDb.DataSource", "ORADBSVR01");
-            //Set("OracleDb.Credentials", new Credential("OracleUser", "gyHt82bNmre457sjd709Aq1==", isEncryptedPassword: true));
-            //Set("OracleDb.AdditionalConnectionAttributes", "Integrated Security=SSQI|Attribute1=Value1");
-            //Set("OracleDb.Timeout", 30);
-            //Set("OracleDb.ServerList", "ORADBSVR01|'NAME'11.22.33.44:9999;SERVICE1|ORADBSVR02:9999;SERVICE1;INSTANCE1");
+            //Set("Oracle.ConnectionString", "Data Source=//11.22.33.44:9999/SERVICE1;User ID=OracleUser;Password=gyHt82bNmre457sjd709Aq1==;");  // EZConnect
+            //Set("Oracle.ConnectionString", "Data Source=ORADBSVR01;User ID=OracleUser;Password=gyHt82bNmre457sjd709Aq1==;");
+            //Set("Oracle.IsEncryptedPassword", true);
+            //Set("Oracle.Server", "ORADBSVR01");  // or 'NAME'11.22.33.44:9999;SERVICE1 or ORADBSVR02:9999;SERVICE1;INSTANCE1
+            //Set("Oracle.DataSource", "ORADBSVR01");
+            //Set("Oracle.Credentials", new Credential("OracleUser", "gyHt82bNmre457sjd709Aq1==", isEncryptedPassword: true));
+            //Set("Oracle.AdditionalConnectionAttributes", "Integrated Security=SSQI|Attribute1=Value1");
+            //Set("Oracle.Timeout", 30);
+            //Set("Oracle.ServerList", "ORADBSVR01|'NAME'11.22.33.44:9999;SERVICE1|ORADBSVR02:9999;SERVICE1;INSTANCE1");
 
-            //Set("Smtp.Server", "smtp.myorganization.com");
-            //Set("Smtp.Port", 25);
-            //Set("Smtp.EnableSSL", false);
-            //Set("Smtp.Credentials", new Credential("SmtpUser", "gyHt82bNmre457sjd709Aq1==", isEncryptedPassword: true));
-            //Set("Email.From", "noreply@myorganization.com");
-            //Set("Email.Footer", "This is an automated email message.  If you have questions please call customer service at 1-800-000-0000.");
             //Set("Sms.From", "sms@myorganization.com");
 
-            //Set("SqlDb.ConnectionString", "Data Source;Server=DBSVR01;Initial Catalog=MyDatabase;User ID=SqlUser;Password=gyHt82bNmre457sjd709Aq1==;");
-            //Set("SqlDb.IsEncryptedPassword", true);
-            //Set("SqlDb.Server", "DBSVR01;2008R2");  // or 'NAME'11.22.33.44:9999;2012 or DBSVR01 (lookup / versionless)
-            //Set("SqlDb.DataSource", "DBSVR01");
-            //Set("SqlDb.InitialCatalog", "MyDatabase");
-            //Set("SqlDb.Credentials", new Credential("SqlUser", "gyHt82bNmre457sjd709Aq1==", isEncryptedPassword: true));
-            //Set("SqlDb.AdditionalConnectionAttributes", "Integrated Security=SSQI|Attribute1=Value1");
-            //Set("SqlDb.Timeout", 30);
-            //Set("SqlDb.ServerList", "DBSVR01|'NAME'11.22.33.44:9999;2012|DBSVR02;2008R2");
+            //Set("Sql.ConnectionString", "Data Source;Server=DBSVR01;Initial Catalog=MyDatabase;User ID=SqlUser;Password=gyHt82bNmre457sjd709Aq1==;");
+            //Set("Sql.IsEncryptedPassword", true);
+            //Set("Sql.Server", "DBSVR01;2008R2");  // or 'NAME'11.22.33.44:9999;2012 or DBSVR01 (lookup / versionless)
+            //Set("Sql.DataSource", "DBSVR01");
+            //Set("Sql.InitialCatalog", "MyDatabase");
+            //Set("Sql.Credentials", new Credential("SqlUser", "gyHt82bNmre457sjd709Aq1==", isEncryptedPassword: true));
+            //Set("Sql.AdditionalConnectionAttributes", "Integrated Security=SSQI|Attribute1=Value1");
+            //Set("Sql.Timeout", 30);
+            //Set("Sql.ServerList", "DBSVR01|'NAME'11.22.33.44:9999;2012|DBSVR02;2008R2");
 
             //Set("ReportingServices.ReportServer", "http://reports.mycompany.com/ReportServer");
 
-            //Set("WebServices.Credentials", new Credential("WebServiceUser", "gyHt82bNmre457sjd709Aq1==", isEncryptedPassword: true));
+            //Set("WebService.Credentials", new Credential("WebServiceUser", "gyHt82bNmre457sjd709Aq1==", isEncryptedPassword: true));
         }
 
         static void Set(string key, object value)

@@ -27,7 +27,7 @@ namespace Horseshoe.NET.SqlDb.Meta
 
         public static IEnumerable<DbServer> LookupAll()
         {
-            return Settings.ServerList;
+            return SqlSettings.ServerList;
         }
 
         public static DbServer Lookup(string dataSource, bool suppressErrors = false)

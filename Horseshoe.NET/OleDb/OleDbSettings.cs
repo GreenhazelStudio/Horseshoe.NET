@@ -6,19 +6,19 @@ using Horseshoe.NET.Db;
 
 namespace Horseshoe.NET.OleDb
 {
-    public static class Settings
+    public static class OleDbSettings
     {
         static string _defaultConnectionStringName;
 
         /// <summary>
-        /// Gets or sets the default OLEDB connection string name used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:OleDb:ConnectionStringName)
+        /// Gets or sets the default OLEDB connection string name used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:OleDb.ConnectionStringName)
         /// </summary>
         public static string DefaultConnectionStringName
         {
             get
             {
                 return _defaultConnectionStringName
-                    ?? Config.Get("Horseshoe.NET:OleDb:ConnectionStringName");
+                    ?? Config.Get("Horseshoe.NET:OleDb.ConnectionStringName");
             }
             set
             {
@@ -37,7 +37,7 @@ namespace Horseshoe.NET.OleDb
             get
             {
                 return _GetConnectionString(_defaultConnectionString, _isEncryptedPassword)
-                    ?? _GetConnectionString(Config.GetConnectionString(DefaultConnectionStringName, suppressErrors: true), Config.GetBoolean("Horseshoe.NET:OleDb:IsEncryptedPassword"))
+                    ?? _GetConnectionString(Config.GetConnectionString(DefaultConnectionStringName, suppressErrors: true), Config.GetBoolean("Horseshoe.NET:OleDb.IsEncryptedPassword"))
                     ?? _GetConnectionString(OrganizationalDefaultSettings.GetString("OleDb.ConnectionString"), OrganizationalDefaultSettings.GetBoolean("OleDb.IsEncryptedPassword"));
             }
         }
@@ -62,14 +62,14 @@ namespace Horseshoe.NET.OleDb
         private static string _defaultDataSource;
 
         /// <summary>
-        /// Gets or sets the default OLEDB data source used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:OleDb:DataSource and OrganizationalDefaultSettings: key = OleDb.DataSource)
+        /// Gets or sets the default OLEDB data source used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:OleDb.DataSource and OrganizationalDefaultSettings: key = OleDb.DataSource)
         /// </summary>
         public static string DefaultDataSource
         {
             get
             {
                 return _defaultDataSource       // e.g. DBSVR01
-                    ?? Config.Get("Horseshoe.NET:OleDb:DataSource")
+                    ?? Config.Get("Horseshoe.NET:OleDb.DataSource")
                     ?? OrganizationalDefaultSettings.GetString("OleDb.DataSource");
             }
             set
@@ -81,7 +81,7 @@ namespace Horseshoe.NET.OleDb
         private static Credential? _defaultCredentials;
 
         /// <summary>
-        /// Gets or sets the default OLEDB credentials used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:OleDb:UserName|Password and OrganizationalDefaultSettings: key = OleDb.Credentials)
+        /// Gets or sets the default OLEDB credentials used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:OleDb.UserName|Password and OrganizationalDefaultSettings: key = OleDb.Credentials)
         /// </summary>
         public static Credential? DefaultCredentials
         {
@@ -90,9 +90,9 @@ namespace Horseshoe.NET.OleDb
                 return _defaultCredentials
                     ?? Credential.Build
                     (
-                        Config.Get("Horseshoe.NET:OleDb:UserID"),
-                        Config.Get("Horseshoe.NET:OleDb:Password"),
-                        isEncryptedPassword: Config.GetBoolean("Horseshoe.NET:OleDb:IsEncryptedPassword")
+                        Config.Get("Horseshoe.NET:OleDb.UserID"),
+                        Config.Get("Horseshoe.NET:OleDb.Password"),
+                        isEncryptedPassword: Config.GetBoolean("Horseshoe.NET:OleDb.IsEncryptedPassword")
                     )
                     ?? OrganizationalDefaultSettings.GetNullable<Credential>("OleDb.Credentials");
             }
@@ -105,14 +105,14 @@ namespace Horseshoe.NET.OleDb
         private static IDictionary<string, string> _defaultAdditionalConnectionAttributes;
 
         /// <summary>
-        /// Gets or sets the default additional OLEDB connection attributes used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:OleDb:AdditionalConnectionAttributes and OrganizationalDefaultSettings: key = OleDb.AdditionalConnectionAttributes)
+        /// Gets or sets the default additional OLEDB connection attributes used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:OleDb.AdditionalConnectionAttributes and OrganizationalDefaultSettings: key = OleDb.AdditionalConnectionAttributes)
         /// </summary>
         public static IDictionary<string, string> DefaultAdditionalConnectionAttributes
         {
             get
             {
                 return _defaultAdditionalConnectionAttributes        // e.g. Integrated Security=SSQI|Attribute1=Value1
-                    ?? Config.Get("Horseshoe.NET:OleDb:AdditionalConnectionAttributes", parseFunc: (raw) => DataUtil.ParseAdditionalConnectionAttributes(raw))
+                    ?? Config.Get("Horseshoe.NET:OleDb.AdditionalConnectionAttributes", parseFunc: (raw) => DataUtil.ParseAdditionalConnectionAttributes(raw))
                     ?? OrganizationalDefaultSettings.Get("OleDb.AdditionalConnectionAttributes", parseFunc: (raw) => DataUtil.ParseAdditionalConnectionAttributes((string)raw));
             }
             set
@@ -124,14 +124,14 @@ namespace Horseshoe.NET.OleDb
         private static int? _defaultTimeout;
 
         /// <summary>
-        /// Gets or sets the default OLEDB timeout used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:OleDb:Timeout and OrganizationalDefaultSettings: key = OleDb.Timeout)
+        /// Gets or sets the default OLEDB timeout used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:OleDb.Timeout and OrganizationalDefaultSettings: key = OleDb.Timeout)
         /// </summary>
         public static int? DefaultTimeout
         {
             get
             {
                 return _defaultTimeout           // e.g. 30 (Microsoft default?)
-                    ?? Config.GetNInt("Horseshoe.NET:OleDb:Timeout")
+                    ?? Config.GetNInt("Horseshoe.NET:OleDb.Timeout")
                     ?? OrganizationalDefaultSettings.GetNInt("OleDb.Timeout");
             }
             set

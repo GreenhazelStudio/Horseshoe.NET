@@ -9,15 +9,15 @@ namespace Horseshoe.NET.IO.Email
         private static string _defaultSmtpServer;
 
         /// <summary>
-        /// Gets or sets the default SMTP server used by PlainEmail and HtmlEmail.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Smtp.Server and OrganizationalDefaultSettings: key = Smtp.Server)
+        /// Gets or sets the default SMTP server used by PlainEmail and HtmlEmail.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Email.SmtpServer and OrganizationalDefaultSettings: key = Email.SmtpServer)
         /// </summary>
         public static string DefaultSmtpServer
         {
             get
             {
                 return _defaultSmtpServer
-                    ?? Config.Get("Horseshoe.NET:Smtp.Server") 
-                    ?? OrganizationalDefaultSettings.GetString("Smtp.Server");
+                    ?? Config.Get("Horseshoe.NET:Email.SmtpServer") 
+                    ?? OrganizationalDefaultSettings.GetString("Email.SmtpServer");
             }
             set
             {
@@ -28,15 +28,15 @@ namespace Horseshoe.NET.IO.Email
         private static int? _defaultPort;
 
         /// <summary>
-        /// Gets or sets the default SMTP port used by PlainEmail and HtmlEmail.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Smtp.Port and OrganizationalDefaultSettings: key = Smtp.Port)
+        /// Gets or sets the default SMTP port used by PlainEmail and HtmlEmail.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Email.SmtpPort and OrganizationalDefaultSettings: key = Email.SmtpPort)
         /// </summary>
         public static int? DefaultPort
         {
             get
             {
                 return _defaultPort
-                    ?? Config.GetNInt("Horseshoe.NET:Smtp.Port") 
-                    ?? OrganizationalDefaultSettings.GetNInt("Smtp.Port");
+                    ?? Config.GetNInt("Horseshoe.NET:Email.SmtpPort") 
+                    ?? OrganizationalDefaultSettings.GetNInt("Email.SmtpPort");
             }
             set
             {
@@ -47,15 +47,15 @@ namespace Horseshoe.NET.IO.Email
         private static bool? _defaultEnableSsl;
 
         /// <summary>
-        /// Gets or sets the SSL setting used by PlainEmail and HtmlEmail.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Smtp.EnableSsl and OrganizationalDefaultSettings: key = Smtp.EnableSsl)
+        /// Gets or sets the SSL setting used by PlainEmail and HtmlEmail.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Email.SmtpEnableSsl and OrganizationalDefaultSettings: key = Email.SmtpEnableSsl)
         /// </summary>
         public static bool DefaultEnableSsl
         {
             get
             {
                 return _defaultEnableSsl
-                    ?? Config.GetNBoolean("Horseshoe.NET:Smtp.EnableSsl")
-                    ?? OrganizationalDefaultSettings.GetBoolean("Smtp.EnableSsl");
+                    ?? Config.GetNBoolean("Horseshoe.NET:Email.SmtpEnableSsl")
+                    ?? OrganizationalDefaultSettings.GetBoolean("Email.SmtpEnableSsl");
             }
             set
             {
@@ -66,15 +66,15 @@ namespace Horseshoe.NET.IO.Email
         static Credential? _defaultCredentials;
 
         /// <summary>
-        /// Gets or sets the default SMTP login credentials used by PlainEmail and HtmlEmail.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Smtp.UserName|Password|IsEncryptedPassword|Domain and OrganizationalDefaultSettings: key = Smtp.Credentials)
+        /// Gets or sets the default SMTP login credentials used by PlainEmail and HtmlEmail.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Email.SmtpUserName|Password|IsEncryptedPassword|Domain and OrganizationalDefaultSettings: key = Email.SmtpCredentials)
         /// </summary>
         public static Credential? DefaultCredentials
         {
             get
             {
                 return _defaultCredentials
-                    ?? Credential.Build(Config.Get("Horseshoe.NET:Smtp.UserName"), Config.Get("Horseshoe.NET:Smtp.Password"), isEncryptedPassword: Config.GetBoolean("Horseshoe.NET:Smtp.IsEncryptedPassword"), domain: Config.Get("Horseshoe.NET:Smtp.Domain"))
-                    ?? OrganizationalDefaultSettings.GetNullable<Credential>("Smtp.Credentials");
+                    ?? Credential.Build(Config.Get("Horseshoe.NET:Email.SmtpUserName"), Config.Get("Horseshoe.NET:Email.SmtpPassword"), isEncryptedPassword: Config.GetBoolean("Horseshoe.NET:Email.SmtpIsEncryptedPassword"), domain: Config.Get("Horseshoe.NET:Email.SmtpDomain"))
+                    ?? OrganizationalDefaultSettings.GetNullable<Credential>("Email.SmtpCredentials");
             }
             set
             {

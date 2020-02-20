@@ -17,8 +17,8 @@ namespace Horseshoe.NET.SqlDb.Meta
         {
             public static IEnumerable<Db> List(Predicate<Db> filter = null, int? timeout = null)
             {
-                var server = Settings.DefaultServer ?? new DbServer(Settings.DefaultDataSource ?? throw new UtilityException("A default Server or DataSource must be defined to use this method - see Settings or OrganizationDefaultSettings"));
-                using (var conn = SqlUtil.LaunchConnection(connectionInfo: new SqlConnectionInfo { Server = server, Credentials = Settings.DefaultCredentials }))
+                var server = SqlSettings.DefaultServer ?? new DbServer(SqlSettings.DefaultDataSource ?? throw new UtilityException("A default Server or DataSource must be defined to use this method - see Settings or OrganizationDefaultSettings"));
+                using (var conn = SqlUtil.LaunchConnection(connectionInfo: new SqlConnectionInfo { Server = server, Credentials = SqlSettings.DefaultCredentials }))
                 {
                     return List(conn, server, filter: filter, timeout: timeout);
                 }
@@ -98,12 +98,12 @@ namespace Horseshoe.NET.SqlDb.Meta
             [SuppressMessage("Code Quality", "IDE0068:Use recommended dispose pattern", Justification = "Will be closed by caller")]
             internal static Db Lookup(out SqlConnection conn, string name, bool ignoreCase = false, int? timeout = null)
             {
-                var server = Settings.DefaultServer ?? new DbServer(Settings.DefaultDataSource ?? throw new UtilityException("A default Server or DataSource must be defined to use this method - see Settings or OrganizationDefaultSettings"));
+                var server = SqlSettings.DefaultServer ?? new DbServer(SqlSettings.DefaultDataSource ?? throw new UtilityException("A default Server or DataSource must be defined to use this method - see Settings or OrganizationDefaultSettings"));
                 var filteredList = List
                 (
                     out conn,
                     server,
-                    credentials: Settings.DefaultCredentials,
+                    credentials: SqlSettings.DefaultCredentials,
                     filter: (s) => s.Name.Equals(name, ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal),
                     timeout: timeout
                 ) as List<Db>;
@@ -172,7 +172,7 @@ namespace Horseshoe.NET.SqlDb.Meta
                 (
                     out conn,
                     server,
-                    credentials: credentials ?? Settings.DefaultCredentials,
+                    credentials: credentials ?? SqlSettings.DefaultCredentials,
                     filter: (s) => s.Name.Equals(name, ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal),
                     timeout: timeout
                 ) as List<Db>;
@@ -324,8 +324,8 @@ namespace Horseshoe.NET.SqlDb.Meta
 
             internal static DbObject Lookup(out SqlConnection conn, string name, bool ignoreCase = false, int? timeout = null)
             {
-                var server = Settings.DefaultServer ?? new DbServer(Settings.DefaultDataSource ?? throw new UtilityException("A default Server or DataSource must be defined to use this method - see Settings or OrganizationDefaultSettings"));
-                conn = SqlUtil.LaunchConnection(connectionInfo: new SqlConnectionInfo { Server = server, Credentials = Settings.DefaultCredentials });
+                var server = SqlSettings.DefaultServer ?? new DbServer(SqlSettings.DefaultDataSource ?? throw new UtilityException("A default Server or DataSource must be defined to use this method - see Settings or OrganizationDefaultSettings"));
+                conn = SqlUtil.LaunchConnection(connectionInfo: new SqlConnectionInfo { Server = server, Credentials = SqlSettings.DefaultCredentials });
                 var filteredList = List    /* uses default server, credentials */
                 (
                     conn,

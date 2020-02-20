@@ -7,19 +7,19 @@ using Horseshoe.NET.OracleDb.Meta;
 
 namespace Horseshoe.NET.OracleDb
 {
-    public static class Settings
+    public static class OracleSettings
     {
         static string _defaultConnectionStringName;
 
         /// <summary>
-        /// Gets or sets the default Oracle connection string name used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:OracleDb:ConnectionStringName)
+        /// Gets or sets the default Oracle connection string name used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Oracle.ConnectionStringName)
         /// </summary>
         public static string DefaultConnectionStringName
         {
             get
             {
                 return _defaultConnectionStringName
-                    ?? Config.Get("Horseshoe.NET:OracleDb:ConnectionStringName");
+                    ?? Config.Get("Horseshoe.NET:Oracle.ConnectionStringName");
             }
             set
             {
@@ -38,8 +38,8 @@ namespace Horseshoe.NET.OracleDb
             get
             {
                 return _GetConnectionString(_defaultConnectionString, _isEncryptedPassword)
-                    ?? _GetConnectionString(Config.GetConnectionString(DefaultConnectionStringName, suppressErrors: true), Config.GetBoolean("Horseshoe.NET:OracleDb:IsEncryptedPassword"))
-                    ?? _GetConnectionString(OrganizationalDefaultSettings.GetString("OracleDb.ConnectionString"), OrganizationalDefaultSettings.GetBoolean("OracleDb.IsEncryptedPassword"));
+                    ?? _GetConnectionString(Config.GetConnectionString(DefaultConnectionStringName, suppressErrors: true), Config.GetBoolean("Horseshoe.NET:Oracle.IsEncryptedPassword"))
+                    ?? _GetConnectionString(OrganizationalDefaultSettings.GetString("Oracle.ConnectionString"), OrganizationalDefaultSettings.GetBoolean("Oracle.IsEncryptedPassword"));
             }
         }
 
@@ -63,7 +63,7 @@ namespace Horseshoe.NET.OracleDb
         private static OraServer _defaultServer;
 
         /// <summary>
-        /// Gets or sets the default Oracle server used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:OracleDb:Server and OrganizationalDefaultSettings: key = OracleDb.Server)
+        /// Gets or sets the default Oracle server used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Oracle.Server and OrganizationalDefaultSettings: key = OracleDb.Server)
         /// </summary>
         public static OraServer DefaultServer
         {
@@ -72,8 +72,8 @@ namespace Horseshoe.NET.OracleDb
                 if (_defaultServer == null)
                 {
                     _defaultServer =      // e.g. ORADBSVR01 or 'NAME'11.22.33.44:9999;SERVICE1 or ORADBSVR02:9999;SERVICE1;INSTANCE1
-                        Config.Get("Horseshoe.NET:OracleDb:Server", parseFunc: (raw) => OracleUtil.ParseServer(raw)) ?? 
-                        OrganizationalDefaultSettings.Get("OracleDb.Server", parseFunc: (raw) => OracleUtil.ParseServer((string)raw)); 
+                        Config.Get("Horseshoe.NET:Oracle.Server", parseFunc: (raw) => OracleUtil.ParseServer(raw)) ?? 
+                        OrganizationalDefaultSettings.Get("Oracle.Server", parseFunc: (raw) => OracleUtil.ParseServer((string)raw)); 
                 }
                 return _defaultServer;
             }
@@ -86,15 +86,15 @@ namespace Horseshoe.NET.OracleDb
         private static string _defaultDataSource;
 
         /// <summary>
-        /// Gets or sets the default Oracle datasource used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:OracleDb:DataSource and OrganizationalDefaultSettings: key = OracleDb.DataSource)
+        /// Gets or sets the default Oracle datasource used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Oracle.DataSource and OrganizationalDefaultSettings: key = OracleDb.DataSource)
         /// </summary>
         public static string DefaultDataSource
         {
             get
             {
                 return _defaultDataSource     // e.g. ORADBSVR01
-                    ?? Config.Get("Horseshoe.NET:OracleDb:DataSource")  
-                    ?? OrganizationalDefaultSettings.GetString("OracleDb.DataSource") 
+                    ?? Config.Get("Horseshoe.NET:Oracle.DataSource")  
+                    ?? OrganizationalDefaultSettings.GetString("Oracle.DataSource") 
                     ?? DefaultServer?.DataSource;
             }
             set
@@ -106,15 +106,15 @@ namespace Horseshoe.NET.OracleDb
         private static Credential? _defaultCredentials;
 
         /// <summary>
-        /// Gets or sets the default Oracle credentials used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:OracleDb:UserID|Password and OrganizationalDefaultSettings: key = OracleDb.Credentials)
+        /// Gets or sets the default Oracle credentials used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Oracle.UserID|Password and OrganizationalDefaultSettings: key = OracleDb.Credentials)
         /// </summary>
         public static Credential? DefaultCredentials
         {
             get
             {
                 return _defaultCredentials
-                    ?? Credential.Build(Config.Get("Horseshoe.NET:OracleDb:UserID"), Config.Get("Horseshoe.NET:OracleDb:Password"), isEncryptedPassword: Config.GetBoolean("Horseshoe.NET:OracleDb:IsEncryptedPassword"))
-                    ?? OrganizationalDefaultSettings.GetNullable<Credential>("OracleDb.Credentials");
+                    ?? Credential.Build(Config.Get("Horseshoe.NET:Oracle.UserID"), Config.Get("Horseshoe.NET:Oracle.Password"), isEncryptedPassword: Config.GetBoolean("Horseshoe.NET:Oracle.IsEncryptedPassword"))
+                    ?? OrganizationalDefaultSettings.GetNullable<Credential>("Oracle.Credentials");
             }
             set
             {
@@ -125,15 +125,15 @@ namespace Horseshoe.NET.OracleDb
         private static IDictionary<string, string> _defaultAdditionalConnectionAttributes;
 
         /// <summary>
-        /// Gets or sets the additional Oracle connection string attributes used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:OracleDb:AdditionalConnectionAttributes and OrganizationalDefaultSettings: key = OracleDb.AdditionalConnectionAttributes)
+        /// Gets or sets the additional Oracle connection string attributes used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Oracle.AdditionalConnectionAttributes and OrganizationalDefaultSettings: key = OracleDb.AdditionalConnectionAttributes)
         /// </summary>
         public static IDictionary<string, string> DefaultAdditionalConnectionAttributes
         {
             get
             {
                 return _defaultAdditionalConnectionAttributes         // e.g. Integrated Security=SSQI|Attribute1=Value1
-                    ?? Config.Get("Horseshoe.NET:OracleDb:AdditionalConnectionAttributes", parseFunc: (raw) => DataUtil.ParseAdditionalConnectionAttributes(raw))
-                    ?? OrganizationalDefaultSettings.Get("OracleDb.AdditionalConnectionAttributes", parseFunc: (raw) => DataUtil.ParseAdditionalConnectionAttributes((string)raw));
+                    ?? Config.Get("Horseshoe.NET:Oracle.AdditionalConnectionAttributes", parseFunc: (raw) => DataUtil.ParseAdditionalConnectionAttributes(raw))
+                    ?? OrganizationalDefaultSettings.Get("Oracle.AdditionalConnectionAttributes", parseFunc: (raw) => DataUtil.ParseAdditionalConnectionAttributes((string)raw));
             }
             set
             {
@@ -144,15 +144,15 @@ namespace Horseshoe.NET.OracleDb
         private static int? _defaultTimeout;
 
         /// <summary>
-        /// Gets or sets the Oracle timeout used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:OracleDb:Timeout and OrganizationalDefaultSettings: key = OracleDb.Timeout)
+        /// Gets or sets the Oracle timeout used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Oracle.Timeout and OrganizationalDefaultSettings: key = OracleDb.Timeout)
         /// </summary>
         public static int? DefaultTimeout
         {
             get
             {
                 return _defaultTimeout
-                    ?? Config.GetNInt("Horseshoe.NET:OracleDb:Timeout")
-                    ?? OrganizationalDefaultSettings.GetNInt("OracleDb.Timeout"); 
+                    ?? Config.GetNInt("Horseshoe.NET:Oracle.Timeout")
+                    ?? OrganizationalDefaultSettings.GetNInt("Oracle.Timeout"); 
             }
             set
             {
@@ -163,7 +163,7 @@ namespace Horseshoe.NET.OracleDb
         private static IEnumerable<OraServer> _serverList;
 
         /// <summary>
-        /// Gets or sets a list of Oracle servers for OraServer's Lookup() method.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:OracleDb:ServerList and OrganizationalDefaultSettings: key = OracleDb.ServerList)
+        /// Gets or sets a list of Oracle servers for OraServer's Lookup() method.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Oracle.ServerList and OrganizationalDefaultSettings: key = OracleDb.ServerList)
         /// </summary>
         public static IEnumerable<OraServer> ServerList
         {
@@ -172,8 +172,8 @@ namespace Horseshoe.NET.OracleDb
                 if (_serverList == null)
                 {
                     _serverList =      // e.g. ORADBSVR01|'NAME'11.22.33.44:9999;SERVICE1|ORADBSVR02:9999;SERVICE1;INSTANCE1
-                        Config.Get("Horseshoe.NET:OracleDb:ServerList", parseFunc: (raw) => OracleUtil.ParseServerList(raw)) ??  
-                        OrganizationalDefaultSettings.Get("OracleDb.ServerList", parseFunc: (raw) => OracleUtil.ParseServerList((string)raw));
+                        Config.Get("Horseshoe.NET:Oracle.ServerList", parseFunc: (raw) => OracleUtil.ParseServerList(raw)) ??  
+                        OrganizationalDefaultSettings.Get("Oracle.ServerList", parseFunc: (raw) => OracleUtil.ParseServerList((string)raw));
                 }
                 return _serverList;
             }
