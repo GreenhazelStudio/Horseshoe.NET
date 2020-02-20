@@ -11,8 +11,6 @@ namespace TestConsole
 {
     class Program : ConsoleApp<Program>
     {
-        Routine[] Menu = ListRoutines();
-
         public override void Run()
         {
             RenderSplash
@@ -26,7 +24,7 @@ namespace TestConsole
             );
             PromptRoutineMenu
             (
-                Menu,
+                FindRoutines(),
                 title: "Main Menu",
                 autoRun: true
             );
@@ -35,14 +33,6 @@ namespace TestConsole
         static void Main(string[] args)
         {
             StartApp();
-        }
-
-        static Routine[] ListRoutines()
-        {
-            var assembly = Assembly.GetExecutingAssembly();
-            var routineTypes = assembly.GetTypes().Where(t => typeof(Routine).IsAssignableFrom(t));
-            var array = routineTypes.Select(t => (Routine)ObjectUtil.GetInstance(t)).ToArray();
-            return array;
         }
     }
 }

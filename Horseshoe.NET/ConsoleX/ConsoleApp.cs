@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
+
+using Horseshoe.NET.Objects;
 
 namespace Horseshoe.NET.ConsoleX
 {
@@ -115,6 +118,28 @@ namespace Horseshoe.NET.ConsoleX
                 allowMultipleSelection: allowMultipleSelection,
                 allowExitApplication: allowExitApplication
             );
+        }
+
+        /// <summary>
+        /// Search the calling assembly for subclasses of Routine and instantiate an alphabetized array
+        /// </summary>
+        /// <param name="matchBaseNamespace">Filter out routines in child and unrelated namespaces</param>
+        /// <param name="namespaceToMatch">Select routines only in this namespace, if provided</param>
+        /// <returns></returns>
+        public static IEnumerable<Routine> FindRoutines(bool matchBaseNamespace = false, string namespaceToMatch = null)
+        {
+            var assembly = Assembly.GetCallingAssembly();
+            var routineTypes = assembly.GetTypes()
+                .Where(t => 
+                    typeof(Routine).IsAssignableFrom(t) && 
+                    (!matchBaseNamespace || Equals(t.Namespace, assembly.GetName().Name)) &&
+                    (namespaceToMatch == null || Equals(t.Namespace, namespaceToMatch))
+                )
+                .OrderBy(t => t.Name);
+            var array = routineTypes
+                .Select(t => (Routine)ObjectUtil.GetInstance(t))
+                .ToArray();
+            return array;
         }
 
         public static MenuSelection<Routine> PromptRoutineMenu
