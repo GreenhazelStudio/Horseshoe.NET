@@ -8,36 +8,6 @@ namespace Horseshoe.NET
 {
     public static class DateUtil
     {
-        public static int AgeInYears(DateTime from)
-        {
-            return DateDiff.Years(from, DateTime.Today);
-        }
-
-        public static double TotalAgeInYears(DateTime from, int decimals = -1)
-        {
-            return DateDiff.TotalYears(from, DateTime.Today, decimals: decimals);
-        }
-
-        public static int AgeInMonths(DateTime from)
-        {
-            return DateDiff.Months(from, DateTime.Today);
-        }
-
-        public static double TotalAgeInMonths(DateTime from, int decimals = -1)
-        {
-            return DateDiff.TotalMonths(from, DateTime.Today, decimals: decimals);
-        }
-
-        public static int AgeInDays(DateTime from)
-        {
-            return DateDiff.Days(from, DateTime.Today);
-        }
-
-        public static double TotalAgeInDays(DateTime from, int decimals = -1)
-        {
-            return DateDiff.TotalDays(from, DateTime.Today, decimals: decimals);
-        }
-
         public static bool IsLeapYear(DateTime date)
         {
             return IsLeapYear(date.Year);
@@ -51,7 +21,7 @@ namespace Horseshoe.NET
             return false;
         }
 
-        public static int SpansLeapDays(DateTime from, DateTime to)
+        public static int CountLeapDaysBetween(DateTime from, DateTime to)
         {
             if (from > to)
             {
@@ -80,7 +50,7 @@ namespace Horseshoe.NET
             return leapDayCounter;
         }
 
-        public static bool SameDate(DateTime date1, DateTime date2)
+        public static bool SameDay(DateTime date1, DateTime date2)
         {
             return date1.Year == date2.Year && date1.Month == date2.Month && date1.Day == date2.Day;
         }

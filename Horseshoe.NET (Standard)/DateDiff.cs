@@ -34,7 +34,7 @@ namespace Horseshoe.NET
             return years;
         }
 
-        public static double TotalYears(DateTime from, DateTime to, int decimals = -1)
+        public static double PreciseYears(DateTime from, DateTime to, int decimals = -1)
         {
             var neg = false;
             if (from > to)
@@ -87,7 +87,7 @@ namespace Horseshoe.NET
             return months;
         }
 
-        public static double TotalMonths(DateTime from, DateTime to, int decimals = -1)
+        public static double PreciseMonths(DateTime from, DateTime to, int decimals = -1)
         {
             var neg = false;
             if (from > to)
@@ -114,7 +114,7 @@ namespace Horseshoe.NET
             return span.Days;
         }
 
-        public static double TotalDays(DateTime from, DateTime to, int decimals = -1)
+        public static double PreciseDays(DateTime from, DateTime to, int decimals = -1)
         {
             var span = to - from;
             return decimals < 0

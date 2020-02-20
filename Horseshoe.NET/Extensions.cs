@@ -150,39 +150,49 @@ namespace Horseshoe.NET
             return string.Join(Environment.NewLine, lines);
         }
 
-        public static int AgeInYearsFrom(this DateTime from)
+        public static int GetAgeInYears(this DateTime from, DateTime? asOf = null)
         {
-            return DateUtil.AgeInYears(from);
+            return DateDiff.Years(from, asOf ?? DateTime.Now);
         }
 
-        public static double TotalAgeInYearsFrom(this DateTime from, int decimals = -1)
+        public static double GetPreciseAgeInYears(this DateTime from, DateTime? asOf = null, int decimals = -1)
         {
-            return DateUtil.TotalAgeInYears(from, decimals: decimals);
+            return DateDiff.PreciseYears(from, asOf ?? DateTime.Now, decimals: decimals);
         }
 
-        public static int AgeInMonthsFrom(this DateTime from)
+        public static int GetAgeInMonths(this DateTime from, DateTime? asOf = null)
         {
-            return DateUtil.AgeInMonths(from);
+            return DateDiff.Months(from, asOf ?? DateTime.Now);
         }
 
-        public static double TotalAgeInMonthsFrom(this DateTime from, int decimals = -1)
+        public static double GetPreciseAgeInMonths(this DateTime from, DateTime? asOf = null, int decimals = -1)
         {
-            return DateUtil.TotalAgeInMonths(from, decimals: decimals);
+            return DateDiff.PreciseMonths(from, asOf ?? DateTime.Now, decimals: decimals);
         }
 
-        public static int AgeInDaysFrom(this DateTime from)
+        public static int GetAgeInDays(this DateTime from, DateTime? asOf = null)
         {
-            return DateUtil.AgeInDays(from);
+            return DateDiff.Days(from, asOf ?? DateTime.Now);
         }
 
-        public static double TotalAgeInDaysFrom(this DateTime from, int decimals = -1)
+        public static double GetPreciseAgeInDays(this DateTime from, DateTime? asOf = null, int decimals = -1)
         {
-            return DateUtil.TotalAgeInDays(from, decimals: decimals);
+            return DateDiff.PreciseDays(from, asOf ?? DateTime.Now, decimals: decimals);
         }
 
         public static bool IsLeapYear(this DateTime date)
         {
             return DateUtil.IsLeapYear(date);
+        }
+
+        public static bool IsSameDay(this DateTime date, DateTime other)
+        {
+            return DateUtil.SameDay(date, other);
+        }
+
+        public static bool IsSameMonth(this DateTime date, DateTime other)
+        {
+            return DateUtil.SameMonth(date, other);
         }
 
         public static NetworkCredential ToNetworkCredentials(this Credential credentials)
