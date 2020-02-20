@@ -33,9 +33,14 @@ namespace Horseshoe.NET.Odbc
 
         public static int Table(OdbcConnection conn, string tableName, IEnumerable<Column> columns, Filter where = null, int? timeout = null, DbProduct? product = null)
         {
+            foreach (var col in columns.Where(_col => !_col.Product.HasValue))
+            {
+                col.Product = product;
+            }
+
             var statement = @"
                 UPDATE " + tableName + @"
-                SET " + string.Join(", ", columns.Select(c => c.ToDMLString(product)));
+                SET " + string.Join(", ", columns.Select(c => c.ToDMLString()));
             if (where != null)
             {
                 statement += @"

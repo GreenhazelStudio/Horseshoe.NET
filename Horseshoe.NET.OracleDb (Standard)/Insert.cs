@@ -38,8 +38,13 @@ namespace Horseshoe.NET.OracleDb
             int? timeout = null
         )
         {
+            foreach (var col in columns.Where(_col => !_col.Product.HasValue))
+            {
+                col.Product = DbProduct.Oracle;
+            }
+
             var statement = @"
-                INSERT INTO " + tableName + " (" + string.Join(", ", columns.Select(c => c.ToString(DbProduct.Oracle))) + @")
+                INSERT INTO " + tableName + " (" + string.Join(", ", columns) + @")
                 VALUES (" + string.Join(", ", columns.Select(c => DataUtil.Sqlize(c.Value, DbProduct.Oracle))) + ")";
 
             statement = statement.MultilineTrim();
@@ -75,8 +80,13 @@ namespace Horseshoe.NET.OracleDb
             int? timeout = null
         )
         {
+            foreach (var col in columns.Where(_col => !_col.Product.HasValue))
+            {
+                col.Product = DbProduct.Oracle;
+            }
+
             var statement = @"
-                INSERT INTO " + tableName + " (" + string.Join(", ", columns.Select(c => c.ToString(DbProduct.Oracle))) + @")
+                INSERT INTO " + tableName + " (" + string.Join(", ", columns) + @")
                 VALUES (" + string.Join(", ", columns.Select(c => DataUtil.Sqlize(c.Value, DbProduct.Oracle))) + @");
                 SELECT LAST_INSERT_ID()";
 

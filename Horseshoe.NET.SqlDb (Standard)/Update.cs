@@ -38,9 +38,14 @@ namespace Horseshoe.NET.SqlDb
             int? timeout = null
         )
         {
+            foreach (var col in columns.Where(_col => !_col.Product.HasValue))
+            {
+                col.Product = DbProduct.SqlServer;
+            }
+
             var statement = @"
                 UPDATE " + tableName + @"
-                SET " + string.Join(", ", columns.Select(c => c.ToDMLString(DbProduct.SqlServer)));
+                SET " + string.Join(", ", columns.Select(c => c.ToDMLString()));
             if (where != null)
             {
                 statement += @"

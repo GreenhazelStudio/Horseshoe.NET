@@ -5,7 +5,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-using Horseshoe.NET.Db.Internal;
 using static Horseshoe.NET.Db.DataUtil;
 
 namespace Horseshoe.NET.Db
@@ -14,7 +13,7 @@ namespace Horseshoe.NET.Db
     {
         public string Name { get; }
         public object Value { get; }
-        public DbProduct? Vendor { get; }
+        public DbProduct? Product { get; set; }
 
         public Column(string name, object value = null, DbProduct? product = null)
         {
@@ -24,30 +23,17 @@ namespace Horseshoe.NET.Db
             }
             Name = name;
             Value = value;
-            Vendor = product;
+            Product = product;
         }
-
-        public static Column Default(string name) => new Column(name, value: SystemValue.Default);
-
-        public static Column CurrentDate(string name, DbProduct? product = null) => new Column(name, value: SystemValue.CurrentDate, product: product);
-
-        public static Column Guid(string name) => new Column(name, value: SystemValue.Guid);
-
-        public static Column UseExpression(string name, string expression) => new Column(name, value: SystemValue.UseExpression(expression));
 
         public override string ToString()
         {
-            return Name;
+            return RenderColumnName(Name, Product);
         }
 
-        public string ToString(DbProduct? product)
+        public string ToDMLString()
         {
-            return RenderColumnName(Name, product);
-        }
-
-        public string ToDMLString(DbProduct? product = null)
-        {
-            return ToString(product) + " = " + Sqlize(Value, Vendor ?? product);
+            return ToString() + " = " + Sqlize(Value, Product);
         }
     }
 }

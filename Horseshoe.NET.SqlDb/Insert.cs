@@ -37,8 +37,13 @@ namespace Horseshoe.NET.SqlDb
             int? timeout = null
         )
         {
+            foreach (var col in columns.Where(_col => !_col.Product.HasValue))
+            {
+                col.Product = DbProduct.SqlServer;
+            }
+
             var statement = @"
-                INSERT INTO " + tableName + " (" + string.Join(", ", columns.Select(c => c.ToString(DbProduct.SqlServer))) + @")
+                INSERT INTO " + tableName + " (" + string.Join(", ", columns) + @")
                 VALUES (" + string.Join(", ", columns.Select(c => DataUtil.Sqlize(c.Value, DbProduct.SqlServer))) + ")";
 
             statement = statement.MultilineTrim();
@@ -74,8 +79,13 @@ namespace Horseshoe.NET.SqlDb
             int? timeout = null
         )
         {
+            foreach (var col in columns.Where(_col => !_col.Product.HasValue))
+            {
+                col.Product = DbProduct.SqlServer;
+            }
+
             var statement = @"
-                INSERT INTO " + tableName + " (" + string.Join(", ", columns.Select(c => c.ToString(DbProduct.SqlServer))) + @")
+                INSERT INTO " + tableName + " (" + string.Join(", ", columns) + @")
                 VALUES (" + string.Join(", ", columns.Select(c => DataUtil.Sqlize(c.Value, DbProduct.SqlServer))) + @")
                 SELECT CONVERT(int, SCOPE_IDENTITY())";
 

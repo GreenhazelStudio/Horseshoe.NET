@@ -39,8 +39,13 @@ namespace Horseshoe.NET.OleDb
             DbProduct? product = null
         )
         {
+            foreach (var col in columns.Where(_col => !_col.Product.HasValue))
+            {
+                col.Product = product;
+            }
+
             var statement = @"
-                INSERT INTO " + tableName + " (" + string.Join(", ", columns.Select(c => c.ToString(product))) + @")
+                INSERT INTO " + tableName + " (" + string.Join(", ", columns) + @")
                 VALUES (" + string.Join(", ", columns.Select(c => DataUtil.Sqlize(c.Value, product))) + ")";
 
             statement = statement.MultilineTrim();
@@ -78,8 +83,13 @@ namespace Horseshoe.NET.OleDb
             DbProduct? product = null
         )
         {
+            foreach (var col in columns.Where(_col => !_col.Product.HasValue))
+            {
+                col.Product = product;
+            }
+
             var statement = @"
-                INSERT INTO " + tableName + " (" + string.Join(", ", columns.Select(c => c.ToString(product))) + @")
+                INSERT INTO " + tableName + " (" + string.Join(", ", columns) + @")
                 VALUES (" + string.Join(", ", columns.Select(c => DataUtil.Sqlize(c.Value, product))) + ")";
             switch (product)
             {

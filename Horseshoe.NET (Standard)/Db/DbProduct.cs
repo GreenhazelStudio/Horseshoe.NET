@@ -4,6 +4,7 @@
     {
         Neutral,
         SqlServer,
+        MySql,
         Oracle
     }
 }

@@ -33,9 +33,14 @@ namespace Horseshoe.NET.OracleDb
 
         public static int Table(OracleConnection conn, string tableName, IEnumerable<Column> columns, Filter where = null, int? timeout = null)
         {
+            foreach (var col in columns.Where(_col => !_col.Product.HasValue))
+            {
+                col.Product = DbProduct.Oracle;
+            }
+
             var statement = @"
                 UPDATE " + tableName + @"
-                SET " + string.Join(", ", columns.Select(c => c.ToDMLString(DbProduct.Oracle)));
+                SET " + string.Join(", ", columns.Select(c => c.ToDMLString()));
             if (where != null)
             {
                 statement += @"

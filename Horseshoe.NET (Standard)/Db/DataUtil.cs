@@ -7,7 +7,6 @@ using System.Text.RegularExpressions;
 
 using Horseshoe.NET.Collections;
 using Horseshoe.NET.Cryptography;
-using Horseshoe.NET.Db.Internal;
 using Horseshoe.NET.Events;
 using Horseshoe.NET.Text;
 
@@ -83,7 +82,7 @@ namespace Horseshoe.NET.Db
                         dateTimeFormat = "yyyy-MM-dd HH:mm:ss.fff";  // format inspired by Microsoft Sql Server Managament Studio
                         break;
                     case DbProduct.Oracle:
-                        dateTimeFormat = "mm/dd/yyyy hh:mm:ss tt";   // format inspired by dbForge for Oracle
+                        dateTimeFormat = "MM/dd/yyyy hh:mm:ss tt";   // format inspired by dbForge for Oracle
                         var oracleDateFormat = "mm/dd/yyyy hh:mi:ss am";
                         return "TO_DATE('" + dateTimeValue.ToString(dateTimeFormat) + "', '" + oracleDateFormat + "')";  // example: TO_DATE('02/02/2014 3:35:57 PM', 'mm/dd/yyyy hh:mi:ss am')
                     default:
@@ -92,9 +91,13 @@ namespace Horseshoe.NET.Db
                 }
                 return "'" + dateTimeValue.ToString(dateTimeFormat) + "'";
             }
-            if (o is SystemValue systemValue)
+            if (o is RawSql rawSql)
             {
-                return systemValue.Formatter.Invoke(product, systemValue.Expression);
+                if (rawSql is SystemValue systemValue)
+                {
+                    return systemValue.Formatter.Invoke(product, systemValue.Expression);
+                }
+                return rawSql.Expression ?? "";
             }
             var returnValue = "'" + o.ToString().Replace("'", "''") + "'";
             if (product == DbProduct.SqlServer)

@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 
+using Horseshoe.NET.Cryptography;
 using Horseshoe.NET.Db;
 using Horseshoe.NET.Text;
 
@@ -18,10 +19,11 @@ namespace Horseshoe.NET.SqlDb
             string tableName,
             IEnumerable<Column> columns,
             SqlConnectionInfo connectionInfo = null,
-            int? timeout = null
+            int? timeout = null,
+            CryptoOptions options = null
         )
         {
-            using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+            using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
             {
                 return Table(conn, tableName, columns, timeout: timeout);
             }
@@ -35,8 +37,13 @@ namespace Horseshoe.NET.SqlDb
             int? timeout = null
         )
         {
+            foreach (var col in columns.Where(_col => !_col.Product.HasValue))
+            {
+                col.Product = DbProduct.SqlServer;
+            }
+
             var statement = @"
-                INSERT INTO " + tableName + " (" + string.Join(", ", columns.Select(c => c.ToString(DbProduct.SqlServer))) + @")
+                INSERT INTO " + tableName + " (" + string.Join(", ", columns) + @")
                 VALUES (" + string.Join(", ", columns.Select(c => DataUtil.Sqlize(c.Value, DbProduct.SqlServer))) + ")";
 
             statement = statement.MultilineTrim();
@@ -53,10 +60,11 @@ namespace Horseshoe.NET.SqlDb
             IEnumerable<Column> columns,
             out int identity,
             SqlConnectionInfo connectionInfo = null,
-            int? timeout = null
+            int? timeout = null,
+            CryptoOptions options = null
         )
         {
-            using (var conn = SqlUtil.LaunchConnection(connectionInfo))
+            using (var conn = SqlUtil.LaunchConnection(connectionInfo, options: options))
             {
                 return Table(conn, tableName, columns, out identity, timeout: timeout);
             }
@@ -71,8 +79,13 @@ namespace Horseshoe.NET.SqlDb
             int? timeout = null
         )
         {
+            foreach (var col in columns.Where(_col => !_col.Product.HasValue))
+            {
+                col.Product = DbProduct.SqlServer;
+            }
+
             var statement = @"
-                INSERT INTO " + tableName + " (" + string.Join(", ", columns.Select(c => c.ToString(DbProduct.SqlServer))) + @")
+                INSERT INTO " + tableName + " (" + string.Join(", ", columns) + @")
                 VALUES (" + string.Join(", ", columns.Select(c => DataUtil.Sqlize(c.Value, DbProduct.SqlServer))) + @")
                 SELECT CONVERT(int, SCOPE_IDENTITY())";
 
