@@ -11,21 +11,44 @@ namespace Horseshoe.NET.IO.FileImport
 {
     public static class ImportUtil
     {
-        public static object ConvertDataElement(object value, Column column, string dataReference)
+        //public static object ConvertDataElement(object value, Column column, string dataReference)
+        //{
+        //    if (value == null) return null;
+        //    if (column?.ValueConverter == null)
+        //    {
+        //        return value;
+        //    }
+        //    try
+        //    {
+        //        return column.ValueConverter.Invoke(value);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new UtilityException(ex.Message + " -- occurred at " + dataReference + " -- value = " + (value.Equals("") ? "[blank]" : value), ex);
+        //    }
+        //}
+
+        public static object ProcessDatum(object value, Column column, string dataReference)
         {
-            if (value == null) return null;
-            if (column?.ValueConverter == null)
+            if (column?.ValueConverter != null)
             {
-                return value;
+                try
+                {
+                    value = column.ValueConverter.Invoke(value);
+                }
+                catch (Exception ex)
+                {
+                    throw new ImportedDatumException(value, ex.Message, ex, columnName: column?.Name, length: column.Width, dataRef: dataReference);
+                }
             }
-            try
+            if (value is string stringValue && column?.Width > 0)
             {
-                return column.ValueConverter.Invoke(value);
+                if (stringValue.Length > column.Width)
+                {
+                    throw new ImportedDatumException(stringValue, "value exceeds max width", columnName: column?.Name, length: column.Width, dataRef: dataReference);
+                }
             }
-            catch (Exception ex)
-            {
-                throw new UtilityException(ex.Message + " -- occurred at " + dataReference + " -- value = " + (value.Equals("") ? "[blank]" : value), ex);
-            }
+            return value;
         }
 
         public static string PostParseString(string value, AutoTruncate autoTrunc)

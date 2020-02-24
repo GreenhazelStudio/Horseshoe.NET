@@ -112,6 +112,7 @@
     <Compile Include="ExceptionInfo.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="CustomMapping.cs" />
+    <Compile Include="IO\FileImport\ImportedDatumException.cs" />
     <Compile Include="IO\FileImport\NoMapColumn.cs" />
     <Compile Include="IO\FileImport\NullableColumn.cs" />
     <Compile Include="IO\Ftp\Ftp.cs" />

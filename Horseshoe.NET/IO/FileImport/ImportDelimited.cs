@@ -97,7 +97,7 @@ namespace Horseshoe.NET.IO.FileImport
                     var oArray = new object[_columns.Length];
                     for (int i = 0; i < _columns.Length; i++)
                     {
-                        oArray[i] = ConvertDataElement(array[i], _columns[i], "data row " + index);
+                        oArray[i] = ProcessDatum(array[i], _columns[i], "data row " + index);
                     }
                     list.Add(oArray);
                 }

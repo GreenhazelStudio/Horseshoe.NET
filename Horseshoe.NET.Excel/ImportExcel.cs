@@ -759,7 +759,7 @@ namespace Horseshoe.NET.Excel
                         }
                         throw new UtilityException("Unknown cell type at " + cellAddress);
                 }
-                value = ConvertDataElement(value, column, cellAddress);
+                value = ProcessDatum(value, column, cellAddress);
                 list.Add(value);
             }
             return list.ToArray();
