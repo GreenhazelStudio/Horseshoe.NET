@@ -12,14 +12,11 @@ namespace Horseshoe.NET.IO.Email
     {
         public static void Send
         (
-            string body,
             string subject,
-            string to = null,
-            IEnumerable<string> recipients = null,
-            string cc = null,
-            IEnumerable<string> ccRecipients = null,
-            string bcc = null,
-            IEnumerable<string> bccRecipients = null,
+            string body,
+            EmailAddressList to,
+            EmailAddressList cc = null,
+            EmailAddressList bcc = null,
             string from = null,
             string attach = null,
             IEnumerable<string> attachments = null,
@@ -37,11 +34,6 @@ namespace Horseshoe.NET.IO.Email
                 body,
                 subject,
                 to,
-                recipients,
-                cc,
-                ccRecipients,
-                bcc,
-                bccRecipients,
                 from,
                 attach,
                 attachments
@@ -56,39 +48,24 @@ namespace Horseshoe.NET.IO.Email
                 IsBodyHtml = false
             };
 
-            if (to != null && (recipients == null || !recipients.Any()))
-            {
-                recipients = to.Split(',', ';').ZapAndPrune();
-            }
-
-            foreach (var recipient in recipients)
+            foreach (var recipient in to)
             {
                 mailMessage.To.Add(new MailAddress(recipient));
             }
 
-            if (cc != null && (ccRecipients == null || !ccRecipients.Any()))
+            if (cc != null)
             {
-                ccRecipients = cc.Split(',', ';').ZapAndPrune();
-            }
-
-            if (ccRecipients != null && ccRecipients.Any())
-            {
-                foreach (var recipient in ccRecipients)
+                foreach (var recipient in cc)
                 {
-                    mailMessage.To.Add(new MailAddress(recipient));
+                    mailMessage.CC.Add(new MailAddress(recipient));
                 }
             }
 
-            if (bcc != null && (bccRecipients == null || !bccRecipients.Any()))
+            if (bcc != null)
             {
-                bccRecipients = bcc.Split(',', ';').ZapAndPrune();
-            }
-
-            if (bccRecipients != null && bccRecipients.Any())
-            {
-                foreach (var recipient in bccRecipients)
+                foreach (var recipient in bcc)
                 {
-                    mailMessage.To.Add(new MailAddress(recipient));
+                    mailMessage.Bcc.Add(new MailAddress(recipient));
                 }
             }
 

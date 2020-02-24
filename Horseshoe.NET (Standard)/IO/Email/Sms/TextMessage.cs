@@ -24,8 +24,8 @@ namespace Horseshoe.NET.IO.Email.SMS
 
             PlainEmail.Send
             (
-                message,
                 subject,
+                message,
                 to: recipientAddress,
                 from: from ?? SmsSettings.DefaultFrom,
                 connectionInfo: connectionInfo

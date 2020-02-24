@@ -34,7 +34,7 @@ namespace TestConsole
             switch (selection.SelectedItem)
             {
                 case "Plain Email":
-                    PlainEmail.Send("This is a plain email test.", "Horseshoe.NET email test", to: "recipient@email.com", from: "sender@email.net", connectionInfo: new SmtpConnectionInfo { Server = "smtp-relay@email.biz" });
+                    PlainEmail.Send("Horseshoe.NET email test", "This is a plain email test.", to: "recipient@email.com", from: "sender@email.net", connectionInfo: new SmtpConnectionInfo { Server = "smtp-relay@email.biz" });
                     Console.WriteLine("Email sent!");
                     break;
             }

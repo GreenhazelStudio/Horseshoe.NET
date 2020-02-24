@@ -70,12 +70,7 @@ namespace Horseshoe.NET.IO.Email
         (
             string subject,
             string body,
-            string to = null,
-            IEnumerable<string> recipients = null,
-            string cc = null,
-            IEnumerable<string> ccRecipients = null,
-            string bcc = null,
-            IEnumerable<string> bccRecipients = null,
+            EmailAddressList to,
             string from = null,
             string attach = null,
             IEnumerable<string> attachments = null
@@ -83,24 +78,9 @@ namespace Horseshoe.NET.IO.Email
         {
             var validationMessages = new List<string>();
 
-            if (to == null && (recipients == null || !recipients.Any()))
+            if (to == null || !to.Any())
             {
-                validationMessages.Add("Please populate 'to' or 'recipients', mail cannot be sent otherwise");
-            }
-
-            if (to != null && !(recipients == null || !recipients.Any()))
-            {
-                validationMessages.Add("Please only populate 'to' or 'recipients', not both");
-            }
-
-            if (cc != null && !(ccRecipients == null || !ccRecipients.Any()))
-            {
-                validationMessages.Add("Please only populate 'cc' or 'ccRecipients', not both");
-            }
-
-            if (bcc != null && !(bccRecipients == null || !bccRecipients.Any()))
-            {
-                validationMessages.Add("Please only populate 'bcc' or 'bccRecipients', not both");
+                validationMessages.Add("'to' cannot be null or empty, mail cannot be sent without any recipients");
             }
 
             if (from == null && EmailSettings.DefaultFrom == null)

@@ -98,6 +98,7 @@
     <Compile Include="Db\RawSql.cs" />
     <Compile Include="Db\ScalarReaderParser.cs" />
     <Compile Include="Dates\DateUtil.cs" />
+    <Compile Include="IO\Email\EmailAddressList.cs" />
     <Compile Include="IO\Email\HtmlEmail.cs" />
     <Compile Include="IO\Email\PlainEmail.cs" />
     <Compile Include="IO\Email\EmailSettings.cs" />
