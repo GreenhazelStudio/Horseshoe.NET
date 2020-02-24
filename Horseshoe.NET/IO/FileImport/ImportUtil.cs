@@ -38,14 +38,14 @@ namespace Horseshoe.NET.IO.FileImport
                 }
                 catch (Exception ex)
                 {
-                    throw new ImportedDatumException(value, ex.Message, ex, columnName: column?.Name, length: column.Width, dataRef: dataReference);
+                    throw new ImportedDatumException(ex, value, columnName: column?.Name, length: column.Width, dataRef: dataReference);
                 }
             }
             if (value is string stringValue && column?.Width > 0)
             {
                 if (stringValue.Length > column.Width)
                 {
-                    throw new ImportedDatumException(stringValue, "value exceeds max width", columnName: column?.Name, length: column.Width, dataRef: dataReference);
+                    throw new ImportedDatumException("value exceeds max length", stringValue, columnName: column?.Name, length: column.Width, dataRef: dataReference);
                 }
             }
             return value;

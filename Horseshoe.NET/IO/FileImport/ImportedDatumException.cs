@@ -21,7 +21,7 @@ namespace Horseshoe.NET.IO.FileImport
 
         public string DataRef { get; set; }
 
-        public ImportedDatumException(object datum, string message, string columnName = null, int length = 0, string dataRef = null) : base(message)
+        public ImportedDatumException(string message, object datum, string columnName = null, int length = 0, string dataRef = null) : base(ToString(message, datum, columnName, length, dataRef))
         {
             Datum = datum;
             ColumnName = columnName;
@@ -29,7 +29,7 @@ namespace Horseshoe.NET.IO.FileImport
             DataRef = dataRef;
         }
 
-        public ImportedDatumException(object datum, string message, Exception innerException, string columnName = null, int length = 0, string dataRef = null) : base(message, innerException)
+        public ImportedDatumException(Exception innerException, object datum, string columnName = null, int length = 0, string dataRef = null) : base(ToString(innerException.Message, datum, columnName, length, dataRef), innerException)
         {
             Datum = datum;
             ColumnName = columnName;
@@ -37,13 +37,22 @@ namespace Horseshoe.NET.IO.FileImport
             DataRef = dataRef;
         }
 
-        public override string ToString()
+        public ImportedDatumException(string message, Exception innerException, object datum, string columnName = null, int length = 0, string dataRef = null) : base(ToString(message ?? innerException.Message, datum, columnName, length, dataRef), innerException)
+        {
+            Datum = datum;
+            ColumnName = columnName;
+            Length = length;
+            DataRef = dataRef;
+        }
+
+        static string ToString(string message, object datum, string columnName = null, int length = 0, string dataRef = null)
         {
             return
-                "datum=" + TextUtil.RevealNullOrBlank(Datum).Trunc(20, truncPolicy: TruncatePolicy.LongEllipsis) +
-                (ColumnName != null ? "; col=" + ColumnName : "") +
-                (Length > 0 ? "; len=" + Length : "") +
-                (DataRef != null ? "; dataref=" + DataRef : "");
+                (message != null ? message + " -- " : "") +
+                "Datum = " + TextUtil.RevealNullOrBlank(datum).Trunc(24, truncPolicy: TruncatePolicy.LongEllipsis) +
+                (columnName != null ? "; Column = " + columnName : "") +
+                (length > 0 ? "; Length = " + length : "") +
+                (dataRef != null ? "; Data Ref = " + dataRef : "");
         }
     }
 }
