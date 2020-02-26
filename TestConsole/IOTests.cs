@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 using Horseshoe.NET;
@@ -21,6 +22,7 @@ namespace TestConsole
         {
             Ftp.RequestUriCreated += (uri) => Console.WriteLine("URI: " + uri);
             Ftp.FileUploaded += (fileName, fileSize, statusCode, statusDescription) => Console.WriteLine("Upload results: " + fileName + " - " + FileUtil.GetDisplayFileSize(fileSize) + " - " + statusDescription);
+            Ftp.DirectoryContentsListed += (count, statusCode, statusDescription) => Console.WriteLine("Dir listing results: x" + count + " - " + statusDescription);
         }
 
         public override void Do()
@@ -31,7 +33,10 @@ namespace TestConsole
                 {
                     "Build SSRS URLs",
                     "Display file sizes",
-                    "Test FTP Upload"
+                    "Test FTP Upload",
+                    "Test FTP Download",
+                    "List FTP Directory",
+                    "regex"
                 },
                 title: "SSRS Test Menu"
             );
@@ -67,6 +72,49 @@ namespace TestConsole
                         serverPath: "/my_dir",
                         credentials: new Credential("username", "password")
                     );
+                    break;
+                case "Test FTP Download":
+                    var stream = Ftp.DownloadFile
+                    (
+                        "blank.txt",
+                        server: "11.22.33.44",
+                        serverPath: "/my_dir",
+                        credentials: new Credential("username", "password")
+                    );
+                    Console.WriteLine("File length: " + stream.Length);
+                    Console.WriteLine("File contents: " + Encoding.Default.GetString(stream.ToArray()));
+                    break;
+                case "List FTP Directory":
+                    var dirContents = Ftp.ListDirectoryContents
+                    (
+                        server: "11.22.33.44",
+                        serverPath: "/my_dir",
+                        credentials: new Credential("username", "password")
+                    );
+                    Console.WriteLine("Directory contents:");
+                    Console.WriteLine(string.Join(Environment.NewLine, dirContents));
+                    Console.WriteLine();
+
+                    dirContents = Ftp.ListDirectoryContents
+                    (
+                        fileMask: FtpFileMasks.Txt,
+                        server: "11.22.33.44",
+                        serverPath: "/my_dir",
+                        credentials: new Credential("username", "password")
+                    );
+                    Console.WriteLine("Directory contents (.txt files only):");
+                    Console.WriteLine(string.Join(Environment.NewLine, dirContents));
+                    break;
+                case "regex":
+                    var regexes = new[] { "^[^.]+$", "^[^\\.]+$" };
+                    var testStrings = new[] { "file.txt", "DIR" };
+                    foreach (var regex in regexes)
+                    {
+                        foreach (var str in testStrings)
+                        {
+                            Console.WriteLine("Testing '" + str + "' against '" + regex + "' -> " + Regex.IsMatch(str, regex));
+                        }
+                    }
                     break;
             }
         }

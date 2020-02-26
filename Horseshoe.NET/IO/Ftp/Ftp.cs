@@ -4,8 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
+using Horseshoe.NET.Collections;
 using Horseshoe.NET.Text;
 
 namespace Horseshoe.NET.IO.Ftp
@@ -15,10 +17,13 @@ namespace Horseshoe.NET.IO.Ftp
     {
         public static event Action<string> RequestUriCreated;
         public static event Action<string, long, int, string> FileUploaded;
+        public static event Action<string, long, int, string> FileDownloaded;
+        public static event Action<int, int, string> DirectoryContentsListed;
 
         public static void UploadFile
         (
             string filePath,
+            string newFileName = null,
             string server = null,
             int? port = null,
             string serverPath = "/",
@@ -42,12 +47,13 @@ namespace Horseshoe.NET.IO.Ftp
                 }
             }
 
-            UploadContent(fileContents, Path.GetFileName(filePath), server: server, port: port, serverPath: serverPath, credentials: credentials);
+            UploadContent(fileContents, newFileName ?? Path.GetFileName(filePath), server: server, port: port, serverPath: serverPath, credentials: credentials);
         }
 
         public static void UploadFile
         (
             FileInfo file,
+            string newFileName = null,
             string server = null,
             int? port = null,
             string serverPath = "/",
@@ -56,22 +62,17 @@ namespace Horseshoe.NET.IO.Ftp
             Encoding encoding = null
         )
         {
-            byte[] fileContents;
-
-            // Get the file bytes
-            if (isBinary)
-            {
-                fileContents = File.ReadAllBytes(file.FullName);
-            }
-            else
-            {
-                using (var streamReader = new StreamReader(file.OpenRead()))
-                {
-                    fileContents = (encoding ?? Encoding.Default).GetBytes(streamReader.ReadToEnd());
-                }
-            }
-
-            UploadContent(fileContents, file.Name, server: server, port: port, serverPath: serverPath, credentials: credentials);
+            UploadFile
+            (
+                file.FullName,
+                newFileName: newFileName,
+                server: server,
+                port: port,
+                serverPath: serverPath,
+                credentials: credentials,
+                isBinary: isBinary,
+                encoding: encoding
+            );
         }
 
         public static void UploadContent
@@ -101,7 +102,7 @@ namespace Horseshoe.NET.IO.Ftp
             Credential? credentials = null
         )
         {
-            // Get the object used to communicate with the server.
+            // Get the object used to communicate with the server
             var uriString = CreateRequestUriString(server ?? FtpSettings.DefaultFtpServer, port ?? FtpSettings.DefaultPort, serverPath, fileName);
             var request = (FtpWebRequest)WebRequest.Create(uriString);
             request.Method = WebRequestMethods.Ftp.UploadFile;
@@ -115,8 +116,136 @@ namespace Horseshoe.NET.IO.Ftp
 
             using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
             {
-                FileUploaded?.Invoke(fileName ?? "[null]", bytes.LongLength, (int)response.StatusCode, response.StatusDescription);
+                FileUploaded?.Invoke(TextUtil.RevealNullOrBlank(fileName), bytes.LongLength, (int)response.StatusCode, response.StatusDescription);
             }
+        }
+
+        public static void DownloadFile
+        (
+            string serverFileName,
+            string downloadFilePath,
+            bool overwrite = false,
+            string server = null,
+            int? port = null,
+            string serverPath = "/",
+            Credential? credentials = null
+        )
+        {
+            var stream = DownloadFile
+            (
+                serverFileName,
+                server: server,
+                port: port,
+                serverPath: serverPath,
+                credentials: credentials
+            );
+            if (Directory.Exists(downloadFilePath))
+            {
+                downloadFilePath = Path.Combine(downloadFilePath, serverFileName);
+            }
+            if (File.Exists(downloadFilePath) && !overwrite)
+            {
+                throw new UtilityException("A file named '" + Path.GetFileName(downloadFilePath) + "' already exists in '" + Path.GetDirectoryName(downloadFilePath) + "'");
+            }
+            File.WriteAllBytes(downloadFilePath, stream.ToArray());
+        }
+
+        public static MemoryStream DownloadFile
+        (
+            string serverFileName,
+            string server = null,
+            int? port = null,
+            string serverPath = "/",
+            Credential? credentials = null
+        )
+        {
+            var memoryStream = new MemoryStream();
+
+            // Get the object used to communicate with the server
+            var uriString = CreateRequestUriString(server ?? FtpSettings.DefaultFtpServer, port ?? FtpSettings.DefaultPort, serverPath, serverFileName);
+            var request = (FtpWebRequest)WebRequest.Create(uriString);
+            request.Method = WebRequestMethods.Ftp.DownloadFile;
+            request.Credentials = (credentials ?? FtpSettings.DefaultCredentials)?.ToNetworkCredentials() ?? new NetworkCredential("anonymous", "ftpuser");
+
+            using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
+            {
+                var stream = response.GetResponseStream();
+                stream.CopyTo(memoryStream);
+                FileDownloaded?.Invoke(serverFileName, memoryStream.Length, (int)response.StatusCode, response.StatusDescription);
+            }
+
+            return memoryStream;
+        }
+
+        public static string[] ListDetailedDirectoryContents
+        (
+            string server = null,
+            int? port = null,
+            string serverPath = "/",
+            Credential? credentials = null
+        )
+        {
+            string[] contents;
+
+            // Get the object used to communicate with the server
+            var uriString = CreateRequestUriString(server ?? FtpSettings.DefaultFtpServer, port ?? FtpSettings.DefaultPort, serverPath, null);
+            var request = (FtpWebRequest)WebRequest.Create(uriString);
+            request.Method = WebRequestMethods.Ftp.ListDirectoryDetails;
+            request.Credentials = (credentials ?? FtpSettings.DefaultCredentials)?.ToNetworkCredentials() ?? new NetworkCredential("anonymous", "ftpuser");
+
+            using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
+            {
+                var streamReader = new StreamReader(response.GetResponseStream());
+                contents = streamReader.ReadToEnd().Replace("\r\n", "\n").Split('\n');
+                DirectoryContentsListed?.Invoke(contents.Length, (int)response.StatusCode, response.StatusDescription);
+            }
+
+            return contents;
+        }
+
+
+        public static string[] ListDirectoryContents
+        (
+            string fileMask = null,
+            string server = null,
+            int? port = null,
+            string serverPath = "/",
+            Credential? credentials = null
+        )
+        {
+            string[] contents;
+            Regex filter = null;
+
+            // Get the object used to communicate with the server
+            var uriString = CreateRequestUriString(server ?? FtpSettings.DefaultFtpServer, port ?? FtpSettings.DefaultPort, serverPath, null);
+            var request = (FtpWebRequest)WebRequest.Create(uriString);
+            request.Method = WebRequestMethods.Ftp.ListDirectory;
+            request.Credentials = (credentials ?? FtpSettings.DefaultCredentials)?.ToNetworkCredentials() ?? new NetworkCredential("anonymous", "ftpuser");
+
+            // Convert the file mask to regex
+            if (fileMask == FtpFileMasks.NoExtension)
+            {
+                filter = new Regex("^[^.]+$");
+            }
+            else if (fileMask != null)
+            {
+                filter = new Regex(fileMask.Replace(".", @"\.").Replace("*", ".*").Replace("?", "."), RegexOptions.IgnoreCase);
+            }
+
+            using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
+            {
+                var streamReader = new StreamReader(response.GetResponseStream());
+                contents = streamReader.ReadToEnd().Replace("\r\n", "\n").Split('\n');
+                if (filter != null)
+                {
+                    contents = contents
+                        .Where(s => filter.IsMatch(s))
+                        .ToArray();
+                }
+                DirectoryContentsListed?.Invoke(contents.Length, (int)response.StatusCode, response.StatusDescription);
+            }
+
+            return contents;
         }
 
         static string CreateRequestUriString(string server, int? port, string serverPath, string fileName)

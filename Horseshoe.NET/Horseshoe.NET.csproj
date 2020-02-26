@@ -119,6 +119,7 @@
     <Compile Include="IO\FileImport\NoMapColumn.cs" />
     <Compile Include="IO\FileImport\NullableColumn.cs" />
     <Compile Include="IO\Ftp\Ftp.cs" />
+    <Compile Include="IO\Ftp\FtpFileMasks.cs" />
     <Compile Include="IO\Ftp\FtpSettings.cs" />
     <Compile Include="OleDb\Delete.cs" />
     <Compile Include="OleDb\Execute.cs" />
