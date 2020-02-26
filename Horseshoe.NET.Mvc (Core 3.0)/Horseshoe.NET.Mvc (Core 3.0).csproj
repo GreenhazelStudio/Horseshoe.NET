@@ -11,7 +11,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Horseshoe.NET (Standard)\Horseshoe.NET (Standard).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET (Standard)\Horseshoe.NET (Standard).csproj">
+      <Private>false</Private>
+    </ProjectReference>
   </ItemGroup>
 
 

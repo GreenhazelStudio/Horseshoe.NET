@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Horseshoe.NET.IO.FileImport
+namespace Horseshoe.NET.IO.FileImport.Enums
 {
     public enum DataType
     {

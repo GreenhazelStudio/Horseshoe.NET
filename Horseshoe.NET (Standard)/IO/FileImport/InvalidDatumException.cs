@@ -11,7 +11,7 @@ namespace Horseshoe.NET.IO.FileImport
 {
     [SuppressMessage("Usage", "CA2237:Mark ISerializable types with serializable", Justification = "Serialization irrelavent")]
     [SuppressMessage("Design", "CA1032:Implement standard exception constructors", Justification = "Only need certain constructors")]
-    public class ImportedDatumException : Exception
+    public class InvalidDatumException : DataImportException
     {
         public object Datum { get; set; }
 
@@ -21,7 +21,7 @@ namespace Horseshoe.NET.IO.FileImport
 
         public string DataRef { get; set; }
 
-        public ImportedDatumException(string message, object datum, string columnName = null, int length = 0, string dataRef = null) : base(ToString(message, datum, columnName, length, dataRef))
+        public InvalidDatumException(string message, object datum, string columnName = null, int length = 0, string dataRef = null) : base(ToString(message, datum, columnName, length, dataRef))
         {
             Datum = datum;
             ColumnName = columnName;
@@ -29,7 +29,7 @@ namespace Horseshoe.NET.IO.FileImport
             DataRef = dataRef;
         }
 
-        public ImportedDatumException(Exception innerException, object datum, string columnName = null, int length = 0, string dataRef = null) : base(ToString(innerException.Message, datum, columnName, length, dataRef), innerException)
+        public InvalidDatumException(Exception innerException, object datum, string columnName = null, int length = 0, string dataRef = null) : base(ToString(innerException.Message, datum, columnName, length, dataRef), innerException)
         {
             Datum = datum;
             ColumnName = columnName;
@@ -37,7 +37,7 @@ namespace Horseshoe.NET.IO.FileImport
             DataRef = dataRef;
         }
 
-        public ImportedDatumException(string message, Exception innerException, object datum, string columnName = null, int length = 0, string dataRef = null) : base(ToString(message ?? innerException.Message, datum, columnName, length, dataRef), innerException)
+        public InvalidDatumException(string message, Exception innerException, object datum, string columnName = null, int length = 0, string dataRef = null) : base(ToString(message ?? innerException.Message, datum, columnName, length, dataRef), innerException)
         {
             Datum = datum;
             ColumnName = columnName;

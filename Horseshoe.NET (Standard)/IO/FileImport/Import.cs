@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Horseshoe.NET.Collections;
+using Horseshoe.NET.IO.FileImport.Enums;
 using Horseshoe.NET.Objects;
 using Horseshoe.NET.Text;
 
@@ -277,11 +278,11 @@ namespace Horseshoe.NET.IO.FileImport
                 }
             }
 
-            public static DataTable AsDataTable(string text, Encoding encoding, char delimiter, bool hasHeaderRow = false)
+            public static DataTable AsDataTable(string text, Encoding encoding, char delimiter, bool hasHeaderRow = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
             {
                 using (var stream = new MemoryStream((encoding ?? Encoding.ASCII).GetBytes(text)))
                 {
-                    return AsDataTable(stream, delimiter, hasHeaderRow: hasHeaderRow);
+                    return AsDataTable(stream, delimiter, hasHeaderRow: hasHeaderRow, dataErrorHandling: dataErrorHandling);
                 }
             }
 
@@ -301,30 +302,30 @@ namespace Horseshoe.NET.IO.FileImport
                 }
             }
 
-            public static DataTable AsDataTable(Stream stream, char delimiter, bool hasHeaderRow = false)
+            public static DataTable AsDataTable(Stream stream, char delimiter, bool hasHeaderRow = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
             {
                 Column[] columns = null;
 
                 // get imported data - ensures columns is not null
-                var objectArrays = ImportDelimited.AsObjects(stream, delimiter, ref columns, hasHeaderRow);
+                var objectArrays = ImportDelimited.AsObjects(stream, delimiter, ref columns, hasHeaderRow, dataErrorHandling);
 
                 return ImportDelimited.AsDataTable(objectArrays, columns);
             }
 
-            public static DataTable AsDataTable(Stream stream, char delimiter, Column[] columns, bool hasHeaderRow = false)
+            public static DataTable AsDataTable(Stream stream, char delimiter, Column[] columns, bool hasHeaderRow = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
             {
                 // get imported data - ensures columns is not null
-                var objectArrays = ImportDelimited.AsObjects(stream, delimiter, ref columns, hasHeaderRow);
+                var objectArrays = ImportDelimited.AsObjects(stream, delimiter, ref columns, hasHeaderRow, dataErrorHandling);
 
                 return ImportDelimited.AsDataTable(objectArrays, columns);
             }
 
-            public static DataTable AsDataTable(Stream stream, char delimiter, out Column[] columns, bool hasHeaderRow = false)
+            public static DataTable AsDataTable(Stream stream, char delimiter, out Column[] columns, bool hasHeaderRow = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
             {
                 Column[] _columns = null;
 
                 // get imported data - ensures columns is not null
-                var objectArrays = ImportDelimited.AsObjects(stream, delimiter, ref _columns, hasHeaderRow);
+                var objectArrays = ImportDelimited.AsObjects(stream, delimiter, ref _columns, hasHeaderRow, dataErrorHandling);
 
                 columns = _columns;
                 return ImportDelimited.AsDataTable(objectArrays, _columns);
@@ -452,27 +453,27 @@ namespace Horseshoe.NET.IO.FileImport
                 }
             }
 
-            public static IEnumerable<object[]> AsObjects(Stream stream, char delimiter, bool hasHeaderRow = false)
+            public static IEnumerable<object[]> AsObjects(Stream stream, char delimiter, bool hasHeaderRow = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
             {
                 Column[] columns = null;
 
                 // get imported data - ensures columns is not null
-                var objectArrays = ImportDelimited.AsObjects(stream, delimiter, ref columns, hasHeaderRow);
+                var objectArrays = ImportDelimited.AsObjects(stream, delimiter, ref columns, hasHeaderRow, dataErrorHandling);
 
                 return objectArrays;
             }
 
-            public static IEnumerable<object[]> AsObjects(Stream stream, char delimiter, Column[] columns, bool hasHeaderRow = false)
+            public static IEnumerable<object[]> AsObjects(Stream stream, char delimiter, Column[] columns, bool hasHeaderRow = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
             {
-                return ImportDelimited.AsObjects(stream, delimiter, ref columns, hasHeaderRow);
+                return ImportDelimited.AsObjects(stream, delimiter, ref columns, hasHeaderRow, dataErrorHandling);
             }
 
-            public static IEnumerable<object[]> AsObjects(Stream stream, char delimiter, out Column[] columns, bool hasHeaderRow = false)
+            public static IEnumerable<object[]> AsObjects(Stream stream, char delimiter, out Column[] columns, bool hasHeaderRow = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
             {
                 Column[] _columns = null;
 
                 // get imported data - ensures columns is not null
-                var objectArrays = ImportDelimited.AsObjects(stream, delimiter, ref _columns, hasHeaderRow);
+                var objectArrays = ImportDelimited.AsObjects(stream, delimiter, ref _columns, hasHeaderRow, dataErrorHandling);
 
                 columns = _columns;
                 return objectArrays;
@@ -510,11 +511,11 @@ namespace Horseshoe.NET.IO.FileImport
                 }
             }
 
-            public static IEnumerable<E> AsCollection<E>(Stream stream, char delimiter, Column[] columns, bool hasHeaderRow = false, char[] charsToRemove = null) where E : class, new()
+            public static IEnumerable<E> AsCollection<E>(Stream stream, char delimiter, Column[] columns, bool hasHeaderRow = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw, char[] charsToRemove = null) where E : class, new()
             {
                 var list = new List<E>();
                 // get imported data
-                var objectArrays = ImportDelimited.AsObjects(stream, delimiter, ref columns, hasHeaderRow);
+                var objectArrays = ImportDelimited.AsObjects(stream, delimiter, ref columns, hasHeaderRow, dataErrorHandling);
 
                 // characters to remove (whitespace is already handled) to aid in the conversion of column names to object properties
                 charsToRemove = charsToRemove != null
@@ -564,26 +565,26 @@ namespace Horseshoe.NET.IO.FileImport
         [SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification = "This is my style")]
         public static class FixedWidth
         {
-            public static DataTable AsDataTable(string filePath, Column[] columns, AutoTruncate autoTrunc = AutoTruncate.Trim)
+            public static DataTable AsDataTable(string filePath, Column[] columns, AutoTruncate autoTrunc = AutoTruncate.Trim, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
             {
                 using (var stream = File.OpenRead(filePath))
                 {
-                    return AsDataTable(stream, columns, autoTrunc: autoTrunc);
+                    return AsDataTable(stream, columns, autoTrunc: autoTrunc, dataErrorHandling: dataErrorHandling);
                 }
             }
 
-            public static DataTable AsDataTable(string text, Encoding encoding, Column[] columns, AutoTruncate autoTrunc = AutoTruncate.Trim)
+            public static DataTable AsDataTable(string text, Encoding encoding, Column[] columns, AutoTruncate autoTrunc = AutoTruncate.Trim, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
             {
                 using (var stream = new MemoryStream((encoding ?? Encoding.ASCII).GetBytes(text)))
                 {
-                    return AsDataTable(stream, columns, autoTrunc: autoTrunc);
+                    return AsDataTable(stream, columns, autoTrunc: autoTrunc, dataErrorHandling: dataErrorHandling);
                 }
             }
 
-            public static DataTable AsDataTable(Stream stream, Column[] columns, AutoTruncate autoTrunc = AutoTruncate.Trim)
+            public static DataTable AsDataTable(Stream stream, Column[] columns, AutoTruncate autoTrunc = AutoTruncate.Trim, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
             {
                 // get imported data - ensures columns is not null
-                var objectArrays = ImportFixedWidth.AsObjects(stream, columns, autoTrunc);
+                var objectArrays = ImportFixedWidth.AsObjects(stream, columns, autoTrunc, dataErrorHandling);
 
                 return ImportFixedWidth.AsDataTable(objectArrays, columns.Where(c => c.IsMappable).ToArray());
             }
@@ -609,25 +610,25 @@ namespace Horseshoe.NET.IO.FileImport
                 return ImportFixedWidth.AsStrings(stream, columns, autoTrunc);
             }
 
-            public static IEnumerable<object[]> AsObjects(string filePath, Column[] columns, AutoTruncate autoTrunc = AutoTruncate.Trim)
+            public static IEnumerable<object[]> AsObjects(string filePath, Column[] columns, AutoTruncate autoTrunc = AutoTruncate.Trim, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
             {
                 using (var stream = File.OpenRead(filePath))
                 {
-                    return AsObjects(stream, columns, autoTrunc: autoTrunc);
+                    return AsObjects(stream, columns, autoTrunc: autoTrunc, dataErrorHandling: dataErrorHandling);
                 }
             }
 
-            public static IEnumerable<object[]> AsObjects(string text, Encoding encoding, Column[] columns, AutoTruncate autoTrunc = AutoTruncate.Trim)
+            public static IEnumerable<object[]> AsObjects(string text, Encoding encoding, Column[] columns, AutoTruncate autoTrunc = AutoTruncate.Trim, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
             {
                 using (var stream = new MemoryStream((encoding ?? Encoding.ASCII).GetBytes(text)))
                 {
-                    return AsObjects(stream, columns, autoTrunc: autoTrunc);
+                    return AsObjects(stream, columns, autoTrunc: autoTrunc, dataErrorHandling: dataErrorHandling);
                 }
             }
 
-            public static IEnumerable<object[]> AsObjects(Stream stream, Column[] columns, AutoTruncate autoTrunc = AutoTruncate.Trim)
+            public static IEnumerable<object[]> AsObjects(Stream stream, Column[] columns, AutoTruncate autoTrunc = AutoTruncate.Trim, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
             {
-                return ImportFixedWidth.AsObjects(stream, columns, autoTrunc);
+                return ImportFixedWidth.AsObjects(stream, columns, autoTrunc, dataErrorHandling);
             }
 
             public static IEnumerable<E> AsCollection<E>(string filePath, Column[] columns, Func<object[], E> parseFunc = null, AutoTruncate autoTrunc = AutoTruncate.Trim, char[] charsToRemove = null) where E : class, new()
@@ -646,20 +647,20 @@ namespace Horseshoe.NET.IO.FileImport
                 }
             }
 
-            public static IEnumerable<E> AsCollection<E>(Stream stream, Column[] columns, Func<object[], E> parseFunc = null, AutoTruncate autoTrunc = AutoTruncate.Trim, char[] charsToRemove = null) where E : class, new()
+            public static IEnumerable<E> AsCollection<E>(Stream stream, Column[] columns, Func<object[], E> parseFunc = null, AutoTruncate autoTrunc = AutoTruncate.Trim, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw, char[] charsToRemove = null) where E : class, new()
             {
                 // get imported data
-                var objectArrays = ImportFixedWidth.AsObjects(stream, columns, autoTrunc);
+                var objectArrays = ImportFixedWidth.AsObjects(stream, columns, autoTrunc, dataErrorHandling);
 
                 return ImportFixedWidth.AsCollection(objectArrays, columns.Where(c => c.IsMappable).ToArray(), parseFunc, charsToRemove);
             }
 
-            public static IEnumerable<E> AsCollection<E>(Stream stream, out Column[] columns, Func<object[], E> parseFunc = null, AutoTruncate autoTrunc = AutoTruncate.Trim, char[] charsToRemove = null) where E : class, new()
+            public static IEnumerable<E> AsCollection<E>(Stream stream, out Column[] columns, Func<object[], E> parseFunc = null, AutoTruncate autoTrunc = AutoTruncate.Trim, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw, char[] charsToRemove = null) where E : class, new()
             {
                 Column[] _columns = null;
 
                 // get imported data - ensures columns is not null
-                var objectArrays = ImportFixedWidth.AsObjects(stream, _columns, autoTrunc);
+                var objectArrays = ImportFixedWidth.AsObjects(stream, _columns, autoTrunc, dataErrorHandling);
 
                 columns = _columns;
                 return ImportFixedWidth.AsCollection(objectArrays, _columns, parseFunc, charsToRemove);

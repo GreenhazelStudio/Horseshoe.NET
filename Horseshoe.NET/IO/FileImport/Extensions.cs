@@ -10,9 +10,9 @@ namespace Horseshoe.NET.IO.FileImport
 {
     public static class Extensions
     {
-        public static bool IsBlank(this object[] array)
+        public static bool IsBlank(this object[] objects)
         {
-            foreach (var obj in array)
+            foreach (var obj in objects)
             {
                 if (obj is string str)
                 {
@@ -24,6 +24,11 @@ namespace Horseshoe.NET.IO.FileImport
                 }
             }
             return true;
+        }
+
+        public static bool HasDataImportErrors(this object[] objects)
+        {
+            return objects.Any(o => o is DataImportException);
         }
     }
 }

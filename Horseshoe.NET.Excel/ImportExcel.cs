@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Horseshoe.NET.Collections;
 using Horseshoe.NET.IO.FileImport;
 using static Horseshoe.NET.IO.FileImport.ImportUtil;
+using Horseshoe.NET.IO.FileImport.Enums;
 using Horseshoe.NET.Objects;
 using Horseshoe.NET.Text;
 using static Horseshoe.NET.Text.TextUtil;  // Zap(), etc.
@@ -21,279 +22,279 @@ namespace Horseshoe.NET.Excel
 {
     public static class ImportExcel
     {
-        public static DataTable AsDataTable(string filePath, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static DataTable AsDataTable(string filePath, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
-            return AsDataTable(filePath, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
+            return AsDataTable(filePath, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
         }
 
-        public static DataTable AsDataTable(string filePath, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static DataTable AsDataTable(string filePath, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
-            return AsDataTable(new FileInfo(filePath), columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
+            return AsDataTable(new FileInfo(filePath), columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
         }
 
-        public static DataTable AsDataTable(string filePath, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static DataTable AsDataTable(string filePath, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
-            return AsDataTable(new FileInfo(filePath), out columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
+            return AsDataTable(new FileInfo(filePath), out columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
         }
 
-        public static DataTable AsDataTable(FileInfo file, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static DataTable AsDataTable(FileInfo file, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
-            return AsDataTable(file, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
+            return AsDataTable(file, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
         }
 
-        public static DataTable AsDataTable(FileInfo file, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static DataTable AsDataTable(FileInfo file, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
             var worksheet = GetWorksheet(file, sheetNum);
-            var objectArrays = AsObjects(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, suppressExcelErrors);
+            var objectArrays = AsObjects(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, suppressExcelErrors, dataErrorHandling);
             return AsDataTable(objectArrays, columns);
         }
 
-        public static DataTable AsDataTable(FileInfo file, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static DataTable AsDataTable(FileInfo file, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
             Column[] _columns = null;
             var worksheet = GetWorksheet(file, sheetNum);
-            var objectArrays = AsObjects(worksheet, ref _columns, hasHeaderRow, false, blankRowMode, suppressExcelErrors);
+            var objectArrays = AsObjects(worksheet, ref _columns, hasHeaderRow, false, blankRowMode, suppressExcelErrors, dataErrorHandling);
 
             columns = _columns;
             return AsDataTable(objectArrays, _columns);
         }
 
-        public static DataTable AsDataTable(Stream stream, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static DataTable AsDataTable(Stream stream, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
-            return AsDataTable(stream, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
+            return AsDataTable(stream, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
         }
 
-        public static DataTable AsDataTable(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static DataTable AsDataTable(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
             if (stream is FileStream fileStream)
             {
                 switch (Path.GetExtension(fileStream.Name).ToUpper())
                 {
                     case ".XLS":
-                        return AsDataTableFromXlsStream(stream, columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
+                        return AsDataTableFromXlsStream(stream, columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
                     case ".XLSX":
-                        return AsDataTableFromXlsxStream(stream, columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
+                        return AsDataTableFromXlsxStream(stream, columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
                 }
                 throw new UtilityException("At this time we only recognize .xls and .xlsx Excel extensions: " + fileStream.Name + " -- also you can try using AsDataTableFromXlsStream() or AsDataTableFromXlsxStream()");
             }
             throw new UtilityException("Expected System.IO.FileStream, found " + stream.GetType().Name);
         }
 
-        public static DataTable AsDataTable(Stream stream, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static DataTable AsDataTable(Stream stream, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
             if (stream is FileStream fileStream)
             {
                 switch (Path.GetExtension(fileStream.Name).ToUpper())
                 {
                     case ".XLS":
-                        return AsDataTableFromXlsStream(stream, out columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
+                        return AsDataTableFromXlsStream(stream, out columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
                     case ".XLSX":
-                        return AsDataTableFromXlsxStream(stream, out columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
+                        return AsDataTableFromXlsxStream(stream, out columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
                 }
                 throw new UtilityException("At this time we only recognize .xls and .xlsx Excel extensions: " + fileStream.Name + " -- also you can try using AsDataTableFromXlsStream() or AsDataTableFromXlsxStream()");
             }
             throw new UtilityException("Expected System.IO.FileStream, found " + stream.GetType().Name);
         }
 
-        public static DataTable AsDataTableFromXlsStream(Stream stream, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static DataTable AsDataTableFromXlsStream(Stream stream, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
-            return AsDataTableFromXlsStream(stream, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
+            return AsDataTableFromXlsStream(stream, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
         }
 
-        public static DataTable AsDataTableFromXlsStream(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static DataTable AsDataTableFromXlsStream(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
             var workbook = new HSSFWorkbook(stream);
             var worksheet = workbook.GetSheetAt(sheetNum);
-            var objectArrays = AsObjects(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, suppressExcelErrors);
+            var objectArrays = AsObjects(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, suppressExcelErrors, dataErrorHandling);
 
             return AsDataTable(objectArrays, columns);
         }
 
-        public static DataTable AsDataTableFromXlsStream(Stream stream, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static DataTable AsDataTableFromXlsStream(Stream stream, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
             Column[] _columns = null;
             var workbook = new HSSFWorkbook(stream);
             var worksheet = workbook.GetSheetAt(sheetNum);
-            var objectArrays = AsObjects(worksheet, ref _columns, hasHeaderRow, false, blankRowMode, suppressExcelErrors);
+            var objectArrays = AsObjects(worksheet, ref _columns, hasHeaderRow, false, blankRowMode, suppressExcelErrors, dataErrorHandling);
 
             columns = _columns;
             return AsDataTable(objectArrays, _columns);
         }
 
-        public static DataTable AsDataTableFromXlsxStream(Stream stream, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static DataTable AsDataTableFromXlsxStream(Stream stream, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
-            return AsDataTableFromXlsxStream(stream, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
+            return AsDataTableFromXlsxStream(stream, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
         }
 
-        public static DataTable AsDataTableFromXlsxStream(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static DataTable AsDataTableFromXlsxStream(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
             var workbook = new XSSFWorkbook(stream);
             var worksheet = workbook.GetSheetAt(sheetNum);
-            var objectArrays = AsObjects(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, suppressExcelErrors);
+            var objectArrays = AsObjects(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, suppressExcelErrors, dataErrorHandling);
 
             return AsDataTable(objectArrays, columns);
         }
 
-        public static DataTable AsDataTableFromXlsxStream(Stream stream, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static DataTable AsDataTableFromXlsxStream(Stream stream, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
             Column[] _columns = null;
             var workbook = new XSSFWorkbook(stream);
             var worksheet = workbook.GetSheetAt(sheetNum);
-            var objectArrays = AsObjects(worksheet, ref _columns, hasHeaderRow, false, blankRowMode, suppressExcelErrors);
+            var objectArrays = AsObjects(worksheet, ref _columns, hasHeaderRow, false, blankRowMode, suppressExcelErrors, dataErrorHandling);
 
             columns = _columns;
             return AsDataTable(objectArrays, _columns);
         }
 
-        public static IEnumerable<string[]> AsStrings(string filePath, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false)
+        public static IEnumerable<string[]> AsStrings(string filePath, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
-            return AsStrings(filePath, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, autoTrunc: autoTrunc, suppressExcelErrors: suppressExcelErrors);
+            return AsStrings(filePath, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, autoTrunc: autoTrunc, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
         }
 
-        public static IEnumerable<string[]> AsStrings(string filePath, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false)
+        public static IEnumerable<string[]> AsStrings(string filePath, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
-            return AsStrings(new FileInfo(filePath), columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, autoTrunc: autoTrunc, suppressExcelErrors: suppressExcelErrors);
+            return AsStrings(new FileInfo(filePath), columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, autoTrunc: autoTrunc, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
         }
 
-        public static IEnumerable<string[]> AsStrings(string filePath, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false)
+        public static IEnumerable<string[]> AsStrings(string filePath, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
-            return AsStrings(new FileInfo(filePath), out columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, autoTrunc: autoTrunc, suppressExcelErrors: suppressExcelErrors);
+            return AsStrings(new FileInfo(filePath), out columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, autoTrunc: autoTrunc, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
         }
 
-        public static IEnumerable<string[]> AsStrings(FileInfo file, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false)
+        public static IEnumerable<string[]> AsStrings(FileInfo file, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
-            return AsStrings(file, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, autoTrunc: autoTrunc, suppressExcelErrors: suppressExcelErrors);
+            return AsStrings(file, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, autoTrunc: autoTrunc, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
         }
 
-        public static IEnumerable<string[]> AsStrings(FileInfo file, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false)
+        public static IEnumerable<string[]> AsStrings(FileInfo file, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
             var worksheet = GetWorksheet(file, sheetNum);
-            return AsStrings(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, autoTrunc, suppressExcelErrors);
+            return AsStrings(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, autoTrunc, suppressExcelErrors, dataErrorHandling);
         }
 
-        public static IEnumerable<string[]> AsStrings(FileInfo file, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false)
+        public static IEnumerable<string[]> AsStrings(FileInfo file, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
             var worksheet = GetWorksheet(file, sheetNum);
             Column[] _columns = null;
-            var stringArrays = AsStrings(worksheet, ref _columns, hasHeaderRow, false, blankRowMode, autoTrunc, suppressExcelErrors);
+            var stringArrays = AsStrings(worksheet, ref _columns, hasHeaderRow, false, blankRowMode, autoTrunc, suppressExcelErrors, dataErrorHandling);
             columns = _columns;
             return stringArrays;
         }
 
-        public static IEnumerable<string[]> AsStrings(Stream stream, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false)
+        public static IEnumerable<string[]> AsStrings(Stream stream, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
-            return AsStrings(stream, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, autoTrunc: autoTrunc, suppressExcelErrors: suppressExcelErrors);
+            return AsStrings(stream, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, autoTrunc: autoTrunc, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
         }
 
-        public static IEnumerable<string[]> AsStrings(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false)
+        public static IEnumerable<string[]> AsStrings(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
             if (stream is FileStream fileStream)
             {
                 switch (Path.GetExtension(fileStream.Name).ToUpper())
                 {
                     case ".XLS":
-                        return AsStringsFromXlsStream(stream, columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, autoTrunc: autoTrunc, suppressExcelErrors: suppressExcelErrors);
+                        return AsStringsFromXlsStream(stream, columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, autoTrunc: autoTrunc, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
                     case ".XLSX":
-                        return AsStringsFromXlsxStream(stream, columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, autoTrunc: autoTrunc, suppressExcelErrors: suppressExcelErrors);
+                        return AsStringsFromXlsxStream(stream, columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, autoTrunc: autoTrunc, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
                 }
                 throw new UtilityException("At this time we only recognize .xls and .xlsx Excel extensions: " + fileStream.Name + " -- also you can try using AsStringsFromXlsStream() or AsStringsFromXlsxStream()");
             }
             throw new UtilityException("Expected System.IO.FileStream, found " + stream.GetType().Name);
         }
 
-        public static IEnumerable<string[]> AsStrings(Stream stream, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false)
+        public static IEnumerable<string[]> AsStrings(Stream stream, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
             if (stream is FileStream fileStream)
             {
                 switch (Path.GetExtension(fileStream.Name).ToUpper())
                 {
                     case ".XLS":
-                        return AsStringsFromXlsStream(stream, out columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, autoTrunc: autoTrunc, suppressExcelErrors: suppressExcelErrors);
+                        return AsStringsFromXlsStream(stream, out columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, autoTrunc: autoTrunc, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
                     case ".XLSX":
-                        return AsStringsFromXlsxStream(stream, out columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, autoTrunc: autoTrunc, suppressExcelErrors: suppressExcelErrors);
+                        return AsStringsFromXlsxStream(stream, out columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, autoTrunc: autoTrunc, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
                 }
                 throw new UtilityException("At this time we only recognize .xls and .xlsx Excel extensions: " + fileStream.Name + " -- also you can try using AsStringsFromXlsStream() or AsStringsFromXlsxStream()");
             }
             throw new UtilityException("Expected System.IO.FileStream, found " + stream.GetType().Name);
         }
 
-        public static IEnumerable<string[]> AsStringsFromXlsStream(Stream stream, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false)
+        public static IEnumerable<string[]> AsStringsFromXlsStream(Stream stream, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
-            return AsStringsFromXlsStream(stream, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, autoTrunc: autoTrunc, suppressExcelErrors: suppressExcelErrors);
+            return AsStringsFromXlsStream(stream, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, autoTrunc: autoTrunc, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
         }
 
-        public static IEnumerable<string[]> AsStringsFromXlsStream(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false)
+        public static IEnumerable<string[]> AsStringsFromXlsStream(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
             var workbook = new HSSFWorkbook(stream);
             var worksheet = workbook.GetSheetAt(sheetNum);
-            return AsStrings(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, autoTrunc, suppressExcelErrors);
+            return AsStrings(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, autoTrunc, suppressExcelErrors, dataErrorHandling);
         }
 
-        public static IEnumerable<string[]> AsStringsFromXlsStream(Stream stream, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false)
+        public static IEnumerable<string[]> AsStringsFromXlsStream(Stream stream, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
             Column[] _columns = null;
             var workbook = new HSSFWorkbook(stream);
             var worksheet = workbook.GetSheetAt(sheetNum);
-            var stringArrays = AsStrings(worksheet, ref _columns, hasHeaderRow, false, blankRowMode, autoTrunc, suppressExcelErrors);
+            var stringArrays = AsStrings(worksheet, ref _columns, hasHeaderRow, false, blankRowMode, autoTrunc, suppressExcelErrors, dataErrorHandling);
 
             columns = _columns;
             return stringArrays;
         }
 
-        public static IEnumerable<string[]> AsStringsFromXlsxStream(Stream stream, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false)
+        public static IEnumerable<string[]> AsStringsFromXlsxStream(Stream stream, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
-            return AsStringsFromXlsxStream(stream, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, autoTrunc: autoTrunc, suppressExcelErrors: suppressExcelErrors);
+            return AsStringsFromXlsxStream(stream, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, autoTrunc: autoTrunc, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
         }
 
-        public static IEnumerable<string[]> AsStringsFromXlsxStream(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false)
+        public static IEnumerable<string[]> AsStringsFromXlsxStream(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
             var workbook = new XSSFWorkbook(stream);
             var worksheet = workbook.GetSheetAt(sheetNum);
-            return AsStrings(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, autoTrunc, suppressExcelErrors);
+            return AsStrings(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, autoTrunc, suppressExcelErrors, dataErrorHandling);
         }
 
-        public static IEnumerable<string[]> AsStringsFromXlsxStream(Stream stream, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false)
+        public static IEnumerable<string[]> AsStringsFromXlsxStream(Stream stream, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, AutoTruncate autoTrunc = AutoTruncate.Trim, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
             Column[] _columns = null;
             var workbook = new XSSFWorkbook(stream);
             var worksheet = workbook.GetSheetAt(sheetNum);
-            var stringArrays = AsStrings(worksheet, ref _columns, hasHeaderRow, false, blankRowMode, autoTrunc, suppressExcelErrors);
+            var stringArrays = AsStrings(worksheet, ref _columns, hasHeaderRow, false, blankRowMode, autoTrunc, suppressExcelErrors, dataErrorHandling);
 
             columns = _columns;
             return stringArrays;
         }
 
-        public static IEnumerable<object[]> AsObjects(string filePath, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static IEnumerable<object[]> AsObjects(string filePath, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
-            return AsObjects(filePath, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
+            return AsObjects(filePath, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
         }
 
-        public static IEnumerable<object[]> AsObjects(string filePath, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static IEnumerable<object[]> AsObjects(string filePath, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
-            return AsObjects(new FileInfo(filePath), columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
+            return AsObjects(new FileInfo(filePath), columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
         }
 
-        public static IEnumerable<object[]> AsObjects(string filePath, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static IEnumerable<object[]> AsObjects(string filePath, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
-            return AsObjects(new FileInfo(filePath), out columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
+            return AsObjects(new FileInfo(filePath), out columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
         }
 
-        public static IEnumerable<object[]> AsObjects(FileInfo file, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static IEnumerable<object[]> AsObjects(FileInfo file, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
-            return AsObjects(file, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
+            return AsObjects(file, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
         }
 
-        public static IEnumerable<object[]> AsObjects(FileInfo file, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static IEnumerable<object[]> AsObjects(FileInfo file, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
             var worksheet = GetWorksheet(file, sheetNum);
-            return AsObjects(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, suppressExcelErrors);
+            return AsObjects(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, suppressExcelErrors, dataErrorHandling);
         }
 
-        public static IEnumerable<object[]> AsObjects(FileInfo file, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static IEnumerable<object[]> AsObjects(FileInfo file, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
             Column[] _columns = null;
             var worksheet = GetWorksheet(file, sheetNum);
-            var objectArrays = AsObjects(worksheet, ref _columns, hasHeaderRow, false, blankRowMode, suppressExcelErrors);
+            var objectArrays = AsObjects(worksheet, ref _columns, hasHeaderRow, false, blankRowMode, suppressExcelErrors, dataErrorHandling);
             columns = _columns;
             return objectArrays;
         }
@@ -303,79 +304,79 @@ namespace Horseshoe.NET.Excel
             return AsObjects(stream, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
         }
 
-        public static IEnumerable<object[]> AsObjects(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static IEnumerable<object[]> AsObjects(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
             if (stream is FileStream fileStream)
             {
                 switch (Path.GetExtension(fileStream.Name).ToUpper())
                 {
                     case ".XLS":
-                        return AsObjectsFromXlsStream(stream, columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
+                        return AsObjectsFromXlsStream(stream, columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
                     case ".XLSX":
-                        return AsObjectsFromXlsxStream(stream, columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
+                        return AsObjectsFromXlsxStream(stream, columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
                 }
                 throw new UtilityException("At this time we only recognize .xls and .xlsx Excel extensions: " + fileStream.Name + " -- also you can try using AsObjectsFromXlsStream() or AsObjectsFromXlsxStream()");
             }
             throw new UtilityException("Expected System.IO.FileStream, found " + stream.GetType().Name);
         }
 
-        public static IEnumerable<object[]> AsObjects(Stream stream, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static IEnumerable<object[]> AsObjects(Stream stream, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
             if (stream is FileStream fileStream)
             {
                 switch (Path.GetExtension(fileStream.Name).ToUpper())
                 {
                     case ".XLS":
-                        return AsObjectsFromXlsStream(stream, out columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
+                        return AsObjectsFromXlsStream(stream, out columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
                     case ".XLSX":
-                        return AsObjectsFromXlsxStream(stream, out columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
+                        return AsObjectsFromXlsxStream(stream, out columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
                 }
                 throw new UtilityException("At this time we only recognize .xls and .xlsx Excel extensions: " + fileStream.Name + " -- also you can try using AsObjectsFromXlsStream() or AsObjectsFromXlsxStream()");
             }
             throw new UtilityException("Expected System.IO.FileStream, found " + stream.GetType().Name);
         }
 
-        public static IEnumerable<object[]> AsObjectsFromXlsStream(Stream stream, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static IEnumerable<object[]> AsObjectsFromXlsStream(Stream stream, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
-            return AsObjectsFromXlsStream(stream, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
+            return AsObjectsFromXlsStream(stream, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
         }
 
-        public static IEnumerable<object[]> AsObjectsFromXlsStream(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static IEnumerable<object[]> AsObjectsFromXlsStream(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
             var workbook = new HSSFWorkbook(stream);
             var worksheet = workbook.GetSheetAt(sheetNum);
-            return AsObjects(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, suppressExcelErrors);
+            return AsObjects(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, suppressExcelErrors, dataErrorHandling);
         }
 
-        public static IEnumerable<object[]> AsObjectsFromXlsStream(Stream stream, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static IEnumerable<object[]> AsObjectsFromXlsStream(Stream stream, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
             Column[] _columns = null;
             var workbook = new HSSFWorkbook(stream);
             var worksheet = workbook.GetSheetAt(sheetNum);
-            var objectArrays = AsObjects(worksheet, ref _columns, hasHeaderRow, false, blankRowMode, suppressExcelErrors);
+            var objectArrays = AsObjects(worksheet, ref _columns, hasHeaderRow, false, blankRowMode, suppressExcelErrors, dataErrorHandling);
 
             columns = _columns;
             return objectArrays;
         }
 
-        public static IEnumerable<object[]> AsObjectsFromXlsxStream(Stream stream, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static IEnumerable<object[]> AsObjectsFromXlsxStream(Stream stream, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
-            return AsObjectsFromXlsxStream(stream, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
+            return AsObjectsFromXlsxStream(stream, null as Column[], sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
         }
 
-        public static IEnumerable<object[]> AsObjectsFromXlsxStream(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static IEnumerable<object[]> AsObjectsFromXlsxStream(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
             var workbook = new XSSFWorkbook(stream);
             var worksheet = workbook.GetSheetAt(sheetNum);
-            return AsObjects(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, suppressExcelErrors);
+            return AsObjects(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, suppressExcelErrors, dataErrorHandling);
         }
 
-        public static IEnumerable<object[]> AsObjectsFromXlsxStream(Stream stream, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static IEnumerable<object[]> AsObjectsFromXlsxStream(Stream stream, out Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
             Column[] _columns = null;
             var workbook = new XSSFWorkbook(stream);
             var worksheet = workbook.GetSheetAt(sheetNum);
-            var objectArrays = AsObjects(worksheet, ref _columns, hasHeaderRow, false, blankRowMode, suppressExcelErrors);
+            var objectArrays = AsObjects(worksheet, ref _columns, hasHeaderRow, false, blankRowMode, suppressExcelErrors, dataErrorHandling);
 
             columns = _columns;
             return objectArrays;
@@ -386,90 +387,90 @@ namespace Horseshoe.NET.Excel
             return AsCollection<E>(new FileInfo(filePath), parseFunc, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
         }
 
-        public static IEnumerable<E> AsCollection<E>(string filePath, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, char[] charsToRemove = null, bool suppressExcelErrors = false) where E : class, new()
+        public static IEnumerable<E> AsCollection<E>(string filePath, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, char[] charsToRemove = null, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw) where E : class, new()
         {
-            return AsCollection<E>(new FileInfo(filePath), columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, charsToRemove: charsToRemove, suppressExcelErrors: suppressExcelErrors);
+            return AsCollection<E>(new FileInfo(filePath), columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, charsToRemove: charsToRemove, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
         }
 
-        public static IEnumerable<E> AsCollection<E>(FileInfo file, Func<object[], E> parseFunc, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
-        {
-            var worksheet = GetWorksheet(file, sheetNum);
-            return AsCollection<E>(worksheet, parseFunc, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
-        }
-
-        public static IEnumerable<E> AsCollection<E>(FileInfo file, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, char[] charsToRemove = null, bool suppressExcelErrors = false) where E : class, new()
+        public static IEnumerable<E> AsCollection<E>(FileInfo file, Func<object[], E> parseFunc, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
             var worksheet = GetWorksheet(file, sheetNum);
-            return AsCollection<E>(worksheet, columns, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, charsToRemove: charsToRemove, suppressExcelErrors: suppressExcelErrors);
+            return AsCollection<E>(worksheet, parseFunc, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
         }
 
-        public static IEnumerable<E> AsCollection<E>(Stream stream, Func<object[], E> parseFunc, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static IEnumerable<E> AsCollection<E>(FileInfo file, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, char[] charsToRemove = null, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw) where E : class, new()
+        {
+            var worksheet = GetWorksheet(file, sheetNum);
+            return AsCollection<E>(worksheet, columns, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, charsToRemove: charsToRemove, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
+        }
+
+        public static IEnumerable<E> AsCollection<E>(Stream stream, Func<object[], E> parseFunc, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
             if (stream is FileStream fileStream)
             {
                 switch (Path.GetExtension(fileStream.Name).ToUpper())
                 {
                     case ".XLS":
-                        return AsCollectionFromXlsStream<E>(stream, parseFunc, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
+                        return AsCollectionFromXlsStream<E>(stream, parseFunc, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
                     case ".XLSX":
-                        return AsCollectionFromXlsxStream<E>(stream, parseFunc, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
+                        return AsCollectionFromXlsxStream<E>(stream, parseFunc, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
                 }
                 throw new UtilityException("At this time we only recognize .xls and .xlsx Excel extensions: " + fileStream.Name + " -- also you can try using AsCollectionFromXlsStream() or AsCollectionFromXlsxStream()");
             }
             throw new UtilityException("Expected System.IO.FileStream, found " + stream.GetType().Name);
         }
 
-        public static IEnumerable<E> AsCollection<E>(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, char[] charsToRemove = null, bool suppressExcelErrors = false) where E : class, new()
+        public static IEnumerable<E> AsCollection<E>(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, char[] charsToRemove = null, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw) where E : class, new()
         {
             if (stream is FileStream fileStream)
             {
                 switch (Path.GetExtension(fileStream.Name).ToUpper())
                 {
                     case ".XLS":
-                        return AsCollectionFromXlsStream<E>(stream, columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, charsToRemove: charsToRemove, suppressExcelErrors: suppressExcelErrors);
+                        return AsCollectionFromXlsStream<E>(stream, columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, charsToRemove: charsToRemove, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
                     case ".XLSX":
-                        return AsCollectionFromXlsxStream<E>(stream, columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, charsToRemove: charsToRemove, suppressExcelErrors: suppressExcelErrors);
+                        return AsCollectionFromXlsxStream<E>(stream, columns, sheetNum: sheetNum, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, charsToRemove: charsToRemove, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
                 }
                 throw new UtilityException("At this time we only recognize .xls and .xlsx Excel extensions: " + fileStream.Name + " -- also you can try using AsCollectionFromXlsStream() or AsCollectionFromXlsxStream()");
             }
             throw new UtilityException("Expected System.IO.FileStream, found " + stream.GetType().Name);
         }
 
-        public static IEnumerable<E> AsCollectionFromXlsStream<E>(Stream stream, Func<object[], E> parseFunc, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static IEnumerable<E> AsCollectionFromXlsStream<E>(Stream stream, Func<object[], E> parseFunc, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
             var workbook = new HSSFWorkbook(stream);
             var worksheet = workbook.GetSheetAt(sheetNum);
-            return AsCollection<E>(worksheet, parseFunc, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
+            return AsCollection<E>(worksheet, parseFunc, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
         }
 
-        public static IEnumerable<E> AsCollectionFromXlsStream<E>(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, char[] charsToRemove = null, bool suppressExcelErrors = false) where E : class, new()
+        public static IEnumerable<E> AsCollectionFromXlsStream<E>(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, char[] charsToRemove = null, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw) where E : class, new()
         {
             var workbook = new HSSFWorkbook(stream);
             var worksheet = workbook.GetSheetAt(sheetNum);
-            return AsCollection<E>(worksheet, columns, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, charsToRemove: charsToRemove, suppressExcelErrors: suppressExcelErrors);
+            return AsCollection<E>(worksheet, columns, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, charsToRemove: charsToRemove, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
         }
 
-        public static IEnumerable<E> AsCollectionFromXlsxStream<E>(Stream stream, Func<object[], E> parseFunc, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        public static IEnumerable<E> AsCollectionFromXlsxStream<E>(Stream stream, Func<object[], E> parseFunc, int sheetNum = 0, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
             var workbook = new XSSFWorkbook(stream);
             var worksheet = workbook.GetSheetAt(sheetNum);
-            return AsCollection<E>(worksheet, parseFunc, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors);
+            return AsCollection<E>(worksheet, parseFunc, hasHeaderRow: hasHeaderRow, blankRowMode: blankRowMode, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
         }
 
-        public static IEnumerable<E> AsCollectionFromXlsxStream<E>(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, char[] charsToRemove = null, bool suppressExcelErrors = false) where E : class, new()
+        public static IEnumerable<E> AsCollectionFromXlsxStream<E>(Stream stream, Column[] columns, int sheetNum = 0, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, char[] charsToRemove = null, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw) where E : class, new()
         {
             var workbook = new XSSFWorkbook(stream);
             var worksheet = workbook.GetSheetAt(sheetNum);
-            return AsCollection<E>(worksheet, columns, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, charsToRemove: charsToRemove, suppressExcelErrors: suppressExcelErrors);
+            return AsCollection<E>(worksheet, columns, hasHeaderRow: hasHeaderRow, validateHeaderRowFromColumns: validateHeaderRowFromColumns, blankRowMode: blankRowMode, charsToRemove: charsToRemove, suppressExcelErrors: suppressExcelErrors, dataErrorHandling: dataErrorHandling);
         }
 
-        static IEnumerable<E> AsCollection<E>(ISheet worksheet, Func<object[], E> parseFunc, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false)
+        static IEnumerable<E> AsCollection<E>(ISheet worksheet, Func<object[], E> parseFunc, bool hasHeaderRow = false, BlankRowMode blankRowMode = default, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw)
         {
             Column[] columns = null;
             var list = new List<E>();
 
             // get imported data and populate columns
-            var objectArrays = AsObjects(worksheet, ref columns, hasHeaderRow, false, blankRowMode, suppressExcelErrors);
+            var objectArrays = AsObjects(worksheet, ref columns, hasHeaderRow, false, blankRowMode, suppressExcelErrors, dataErrorHandling);
 
             objectArrays.Iterate
             (
@@ -483,10 +484,10 @@ namespace Horseshoe.NET.Excel
             return list;
         }
 
-        static IEnumerable<E> AsCollection<E>(ISheet worksheet, Column[] columns, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, char[] charsToRemove = null, bool suppressExcelErrors = false) where E : class, new()
+        static IEnumerable<E> AsCollection<E>(ISheet worksheet, Column[] columns, bool hasHeaderRow = false, bool validateHeaderRowFromColumns = false, BlankRowMode blankRowMode = default, char[] charsToRemove = null, bool suppressExcelErrors = false, DataErrorHandlingPolicy dataErrorHandling = DataErrorHandlingPolicy.Throw) where E : class, new()
         {
             // get imported data
-            var objectArrays = AsObjects(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, suppressExcelErrors);
+            var objectArrays = AsObjects(worksheet, ref columns, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, suppressExcelErrors, dataErrorHandling);
             var list = new List<E>();
 
             // characters to remove (whitespace is handled separately) to aid in the conversion of column names to object properties
@@ -531,25 +532,25 @@ namespace Horseshoe.NET.Excel
             throw new UtilityException("At this time the only Excel extensions allowed are .xls and .xlsx: " + file.FullName);
         }
 
-        static IEnumerable<string[]> AsStrings(ISheet worksheet, ref Column[] columns, bool hasHeaderRow, bool validateHeaderRowFromColumns, BlankRowMode blankRowMode, AutoTruncate autoTrunc, bool suppressExcelErrors)
+        static IEnumerable<string[]> AsStrings(ISheet worksheet, ref Column[] columns, bool hasHeaderRow, bool validateHeaderRowFromColumns, BlankRowMode blankRowMode, AutoTruncate autoTrunc, bool suppressExcelErrors, DataErrorHandlingPolicy dataErrorHandling)
         {
-            var objectArrays = AsObjectsOrStrings(worksheet, ref columns, true, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, autoTrunc, suppressExcelErrors);
+            var objectArrays = AsObjectsOrStrings(worksheet, ref columns, true, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, autoTrunc, suppressExcelErrors, dataErrorHandling);
             return objectArrays
                 .Select(o => (string[])o)
                 .ToList();
         }
 
-        static IEnumerable<object[]> AsObjects(ISheet worksheet, ref Column[] columns, bool hasHeaderRow, bool validateHeaderRowFromColumns, BlankRowMode blankRowMode, bool suppressExcelErrors)
+        static IEnumerable<object[]> AsObjects(ISheet worksheet, ref Column[] columns, bool hasHeaderRow, bool validateHeaderRowFromColumns, BlankRowMode blankRowMode, bool suppressExcelErrors, DataErrorHandlingPolicy dataErrorHandling)
         {
-            return AsObjectsOrStrings(worksheet, ref columns, false, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, AutoTruncate.Zap, suppressExcelErrors);
+            return AsObjectsOrStrings(worksheet, ref columns, false, hasHeaderRow, validateHeaderRowFromColumns, blankRowMode, AutoTruncate.Zap, suppressExcelErrors, dataErrorHandling);
         }
 
-        static IEnumerable<object[]> AsObjectsOrStrings(ISheet worksheet, ref Column[] columns, bool stringModeOn, bool hasHeaderRow, bool validateHeaderRowFromColumns, BlankRowMode blankRowMode, AutoTruncate autoTrunc, bool suppressExcelErrors)
+        static IEnumerable<object[]> AsObjectsOrStrings(ISheet worksheet, ref Column[] columns, bool stringModeOn, bool hasHeaderRow, bool validateHeaderRowFromColumns, BlankRowMode blankRowMode, AutoTruncate autoTrunc, bool suppressExcelErrors, DataErrorHandlingPolicy dataErrorHandling)
         {
             var list = new List<object[]>();
             var rowNum = 0;
             var row = worksheet.GetRow(rowNum);
-            var firstRowAsStrings = ParseStrings(row, new int[row.LastCellNum].Select(i => Column.String("")).ToArray(), AutoTruncate.Trim, true);
+            var firstRowAsStrings = ParseStrings(row, new int[row.LastCellNum].Select(i => Column.String("")).ToArray(), AutoTruncate.Trim, suppressExcelErrors, dataErrorHandling);
             object[] array;
 
             if (firstRowAsStrings == null)
@@ -607,8 +608,8 @@ namespace Horseshoe.NET.Excel
                 if (row == null) break;
 
                 array = stringModeOn
-                    ? ParseStrings(row, columns, autoTrunc, suppressExcelErrors)
-                    : ParseObjects(row, columns, autoTrunc, suppressExcelErrors);
+                    ? ParseStrings(row, columns, autoTrunc, suppressExcelErrors, dataErrorHandling)
+                    : ParseObjects(row, columns, autoTrunc, suppressExcelErrors, dataErrorHandling);
 
                 if (array == null)
                 {
@@ -669,9 +670,9 @@ namespace Horseshoe.NET.Excel
             return dataTable;
         }
 
-        static string[] ParseStrings(IRow row, Column[] columns, AutoTruncate autoTrunc, bool suppressExcelErrors)
+        static string[] ParseStrings(IRow row, Column[] columns, AutoTruncate autoTrunc, bool suppressExcelErrors, DataErrorHandlingPolicy dataErrorHandling)
         {
-            var objects = ParseObjects(row, columns, autoTrunc, suppressExcelErrors);
+            var objects = ParseObjects(row, columns, autoTrunc, suppressExcelErrors, dataErrorHandling);
 
             if (objects == null)
             {
@@ -693,7 +694,7 @@ namespace Horseshoe.NET.Excel
             return strings;
         }
 
-        static object[] ParseObjects(IRow row, Column[] columns, AutoTruncate autoTrunc, bool suppressExcelErrors)
+        static object[] ParseObjects(IRow row, Column[] columns, AutoTruncate autoTrunc, bool suppressExcelErrors, DataErrorHandlingPolicy dataErrorHandling)
         {
             if (row.LastCellNum == 0) return null;
             var count = Math.Max(row.LastCellNum, columns.Length);
@@ -759,7 +760,7 @@ namespace Horseshoe.NET.Excel
                         }
                         throw new UtilityException("Unknown cell type at " + cellAddress);
                 }
-                value = ProcessDatum(value, column, cellAddress);
+                value = ProcessDatum(value, column, cellAddress, dataErrorHandling);
                 list.Add(value);
             }
             return list.ToArray();

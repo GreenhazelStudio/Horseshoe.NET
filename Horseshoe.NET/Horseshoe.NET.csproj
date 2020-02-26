@@ -113,7 +113,9 @@
     <Compile Include="ExceptionInfo.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="CustomMapping.cs" />
-    <Compile Include="IO\FileImport\ImportedDatumException.cs" />
+    <Compile Include="IO\FileImport\Enums\DataErrorHandlingPolicy.cs" />
+    <Compile Include="IO\FileImport\DataImportException.cs" />
+    <Compile Include="IO\FileImport\InvalidDatumException.cs" />
     <Compile Include="IO\FileImport\NoMapColumn.cs" />
     <Compile Include="IO\FileImport\NullableColumn.cs" />
     <Compile Include="IO\Ftp\Ftp.cs" />
@@ -127,9 +129,9 @@
     <Compile Include="OleDb\OleDbSettings.cs" />
     <Compile Include="OleDb\Update.cs" />
     <Compile Include="TemplatePart.cs" />
-    <Compile Include="IO\FileImport\BlankRowMode.cs" />
+    <Compile Include="IO\FileImport\Enums\BlankRowMode.cs" />
     <Compile Include="IO\FileImport\Column.cs" />
-    <Compile Include="IO\FileImport\DataType.cs" />
+    <Compile Include="IO\FileImport\Enums\DataType.cs" />
     <Compile Include="IO\DirectoryCopyMode.cs" />
     <Compile Include="IO\FileImport\Extensions.cs" />
     <Compile Include="IO\FileSize.cs" />

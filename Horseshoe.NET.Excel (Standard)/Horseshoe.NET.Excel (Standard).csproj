@@ -7,7 +7,7 @@
     <Authors>Carl Thomas</Authors>
     <Company>Greenhazel Studio</Company>
     <Copyright>Copyright © 2020 Greenhazel Studio</Copyright>
-    <Version>0.9.4.3</Version>
+    <Version>0.9.4.4</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,7 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Horseshoe.NET (Standard)\Horseshoe.NET (Standard).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET (Standard)\Horseshoe.NET (Standard).csproj">
+      <Private>false</Private>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>

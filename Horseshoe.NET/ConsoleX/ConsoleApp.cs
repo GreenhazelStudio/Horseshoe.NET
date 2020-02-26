@@ -131,7 +131,7 @@ namespace Horseshoe.NET.ConsoleX
             var assembly = Assembly.GetCallingAssembly();
             var routineTypes = assembly.GetTypes()
                 .Where(t => 
-                    typeof(Routine).IsAssignableFrom(t) && 
+                    t.IsSubclassOf(typeof(Routine)) && 
                     (!matchBaseNamespace || Equals(t.Namespace, assembly.GetName().Name)) &&
                     (namespaceToMatch == null || Equals(t.Namespace, namespaceToMatch))
                 )

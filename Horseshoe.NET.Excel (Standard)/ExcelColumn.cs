@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Horseshoe.NET.IO.FileImport;
+using Horseshoe.NET.IO.FileImport.Enums;
 
 namespace Horseshoe.NET.Excel
 {

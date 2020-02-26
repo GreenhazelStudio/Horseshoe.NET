@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 using Horseshoe.NET.Collections;
 using static Horseshoe.NET.IO.FileImport.ImportUtil;
+using Horseshoe.NET.IO.FileImport.Enums;
 using Horseshoe.NET.Objects;
 using Horseshoe.NET.Text;
 using static Horseshoe.NET.Text.TextUtil;
@@ -47,7 +48,7 @@ namespace Horseshoe.NET.IO.FileImport
             return list.ToArray();
         }
 
-        internal static IEnumerable<object[]> AsObjects(Stream stream, Column[] columns, AutoTruncate autoTrunc)
+        internal static IEnumerable<object[]> AsObjects(Stream stream, Column[] columns, AutoTruncate autoTrunc, DataErrorHandlingPolicy dataErrorHandling)
         {
             var allColumnsAreStrings = columns == null;
             var stringArrays = AsStrings(stream, columns, autoTrunc);
@@ -66,7 +67,7 @@ namespace Horseshoe.NET.IO.FileImport
                     var oArray = new object[_columns.Length];
                     for (int i = 0; i < _columns.Length; i++)
                     {
-                        oArray[i] = ProcessDatum(array[i], _columns[i], "data row " + index);
+                        oArray[i] = ProcessDatum(array[i], _columns[i], "data row " + index, dataErrorHandling);
                     }
                     list.Add(oArray);
                 }

@@ -4,13 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Horseshoe.NET.IO.FileImport.Enums;
 using Horseshoe.NET.Text;
-using static Horseshoe.NET.Text.TextUtil;
 
 namespace Horseshoe.NET.IO.FileImport
 {
     public static class ImportUtil
     {
+        public static event Action<DataImportException> DataImportErrorOccurred;
+
         //public static object ConvertDataElement(object value, Column column, string dataReference)
         //{
         //    if (value == null) return null;
@@ -28,8 +30,9 @@ namespace Horseshoe.NET.IO.FileImport
         //    }
         //}
 
-        public static object ProcessDatum(object value, Column column, string dataReference)
+        public static object ProcessDatum(object value, Column column, string dataReference, DataErrorHandlingPolicy dataErrorHandling)
         {
+            DataImportException diex = null;
             if (column?.ValueConverter != null)
             {
                 try
@@ -38,14 +41,30 @@ namespace Horseshoe.NET.IO.FileImport
                 }
                 catch (Exception ex)
                 {
-                    throw new ImportedDatumException(ex, value, columnName: column?.Name, length: column.Width, dataRef: dataReference);
+                    diex = new InvalidDatumException(ex, value, columnName: column?.Name, length: column.Width, dataRef: dataReference);
                 }
             }
-            if (value is string stringValue && column?.Width > 0)
+            if (value is string stringValue && column?.Width > 0 && stringValue.Length > column.Width)
             {
-                if (stringValue.Length > column.Width)
+                diex = new InvalidDatumException("value exceeds max length", stringValue, columnName: column?.Name, length: column.Width, dataRef: dataReference);
+            }
+            if (diex != null)
+            {
+                if ((dataErrorHandling & DataErrorHandlingPolicy.Announce) == DataErrorHandlingPolicy.Announce)
                 {
-                    throw new ImportedDatumException("value exceeds max length", stringValue, columnName: column?.Name, length: column.Width, dataRef: dataReference);
+                    if (DataImportErrorOccurred == null)
+                    {
+                        throw new UtilityException("Error could not be announced due to no listener was supplied (e.g. ImportUtil.DataImportErrorOccurred += (diex) => { ... })");
+                    }
+                    DataImportErrorOccurred.Invoke(diex);
+                }
+                if ((dataErrorHandling & DataErrorHandlingPolicy.Embed) == DataErrorHandlingPolicy.Embed)
+                {
+                    value = diex;
+                }
+                if ((dataErrorHandling & DataErrorHandlingPolicy.Throw) == DataErrorHandlingPolicy.Throw)
+                {
+                    throw diex;
                 }
             }
             return value;
@@ -55,7 +74,7 @@ namespace Horseshoe.NET.IO.FileImport
         {
             if (autoTrunc == AutoTruncate.Zap)
             {
-                value = Zap(value);
+                value = TextUtil.Zap(value);
             }
             else if (autoTrunc == AutoTruncate.Trim)
             {
