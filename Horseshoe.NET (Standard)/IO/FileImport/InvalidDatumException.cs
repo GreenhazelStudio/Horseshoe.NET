@@ -19,40 +19,41 @@ namespace Horseshoe.NET.IO.FileImport
 
         public int Length { get; set; }
 
-        public string DataRef { get; set; }
+        public string Position { get; set; }
 
-        public InvalidDatumException(string message, object datum, string columnName = null, int length = 0, string dataRef = null) : base(ToString(message, datum, columnName, length, dataRef))
+        public InvalidDatumException(string message, object datum, string columnName = null, int length = 0, string position = null) : base(ToMessageString(message, datum, columnName, length, position))
         {
             Datum = datum;
             ColumnName = columnName;
             Length = length;
-            DataRef = dataRef;
+            Position = position;
         }
 
-        public InvalidDatumException(Exception innerException, object datum, string columnName = null, int length = 0, string dataRef = null) : base(ToString(innerException.Message, datum, columnName, length, dataRef), innerException)
+        public InvalidDatumException(Exception innerException, object datum, string columnName = null, int length = 0, string position = null) : base(ToMessageString(innerException.Message, datum, columnName, length, position), innerException)
         {
             Datum = datum;
             ColumnName = columnName;
             Length = length;
-            DataRef = dataRef;
+            Position = position;
         }
 
-        public InvalidDatumException(string message, Exception innerException, object datum, string columnName = null, int length = 0, string dataRef = null) : base(ToString(message ?? innerException.Message, datum, columnName, length, dataRef), innerException)
+        public InvalidDatumException(string message, Exception innerException, object datum, string columnName = null, int length = 0, string position = null) : base(ToMessageString(message ?? innerException.Message, datum, columnName, length, position), innerException)
         {
             Datum = datum;
             ColumnName = columnName;
             Length = length;
-            DataRef = dataRef;
+            Position = position;
         }
 
-        static string ToString(string message, object datum, string columnName = null, int length = 0, string dataRef = null)
+        static string ToMessageString(string message, object datum, string columnName, int length, string position)
         {
             return
-                (message != null ? message + " -- " : "") +
-                "Datum = " + TextUtil.RevealNullOrBlank(datum).Trunc(24, truncPolicy: TruncatePolicy.LongEllipsis) +
-                (columnName != null ? "; Column = " + columnName : "") +
-                (length > 0 ? "; Length = " + length : "") +
-                (dataRef != null ? "; Data Ref = " + dataRef : "");
+                (!string.IsNullOrEmpty(message) ? message + " -- " : "") +
+                "{Value: \"" + TextUtil.RevealNullOrBlank(datum).Trunc(12, truncPolicy: TruncatePolicy.LongEllipsis) + "\"" + 
+                (columnName != null ? "; Column: \"" + columnName : "\"") +
+                (length > 0 ? "; Length: " + length : "") +
+                (position != null ? "; Position: \"" + position : "\"") +
+                "}";
         }
     }
 }

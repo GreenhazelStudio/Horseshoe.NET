@@ -13,23 +13,6 @@ namespace Horseshoe.NET.IO.FileImport
     {
         public static event Action<DataImportException> DataImportErrorOccurred;
 
-        //public static object ConvertDataElement(object value, Column column, string dataReference)
-        //{
-        //    if (value == null) return null;
-        //    if (column?.ValueConverter == null)
-        //    {
-        //        return value;
-        //    }
-        //    try
-        //    {
-        //        return column.ValueConverter.Invoke(value);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new UtilityException(ex.Message + " -- occurred at " + dataReference + " -- value = " + (value.Equals("") ? "[blank]" : value), ex);
-        //    }
-        //}
-
         public static object ProcessDatum(object value, Column column, string dataReference, DataErrorHandlingPolicy dataErrorHandling)
         {
             DataImportException diex = null;
@@ -41,12 +24,12 @@ namespace Horseshoe.NET.IO.FileImport
                 }
                 catch (Exception ex)
                 {
-                    diex = new InvalidDatumException(ex, value, columnName: column?.Name, length: column.Width, dataRef: dataReference);
+                    diex = new InvalidDatumException(ex, value, columnName: column?.Name, length: column.Width, position: dataReference);
                 }
             }
             if (value is string stringValue && column?.Width > 0 && stringValue.Length > column.Width)
             {
-                diex = new InvalidDatumException("value exceeds max length", stringValue, columnName: column?.Name, length: column.Width, dataRef: dataReference);
+                diex = new InvalidDatumException("Value length (" + stringValue.Length + ") exceeds max length (" + column.Width + ")", stringValue, columnName: column?.Name, length: column.Width, position: dataReference);
             }
             if (diex != null)
             {
@@ -54,7 +37,7 @@ namespace Horseshoe.NET.IO.FileImport
                 {
                     if (DataImportErrorOccurred == null)
                     {
-                        throw new UtilityException("Error could not be announced due to no listener was supplied (e.g. ImportUtil.DataImportErrorOccurred += (diex) => { ... })");
+                        throw new UtilityException("Data import error could not be announced, no listener was supplied (e.g. ImportUtil.DataImportErrorOccurred += (diex) => { ... })");
                     }
                     DataImportErrorOccurred.Invoke(diex);
                 }
