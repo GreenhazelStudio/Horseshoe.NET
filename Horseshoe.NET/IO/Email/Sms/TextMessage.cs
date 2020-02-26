@@ -11,13 +11,25 @@ namespace Horseshoe.NET.IO.Email.SMS
             string message,
             string mobileNumber = null,
             Carrier? carrier = null,
-            string subject = null,
             string from = null,
             SmtpConnectionInfo connectionInfo = null
         )
         {
-            if (mobileNumber == null) throw new ValidationException("MobileNumber cannot be null");
-            if (!carrier.HasValue) throw new ValidationException("Carrier cannot be null");
+            Send(null, message, mobileNumber: mobileNumber, carrier: carrier, from: from, connectionInfo: connectionInfo);
+        }
+
+        public static void Send
+        (
+            string subject,
+            string message,
+            string mobileNumber = null,
+            Carrier? carrier = null,
+            string from = null,
+            SmtpConnectionInfo connectionInfo = null
+        )
+        {
+            if (mobileNumber == null) throw new ValidationException("mobileNumber cannot be null");
+            if (!carrier.HasValue) throw new ValidationException("carrier cannot be null");
             mobileNumber = SmsUtil.ValidateMobileNumber(mobileNumber);
 
             var recipientAddress = SmsUtil.BuildTextRecipientAddress(mobileNumber, carrier.Value);
