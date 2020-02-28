@@ -2,7 +2,7 @@
 using System.Text;
 
 using Horseshoe.NET.Application;
-using Horseshoe.NET.Cryptography;
+using Horseshoe.NET.Crypto;
 using Horseshoe.NET.Db;
 using Horseshoe.NET.Objects;
 using Horseshoe.NET.Text;

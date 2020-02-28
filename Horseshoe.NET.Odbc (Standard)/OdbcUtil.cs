@@ -6,7 +6,7 @@ using System.Data.Odbc;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
-using Horseshoe.NET.Cryptography;
+using Horseshoe.NET.Crypto;
 using Horseshoe.NET.Db;
 using Horseshoe.NET.Text;
 

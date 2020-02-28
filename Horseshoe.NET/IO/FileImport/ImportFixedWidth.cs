@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 using Horseshoe.NET.Collections;
 using static Horseshoe.NET.IO.FileImport.ImportUtil;
-using Horseshoe.NET.IO.FileImport.Enums;
 using Horseshoe.NET.Objects;
 using Horseshoe.NET.Text;
 using static Horseshoe.NET.Text.TextUtil;

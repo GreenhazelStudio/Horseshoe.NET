@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
+using Horseshoe.NET.Crypto;
 using Horseshoe.NET.Text;
 
 namespace Horseshoe.NET.IO.WebServices
@@ -205,8 +206,8 @@ namespace Horseshoe.NET.IO.WebServices
                 else if (credentials.Value.IsEncryptedPassword)
                 {
                     request.Credentials = credentials.Value.Domain != null
-                        ? new NetworkCredential(credentials.Value.UserName, WebServiceUtil.DecryptSecure(credentials.Value.Password), credentials.Value.Domain)
-                        : new NetworkCredential(credentials.Value.UserName, WebServiceUtil.DecryptSecure(credentials.Value.Password));
+                        ? new NetworkCredential(credentials.Value.UserName, Decrypt.SecureString(credentials.Value.Password), credentials.Value.Domain)
+                        : new NetworkCredential(credentials.Value.UserName, Decrypt.SecureString(credentials.Value.Password));
                 }
                 else if (credentials.Value.Password != null)
                 {
@@ -256,8 +257,8 @@ namespace Horseshoe.NET.IO.WebServices
                 else if (credentials.Value.IsEncryptedPassword)
                 {
                     request.Credentials = credentials.Value.Domain != null
-                        ? new NetworkCredential(credentials.Value.UserName, WebServiceUtil.DecryptSecure(credentials.Value.Password), credentials.Value.Domain)
-                        : new NetworkCredential(credentials.Value.UserName, WebServiceUtil.DecryptSecure(credentials.Value.Password));
+                        ? new NetworkCredential(credentials.Value.UserName, Decrypt.SecureString(credentials.Value.Password), credentials.Value.Domain)
+                        : new NetworkCredential(credentials.Value.UserName, Decrypt.SecureString(credentials.Value.Password));
                 }
                 else if (credentials.Value.Password != null)
                 {
@@ -307,8 +308,8 @@ namespace Horseshoe.NET.IO.WebServices
                 else if (credentials.Value.IsEncryptedPassword)
                 {
                     request.Credentials = credentials.Value.Domain != null
-                        ? new NetworkCredential(credentials.Value.UserName, WebServiceUtil.DecryptSecure(credentials.Value.Password), credentials.Value.Domain)
-                        : new NetworkCredential(credentials.Value.UserName, WebServiceUtil.DecryptSecure(credentials.Value.Password));
+                        ? new NetworkCredential(credentials.Value.UserName, Decrypt.SecureString(credentials.Value.Password), credentials.Value.Domain)
+                        : new NetworkCredential(credentials.Value.UserName, Decrypt.SecureString(credentials.Value.Password));
                 }
                 else if (credentials.Value.Password != null)
                 {
@@ -373,8 +374,8 @@ namespace Horseshoe.NET.IO.WebServices
                 else if (credentials.Value.IsEncryptedPassword)
                 {
                     request.Credentials = credentials.Value.Domain != null
-                        ? new NetworkCredential(credentials.Value.UserName, WebServiceUtil.DecryptSecure(credentials.Value.Password), credentials.Value.Domain)
-                        : new NetworkCredential(credentials.Value.UserName, WebServiceUtil.DecryptSecure(credentials.Value.Password));
+                        ? new NetworkCredential(credentials.Value.UserName, Decrypt.SecureString(credentials.Value.Password), credentials.Value.Domain)
+                        : new NetworkCredential(credentials.Value.UserName, Decrypt.SecureString(credentials.Value.Password));
                 }
                 else if (credentials.Value.Password != null)
                 {

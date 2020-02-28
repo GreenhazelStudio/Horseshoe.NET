@@ -8,7 +8,7 @@ using System.Linq;
 using System.Security;
 using System.Text;
 
-using Horseshoe.NET.Cryptography;
+using Horseshoe.NET.Crypto;
 using Horseshoe.NET.Db;
 
 namespace Horseshoe.NET.SqlDb

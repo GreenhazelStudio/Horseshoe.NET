@@ -5,7 +5,7 @@ using System.Text;
 
 using Horseshoe.NET.Collections;
 
-namespace Horseshoe.NET.Cryptography
+namespace Horseshoe.NET.Crypto
 {
     public static class Hash
     {
@@ -28,7 +28,9 @@ namespace Horseshoe.NET.Cryptography
 
             if (salt.HasValue)
             {
-                plainBytes = CollectionUtil.PadStart(plainBytes, salt.Value, plainBytes.Length + 1, TruncatePolicy.Exception).ToArray();
+                plainBytes = new[] { salt.Value }
+                    .Concat(plainBytes)
+                    .ToArray();
             }
 
             var cipherBytes = algorithm.ComputeHash(plainBytes);

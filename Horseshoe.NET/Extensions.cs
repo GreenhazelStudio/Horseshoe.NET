@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 
 using Horseshoe.NET.Collections;
-using Horseshoe.NET.Cryptography;
+using Horseshoe.NET.Crypto;
 using Horseshoe.NET.Dates;
 using Horseshoe.NET.Text;
 

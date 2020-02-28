@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 
-using Horseshoe.NET.Cryptography;
+using Horseshoe.NET.Crypto;
 using Horseshoe.NET.Db;
 using Horseshoe.NET.Text;
 

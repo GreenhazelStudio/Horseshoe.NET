@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Horseshoe.NET.IO.FileImport.Enums;
 using Horseshoe.NET.Text;
 
 namespace Horseshoe.NET.IO.FileImport

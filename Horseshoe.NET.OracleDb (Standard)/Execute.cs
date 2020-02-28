@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 
-using Horseshoe.NET.Cryptography;
+using Horseshoe.NET.Crypto;
 
 using Oracle.ManagedDataAccess.Client;
 

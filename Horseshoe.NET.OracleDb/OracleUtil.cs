@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 using Oracle.ManagedDataAccess.Client;
 
 using Horseshoe.NET.Collections;
-using Horseshoe.NET.Cryptography;
+using Horseshoe.NET.Crypto;
 using Horseshoe.NET.Db;
 using Horseshoe.NET.OracleDb.Meta;
 using Horseshoe.NET.Text;

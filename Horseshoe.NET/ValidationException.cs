@@ -6,13 +6,14 @@ using Horseshoe.NET.Text;
 
 namespace Horseshoe.NET
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2237:Mark ISerializable types with serializable", Justification = "Only basic usage is expected, serialization is irrelevant")]
     public class ValidationException : Exception
     {
         public override string Message
         {
             get
             {
-                return TextUtil.Trunc
+                return TextUtil.Crop
                 (
                     base.Message +
                     (
@@ -21,7 +22,7 @@ namespace Horseshoe.NET
                             : " (x" + ValidationMessages.Count() + "): " + string.Join(";", ValidationMessages)
                     ),
                     75,
-                    truncPolicy: TruncatePolicy.Ellipsis
+                    truncateMarker: TruncateMarker.LongEllipsis
                 );
             }
         }

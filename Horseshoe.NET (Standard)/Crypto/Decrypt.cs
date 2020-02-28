@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 
 using Horseshoe.NET.Text;
 
-namespace Horseshoe.NET.Cryptography
+namespace Horseshoe.NET.Crypto
 {
     public static class Decrypt
     {

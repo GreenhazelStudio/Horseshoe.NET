@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Horseshoe.NET;
 using Horseshoe.NET.Application;
 using Horseshoe.NET.ConsoleX;
-using Horseshoe.NET.Cryptography;
+using Horseshoe.NET.Crypto;
 using Horseshoe.NET.Text;
 
 namespace TestConsole

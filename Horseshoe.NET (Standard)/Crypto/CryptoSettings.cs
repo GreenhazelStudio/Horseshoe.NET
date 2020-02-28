@@ -5,7 +5,7 @@ using System.Text;
 using Horseshoe.NET.Application;
 using Horseshoe.NET.Objects;
 
-namespace Horseshoe.NET.Cryptography
+namespace Horseshoe.NET.Crypto
 {
     public static class CryptoSettings
     {

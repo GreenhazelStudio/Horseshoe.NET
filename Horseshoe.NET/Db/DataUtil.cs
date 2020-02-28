@@ -6,7 +6,7 @@ using System.Security;
 using System.Text.RegularExpressions;
 
 using Horseshoe.NET.Collections;
-using Horseshoe.NET.Cryptography;
+using Horseshoe.NET.Crypto;
 using Horseshoe.NET.Events;
 using Horseshoe.NET.Text;
 

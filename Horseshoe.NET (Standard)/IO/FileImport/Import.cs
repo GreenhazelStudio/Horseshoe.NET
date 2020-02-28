@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Horseshoe.NET.Collections;
-using Horseshoe.NET.IO.FileImport.Enums;
 using Horseshoe.NET.Objects;
 using Horseshoe.NET.Text;
 

@@ -99,7 +99,7 @@ namespace TestMVC.Controllers
             var result =
                 "intValue=" + TextUtil.RevealNullOrBlank(intValue1) + Environment.NewLine +
                 "textValue1=" + TextUtil.RevealNullOrBlank(textValue1);
-            result += Environment.NewLine + "orig_request_body=" + Request.GetOriginalRequestBody().Trunc(80, truncPolicy: TruncatePolicy.LongEllipsis);
+            result += Environment.NewLine + "orig_request_body=" + Request.GetOriginalRequestBody().Crop(80, truncateMarker: TruncateMarker.LongEllipsis);
             var model = Model;
             model.RequestBodyTestResult = result;
             Model = model;

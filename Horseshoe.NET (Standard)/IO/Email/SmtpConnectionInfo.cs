@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Net.Mail;
 
-using Horseshoe.NET.Cryptography;
+using Horseshoe.NET.Crypto;
 
 namespace Horseshoe.NET.IO.Email
 {

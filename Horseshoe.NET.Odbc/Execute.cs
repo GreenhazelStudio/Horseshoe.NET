@@ -4,7 +4,7 @@ using System.Data;
 using System.Data.Common;
 using System.Data.Odbc;
 
-using Horseshoe.NET.Cryptography;
+using Horseshoe.NET.Crypto;
 
 namespace Horseshoe.NET.Odbc
 {

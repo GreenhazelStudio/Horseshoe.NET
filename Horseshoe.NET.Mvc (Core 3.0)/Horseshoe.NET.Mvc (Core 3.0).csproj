@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <RootNamespace>Horseshoe.NET.Mvc</RootNamespace>
-    <Version>0.9.4.5</Version>
+    <Version>0.9.5.0</Version>
     <Authors>Carl Thomas</Authors>
     <Company>Greenhazel Studio</Company>
     <Copyright>Copyright © 2020 Greenhazel Studio</Copyright>

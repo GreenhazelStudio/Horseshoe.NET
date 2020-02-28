@@ -295,224 +295,126 @@ namespace Horseshoe.NET.Text
             return finalString;
         }
 
-        public static string PadLeft(string text, int totalWidth, PadPolicy padPolicy = PadPolicy.Spaces, char? padChar = null, TruncatePolicy truncPolicy = default, string truncMarker = null)
+        public static string Fill(string text, int targetLength, bool allowOverflow = false, bool rtl = false)
         {
             if (text == null) return null;
-            if (totalWidth < 0) throw new Exception(nameof(totalWidth) + " must be >= 0");
-            if (text.Length < totalWidth)
+            if (targetLength <= 0) return "";
+            if (text.Length == 0) text = " ";
+            if (text.Length == 1) return new string(text[0], targetLength);
+            var sb = new StringBuilder();
+            while (sb.Length < targetLength)
             {
-                char c = GetPadChar(padPolicy, padChar);
-                return text.PadLeft(totalWidth, c);
+                sb.Append(text);
             }
-            else if(text.Length == totalWidth)
-            {
-                return text;
-            }
-            else
-            {
-                switch (truncPolicy)
-                {
-                    case TruncatePolicy.None:
-                        return text;
-                    case TruncatePolicy.Exception:
-                        throw new UtilityException("The text exceeds the target length: " + totalWidth);
-                    default:
-                        return TruncLeft(text, totalWidth, truncPolicy: truncPolicy, truncMarker: truncMarker);
-                }
-            }
+            if (allowOverflow) return sb.ToString();
+            return rtl
+                ? Crop(sb.ToString(), targetLength, direction: Direction.Left)
+                : Crop(sb.ToString(), targetLength);
         }
 
-        public static string PadRight(string text, int totalWidth, PadPolicy padPolicy = PadPolicy.Spaces, char? padChar = null, TruncatePolicy truncPolicy = default, string truncMarker = null)
+        public static string Pad(string text, int targetLength, Direction direction = Direction.Right, string padding = null, string leftPadding = null, bool cannotExceedTargetLength = false)
         {
             if (text == null) return null;
-            if (totalWidth < 0) throw new Exception(nameof(totalWidth) + " must be >= 0");
-            if (text.Length < totalWidth)
+            if (text.Length == targetLength) return text;
+            if (text.Length > targetLength)
             {
-                char c = GetPadChar(padPolicy, padChar);
-                return text.PadRight(totalWidth, c);
-            }
-            else if (text.Length == totalWidth)
-            {
+                if (cannotExceedTargetLength) throw new ValidationException("Text length (" + text.Length + ") cannot exceed target length (" + targetLength + ")");
                 return text;
             }
-            else
-            {
-                switch (truncPolicy)
-                {
-                    case TruncatePolicy.None:
-                        return text;
-                    case TruncatePolicy.Exception:
-                        throw new UtilityException("The text exceeds the target length: " + totalWidth);
-                    default:
-                        return Trunc(text, totalWidth, truncPolicy: truncPolicy, truncMarker: truncMarker);
-                }
-            }
-        }
+            if ((padding ?? "").Length == 0) padding = " ";
+            if (padding.Length > targetLength) throw new ValidationException("Padding length (" + padding.Length + ") cannot exceed target length (" + targetLength + ")");
+            var rtl = leftPadding != null;
+            if (leftPadding == null) leftPadding = padding;
+            else if (leftPadding.Length == 0) leftPadding = " ";
 
-        public static string PadCenter(string text, int totalWidth, PadPolicy padPolicy = PadPolicy.Spaces, char? padChar = null, TruncatePolicy truncPolicy = default, string truncMarker = null)
-        {
-            if (text == null) return null;
-            if (totalWidth < 0) throw new Exception(nameof(totalWidth) + " must be >= 0");
-            if (text.Length < totalWidth)
+            switch (direction)
             {
-                char c = GetPadChar(padPolicy, padChar);
-                int totalPad = totalWidth - text.Length;
-                int leftPad = (int)Math.Floor(totalPad / 2.0);   // this technique favors attaching odd padding char to right side rather than left
-                return text.PadLeft(leftPad + text.Length, c).PadRight(totalWidth, c);
-            }
-            else if(text.Length == totalWidth)
-            {
-                return text;
-            }
-            else
-            {
-                switch (truncPolicy)
-                {
-                    case TruncatePolicy.None:
-                        return text;
-                    case TruncatePolicy.Exception:
-                        throw new UtilityException("The text exceeds the target length: " + totalWidth);
-                    default:
-                        return Trunc(text, totalWidth, truncPolicy: truncPolicy, truncMarker: truncMarker);
-                }
-            }
-        }
-
-        static char GetPadChar(PadPolicy padPolicy, char? padChar)
-        {
-            switch (padPolicy)
-            {
-                case PadPolicy.Spaces:
-                    return ' ';
-                case PadPolicy.Zeros:
-                    return '0';
-                case PadPolicy.Custom:
-                    return padChar ?? throw new UtilityException(nameof(padChar) + " was not specified for PadPolicy.Custom");
+                case Direction.Left:
+                    return Fill(leftPadding, targetLength - text.Length) + text;
+                case Direction.Center:
+                    var sb = new StringBuilder();
+                    int temp = (targetLength - text.Length) / 2;  // in case of uneven padding to left and right of text always prefer a smaller left
+                    sb.Append(Fill(leftPadding, temp, rtl: rtl));
+                    sb.Append(text);
+                    temp = targetLength - text.Length - temp;
+                    sb.Append(Fill(padding, temp));
+                    return sb.ToString();
+                case Direction.Right:
                 default:
-                    throw new UtilityException("Pad policy does not apply: '" + padPolicy + "'");
+                    return text + Fill(padding, targetLength - text.Length);
             }
         }
 
-        public static string Trunc(string text, int targetLength, TruncatePolicy truncPolicy = TruncatePolicy.Simple, string truncMarker = null, PadPolicy padPolicy = default, char? padChar = null)
+        public static string Crop(string text, int targetLength, Direction direction = Direction.Right, string truncateMarker = null)
         {
+            truncateMarker = truncateMarker ?? TruncateMarker.None;
             if (text == null) return null;
             if (targetLength <= 0) return "";
-            if (text.Length > targetLength)
+            if (text.Length <= targetLength) return text;
+            if (truncateMarker.Length > targetLength) throw new ValidationException("Truncate marker length (" + truncateMarker.Length + ") cannot exceed target length (" + targetLength + ")");
+            if (truncateMarker.Length == targetLength) return truncateMarker;
+
+            switch (direction)
             {
-                switch (truncPolicy)
-                {
-                    case TruncatePolicy.Simple:
-                        return text.Substring(0, targetLength);
-                    case TruncatePolicy.Ellipsis:
-                        return text.Substring(0, targetLength - 1) + "…";
-                    case TruncatePolicy.LongEllipsis:
-                        if (targetLength < 3) throw new UtilityException(nameof(targetLength) + " must be >= 3 to use [...] as a truncation marker");
-                        return text.Substring(0, targetLength - 3) + "...";
-                    case TruncatePolicy.CustomMarker:
-                        if (truncMarker == null) throw new UtilityException(nameof(truncMarker) + ", required by TruncatePolicy.CustomMarker, was not specified");
-                        if (targetLength < truncMarker.Length) throw new UtilityException(nameof(targetLength) + " must be >= " + truncMarker.Length + " to use [" + truncMarker + "] as a truncation marker: " + targetLength);
-                        return text.Substring(0, targetLength - truncMarker.Length) + truncMarker;
-                    default:
-                        throw new UtilityException("Truncate policy does not apply: '" + truncPolicy + "'");
-                }
-            }
-            else if (text.Length == targetLength)
-            {
-                return text;
-            }
-            else
-            {
-                switch (padPolicy)
-                {
-                    case PadPolicy.None:
-                        return text;
-                    default:
-                        char c = GetPadChar(padPolicy, padChar);
-                        return text.PadRight(targetLength, c);
-                }
+                case Direction.Left:
+                    return truncateMarker + text.Substring(text.Length - targetLength + truncateMarker.Length);
+                case Direction.Center:
+                    var sb = new StringBuilder();
+                    int temp = (targetLength - truncateMarker.Length) / 2;  // in case of uneven characters to left and right of marker always prefer a smaller left
+                    if (temp == 0) temp = 1;                        // except when left is 0 and right is 1 in which case switch
+                    sb.Append(text.Substring(0, temp));
+                    sb.Append(truncateMarker);
+                    temp = targetLength - temp - truncateMarker.Length;
+                    sb.Append(text.Substring(text.Length - temp));
+                    return sb.ToString();
+                case Direction.Right:
+                default:
+                    return text.Substring(0, targetLength - truncateMarker.Length) + truncateMarker;
             }
         }
 
-        public static string TruncLeft(string text, int targetLength, TruncatePolicy truncPolicy = TruncatePolicy.Simple, string truncMarker = null, PadPolicy padPolicy = default, char? padChar = null)
+        public static string Fit(string text, int targetLength, Direction direction = Direction.Left, string padding = null, string leftPadding = null, Direction? truncateDirection = null, string truncateMarker = null)
         {
             if (text == null) return null;
-            if (targetLength <= 0) return "";
-            if (text.Length > targetLength)
+            if (text.Length == targetLength) return text;
+            if (text.Length < targetLength) return Pad(text, targetLength, direction: FitSwitchPadDirection(direction), padding: padding, leftPadding: leftPadding);
+            return Crop(text, targetLength, direction: truncateDirection ?? FitSwitchTruncateDirection(direction), truncateMarker: truncateMarker);
+        }
+
+        static Direction FitSwitchPadDirection(Direction direction)
+        {
+            switch (direction)
             {
-                switch (truncPolicy)
-                {
-                    case TruncatePolicy.Simple:
-                        return text.Substring(text.Length - targetLength);
-                    case TruncatePolicy.Ellipsis:
-                        return "…" + text.Substring(text.Length - targetLength + 1);
-                    case TruncatePolicy.LongEllipsis:
-                        if (targetLength < 3) throw new UtilityException(nameof(targetLength) + " must be >= 3 to use [...] as a truncation marker");
-                        return "..." + text.Substring(text.Length - targetLength + 3);
-                    case TruncatePolicy.CustomMarker:
-                        if (truncMarker == null) throw new UtilityException(nameof(truncMarker) + ", required by TruncatePolicy.CustomMarker, was not specified");
-                        if (targetLength < truncMarker.Length) throw new UtilityException(nameof(targetLength) + " must be >= " + truncMarker.Length + " to use [" + truncMarker + "] as a truncation marker: " + targetLength);
-                        return truncMarker + text.Substring(text.Length - targetLength + truncMarker.Length);
-                    default:
-                        throw new UtilityException("Truncate policy does not apply: '" + truncPolicy + "'");
-                }
-            }
-            else if (text.Length == targetLength)
-            {
-                return text;
-            }
-            else
-            {
-                switch (padPolicy)
-                {
-                    case PadPolicy.None:
-                        return text;
-                    default:
-                        char c = GetPadChar(padPolicy, padChar);
-                        return text.PadLeft(targetLength, c);
-                }
+                case Direction.Left:
+                    return Direction.Right;
+                case Direction.Center:
+                    return Direction.Center;
+                case Direction.Right:
+                default:
+                    return Direction.Left;
             }
         }
 
-        public static string Repeat(char c, int numberOfTimes)
+        static Direction FitSwitchTruncateDirection(Direction direction)
         {
-            return Repeat(c.ToString(), numberOfTimes);
+            switch (direction)
+            {
+                case Direction.Left:
+                case Direction.Right:
+                default:
+                    return Direction.Right;
+                case Direction.Center:
+                    return Direction.Center;
+            }
         }
 
-        public static string Repeat(string str, int numberOfTimes)
+        public static string Repeat(string text, int numberOfTimes)
         {
-            if (str == null) return null;
+            if (text == null) return null;
             var sb = new StringBuilder();
             for (int i = 0; i < numberOfTimes; i++)
             {
-                sb.Append(str);
-            }
-            return sb.ToString();
-        }
-
-        public static string Fill(string str, int targetLength, TruncatePolicy truncPolicy = TruncatePolicy.Simple)
-        {
-            if (str == null) return null;
-            var sb = new StringBuilder();
-            while (sb.Length + str.Length <= targetLength)
-            {
-                sb.Append(str);
-            }
-            if (sb.Length < targetLength)
-            {
-                switch (truncPolicy)
-                {
-                    case TruncatePolicy.None:
-                        sb.Append(str);
-                        break;
-                    case TruncatePolicy.Simple:
-                        sb.Append(str.Substring(0, targetLength - sb.Length));
-                        break;
-                    case TruncatePolicy.Ellipsis:
-                        sb.Append(str.Substring(0, targetLength - sb.Length - 1) + "…");
-                        break;
-                    default:
-                        throw new UtilityException("Truncate policy does not apply: '" + truncPolicy + "'");
-                }
+                sb.Append(text);
             }
             return sb.ToString();
         }

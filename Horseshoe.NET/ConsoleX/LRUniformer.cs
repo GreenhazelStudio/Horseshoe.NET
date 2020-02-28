@@ -69,11 +69,11 @@ namespace Horseshoe.NET.ConsoleX
             Insert(index, l, r, lIsIndex: lIsIndex, lAlignRight: lAlignRight, rAlignRight: rAlignRight);
         }
 
-        public string RenderLSquareBrackets(int width = 0, PadPolicy padPolicy = PadPolicy.Spaces, char? padChar = null, TruncatePolicy truncPolicy = TruncatePolicy.None, string truncMarker = null)
+        public string RenderLSquareBrackets(int width = 0, string padding = null, string truncateMarker = null)
         {
             var strb = new StringBuilder();
             var lpad = MaxLWidth + 2;
-            var rpad = width > lpad + 3 ? width - lpad - 3 : 0;
+            var rfit = width > lpad + 3 ? width - lpad - 3 : 0;
             foreach (var item in this)
             {
                 strb.AppendIf
@@ -85,10 +85,10 @@ namespace Horseshoe.NET.ConsoleX
                     .Append(" ")
                     .AppendLine
                     (
-                        rpad > 0
+                        rfit > 0
                             ? (item.RAlignRight
-                                ? (item.R ?? "").PadLeft(rpad, padPolicy: padPolicy, padChar: padChar, truncPolicy: truncPolicy == TruncatePolicy.None ? TruncatePolicy.Simple : truncPolicy, truncMarker: truncMarker)
-                                : (item.R ?? "").PadRight(rpad, padPolicy: padPolicy, padChar: padChar, truncPolicy: truncPolicy == TruncatePolicy.None ? TruncatePolicy.Simple : truncPolicy, truncMarker: truncMarker)
+                                ? (item.R ?? "").FitRight(rfit, padding: padding, truncateMarker: truncateMarker)
+                                : (item.R ?? "").FitLeft(rfit, padding: padding, truncateMarker: truncateMarker)
                               )
                             : item.R
                     );

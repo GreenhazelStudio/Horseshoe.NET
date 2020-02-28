@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 
 using Horseshoe.NET.Collections;
 
-namespace Horseshoe.NET.Cryptography
+namespace Horseshoe.NET.Crypto
 {
     internal static class CryptoUtil
     {
@@ -71,7 +71,7 @@ namespace Horseshoe.NET.Cryptography
                         throw new ValidationException("Key exceeds max allowable size.  Detected: " + keySize + " bits.  Valid sizes: " + string.Join(", ", validKeySizes));
                     }
                     var targetSize = validKeySizes.First(ln => ln >= keySize);
-                    key = key.PadLeft((byte)0, targetSize).ToArray();
+                    key = key.PadStart(targetSize).ToArray();
                 }
                 else if (!keySize.In(validKeySizes))
                 {
@@ -90,7 +90,7 @@ namespace Horseshoe.NET.Cryptography
             }
             else if (key != null && autoPopulateIVFromKey)
             {
-                algorithm.IV = key.PadLeft((byte)0, algorithm.BlockSize / 8, TruncatePolicy.Simple).ToArray();
+                algorithm.IV = key.PadStart(algorithm.BlockSize / 8).ToArray();
             }
             if (blockSize.HasValue)
             {

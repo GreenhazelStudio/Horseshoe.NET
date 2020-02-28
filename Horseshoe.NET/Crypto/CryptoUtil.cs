@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 
 using Horseshoe.NET.Collections;
 
-namespace Horseshoe.NET.Cryptography
+namespace Horseshoe.NET.Crypto
 {
     internal static class CryptoUtil
     {
@@ -59,42 +59,44 @@ namespace Horseshoe.NET.Cryptography
         public static SymmetricAlgorithm BuildSymmetricAlgorithm(SymmetricAlgorithm algorithm, byte[] key, bool autoPadKey, byte[] iv, bool autoPopulateIVFromKey, int? blockSize, CipherMode? mode, PaddingMode? padding)
         {
             if (algorithm == null) return null;
-            var validKeyLengths = algorithm.GetValidKeyLengths();
-            var validBlockLengths = algorithm.GetValidBlockLengths();
+            var validKeySizes = algorithm.GetValidKeySizes();
+            var validBlockSizes = algorithm.GetValidBlockSizes();
             if (key != null)
             {
+                var keySize = key.Length * 8;  // convert to bits
                 if (autoPadKey)
                 {
-                    if (key.Length > validKeyLengths.Max())
+                    if (keySize > validKeySizes.Max())
                     {
-                        throw new ValidationException("Key exceeds max allowable size.  Detected size: " + key.Length + ".  Valid sizes: " + string.Join(", ", validKeyLengths));
+                        throw new ValidationException("Key exceeds max allowable size.  Detected: " + keySize + " bits.  Valid sizes: " + string.Join(", ", validKeySizes));
                     }
-                    var targetLength = validKeyLengths.First(ln => ln >= key.Length);
-                    key = key.PadLeft((byte)0, targetLength).ToArray();
+                    var targetSize = validKeySizes.First(ln => ln >= keySize);
+                    key = key.PadStart(targetSize).ToArray();
                 }
-                else if (!key.Length.In(validKeyLengths))
+                else if (!keySize.In(validKeySizes))
                 {
-                    throw new ValidationException("Invalid key size: " + key.Length + ".  Valid sizes: " + string.Join(", ", validKeyLengths));
+                    throw new ValidationException("Invalid key size.  Detected: " + keySize + " bits.  Valid sizes: " + string.Join(", ", validKeySizes));
                 }
                 algorithm.Key = key;
             }
             if (iv != null) 
             {
-                if (!iv.Length.In(validBlockLengths))
+                var ivSize = iv.Length * 8;  // convert to bits
+                if (!ivSize.In(validBlockSizes))
                 {
-                    throw new ValidationException("Invalid IV size: " + iv.Length + ".  Valid sizes: " + string.Join(", ", validBlockLengths));
+                    throw new ValidationException("Invalid IV size.  Detected: " + ivSize + " bits.  Valid sizes: " + string.Join(", ", validBlockSizes));
                 }
                 algorithm.IV = iv;
             }
             else if (key != null && autoPopulateIVFromKey)
             {
-                algorithm.IV = key.PadLeft((byte)0, algorithm.BlockSize / 8, TruncatePolicy.Simple).ToArray();
+                algorithm.IV = key.PadStart(algorithm.BlockSize / 8).ToArray();
             }
             if (blockSize.HasValue)
             {
-                if (!blockSize.Value.In(validBlockLengths))
+                if (!blockSize.Value.In(validBlockSizes))
                 {
-                    throw new ValidationException("Invalid block size: " + blockSize.Value + ".  Valid sizes: " + string.Join(", ", validBlockLengths));
+                    throw new ValidationException("Invalid block size: " + blockSize.Value + ".  Valid sizes: " + string.Join(", ", validBlockSizes));
                 }
                 algorithm.BlockSize = blockSize.Value;
             }

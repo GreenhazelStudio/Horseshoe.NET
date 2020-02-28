@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 
-namespace Horseshoe.NET.Cryptography
+namespace Horseshoe.NET.Crypto
 {
     public static class Encrypt
     {

@@ -14,30 +14,6 @@ namespace Horseshoe.NET.IO.WebServices
 
         public static Action<string> JsonPayloadGenerated;
 
-        private static Cryptography.CryptoOptions CryptoOptions { get; } = new Cryptography.CryptoOptions
-        {
-            Algorithm = new RijndaelManaged(),
-            KeyText = "l)7Be!2X6y&ujB-%"
-        };
-
-        public static string Encrypt(string plainText)
-        {
-            var cipherText = Cryptography.Encrypt.String(plainText, CryptoOptions);
-            return cipherText;
-        }
-
-        public static string Decrypt(string cipherText)
-        {
-            var plainText = Cryptography.Decrypt.String(cipherText, CryptoOptions);
-            return plainText;
-        }
-
-        public static SecureString DecryptSecure(string cipherText)
-        {
-            var secureString = Cryptography.Decrypt.SecureString(cipherText, CryptoOptions);
-            return secureString;
-        }
-
         private static Regex PropertyNameFromBackingFieldRegex { get; } = new Regex(@"(?<=\<)[A-Z_]+(?=\>k__BackingField)", RegexOptions.IgnoreCase);
         private static Regex BackingFieldRegex { get; } = new Regex(@"\<[A-Z_]+\>k__BackingField", RegexOptions.IgnoreCase);
 

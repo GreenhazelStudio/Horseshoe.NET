@@ -49,14 +49,94 @@ namespace Horseshoe.NET.Collections
             return CollectionUtil.ConcatIf(collection, collectionToAppend);
         }
 
-        public static IEnumerable<T> PadLeft<T>(this IEnumerable<T> collection, T padWith, int targetLength, TruncatePolicy truncPolicy = default)
+        public static IEnumerable<T> Pad<T>(this IEnumerable<T> collection, int targetSize, CollectionPosition position = CollectionPosition.End, T padWith = default, bool cannotExceedTargetSize = false)
         {
-            return CollectionUtil.PadStart(collection, padWith, targetLength, truncPolicy: truncPolicy);
+            return CollectionUtil.Pad(collection, targetSize, position: position, padWith: padWith, cannotExceedTargetSize: cannotExceedTargetSize);
         }
 
-        public static IEnumerable<T> PadRight<T>(this IEnumerable<T> collection, T padWith, int targetLength, TruncatePolicy truncPolicy = default)
+        public static IEnumerable<T> PadStart<T>(this IEnumerable<T> collection, int targetSize, T padWith = default, bool cannotExceedTargetSize = false)
         {
-            return CollectionUtil.PadEnd(collection, padWith, targetLength, truncPolicy: truncPolicy);
+            return CollectionUtil.Pad(collection, targetSize, position: CollectionPosition.Start, padWith: padWith, cannotExceedTargetSize: cannotExceedTargetSize);
+        }
+
+        public static IEnumerable<T> PadEnd<T>(this IEnumerable<T> collection, int targetSize, T padWith = default, bool cannotExceedTargetSize = false)
+        {
+            return CollectionUtil.Pad(collection, targetSize, position: CollectionPosition.End, padWith: padWith, cannotExceedTargetSize: cannotExceedTargetSize);
+        }
+
+        public static T[] Pad<T>(this T[] collection, int targetSize, CollectionPosition position = CollectionPosition.End, T padWith = default, bool cannotExceedTargetSize = false)
+        {
+            return CollectionUtil.Pad(collection, targetSize, position: position, padWith: padWith, cannotExceedTargetSize: cannotExceedTargetSize);
+        }
+
+        public static T[] PadStart<T>(this T[] collection, int targetSize, T padWith = default, bool cannotExceedTargetSize = false)
+        {
+            return CollectionUtil.Pad(collection, targetSize, position: CollectionPosition.Start, padWith: padWith, cannotExceedTargetSize: cannotExceedTargetSize);
+        }
+
+        public static T[] PadEnd<T>(this T[] collection, int targetSize, T padWith = default, bool cannotExceedTargetSize = false)
+        {
+            return CollectionUtil.Pad(collection, targetSize, position: CollectionPosition.End, padWith: padWith, cannotExceedTargetSize: cannotExceedTargetSize);
+        }
+
+        public static IEnumerable<T> Crop<T>(this IEnumerable<T> collection, int targetSize, CollectionPosition position = CollectionPosition.End)
+        {
+            return CollectionUtil.Crop(collection, targetSize, position: position);
+        }
+
+        public static IEnumerable<T> CropStart<T>(this IEnumerable<T> collection, int targetSize)
+        {
+            return CollectionUtil.Crop(collection, targetSize, position: CollectionPosition.Start);
+        }
+
+        public static IEnumerable<T> CropEnd<T>(this IEnumerable<T> collection, int targetSize)
+        {
+            return CollectionUtil.Crop(collection, targetSize, position: CollectionPosition.End);
+        }
+
+        public static T[] Crop<T>(this T[] collection, int targetSize, CollectionPosition position = CollectionPosition.End)
+        {
+            return CollectionUtil.Crop(collection, targetSize, position: position);
+        }
+
+        public static T[] CropStart<T>(this T[] collection, int targetSize)
+        {
+            return CollectionUtil.Crop(collection, targetSize, position: CollectionPosition.Start);
+        }
+
+        public static T[] CropEnd<T>(this T[] collection, int targetSize)
+        {
+            return CollectionUtil.Crop(collection, targetSize, position: CollectionPosition.End);
+        }
+
+        public static IEnumerable<T> Fit<T>(this IEnumerable<T> collection, int targetSize, CollectionPosition position = CollectionPosition.End, T padWith = default)
+        {
+            return CollectionUtil.Fit(collection, targetSize, position: position, padWith: padWith);
+        }
+
+        public static IEnumerable<T> FitStart<T>(this IEnumerable<T> collection, int targetSize, T padWith = default)
+        {
+            return CollectionUtil.Fit(collection, targetSize, position: CollectionPosition.Start, padWith: padWith);
+        }
+
+        public static IEnumerable<T> FitEnd<T>(this IEnumerable<T> collection, int targetSize, T padWith = default)
+        {
+            return CollectionUtil.Fit(collection, targetSize, position: CollectionPosition.End, padWith: padWith);
+        }
+
+        public static T[] Fit<T>(this T[] array, int targetSize, CollectionPosition position = CollectionPosition.End, T padWith = default)
+        {
+            return CollectionUtil.Fit(array, targetSize, position: position, padWith: padWith);
+        }
+
+        public static T[] FitStart<T>(this T[] array, int targetSize, T padWith = default)
+        {
+            return CollectionUtil.Fit(array, targetSize, position: CollectionPosition.Start, padWith: padWith);
+        }
+
+        public static T[] FitEnd<T>(this T[] array, int targetSize, T padWith = default)
+        {
+            return CollectionUtil.Fit(array, targetSize, position: CollectionPosition.End, padWith: padWith);
         }
 
         public static string StringDump<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, string equals = " = ", string separator = ", ")

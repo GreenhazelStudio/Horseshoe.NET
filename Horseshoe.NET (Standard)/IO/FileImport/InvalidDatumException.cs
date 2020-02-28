@@ -49,7 +49,7 @@ namespace Horseshoe.NET.IO.FileImport
         {
             return
                 (!string.IsNullOrEmpty(message) ? message + " -- " : "") +
-                "{ Value: \"" + TextUtil.RevealNullOrBlank(datum).Trunc(12, truncPolicy: TruncatePolicy.LongEllipsis) + "\"" + 
+                "{ Value: \"" + TextUtil.RevealNullOrBlank(datum).CropCenter(20, truncateMarker: TruncateMarker.LongEllipsis) + "\"" + 
                 (columnName != null ? "; Column: \"" + columnName + "\"" : "") +
                 (length > 0 ? "; Length: " + length : "") +
                 (position != null ? "; Position: \"" + position + "\"": "") +

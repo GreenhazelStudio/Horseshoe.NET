@@ -110,7 +110,7 @@ namespace Horseshoe.NET.ActiveDirectory
                     return directoryEntries.Single();
                 default:
                     var names = directoryEntries.Select(de => de.Name).ToList();
-                    var summary = TextUtil.Trunc(string.Join("; ", names), 50, truncPolicy: TruncatePolicy.Ellipsis);
+                    var summary = TextUtil.Crop(string.Join("; ", names), 50, truncateMarker: TruncateMarker.Ellipsis);
                     throw new ADException("Search for users matching \"" + userSearchTerm + "\" returned " + names.Count + " results: " + summary);
             }
         }
@@ -164,7 +164,7 @@ namespace Horseshoe.NET.ActiveDirectory
                     return directoryEntries.Single();
                 default:
                     var names = directoryEntries.Select(de => de.Name).ToList();
-                    var summary = TextUtil.Trunc(string.Join("; ", names), 50, truncPolicy: TruncatePolicy.Ellipsis);
+                    var summary = TextUtil.Crop(string.Join("; ", names), 50, truncateMarker: TruncateMarker.Ellipsis);
                     throw new ADException("Search for users matching \"" + userSearchTerm + "\" returned " + names.Count + " results: " + summary);
             }
         }

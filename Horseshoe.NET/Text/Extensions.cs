@@ -13,24 +13,54 @@ namespace Horseshoe.NET.Text
             return TextClean.CleanString(text, textCleanMode: textCleanMode, customTextCleanDictionary: customTextCleanDictionary, charsToRemove: charsToRemove);
         }
 
+        public static string Fill(this string text, int targetLength, bool allowOverflow = false)
+        {
+            return TextUtil.Fill(text, targetLength, allowOverflow: allowOverflow);
+        }
+
+        public static string Fit(this string text, int targetLength, Direction direction = Direction.Left, string padding = null, string leftPadding = null, Direction? truncateDirection = null, string truncateMarker = null)
+        {
+            return TextUtil.Fit(text, targetLength, direction: direction, padding: padding, leftPadding: leftPadding, truncateDirection: truncateDirection, truncateMarker: truncateMarker);
+        }
+
+        public static string FitCenter(this string text, int targetLength, string padding = null, string leftPadding = null, Direction? truncateDirection = null, string truncateMarker = null)
+        {
+            return TextUtil.Fit(text, targetLength, direction: Direction.Center, padding: padding, leftPadding: leftPadding, truncateDirection: truncateDirection, truncateMarker: truncateMarker);
+        }
+
+        public static string FitLeft(this string text, int targetLength, string padding = null, string leftPadding = null, Direction? truncateDirection = null, string truncateMarker = null)
+        {
+            return TextUtil.Fit(text, targetLength, direction: Direction.Left, padding: padding, leftPadding: leftPadding, truncateDirection: truncateDirection, truncateMarker: truncateMarker);
+        }
+
+        public static string FitRight(this string text, int targetLength, string padding = null, string leftPadding = null, Direction? truncateDirection = null, string truncateMarker = null)
+        {
+            return TextUtil.Fit(text, targetLength, direction: Direction.Right, padding: padding, leftPadding: leftPadding, truncateDirection: truncateDirection, truncateMarker: truncateMarker);
+        }
+
         public static string MultilineTrim(this string text)
         {
             return TextUtil.MultilineTrim(text);
         }
 
-        public static string PadCenter(this string text, int totalWidth, PadPolicy padPolicy = PadPolicy.Spaces, char? padChar = null, TruncatePolicy truncPolicy = default, string truncMarker = null)
+        public static string Pad(this string text, int targetLength, Direction direction = Direction.Right, string padding = null, string leftPadding = null, bool cannotExceedTargetLength = false)
         {
-            return TextUtil.PadCenter(text, totalWidth, padPolicy: padPolicy, padChar: padChar, truncPolicy: truncPolicy, truncMarker: truncMarker);
+            return TextUtil.Pad(text, targetLength, direction: direction, padding: padding, leftPadding: leftPadding, cannotExceedTargetLength: cannotExceedTargetLength);
         }
 
-        public static string PadLeft(this string text, int totalWidth, PadPolicy padPolicy = PadPolicy.Spaces, char? padChar = null, TruncatePolicy truncPolicy = default, string truncMarker = null)
+        public static string PadCenter(this string text, int targetLength, string padding = null, string leftPadding = null, bool cannotExceedTargetLength = false)
         {
-            return TextUtil.PadLeft(text, totalWidth, padPolicy: padPolicy, padChar: padChar, truncPolicy: truncPolicy, truncMarker: truncMarker);
+            return TextUtil.Pad(text, targetLength, direction: Direction.Center, padding: padding, leftPadding: leftPadding, cannotExceedTargetLength: cannotExceedTargetLength);
         }
 
-        public static string PadRight(this string text, int totalWidth, PadPolicy padPolicy = PadPolicy.Spaces, char? padChar = null, TruncatePolicy truncPolicy = default, string truncMarker = null)
+        public static string PadLeft(this string text, int targetLength, string padding = null, bool cannotExceedTargetLength = false)
         {
-            return TextUtil.PadRight(text, totalWidth, padPolicy: padPolicy, padChar: padChar, truncPolicy: truncPolicy, truncMarker: truncMarker);
+            return TextUtil.Pad(text, targetLength, direction: Direction.Left, padding: padding, cannotExceedTargetLength: cannotExceedTargetLength);
+        }
+
+        public static string PadRight(this string text, int targetLength, string padding = null, bool cannotExceedTargetLength = false)
+        {
+            return TextUtil.Pad(text, targetLength, direction: Direction.Right, padding: padding, cannotExceedTargetLength: cannotExceedTargetLength);
         }
 
         public static string Repeat(this string text, int numberOfTimes)
@@ -38,14 +68,24 @@ namespace Horseshoe.NET.Text
             return TextUtil.Repeat(text, numberOfTimes);
         }
 
-        public static string Trunc(this string text, int targetLength, TruncatePolicy truncPolicy = TruncatePolicy.Simple, string truncMarker = null, PadPolicy padPolicy = default, char? padChar = null)
+        public static string Crop(this string text, int targetLength, Direction direction = Direction.Right, string truncateMarker = null)
         {
-            return TextUtil.Trunc(text, targetLength, truncPolicy: truncPolicy, truncMarker: truncMarker, padPolicy: padPolicy, padChar: padChar);
+            return TextUtil.Crop(text, targetLength, direction: direction, truncateMarker: truncateMarker);
         }
 
-        public static string TruncLeft(this string text, int targetLength, TruncatePolicy truncPolicy = TruncatePolicy.Simple, string truncMarker = null, PadPolicy padPolicy = default, char? padChar = null)
+        public static string CropCenter(this string text, int targetLength, string truncateMarker = null)
         {
-            return TextUtil.TruncLeft(text, targetLength, truncPolicy: truncPolicy, truncMarker: truncMarker, padPolicy: padPolicy, padChar: padChar);
+            return TextUtil.Crop(text, targetLength, direction: Direction.Center, truncateMarker: truncateMarker);
+        }
+
+        public static string CropLeft(this string text, int targetLength, string truncateMarker = null)
+        {
+            return TextUtil.Crop(text, targetLength, direction: Direction.Left, truncateMarker: truncateMarker);
+        }
+
+        public static string CropRight(this string text, int targetLength, string truncateMarker = null)
+        {
+            return TextUtil.Crop(text, targetLength, direction: Direction.Right, truncateMarker: truncateMarker);
         }
 
         public static string Zap(this string text, string defaultValue = null, TextCleanMode textCleanMode = TextCleanMode.None, object customTextCleanDictionary = null, char[] charsToRemove = null)

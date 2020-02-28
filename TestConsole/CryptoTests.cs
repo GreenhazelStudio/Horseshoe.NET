@@ -9,7 +9,7 @@ using Horseshoe.NET;
 using Horseshoe.NET.Application;
 using Horseshoe.NET.Collections;
 using Horseshoe.NET.ConsoleX;
-using Horseshoe.NET.Cryptography;
+using Horseshoe.NET.Crypto;
 using Horseshoe.NET.Text;
 
 namespace TestConsole
@@ -78,23 +78,23 @@ namespace TestConsole
                     {
                         var algorithm = new System.Security.Cryptography.RijndaelManaged();
                         var ciphertext = Encrypt.String("This is your life!", new CryptoOptions { Algorithm = algorithm });
-                        Console.WriteLine("This is your life!" + " -> " + ciphertext.Trunc(26, truncPolicy: TruncatePolicy.LongEllipsis) + " -- Key: " + string.Join(", ", algorithm.Key).Trunc(26, truncPolicy: TruncatePolicy.LongEllipsis) + " -- IV: " + string.Join(", ", algorithm.IV).Trunc(26, truncPolicy: TruncatePolicy.LongEllipsis));
+                        Console.WriteLine("This is your life!" + " -> " + ciphertext.Crop(26, truncateMarker: TruncateMarker.LongEllipsis) + " -- Key: " + string.Join(", ", algorithm.Key).Crop(26, truncateMarker: TruncateMarker.LongEllipsis) + " -- IV: " + string.Join(", ", algorithm.IV).Crop(26, truncateMarker: TruncateMarker.LongEllipsis));
                     }
                     break;
                 case "Encrypt 3 Passwords (same key random IV)":
                     for (int i = 0; i < 3; i++)
                     {
-                        var algorithm = new System.Security.Cryptography.RijndaelManaged { Key = CollectionUtil.PadEnd(new byte[0], (byte)32, 32).ToArray() };
+                        var algorithm = new System.Security.Cryptography.RijndaelManaged { Key = CollectionUtil.Fill(32, fillWith: (byte)32) };
                         var ciphertext = Encrypt.String("This is your life!", new CryptoOptions { Algorithm = algorithm });
-                        Console.WriteLine("This is your life!" + " -> " + ciphertext.Trunc(26, truncPolicy: TruncatePolicy.LongEllipsis) + " -- Key: " + string.Join(", ", algorithm.Key).Trunc(26, truncPolicy: TruncatePolicy.LongEllipsis) + " -- IV: " + string.Join(", ", algorithm.IV).Trunc(26, truncPolicy: TruncatePolicy.LongEllipsis));
+                        Console.WriteLine("This is your life!" + " -> " + ciphertext.Crop(26, truncateMarker: TruncateMarker.LongEllipsis) + " -- Key: " + string.Join(", ", algorithm.Key).Crop(26, truncateMarker: TruncateMarker.LongEllipsis) + " -- IV: " + string.Join(", ", algorithm.IV).Crop(26, truncateMarker: TruncateMarker.LongEllipsis));
                     }
                     break;
                 case "Encrypt 3 Passwords (same key, IV)":
                     for (int i = 0; i < 3; i++)
                     {
-                        var algorithm = new System.Security.Cryptography.RijndaelManaged { Key = CollectionUtil.PadEnd(new byte[0], (byte)32, 32).ToArray(), IV = CollectionUtil.PadEnd(new byte[0], (byte)16, 16).ToArray() };
+                        var algorithm = new System.Security.Cryptography.RijndaelManaged { Key = CollectionUtil.Fill(32, fillWith: (byte)32), IV = CollectionUtil.Fill(16, fillWith: (byte)16) };
                         var ciphertext = Encrypt.String("This is your life!", new CryptoOptions { Algorithm = algorithm });
-                        Console.WriteLine("This is your life!" + " -> " + ciphertext.Trunc(26, truncPolicy: TruncatePolicy.LongEllipsis) + " -- Key: " + string.Join(", ", algorithm.Key).Trunc(26, truncPolicy: TruncatePolicy.LongEllipsis) + " -- IV: " + string.Join(", ", algorithm.IV).Trunc(26, truncPolicy: TruncatePolicy.LongEllipsis));
+                        Console.WriteLine("This is your life!" + " -> " + ciphertext.Crop(26, truncateMarker: TruncateMarker.LongEllipsis) + " -- Key: " + string.Join(", ", algorithm.Key).Crop(26, truncateMarker: TruncateMarker.LongEllipsis) + " -- IV: " + string.Join(", ", algorithm.IV).Crop(26, truncateMarker: TruncateMarker.LongEllipsis));
                     }
                     break;
             }

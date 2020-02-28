@@ -9,69 +9,161 @@ namespace Horseshoe.NET.Collections
     public static class CollectionUtil
     {
         /// <summary>
-        /// Grows a collection to the desired length by adding elements at the start
+        /// Grows a collection to the desired size by adding elements at the specified position (default position is end)
         /// </summary>
-        public static IEnumerable<T> PadStart<T>(IEnumerable<T> collection, T padWith, int targetLength, TruncatePolicy truncPolicy = default)
+        public static void Pad<T>(IList<T> list, int targetSize, CollectionPosition position = CollectionPosition.End, T padWith = default, bool cannotExceedTargetSize = false)
         {
-            if (targetLength <= 0) throw new ArgumentException("The target length must be greater than 0");
-            if (collection.Count() == targetLength) return collection;
-            if (collection.Count() > targetLength)
+            if (list == null) return;
+            if (list.Count > targetSize)
             {
-                switch (truncPolicy)
-                {
-                    case TruncatePolicy.None:
-                    default:
-                        break;
-                    case TruncatePolicy.Simple:
-                        collection = collection.Skip(collection.Count() - targetLength).ToList();
-                        break;
-                    case TruncatePolicy.Exception:
-                        throw new ArgumentException("The collection exceeds the target length: " + collection.Count() + "/" + targetLength);
-                }
+                if (cannotExceedTargetSize) throw new ValidationException("Collection (" + list.Count + ") cannot exceed target size (" + targetSize + ")");
+                return;
             }
-            else
+            switch (position)
             {
-                var list = collection.ToList();
-                while (list.Count < targetLength)
-                {
-                    list.Insert(0, padWith);
-                }
-                collection = list;
+                case CollectionPosition.End:
+                default:
+                    while (list.Count < targetSize)
+                    {
+                        list.Add(padWith);
+                    }
+                    break;
+                case CollectionPosition.Start:
+                    while (list.Count < targetSize)
+                    {
+                        list.Insert(0, padWith);
+                    }
+                    break;
             }
-            return collection;
         }
 
         /// <summary>
-        /// Grows a collection to the desired length by adding elements at the end
+        /// Returns a duplicate collection of the desired size by adding elements at the specified position (default position is end)
         /// </summary>
-        public static IEnumerable<T> PadEnd<T>(IEnumerable<T> collection, T padWith, int targetLength, TruncatePolicy truncPolicy = default)
+        public static IEnumerable<T> Pad<T>(IEnumerable<T> collection, int targetSize, CollectionPosition position = CollectionPosition.End, T padWith = default, bool cannotExceedTargetSize = false)
         {
-            if (targetLength <= 0) throw new ArgumentException("The target length must be greater than 0");
-            if (collection.Count() == targetLength) return collection;
-            if (collection.Count() > targetLength)
+            if (collection == null) return null;
+            var list = collection.ToList();
+            Pad(list, targetSize, position: position, padWith: padWith, cannotExceedTargetSize: cannotExceedTargetSize);
+            return list;
+        }
+
+        /// <summary>
+        /// Returns a duplicate collection of the desired size by adding elements at the specified position (default position is end)
+        /// </summary>
+        public static T[] Pad<T>(T[] array, int targetSize, CollectionPosition position = CollectionPosition.End, T padWith = default, bool cannotExceedTargetSize = false)
+        {
+            if (array == null) return null;
+            var list = array.ToList();
+            Pad(list, targetSize, position: position, padWith: padWith, cannotExceedTargetSize: cannotExceedTargetSize);
+            return list.ToArray();
+        }
+
+        /// <summary>
+        /// Shrinks a collection to the desired size by removing elements from the specified position (default position is end)
+        /// </summary>
+        public static void Crop<T>(IList<T> list, int targetSize, CollectionPosition position = CollectionPosition.End)
+        {
+            if (list == null) return;
+            if (list.Count <= targetSize) return;
+            switch (position)
             {
-                switch (truncPolicy)
-                {
-                    case TruncatePolicy.None:
-                    default:
-                        break;
-                    case TruncatePolicy.Simple:
-                        collection = collection.Take(targetLength).ToList();
-                        break;
-                    case TruncatePolicy.Exception:
-                        throw new ArgumentException("The collection exceeds the target length: " + collection.Count() + "/" + targetLength);
-                }
+                case CollectionPosition.End:
+                default:
+                    while (list.Count < targetSize)
+                    {
+                        list.RemoveAt(list.Count - 1);
+                    }
+                    break;
+                case CollectionPosition.Start:
+                    while (list.Count < targetSize)
+                    {
+                        list.RemoveAt(0);
+                    }
+                    break;
             }
-            else
+        }
+
+        /// <summary>
+        /// Returns a duplicate collection of the desired size by removing elements from the specified position (default position is end)
+        /// </summary>
+        public static IEnumerable<T> Crop<T>(IEnumerable<T> collection, int targetSize, CollectionPosition position = CollectionPosition.End)
+        {
+            if (collection == null) return null;
+            var list = collection.ToList();
+            Crop(list, targetSize, position: position);
+            return list;
+        }
+
+        /// <summary>
+        /// Returns a duplicate collection of the desired size by removing elements from the specified position (default position is end)
+        /// </summary>
+        public static T[] Crop<T>(T[] array, int targetSize, CollectionPosition position = CollectionPosition.End)
+        {
+            if (array == null) return null;
+            var list = array.ToList();
+            Crop(list, targetSize, position: position);
+            return list.ToArray();
+        }
+
+        /// <summary>
+        /// Grows or shrimks a collection to the desired size by adding / removing elements from the specified position (default position is end)
+        /// </summary>
+        public static void Fit<T>(IList<T> list, int targetSize, CollectionPosition position = CollectionPosition.Start, T padWith = default)
+        {
+            if (list == null) return;
+            if (list.Count == targetSize) return;
+            if (list.Count < targetSize) Pad(list, targetSize, position: FitSwitchCollectionPosition(position), padWith: padWith);
+            else Crop(list, targetSize, position: FitSwitchCollectionPosition(position));
+        }
+
+        /// <summary>
+        /// Returns a duplicate collection of the desired size by adding / removing elements from the specified position (default position is end)
+        /// </summary>
+        public static IEnumerable<T> Fit<T>(IEnumerable<T> collection, int targetSize, CollectionPosition position = CollectionPosition.Start, T padWith = default)
+        {
+            if (collection == null) return null;
+            var list = collection.ToList();
+            if (list.Count < targetSize) Pad(list, targetSize, position: FitSwitchCollectionPosition(position), padWith: padWith);
+            else if (list.Count > targetSize) Crop(list, targetSize, position: FitSwitchCollectionPosition(position));
+            return list;
+        }
+
+        /// <summary>
+        /// Returns a duplicate collection of the desired size by adding / removing elements from the specified position (default position is end)
+        /// </summary>
+        public static T[] Fit<T>(T[] collection, int targetSize, CollectionPosition position = CollectionPosition.Start, T padWith = default)
+        {
+            if (collection == null) return null;
+            var list = collection.ToList();
+            if (list.Count < targetSize) Pad(list, targetSize, position: FitSwitchCollectionPosition(position), padWith: padWith);
+            else if (list.Count > targetSize) Crop(list, targetSize, position: FitSwitchCollectionPosition(position));
+            return list.ToArray();
+        }
+
+        static CollectionPosition FitSwitchCollectionPosition(CollectionPosition position)
+        {
+            switch (position)
             {
-                var list = collection.ToList();
-                while (list.Count < targetLength)
-                {
-                    list.Add(padWith);
-                }
-                collection = list;
+                case CollectionPosition.Start:
+                    return CollectionPosition.End;
+                case CollectionPosition.End:
+                default:
+                    return CollectionPosition.Start;
             }
-            return collection;
+        }
+
+        /// <summary>
+        /// Returns a collection of the desired size containing a single repeated value
+        /// </summary>
+        public static T[] Fill<T>(int targetSize, T fillWith = default)
+        {
+            var list = new List<T>();
+            for (int i = 0; i < targetSize; i++)
+            {
+                list.Add(fillWith);
+            }
+            return list.ToArray();
         }
 
         /// <summary>
@@ -84,17 +176,17 @@ namespace Horseshoe.NET.Collections
                 length = array.Length - startIndex;
             }
             var newArray = array
-                    .Skip(startIndex)
-                    .Take(length)
-                    .ToArray();
+                .Skip(startIndex)
+                .Take(length)
+                .ToArray();
             array = array
-                    .Take(startIndex)
-                    .Concat(
-                        array
-                            .Skip(startIndex + length)
-                            .Take(array.Length)
-                    )
-                    .ToArray();
+                .Take(startIndex)
+                .Concat(
+                    array
+                        .Skip(startIndex + length)
+                        .Take(array.Length)
+                )
+                .ToArray();
             return newArray;
         }
 

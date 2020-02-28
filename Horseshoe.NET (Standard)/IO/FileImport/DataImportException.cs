@@ -5,8 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Horseshoe.NET.Text;
-
 namespace Horseshoe.NET.IO.FileImport
 {
     [SuppressMessage("Usage", "CA2237:Mark ISerializable types with serializable", Justification = "Serialization irrelavent")]
