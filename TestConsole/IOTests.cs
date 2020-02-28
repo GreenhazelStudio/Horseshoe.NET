@@ -22,6 +22,7 @@ namespace TestConsole
         {
             Ftp.RequestUriCreated += (uri) => Console.WriteLine("URI: " + uri);
             Ftp.FileUploaded += (fileName, fileSize, statusCode, statusDescription) => Console.WriteLine("Upload results: " + fileName + " - " + FileUtil.GetDisplayFileSize(fileSize) + " - " + statusDescription);
+            Ftp.FileDeleted += (fileName, statusCode, statusDescription) => Console.WriteLine("Delete results: " + fileName + " - " + statusDescription);
             Ftp.DirectoryContentsListed += (count, statusCode, statusDescription) => Console.WriteLine("Dir listing results: x" + count + " - " + statusDescription);
         }
 
@@ -35,8 +36,10 @@ namespace TestConsole
                     "Display file sizes",
                     "Test FTP Upload",
                     "Test FTP Download",
+                    "Test FTP Delete",
                     "List FTP Directory",
-                    "regex"
+                    "regex",
+                    "FTP connection string parse tests"
                 },
                 title: "SSRS Test Menu"
             );
@@ -68,28 +71,29 @@ namespace TestConsole
                     (
                         "Hello World!",
                         "hello.txt",
-                        server: "11.22.33.44",
-                        serverPath: "/my_dir",
-                        credentials: new Credential("username", "password")
+                        connectionInfo: FtpUtil.ParseFtpConnectionString("ftp://username@11.22.33.44/my_dir?password=password")
                     );
                     break;
                 case "Test FTP Download":
                     var stream = Ftp.DownloadFile
                     (
-                        "blank.txt",
-                        server: "11.22.33.44",
-                        serverPath: "/my_dir",
-                        credentials: new Credential("username", "password")
+                        "hello.txt",
+                        connectionInfo: FtpUtil.ParseFtpConnectionString("ftp://username@11.22.33.44/my_dir?password=password")
                     );
                     Console.WriteLine("File length: " + stream.Length);
                     Console.WriteLine("File contents: " + Encoding.Default.GetString(stream.ToArray()));
                     break;
+                case "Test FTP Delete":
+                    Ftp.DeleteFile
+                    (
+                        "hello.txt",
+                        connectionInfo: FtpUtil.ParseFtpConnectionString("ftp://username@11.22.33.44/my_dir?password=password")
+                    );
+                    break;
                 case "List FTP Directory":
                     var dirContents = Ftp.ListDirectoryContents
                     (
-                        server: "11.22.33.44",
-                        serverPath: "/my_dir",
-                        credentials: new Credential("username", "password")
+                        connectionInfo: FtpUtil.ParseFtpConnectionString("ftp://username@11.22.33.44/my_dir?password=password")
                     );
                     Console.WriteLine("Directory contents:");
                     Console.WriteLine(string.Join(Environment.NewLine, dirContents));
@@ -98,9 +102,7 @@ namespace TestConsole
                     dirContents = Ftp.ListDirectoryContents
                     (
                         fileMask: FtpFileMasks.Txt,
-                        server: "11.22.33.44",
-                        serverPath: "/my_dir",
-                        credentials: new Credential("username", "password")
+                        connectionInfo: FtpUtil.ParseFtpConnectionString("ftp://username@11.22.33.44/my_dir?password=password")
                     );
                     Console.WriteLine("Directory contents (.txt files only):");
                     Console.WriteLine(string.Join(Environment.NewLine, dirContents));
@@ -116,6 +118,30 @@ namespace TestConsole
                         }
                     }
                     break;
+                case "FTP connection string parse tests":
+                    var connStrs = new[]
+                    {
+                        "ftp://george@11.22.33.44/dir/subdir?encryptedPassword=akdj$8iO(d@1sd==",
+                        "ftp://george@11.22.33.44:9001/dir/subdir?encryptedPassword=akdj$8iO(d@1sd==",
+                        "george@11.22.33.44/dir/subdir?encryptedPassword=akdj$8iO(d@1sd==",
+                    };
+                    foreach(var str in connStrs)
+                    {
+                        Console.WriteLine("Imported:  " + str);
+                        Console.Write("Exporting: ");
+                        try
+                        {
+                            var connectionInfo = FtpUtil.ParseFtpConnectionString(str);
+                            Console.WriteLine(connectionInfo);
+                        }
+                        catch(Exception ex)
+                        {
+                            Console.WriteLine("error: " + ex.Message);
+                        }
+                        Console.WriteLine();
+                    }
+                    break;
+                
             }
         }
     }
