@@ -6,7 +6,7 @@
     <Description>A typesafe, object-oriented database helper for ODBC</Description>
     <Authors>Carl Thomas</Authors>
     <Company>Greenhazel Studio</Company>
-    <Version>0.9.5.1</Version>
+    <Version>0.9.5.2</Version>
     <Copyright>Copyright © 2020 Greenhazel Studio</Copyright>
   </PropertyGroup>
 
