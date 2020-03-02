@@ -1,20 +1,14 @@
+<div style="text-align:center;">
+![horseshoe icon](http://greenhazelstudio.com/horseshoe.net/horseshoe-icon-256x256.png)
+</div>
+
 # Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+Horseshoe.NET is a suite of .NET utilities with a dual purpose: simplify coding tasks and offer a variety of new and unique features.  
+
+For over 10 years in my career in software development I have been collecting helpful code snippets and identifying tons of reusable boilerplate code and combining it all into a massive library which I now wish to share with other .NET developers everywhere.
 
 # Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
-
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+Download the Horseshoe.NET NuGet packages to your app today and start discovering time-saving methods and cool new functionality!
 
 # Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
-
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+At this time I do not have any other contributors, however, I more than welcome any feedback, feature requests, bug reports... anything to make this software package more reliable as well as user-friendly.  Thanks!
