@@ -63,6 +63,18 @@
       <Project>{6083928f-0399-4db6-8808-b34a0693895d}</Project>
       <Name>Horseshoe.NET.Excel</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Horseshoe.NET.Odbc\Horseshoe.NET.Odbc.csproj">
+      <Project>{31dc6c32-03ae-4c5d-a94b-bac991655900}</Project>
+      <Name>Horseshoe.NET.Odbc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Horseshoe.NET.OracleDb\Horseshoe.NET.OracleDb.csproj">
+      <Project>{ef577431-b6c3-49b3-af18-4974383c59d1}</Project>
+      <Name>Horseshoe.NET.OracleDb</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Horseshoe.NET.SqlDb\Horseshoe.NET.SqlDb.csproj">
+      <Project>{d9a0bf85-7d85-46ee-8bb5-3f75dc36830a}</Project>
+      <Name>Horseshoe.NET.SqlDb</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Horseshoe.NET\Horseshoe.NET.csproj">
       <Project>{2c647857-6298-47c1-97bc-ad180d55dd33}</Project>
       <Name>Horseshoe.NET</Name>

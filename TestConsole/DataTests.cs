@@ -9,7 +9,7 @@ using Horseshoe.NET;
 using Horseshoe.NET.Application;
 using Horseshoe.NET.ConsoleX;
 using Horseshoe.NET.Db;
-using Horseshoe.NET.Text;
+using Horseshoe.NET.SqlDb;
 
 namespace TestConsole
 {
@@ -18,8 +18,16 @@ namespace TestConsole
         public override Title Title => "Data Tests";
         public override bool Looping => true;
 
+        static string Statement { get; set; }
+
+        static DataTests()
+        {
+            DataUtil.UsingSqlStatement += (stmt) => Statement = stmt;
+        }
+
         string[] Menu => new string[]
         {
+            "Not Equals Test"
         };
 
         public override void Do()
@@ -27,9 +35,26 @@ namespace TestConsole
             Console.WriteLine();
             var selection = PromptMenu
             (
-                Menu
+                Menu,
+                title: "Menu"
             );
             RenderListTitle(selection.SelectedItem);
+            switch(selection.SelectedItem)
+            {
+                case "Not Equals Test":
+                    Update.Table
+                    (
+                        null,
+                        "Table",
+                        new[]
+                        {
+                            new Column("Column", "column")
+                        },
+                        where: Filter.NotEquals("OtherColumn", 15)
+                    );
+                    Console.WriteLine(Statement);
+                    break;
+            }
         }
     }
 }

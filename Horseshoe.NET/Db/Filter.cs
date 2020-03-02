@@ -234,7 +234,11 @@ namespace Horseshoe.NET.Db
         public static Filter NotEquals(string columnName, object value, DbProduct? product = null)
         {
             return value != null
-                ? new Filter(columnName, FilterMode.NotEquals, new[] { value }, product: product)
+                ? And
+                  (
+                      new Filter(columnName, FilterMode.IsNotNull, product: product), 
+                      new Filter(columnName, FilterMode.NotEquals, new[] { value }, product: product)
+                  )
                 : new Filter(columnName, FilterMode.IsNotNull, product: product);
         }
 
@@ -357,7 +361,7 @@ namespace Horseshoe.NET.Db
 
             public override string Render()
             {
-                return string.Join(" AND ", Filters);
+                return "(" + string.Join(" AND ", Filters) + ")";
             }
         }
 
