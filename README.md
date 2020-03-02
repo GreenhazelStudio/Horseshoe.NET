@@ -1,6 +1,4 @@
-<div style="text-align:center;">
-![horseshoe icon](http://greenhazelstudio.com/horseshoe.net/horseshoe-icon-256x256.png)
-</div>
+![horseshoe icon](http://greenhazelstudio.com/horseshoe.net/horseshoe-icon-256x256.png "Horseshoe.NET")
 
 # Introduction 
 Horseshoe.NET is a suite of .NET utilities with a dual purpose: simplify coding tasks and offer a variety of new and unique features.  
