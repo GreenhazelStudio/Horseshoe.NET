@@ -231,25 +231,20 @@ namespace Horseshoe.NET.Db
                 : new Filter(columnName, FilterMode.IsNull, product: product);
         }
 
-        public static Filter NotEquals(string columnName, object value, bool nullCheck = false, DbProduct? product = null)
+        public static Filter NotEquals(string columnName, object value, bool columnIsNullable = false, DbProduct? product = null)
         {
-            if (!nullCheck)
+            if (value != null)
             {
-                return value != null
-                    ? new Filter(columnName, FilterMode.NotEquals, new[] { value }, product: product)
-                    : new Filter(columnName, FilterMode.IsNotNull, product: product);
-            }
-            return value != null
-                ? Or
-                  (
-                      IsNull(columnName),
-                      And
+                return columnIsNullable
+                    ? Or
                       (
-                          IsNotNull(columnName),
+                          IsNull(columnName),
                           new Filter(columnName, FilterMode.NotEquals, new[] { value }, product: product)
                       )
-                  )
-                : new Filter(columnName, FilterMode.IsNotNull, product: product);
+                    : new Filter(columnName, FilterMode.NotEquals, new[] { value }, product: product);
+
+            }
+            return new Filter(columnName, FilterMode.IsNotNull, product: product);
         }
 
         public static Filter NotEqualsOrNull(string columnName, object value, DbProduct? product = null)

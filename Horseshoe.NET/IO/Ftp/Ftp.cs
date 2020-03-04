@@ -46,7 +46,7 @@ namespace Horseshoe.NET.IO.Ftp
                 }
             }
 
-            UploadContent(fileContents, newFileName ?? Path.GetFileName(filePath), connectionInfo: connectionInfo, serverPath: serverPath);
+            UploadFile(newFileName ?? Path.GetFileName(filePath), fileContents, connectionInfo: connectionInfo, serverPath: serverPath);
         }
 
         public static void UploadFile
@@ -70,25 +70,25 @@ namespace Horseshoe.NET.IO.Ftp
             );
         }
 
-        public static void UploadContent
+        public static void UploadFile
         (
-            string content,
             string fileName,
+            string contents,
             FtpConnectionInfo connectionInfo = null,
             string serverPath = "/",
             Encoding encoding = null
         )
         {
             // Get the content bytes
-            byte[] fileContents = (encoding ?? Encoding.Default).GetBytes(content);
+            byte[] fileContents = (encoding ?? Encoding.Default).GetBytes(contents);
 
-            UploadContent(fileContents, fileName, connectionInfo: connectionInfo, serverPath: serverPath);
+            UploadFile(fileName, fileContents, connectionInfo: connectionInfo, serverPath: serverPath);
         }
 
-        public static void UploadContent
+        public static void UploadFile
         (
-            byte[] bytes,
             string fileName,
+            byte[] contents,
             FtpConnectionInfo connectionInfo = null,
             string serverPath = "/"
         )
@@ -116,16 +116,16 @@ namespace Horseshoe.NET.IO.Ftp
             var request = (FtpWebRequest)WebRequest.Create(uriString);
             request.Method = WebRequestMethods.Ftp.UploadFile;
             request.Credentials = credentials?.ToNetworkCredentials() ?? new NetworkCredential("anonymous", "ftpuser");
-            request.ContentLength = bytes.LongLength;
+            request.ContentLength = contents.LongLength;
 
             using (Stream requestStream = request.GetRequestStream())
             {
-                requestStream.Write(bytes, 0, bytes.Length);
+                requestStream.Write(contents, 0, contents.Length);
             }
 
             using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
             {
-                FileUploaded?.Invoke(TextUtil.RevealNullOrBlank(fileName), bytes.LongLength, (int)response.StatusCode, response.StatusDescription);
+                FileUploaded?.Invoke(TextUtil.RevealNullOrBlank(fileName), contents.LongLength, (int)response.StatusCode, response.StatusDescription);
             }
         }
 
