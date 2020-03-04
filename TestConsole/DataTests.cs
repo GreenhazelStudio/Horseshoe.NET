@@ -50,7 +50,7 @@ namespace TestConsole
                         {
                             new Column("Column", "column")
                         },
-                        where: Filter.NotEquals("OtherColumn", 15, nullCheck: true)
+                        where: Filter.NotEquals("OtherColumn", 15, columnIsNullable: true)
                     );
                     Console.WriteLine(Statement);
                     break;

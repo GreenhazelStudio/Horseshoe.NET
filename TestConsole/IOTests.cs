@@ -67,10 +67,10 @@ namespace TestConsole
                     Console.WriteLine();
                     break;
                 case "Test FTP Upload":
-                    Ftp.UploadContent
+                    Ftp.UploadFile
                     (
-                        "Hello World!",
                         "hello.txt",
+                        contents: "Hello World!",
                         connectionInfo: FtpUtil.ParseFtpConnectionString("ftp://username@11.22.33.44/my_dir?password=password")
                     );
                     break;
