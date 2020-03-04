@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Horseshoe.NET.SqlDb")]
-[assembly: AssemblyDescription("A typesafe, object-oriented database helper for SQL Server")]
+[assembly: AssemblyDescription("A typesafe, object-oriented ADO.NET-based SQL Server data access utility")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Greenhazel Studio")]
 [assembly: AssemblyProduct("Horseshoe.NET.SqlDb")]
