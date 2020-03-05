@@ -131,7 +131,7 @@ namespace Horseshoe.NET.OleDb
             return credentials;
         }
 
-        public static OleDbConnection LaunchConnection(OleDbConnectionInfo connectionInfo, CryptoOptions options = null)
+        public static OleDbConnection LaunchConnection(OleDbConnectionInfo connectionInfo = null, CryptoOptions options = null)
         {
             var conn = new OleDbConnection
             {
