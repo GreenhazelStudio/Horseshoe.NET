@@ -24,9 +24,9 @@ namespace Horseshoe.NET.IO.Ftp
         public static void UploadFile
         (
             string filePath,
-            string newFileName = null,
             FtpConnectionInfo connectionInfo = null,
             string serverPath = "/",
+            string serverFileName = null,
             bool isBinary = false,
             Encoding encoding = null
         )
@@ -46,15 +46,15 @@ namespace Horseshoe.NET.IO.Ftp
                 }
             }
 
-            UploadFile(newFileName ?? Path.GetFileName(filePath), fileContents, connectionInfo: connectionInfo, serverPath: serverPath);
+            UploadFile(serverFileName ?? Path.GetFileName(filePath), fileContents, connectionInfo: connectionInfo, serverPath: serverPath);
         }
 
         public static void UploadFile
         (
             FileInfo file,
-            string newFileName = null,
             FtpConnectionInfo connectionInfo = null,
             string serverPath = "/",
+            string serverFileName = null,
             bool isBinary = false,
             Encoding encoding = null
         )
@@ -62,9 +62,9 @@ namespace Horseshoe.NET.IO.Ftp
             UploadFile
             (
                 file.FullName,
-                newFileName: newFileName,
                 connectionInfo: connectionInfo,
                 serverPath: serverPath,
+                serverFileName: serverFileName,
                 isBinary: isBinary,
                 encoding: encoding
             );

@@ -70,7 +70,7 @@ namespace TestConsole
                     Ftp.UploadFile
                     (
                         "hello.txt",
-                        contents: "Hello World!",
+                        "Hello World!",
                         connectionInfo: FtpUtil.ParseFtpConnectionString("ftp://username@11.22.33.44/my_dir?password=password")
                     );
                     break;
