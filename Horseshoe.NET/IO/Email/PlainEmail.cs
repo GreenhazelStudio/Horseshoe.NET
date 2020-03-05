@@ -14,12 +14,11 @@ namespace Horseshoe.NET.IO.Email
         (
             string subject,
             string body,
-            EmailAddressList to,
-            EmailAddressList cc = null,
-            EmailAddressList bcc = null,
+            StringList to,
+            StringList cc = null,
+            StringList bcc = null,
             string from = null,
-            string attach = null,
-            IEnumerable<string> attachments = null,
+            StringList attach = null,
             string footerText = null,
             Encoding encoding = null,
             SmtpConnectionInfo connectionInfo = null
@@ -35,8 +34,7 @@ namespace Horseshoe.NET.IO.Email
                 subject,
                 to,
                 from,
-                attach,
-                attachments
+                attach
             );
 
             var mailMessage = new MailMessage()
@@ -69,14 +67,9 @@ namespace Horseshoe.NET.IO.Email
                 }
             }
 
-            if (attach != null && (attachments == null || !attachments.Any()))
+            if (attach != null && attach.Any())
             {
-                attachments = attach.Split(',', ';', '|').ZapAndPrune();
-            }
-
-            if (attachments != null && attachments.Any())
-            {
-                foreach (var attachment in attachments)
+                foreach (var attachment in attach)
                 {
                     mailMessage.Attachments.Add(new Attachment(attachment));
                 }

@@ -70,10 +70,9 @@ namespace Horseshoe.NET.IO.Email
         (
             string subject,
             string body,
-            EmailAddressList to,
+            StringList to,
             string from = null,
-            string attach = null,
-            IEnumerable<string> attachments = null
+            StringList attach = null
         )
         {
             var validationMessages = new List<string>();
@@ -88,12 +87,8 @@ namespace Horseshoe.NET.IO.Email
                 validationMessages.Add("Please supply a 'from' address, you may configure this value (key=\"Horseshoe.NET:Email:From\")");
             }
 
-            if (attach != null && !(attachments == null || !attachments.Any()))
-            {
-                validationMessages.Add("Please only populate 'attach' or 'attachments', not both");
-            }
 
-            if (string.IsNullOrEmpty(subject) && string.IsNullOrEmpty(body) && attach == null && (attachments == null || !attachments.Any()))
+            if (string.IsNullOrEmpty(subject) && string.IsNullOrEmpty(body) && (attach == null || !attach.Any()))
             {
                 validationMessages.Add("Email may preclude 'subject', 'body' or 'attachments' but not all three");
             }
