@@ -20,9 +20,14 @@ namespace Horseshoe.NET.OracleDb
 {
     public static class OracleUtil
     {
+        public static event UsingConnectionString UsingConnectionString;
+        public static event UsingCredentials UsingCredentials;
+        public static UsingStatement UsingStatement;
+        public static ColumnSearchedByValue ColumnSearchedByValue;
+
         /* * * * * * * * * * * * * * * * * * * * * * * * 
-         *   CONNECTION-RELATED METHODS                *
-         * * * * * * * * * * * * * * * * * * * * * * * */
+          *   CONNECTION-RELATED METHODS                *
+          * * * * * * * * * * * * * * * * * * * * * * * */
         public static string GetDefaultConnectionString(out string announcePrefix)   // Uses EZ Connect style connection string
         {
             if (OracleSettings.DefaultConnectionString != null)
@@ -100,7 +105,7 @@ namespace Horseshoe.NET.OracleDb
             }
             if (connectionString != null && announce)
             {
-                DataUtil.UsingConnectionString?.Invoke(announcePrefix, connectionString);
+                UsingConnectionString?.Invoke(announcePrefix, connectionString);
             }
             return connectionString;
         }
@@ -142,7 +147,7 @@ namespace Horseshoe.NET.OracleDb
                 }
                 if (announce)
                 {
-                    DataUtil.UsingCredentials?.Invoke(source, credentials.Value.UserName, passwordDescription);
+                    UsingCredentials?.Invoke(source, credentials.Value.UserName, passwordDescription);
                 }
             }
             return credentials;

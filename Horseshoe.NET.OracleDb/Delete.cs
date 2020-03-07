@@ -57,7 +57,7 @@ namespace Horseshoe.NET.OracleDb
                 statement = "DELETE FROM " + tableName;
             }
 
-            DataUtil.UsingSqlStatement?.Invoke(statement);
+            OracleUtil.UsingStatement?.Invoke(statement);
 
             if (conn == null) return 0;
 

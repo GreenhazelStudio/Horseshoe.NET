@@ -551,7 +551,7 @@ namespace Horseshoe.NET.SqlDb
                 }
 
                 statement = statement.MultilineTrim();
-                UsingSqlStatement?.Invoke(statement);
+                SqlUtil.UsingStatement?.Invoke(statement);
 
                 return statement;
             }
@@ -1286,7 +1286,7 @@ namespace Horseshoe.NET.SqlDb
                     statement = "SELECT * FROM " + functionName + "(" + string.Join(", ", parameters.Select(p => Sqlize(p.Value, DbProduct.SqlServer))) + ")";
                 }
 
-                UsingSqlStatement?.Invoke(statement);
+                SqlUtil.UsingStatement?.Invoke(statement);
 
                 if (conn == null) return null;
 
@@ -1398,7 +1398,7 @@ namespace Horseshoe.NET.SqlDb
                     statement = "SELECT " + functionName + "(" + string.Join(", ", parameters.Select(p => Sqlize(p.Value, DbProduct.SqlServer))) + ")";
                 }
 
-                UsingSqlStatement?.Invoke(statement);
+                SqlUtil.UsingStatement?.Invoke(statement);
 
                 if (conn == null) return null;
 
@@ -1483,7 +1483,7 @@ namespace Horseshoe.NET.SqlDb
                     statement = "SELECT * FROM " + functionName + "(" + string.Join(", ", parameters.Select(p => Sqlize(p.Value, DbProduct.SqlServer))) + ")";
                 }
 
-                UsingSqlStatement?.Invoke(statement);
+                SqlUtil.UsingStatement?.Invoke(statement);
 
                 if (conn == null) return null;
 
@@ -1531,7 +1531,7 @@ namespace Horseshoe.NET.SqlDb
                     statement = "SELECT * FROM " + functionName + "(" + string.Join(", ", parameters.Select(p => Sqlize(p.Value, DbProduct.SqlServer))) + ")";
                 }
 
-                UsingSqlStatement?.Invoke(statement);
+                SqlUtil.UsingStatement?.Invoke(statement);
 
                 if (conn == null) return null;
 

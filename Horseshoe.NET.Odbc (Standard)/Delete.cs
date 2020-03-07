@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
 using System.Data.Odbc;
 using System.Linq;
 using System.Text;
@@ -56,7 +55,7 @@ namespace Horseshoe.NET.Odbc
                 statement = "DELETE FROM " + tableName;
             }
 
-            DataUtil.UsingSqlStatement?.Invoke(statement);
+            OdbcUtil.UsingStatement?.Invoke(statement);
 
             if (conn == null) return 0;
 

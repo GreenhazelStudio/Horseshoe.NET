@@ -627,7 +627,7 @@ namespace Horseshoe.NET.OracleDb
                 }
 
                 statement = statement.MultilineTrim();
-                UsingSqlStatement?.Invoke(statement);
+                OracleUtil.UsingStatement?.Invoke(statement);
 
                 return statement;
             }
@@ -1509,7 +1509,7 @@ namespace Horseshoe.NET.OracleDb
                     statement = "SELECT * FROM TABLE(" + functionName + "(" + string.Join(", ", parameters.Select(p => Sqlize(p.Value, product ?? DbProduct.Oracle))) + "))";
                 }
 
-                UsingSqlStatement?.Invoke(statement);
+                OracleUtil.UsingStatement?.Invoke(statement);
 
                 if (conn == null) return null;
 
@@ -1622,7 +1622,7 @@ namespace Horseshoe.NET.OracleDb
                     statement = "SELECT " + functionName + "(" + string.Join(", ", parameters.Select(p => Sqlize(p.Value, product ?? DbProduct.Oracle))) + ") FROM DUAL";
                 }
 
-                UsingSqlStatement?.Invoke(statement);
+                OracleUtil.UsingStatement?.Invoke(statement);
 
                 if (conn == null) return null;
 
@@ -1731,7 +1731,7 @@ namespace Horseshoe.NET.OracleDb
                     statement = "SELECT * FROM TABLE(" + functionName + "(" + string.Join(", ", parameters.Select(p => Sqlize(p.Value, DbProduct.Oracle))) + "))";
                 }
 
-                UsingSqlStatement?.Invoke(statement);
+                OracleUtil.UsingStatement?.Invoke(statement);
 
                 if (conn == null) return null;
 
@@ -1801,7 +1801,7 @@ namespace Horseshoe.NET.OracleDb
                     statement = "SELECT * FROM TABLE(" + functionName + "(" + string.Join(", ", parameters.Select(p => Sqlize(p.Value, DbProduct.Oracle))) + "))";
                 }
 
-                UsingSqlStatement?.Invoke(statement);
+                OracleUtil.UsingStatement?.Invoke(statement);
 
                 if (conn == null) return null;
 

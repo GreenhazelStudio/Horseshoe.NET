@@ -5,14 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Horseshoe.NET.Events;
-
 namespace Horseshoe.NET.Excel.Interop
 {
     public static class ConvertExcelFile
     {
-        public static EasyNotifier<string> ConversionCanceled;
-
         public static ConverionSource From(string filePath)
         {
             return new ConverionSource(filePath);

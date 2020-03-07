@@ -49,7 +49,7 @@ namespace Horseshoe.NET.Odbc
 
             statement = statement.MultilineTrim();
 
-            DataUtil.UsingSqlStatement?.Invoke(statement);
+            OdbcUtil.UsingStatement?.Invoke(statement);
 
             if (conn == null) return 0;
 

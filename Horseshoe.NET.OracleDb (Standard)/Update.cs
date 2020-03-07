@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
 using System.Linq;
 using System.Text;
 
@@ -49,7 +48,7 @@ namespace Horseshoe.NET.OracleDb
 
             statement = statement.MultilineTrim();
 
-            DataUtil.UsingSqlStatement?.Invoke(statement);
+            OracleUtil.UsingStatement?.Invoke(statement);
 
             if (conn == null) return 0;
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
 using System.Linq;
 using System.Text;
 
@@ -48,7 +47,7 @@ namespace Horseshoe.NET.OracleDb
                 VALUES (" + string.Join(", ", columns.Select(c => DataUtil.Sqlize(c.Value, DbProduct.Oracle))) + ")";
 
             statement = statement.MultilineTrim();
-            DataUtil.UsingSqlStatement?.Invoke(statement);
+            OracleUtil.UsingStatement?.Invoke(statement);
 
             if (conn == null) return 0;
 
@@ -91,7 +90,7 @@ namespace Horseshoe.NET.OracleDb
                 SELECT LAST_INSERT_ID()";
 
             statement = statement.MultilineTrim();
-            DataUtil.UsingSqlStatement?.Invoke(statement);
+            OracleUtil.UsingStatement?.Invoke(statement);
 
             if (conn == null)
             {

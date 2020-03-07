@@ -54,7 +54,7 @@ namespace Horseshoe.NET.SqlDb
 
             statement = statement.MultilineTrim();
 
-            DataUtil.UsingSqlStatement?.Invoke(statement);
+            SqlUtil.UsingStatement?.Invoke(statement);
 
             if (conn == null) return 0;
 

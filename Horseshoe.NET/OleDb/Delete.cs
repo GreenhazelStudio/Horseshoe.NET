@@ -56,7 +56,7 @@ namespace Horseshoe.NET.OleDb
                 statement = "DELETE FROM " + tableName;
             }
 
-            DataUtil.UsingSqlStatement?.Invoke(statement);
+            OleDbUtil.UsingStatement?.Invoke(statement);
 
             if (conn == null) return 0;
 

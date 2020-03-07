@@ -49,7 +49,7 @@ namespace Horseshoe.NET.Odbc
                 VALUES (" + string.Join(", ", columns.Select(c => DataUtil.Sqlize(c.Value, product))) + ")";
 
             statement = statement.MultilineTrim();
-            DataUtil.UsingSqlStatement?.Invoke(statement);
+            OdbcUtil.UsingStatement?.Invoke(statement);
 
             if (conn == null) return 0;
 
@@ -108,7 +108,7 @@ namespace Horseshoe.NET.Odbc
             }
 
             statement = statement.MultilineTrim();
-            DataUtil.UsingSqlStatement?.Invoke(statement);
+            OdbcUtil.UsingStatement?.Invoke(statement);
 
             if (conn == null)
             {

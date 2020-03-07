@@ -15,11 +15,11 @@ namespace Horseshoe.NET.IO.Ftp
     // ref: https://docs.microsoft.com/en-us/dotnet/framework/network-programming/how-to-upload-files-with-ftp
     public static class Ftp
     {
-        public static event Action<string> RequestUriCreated;
-        public static event Action<string, long, int, string> FileUploaded;
-        public static event Action<string, long, int, string> FileDownloaded;
-        public static event Action<int, int, string> DirectoryContentsListed;
-        public static event Action<string, int, string> FileDeleted;
+        public static event RequestUriCreated RequestUriCreated;
+        public static event FileUploaded FileUploaded;
+        public static event FileDownloaded FileDownloaded;
+        public static event DirectoryContentsListed DirectoryContentsListed;
+        public static event FileDeleted FileDeleted;
 
         public static void UploadFile
         (

@@ -10,7 +10,7 @@ namespace Horseshoe.NET.IO.FileImport
 {
     public static class ImportUtil
     {
-        public static event Action<DataImportException> DataImportErrorOccurred;
+        public static event DataImportErrorOccurred DataImportErrorOccurred;
 
         public static object ProcessDatum(object value, Column column, string dataReference, DataErrorHandlingPolicy dataErrorHandling)
         {

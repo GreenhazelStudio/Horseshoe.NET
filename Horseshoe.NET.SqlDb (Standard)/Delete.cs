@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -56,7 +55,7 @@ namespace Horseshoe.NET.SqlDb
                 statement = "DELETE FROM " + tableName;
             }
 
-            DataUtil.UsingSqlStatement?.Invoke(statement);
+            SqlUtil.UsingStatement?.Invoke(statement);
 
             if (conn == null) return 0;
 

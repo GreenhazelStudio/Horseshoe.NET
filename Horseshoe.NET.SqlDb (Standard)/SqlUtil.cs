@@ -15,6 +15,11 @@ namespace Horseshoe.NET.SqlDb
 {
     public static class SqlUtil
     {
+        public static event UsingConnectionString UsingConnectionString;
+        public static event UsingCredentials UsingCredentials;
+        public static UsingStatement UsingStatement;
+        public static ColumnSearchedByValue ColumnSearchedByValue;
+
         /* * * * * * * * * * * * * * * * * * * * * * * * 
          *   CONNECTION-RELATED METHODS                *
          * * * * * * * * * * * * * * * * * * * * * * * */
@@ -85,7 +90,7 @@ namespace Horseshoe.NET.SqlDb
             }
             if (connectionString != null && announce)
             {
-                DataUtil.UsingConnectionString?.Invoke(announcePrefix, connectionString);
+                UsingConnectionString?.Invoke(connectionString, source: announcePrefix);
             }
             return connectionString;
         }
@@ -127,7 +132,7 @@ namespace Horseshoe.NET.SqlDb
                 }
                 if (announce)
                 {
-                    DataUtil.UsingCredentials?.Invoke(source, credentials.Value.UserName, passwordDescription);
+                    UsingCredentials?.Invoke(credentials.Value.UserName, passwordDescription, source: source);
                 }
             }
             return credentials;

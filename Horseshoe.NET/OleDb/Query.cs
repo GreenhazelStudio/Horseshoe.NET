@@ -552,7 +552,7 @@ namespace Horseshoe.NET.OleDb
                 }
 
                 statement = statement.MultilineTrim();
-                UsingSqlStatement?.Invoke(statement);
+                OleDbUtil.UsingStatement?.Invoke(statement);
 
                 return statement;
             }
@@ -1289,7 +1289,7 @@ namespace Horseshoe.NET.OleDb
                     statement = "SELECT * FROM " + functionName + "(" + string.Join(", ", parameters.Select(p => Sqlize(p.Value, product: product))) + ")";
                 }
 
-                UsingSqlStatement?.Invoke(statement);
+                OleDbUtil.UsingStatement?.Invoke(statement);
 
                 if (conn == null) return null;
 
@@ -1403,7 +1403,7 @@ namespace Horseshoe.NET.OleDb
                     statement = "SELECT " + functionName + "(" + string.Join(", ", parameters.Select(p => Sqlize(p.Value, product: product))) + ")";
                 }
 
-                UsingSqlStatement?.Invoke(statement);
+                OleDbUtil.UsingStatement?.Invoke(statement);
 
                 if (conn == null) return null;
 
@@ -1492,7 +1492,7 @@ namespace Horseshoe.NET.OleDb
                     statement = "SELECT * FROM " + functionName + "(" + string.Join(", ", parameters.Select(p => Sqlize(p.Value, product: product))) + ")";
                 }
 
-                UsingSqlStatement?.Invoke(statement);
+                OleDbUtil.UsingStatement?.Invoke(statement);
 
                 if (conn == null) return null;
 
@@ -1542,7 +1542,7 @@ namespace Horseshoe.NET.OleDb
                     statement = "SELECT * FROM " + functionName + "(" + string.Join(", ", parameters.Select(p => Sqlize(p.Value, product: product))) + ")";
                 }
 
-                UsingSqlStatement?.Invoke(statement);
+                OleDbUtil.UsingStatement?.Invoke(statement);
 
                 if (conn == null) return null;
 

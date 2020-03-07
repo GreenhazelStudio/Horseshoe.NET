@@ -761,7 +761,7 @@ namespace Horseshoe.NET.SqlDb.Meta
                             }
                         }
                     }
-                    DataUtil.ColumnSearchedByValue?.Invoke(column.ToFullyQualifiedString(startingWith: SqlObjectType.Database));
+                    SqlUtil.ColumnSearchedByValue?.Invoke(column.ToFullyQualifiedString(startingWith: SqlObjectType.Database));
                 }
                 return matchingColumns;
             }

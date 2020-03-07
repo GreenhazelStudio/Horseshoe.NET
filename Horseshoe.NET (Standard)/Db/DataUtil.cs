@@ -7,25 +7,12 @@ using System.Text.RegularExpressions;
 
 using Horseshoe.NET.Collections;
 using Horseshoe.NET.Crypto;
-using Horseshoe.NET.Events;
 using Horseshoe.NET.Text;
 
 namespace Horseshoe.NET.Db
 {
     public static class DataUtil
     {
-        /* * * * * * * * * * * * * * * * * * * * 
-         *   EVENTS                            *
-         * * * * * * * * * * * * * * * * * * * */
-
-        public static EasyNotifier<string, string> UsingConnectionString;
-
-        public static EasyNotifier<string, string, string> UsingCredentials;
-
-        public static EasyNotifier<string> UsingSqlStatement;
-
-        public static EasyNotifier<string> ColumnSearchedByValue;
-
         /* * * * * * * * * * * * * * * * * * * * 
          *   CONNECTION STRINGS                *
          * * * * * * * * * * * * * * * * * * * */

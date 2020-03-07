@@ -50,7 +50,7 @@ namespace Horseshoe.NET.OleDb
 
             statement = statement.MultilineTrim();
 
-            DataUtil.UsingSqlStatement?.Invoke(statement);
+            OleDbUtil.UsingStatement?.Invoke(statement);
 
             if (conn == null) return 0;
 

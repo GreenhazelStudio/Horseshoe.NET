@@ -14,6 +14,10 @@ namespace Horseshoe.NET.OleDb
 {
     public static class OleDbUtil
     {
+        public static event UsingConnectionString UsingConnectionString;
+        public static event UsingCredentials UsingCredentials;
+        public static UsingStatement UsingStatement;
+
         /* * * * * * * * * * * * * * * * * * * * * * * * 
          *   CONNECTION-RELATED METHODS                *
          * * * * * * * * * * * * * * * * * * * * * * * */
@@ -83,7 +87,7 @@ namespace Horseshoe.NET.OleDb
             }
             if (connectionString != null && announce)
             {
-                DataUtil.UsingConnectionString?.Invoke(announcePrefix, connectionString);
+                UsingConnectionString?.Invoke(connectionString, source: announcePrefix);
             }
             return connectionString;
         }
@@ -125,7 +129,7 @@ namespace Horseshoe.NET.OleDb
                 }
                 if (announce)
                 {
-                    DataUtil.UsingCredentials?.Invoke(source, credentials.Value.UserName, passwordDescription);
+                    UsingCredentials?.Invoke(credentials.Value.UserName, passwordDescription, source: source);
                 }
             }
             return credentials;

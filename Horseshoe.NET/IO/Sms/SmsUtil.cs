@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-using Horseshoe.NET.Events;
-
-namespace Horseshoe.NET.IO.Email.SMS
+namespace Horseshoe.NET.IO.Sms
 {
     public static class SmsUtil
     {

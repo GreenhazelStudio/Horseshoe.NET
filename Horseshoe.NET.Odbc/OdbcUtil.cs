@@ -14,9 +14,13 @@ namespace Horseshoe.NET.Odbc
 {
     public static class OdbcUtil
     {
+        public static event UsingConnectionString UsingConnectionString;
+        public static event UsingCredentials UsingCredentials;
+        public static UsingStatement UsingStatement;
+
         /* * * * * * * * * * * * * * * * * * * * * * * * 
-         *   CONNECTION-RELATED METHODS                *
-         * * * * * * * * * * * * * * * * * * * * * * * */
+          *   CONNECTION-RELATED METHODS                *
+          * * * * * * * * * * * * * * * * * * * * * * * */
         public static string GetDefaultConnectionString(out string announcePrefix, CryptoOptions options = null)
         {
             if (OdbcSettings.DefaultConnectionString != null)
@@ -83,7 +87,7 @@ namespace Horseshoe.NET.Odbc
             }
             if (connectionString != null && announce)
             {
-                DataUtil.UsingConnectionString?.Invoke(announcePrefix, connectionString);
+                UsingConnectionString?.Invoke(announcePrefix, connectionString);
             }
             return connectionString;
         }
@@ -125,7 +129,7 @@ namespace Horseshoe.NET.Odbc
                 }
                 if (announce)
                 {
-                    DataUtil.UsingCredentials?.Invoke(source, credentials.Value.UserName, passwordDescription);
+                    UsingCredentials?.Invoke(source, credentials.Value.UserName, passwordDescription);
                 }
             }
             return credentials;

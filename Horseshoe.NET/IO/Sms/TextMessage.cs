@@ -1,12 +1,14 @@
 ﻿using System;
 
-namespace Horseshoe.NET.IO.Email.SMS
+using Horseshoe.NET.IO.Email;
+
+namespace Horseshoe.NET.IO.Sms
 {
     public static class TextMessage
     {
-        public static event TextMessageSent Sent;
+        public static event TextMessageSent TextMessageSent;
 
-        public static void Send
+        public static void SendViaEmail
         (
             string message,
             string mobileNumber = null,
@@ -15,10 +17,10 @@ namespace Horseshoe.NET.IO.Email.SMS
             SmtpConnectionInfo connectionInfo = null
         )
         {
-            Send(null, message, mobileNumber: mobileNumber, carrier: carrier, from: from, connectionInfo: connectionInfo);
+            SendViaEmail(null, message, mobileNumber: mobileNumber, carrier: carrier, from: from, connectionInfo: connectionInfo);
         }
 
-        public static void Send
+        public static void SendViaEmail
         (
             string subject,
             string message,
@@ -42,7 +44,7 @@ namespace Horseshoe.NET.IO.Email.SMS
                 from: from ?? SmsSettings.DefaultFrom,
                 connectionInfo: connectionInfo
             );
-            Sent?.Invoke(recipientAddress, message);
+            TextMessageSent?.Invoke(recipientAddress, message);
         }
     }
 }

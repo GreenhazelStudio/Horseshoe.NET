@@ -16,9 +16,17 @@ namespace Horseshoe.NET.Objects
             return obj is null || obj is DBNull;
         }
 
+        public static bool IsNullOrBlank(object obj)
+        {
+            if (IsNull(obj)) return true;
+            if (obj is string stringValue && stringValue.Trim().Length == 0) return true;
+            return false;
+        }
+
         public static string ZapString(object obj, string defaultValue = null)
         {
-            if (IsNull(obj)) return defaultValue;
+            if (IsNullOrBlank(obj)) return defaultValue;
+            if (obj is string stringValue) return stringValue.Trim();
             return obj.ToString();
         }
 
@@ -29,7 +37,7 @@ namespace Horseshoe.NET.Objects
 
         public static byte? ZapNByte(object obj)
         {
-            if (IsNull(obj)) return null;
+            if (IsNullOrBlank(obj)) return null;
             if (obj is byte byteValue) return byteValue;
             try
             {
@@ -48,7 +56,7 @@ namespace Horseshoe.NET.Objects
 
         public static short? ZapNShort(object obj)
         {
-            if (IsNull(obj)) return null;
+            if (IsNullOrBlank(obj)) return null;
             if (obj is short shortValue) return shortValue;
             try
             {
@@ -67,7 +75,7 @@ namespace Horseshoe.NET.Objects
 
         public static int? ZapNInt(object obj)
         {
-            if (IsNull(obj)) return null;
+            if (IsNullOrBlank(obj)) return null;
             if (obj is int intValue) return intValue;
             try
             {
@@ -86,7 +94,7 @@ namespace Horseshoe.NET.Objects
 
         public static long? ZapNLong(object obj)
         {
-            if (IsNull(obj)) return null;
+            if (IsNullOrBlank(obj)) return null;
             if (obj is long longValue) return longValue;
             try
             {
@@ -105,7 +113,7 @@ namespace Horseshoe.NET.Objects
 
         public static float? ZapNFloat(object obj)
         {
-            if (IsNull(obj)) return null;
+            if (IsNullOrBlank(obj)) return null;
             if (obj is float floatValue) return floatValue;
             try
             {
@@ -124,7 +132,7 @@ namespace Horseshoe.NET.Objects
 
         public static double? ZapNDouble(object obj)
         {
-            if (IsNull(obj)) return null;
+            if (IsNullOrBlank(obj)) return null;
             if (obj is double doubleValue) return doubleValue;
             try
             {
@@ -143,7 +151,7 @@ namespace Horseshoe.NET.Objects
 
         public static decimal? ZapNDecimal(object obj)
         {
-            if (IsNull(obj)) return null;
+            if (IsNullOrBlank(obj)) return null;
             if (obj is decimal decimalValue) return decimalValue;
             try
             {
@@ -162,7 +170,7 @@ namespace Horseshoe.NET.Objects
 
         public static bool? ZapNBoolean(object obj)
         {
-            if (IsNull(obj)) return null;
+            if (IsNullOrBlank(obj)) return null;
             if (obj is bool boolValue) return boolValue;
             if (obj is string stringValue) return TextUtil.ZapNBoolean(stringValue);
             try
@@ -182,7 +190,7 @@ namespace Horseshoe.NET.Objects
 
         public static DateTime? ZapNDateTime(object obj)
         {
-            if (IsNull(obj)) return null;
+            if (IsNullOrBlank(obj)) return null;
             if (obj is DateTime dateTimeValue) return dateTimeValue;
             try
             {
@@ -202,7 +210,7 @@ namespace Horseshoe.NET.Objects
         public static T? ZapNEnum<T>(object obj, bool ignoreCase = false) where T : struct
         {
             if (!typeof(T).IsEnum) throw new UtilityException("Not an enum type: " + typeof(T).FullName);
-            if (IsNull(obj)) return null;
+            if (IsNullOrBlank(obj)) return null;
             if (obj is T enumValue) return enumValue;
             if (obj is string stringValue) return TextUtil.ZapNEnum<T>(stringValue, ignoreCase: ignoreCase);
             try

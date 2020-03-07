@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -47,7 +46,7 @@ namespace Horseshoe.NET.SqlDb
                 VALUES (" + string.Join(", ", columns.Select(c => DataUtil.Sqlize(c.Value, DbProduct.SqlServer))) + ")";
 
             statement = statement.MultilineTrim();
-            DataUtil.UsingSqlStatement?.Invoke(statement);
+            SqlUtil.UsingStatement?.Invoke(statement);
 
             if (conn == null) return 0;
 
@@ -90,7 +89,7 @@ namespace Horseshoe.NET.SqlDb
                 SELECT CONVERT(int, SCOPE_IDENTITY())";
 
             statement = statement.MultilineTrim();
-            DataUtil.UsingSqlStatement?.Invoke(statement);
+            SqlUtil.UsingStatement?.Invoke(statement);
 
             if (conn == null)
             {
