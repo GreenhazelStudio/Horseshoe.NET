@@ -105,7 +105,7 @@ namespace Horseshoe.NET.OracleDb
             }
             if (connectionString != null && announce)
             {
-                UsingConnectionString?.Invoke(announcePrefix, connectionString);
+                UsingConnectionString?.Invoke(connectionString, source: announcePrefix);
             }
             return connectionString;
         }
@@ -147,7 +147,7 @@ namespace Horseshoe.NET.OracleDb
                 }
                 if (announce)
                 {
-                    UsingCredentials?.Invoke(source, credentials.Value.UserName, passwordDescription);
+                    UsingCredentials?.Invoke(credentials.Value.UserName, passwordDescription, source: source);
                 }
             }
             return credentials;
