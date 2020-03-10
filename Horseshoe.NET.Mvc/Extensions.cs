@@ -22,10 +22,10 @@ namespace Horseshoe.NET.Mvc
             }
         }
 
-        public static string GetAbsoluteApplicationPath(this HttpRequestBase request, string virtualSubpath = null, bool excludeQueryString = false)
+        public static string GetAbsoluteApplicationPath(this HttpRequestBase request, string virtualSubpath = null, bool excludeQueryString = false, bool forceHttps = false)
         {
             var uri = request.Url;
-            var sb = new StringBuilder(uri.Scheme)       // http
+            var sb = new StringBuilder(forceHttps ? "https" : uri.Scheme)  // http
                 .Append("://")
                 .Append(uri.Host)                        // dev-web01.dev.local
                 .AppendIf

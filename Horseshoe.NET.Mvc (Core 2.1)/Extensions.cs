@@ -17,9 +17,9 @@ namespace Horseshoe.NET.Mvc
             return streamReader.ReadToEnd();
         }
 
-        public static string GetAbsoluteApplicationPath(this HttpRequest request, string virtualSubpath = null, bool includeQueryString = false)
+        public static string GetAbsoluteApplicationPath(this HttpRequest request, string virtualSubpath = null, bool includeQueryString = false, bool forceHttps = false)
         {
-            var sb = new StringBuilder(request.Scheme)   // http
+            var sb = new StringBuilder(forceHttps ? "https" : request.Scheme)   // http
                 .Append("://")
                 .Append(request.Host)                    // dev-web01.dev.local:8080
                 .Append(request.PathBase);               // /test_props
