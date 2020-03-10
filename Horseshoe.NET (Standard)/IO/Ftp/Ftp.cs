@@ -155,14 +155,14 @@ namespace Horseshoe.NET.IO.Ftp
             File.WriteAllBytes(downloadFilePath, stream.ToArray());
         }
 
-        public static MemoryStream DownloadFile
+        public static NamedMemoryStream DownloadFile
         (
             string serverFileName,
             FtpConnectionInfo connectionInfo = null,
             string serverPath = "/"
         )
         {
-            var memoryStream = new MemoryStream();
+            var memoryStream = new NamedMemoryStream(serverFileName);
             string server;
             int? port;
             Credential? credentials;
