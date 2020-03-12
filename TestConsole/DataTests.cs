@@ -22,7 +22,7 @@ namespace TestConsole
 
         static DataTests()
         {
-            DataUtil.UsingSqlStatement += (stmt) => Statement = stmt;
+            SqlUtil.UsingStatement += (stmt) => Statement = stmt;
         }
 
         string[] Menu => new string[]

@@ -7,7 +7,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-using Horseshoe.NET.Collections;
 using Horseshoe.NET.Text;
 
 namespace Horseshoe.NET.IO.Ftp
@@ -25,7 +24,7 @@ namespace Horseshoe.NET.IO.Ftp
         (
             string filePath,
             FtpConnectionInfo connectionInfo = null,
-            string serverPath = "/",
+            string serverPath = null,
             string serverFileName = null,
             bool isBinary = false,
             Encoding encoding = null
@@ -53,7 +52,7 @@ namespace Horseshoe.NET.IO.Ftp
         (
             FileInfo file,
             FtpConnectionInfo connectionInfo = null,
-            string serverPath = "/",
+            string serverPath = null,
             string serverFileName = null,
             bool isBinary = false,
             Encoding encoding = null
@@ -75,7 +74,7 @@ namespace Horseshoe.NET.IO.Ftp
             string fileName,
             string contents,
             FtpConnectionInfo connectionInfo = null,
-            string serverPath = "/",
+            string serverPath = null,
             Encoding encoding = null
         )
         {
@@ -87,10 +86,33 @@ namespace Horseshoe.NET.IO.Ftp
 
         public static void UploadFile
         (
+            NamedMemoryStream namedStream,
+            FtpConnectionInfo connectionInfo = null,
+            string serverPath = null
+        )
+        {
+            UploadFile(namedStream.Name, namedStream.ToArray(), connectionInfo: connectionInfo, serverPath: serverPath);
+        }
+
+        public static void UploadFile
+        (
+            string fileName,
+            Stream contents,
+            FtpConnectionInfo connectionInfo = null,
+            string serverPath = null
+        )
+        {
+            var memoryStream = new MemoryStream();
+            contents.CopyTo(memoryStream);
+            UploadFile(fileName, memoryStream.ToArray(), connectionInfo: connectionInfo, serverPath: serverPath);
+        }
+
+        public static void UploadFile
+        (
             string fileName,
             byte[] contents,
             FtpConnectionInfo connectionInfo = null,
-            string serverPath = "/"
+            string serverPath = null
         )
         {
             string server;
@@ -101,14 +123,15 @@ namespace Horseshoe.NET.IO.Ftp
             {
                 server = connectionInfo.Server;
                 port = connectionInfo.Port;
-                serverPath = connectionInfo.ServerPath ?? serverPath;
                 credentials = connectionInfo.Credentials;
+                serverPath = connectionInfo.ServerPath ?? serverPath;
             }
             else
             {
                 server = FtpSettings.DefaultFtpServer;
                 port = FtpSettings.DefaultPort;
                 credentials = FtpSettings.DefaultCredentials;
+                serverPath = serverPath ?? FtpSettings.DefaultServerPath;
             }
 
             // Get the object used to communicate with the server
@@ -135,7 +158,7 @@ namespace Horseshoe.NET.IO.Ftp
             string downloadFilePath,
             bool overwrite = false,
             FtpConnectionInfo connectionInfo = null,
-            string serverPath = "/"
+            string serverPath = null
         )
         {
             var stream = DownloadFile
@@ -159,7 +182,7 @@ namespace Horseshoe.NET.IO.Ftp
         (
             string serverFileName,
             FtpConnectionInfo connectionInfo = null,
-            string serverPath = "/"
+            string serverPath = null
         )
         {
             var memoryStream = new NamedMemoryStream(serverFileName);
@@ -171,14 +194,15 @@ namespace Horseshoe.NET.IO.Ftp
             {
                 server = connectionInfo.Server;
                 port = connectionInfo.Port;
-                serverPath = connectionInfo.ServerPath ?? serverPath;
                 credentials = connectionInfo.Credentials;
+                serverPath = connectionInfo.ServerPath ?? serverPath;
             }
             else
             {
                 server = FtpSettings.DefaultFtpServer;
                 port = FtpSettings.DefaultPort;
                 credentials = FtpSettings.DefaultCredentials;
+                serverPath = serverPath ?? FtpSettings.DefaultServerPath;
             }
 
             // Get the object used to communicate with the server
@@ -201,7 +225,7 @@ namespace Horseshoe.NET.IO.Ftp
         (
             string fileMask = null,
             FtpConnectionInfo connectionInfo = null,
-            string serverPath = "/"
+            string serverPath = null
         )
         {
             string[] contents;
@@ -214,14 +238,15 @@ namespace Horseshoe.NET.IO.Ftp
             {
                 server = connectionInfo.Server;
                 port = connectionInfo.Port;
-                serverPath = connectionInfo.ServerPath ?? serverPath;
                 credentials = connectionInfo.Credentials;
+                serverPath = connectionInfo.ServerPath ?? serverPath;
             }
             else
             {
                 server = FtpSettings.DefaultFtpServer;
                 port = FtpSettings.DefaultPort;
                 credentials = FtpSettings.DefaultCredentials;
+                serverPath = serverPath ?? FtpSettings.DefaultServerPath;
             }
 
             // Get the object used to communicate with the server
@@ -259,7 +284,7 @@ namespace Horseshoe.NET.IO.Ftp
         public static string[] ListDetailedDirectoryContents
         (
             FtpConnectionInfo connectionInfo = null,
-            string serverPath = "/"
+            string serverPath = null
         )
         {
             string[] contents;
@@ -271,14 +296,15 @@ namespace Horseshoe.NET.IO.Ftp
             {
                 server = connectionInfo.Server;
                 port = connectionInfo.Port;
-                serverPath = connectionInfo.ServerPath ?? serverPath;
                 credentials = connectionInfo.Credentials;
+                serverPath = connectionInfo.ServerPath ?? serverPath;
             }
             else
             {
                 server = FtpSettings.DefaultFtpServer;
                 port = FtpSettings.DefaultPort;
                 credentials = FtpSettings.DefaultCredentials;
+                serverPath = serverPath ?? FtpSettings.DefaultServerPath;
             }
 
             // Get the object used to communicate with the server
@@ -301,7 +327,7 @@ namespace Horseshoe.NET.IO.Ftp
         (
             string serverFileName,
             FtpConnectionInfo connectionInfo = null,
-            string serverPath = "/"
+            string serverPath = null
         )
         {
             string server;
@@ -312,14 +338,15 @@ namespace Horseshoe.NET.IO.Ftp
             {
                 server = connectionInfo.Server;
                 port = connectionInfo.Port;
-                serverPath = connectionInfo.ServerPath ?? serverPath;
                 credentials = connectionInfo.Credentials;
+                serverPath = connectionInfo.ServerPath ?? serverPath;
             }
             else
             {
                 server = FtpSettings.DefaultFtpServer;
                 port = FtpSettings.DefaultPort;
                 credentials = FtpSettings.DefaultCredentials;
+                serverPath = serverPath ?? FtpSettings.DefaultServerPath;
             }
 
             // Get the object used to communicate with the server

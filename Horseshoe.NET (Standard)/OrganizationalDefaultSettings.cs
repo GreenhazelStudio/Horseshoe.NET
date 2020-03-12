@@ -65,6 +65,7 @@ namespace Horseshoe.NET
             //Set("Ftp.Server", "ftp.myorganization.com");  // or "11.22.33.44"
             //Set("Ftp.Port", 21);
             //Set("Ftp.Credentials", new Credential("FtpUser", "gyHt82bNmre457sjd709Aq1==", isEncryptedPassword: true));
+            //Set("Ftp.ServerPath", "/dir/subdir");  // or "//rootdir/subdir"
 
             //Set("Odbc.ConnectionString", "Driver={Oracle in OraClient11g_home1};Server=DBSVR01;Uid=OdbcUser;Pwd=gyHt82bNmre457sjd709Aq1==;");
             //Set("Odbc.IsEncryptedPassword", true);

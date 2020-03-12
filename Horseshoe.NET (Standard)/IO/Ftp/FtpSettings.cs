@@ -62,5 +62,24 @@ namespace Horseshoe.NET.IO.Ftp
                 _defaultCredentials = value;
             }
         }
+
+        static string _defaultServerPath;
+
+        /// <summary>
+        /// Gets or sets the default server path used by FTP.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Ftp.ServerPath and OrganizationalDefaultSettings: key = Ftp.ServerPath)
+        /// </summary>
+        public static string DefaultServerPath
+        {
+            get
+            {
+                return _defaultServerPath
+                    ?? Config.Get("Horseshoe.NET:Ftp.ServerPath")
+                    ?? "/";
+            }
+            set
+            {
+                _defaultServerPath = value;
+            }
+        }
     }
 }

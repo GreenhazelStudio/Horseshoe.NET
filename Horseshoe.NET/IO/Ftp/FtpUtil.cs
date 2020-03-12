@@ -61,6 +61,7 @@ namespace Horseshoe.NET.IO.Ftp
             else
             {
                 connectionInfo.Server = connectionString;
+                connectionInfo.ServerPath = FtpSettings.DefaultServerPath;
             }
 
             pos = connectionInfo.Server.IndexOf(":");
