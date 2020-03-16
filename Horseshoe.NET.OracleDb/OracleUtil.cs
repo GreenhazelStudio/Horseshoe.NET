@@ -153,7 +153,7 @@ namespace Horseshoe.NET.OracleDb
             return credentials;
         }
 
-        public static OracleConnection LaunchConnection(OraConnectionInfo connectionInfo = null, CryptoOptions options = null)
+        public static OracleConnection LaunchConnection(OraConnectionInfo connectionInfo = null, CryptoOptions options = null, bool autoClearPool = false)
         {
             var conn = new OracleConnection
             {
@@ -161,7 +161,7 @@ namespace Horseshoe.NET.OracleDb
                 Credential = GetOracleCredentials(WhichCredentials(connectionInfo: connectionInfo, announce: true), options: options)
             };
             conn.Open();
-            if (OracleSettings.AutoClearPool)
+            if (autoClearPool || OracleSettings.AutoClearConnectionPool)
             {
                 // ref: https://stackoverflow.com/questions/54373754/oracle-managed-dataaccess-connection-object-is-keeping-the-connection-open
                 OracleConnection.ClearPool(conn);   // will clear on close

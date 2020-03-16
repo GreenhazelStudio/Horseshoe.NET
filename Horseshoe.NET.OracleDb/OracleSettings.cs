@@ -160,24 +160,24 @@ namespace Horseshoe.NET.OracleDb
             }
         }
 
-        // ref: https://stackoverflow.com/questions/54373754/oracle-managed-dataaccess-connection-object-is-keeping-the-connection-open
-        private static bool? _defaultAutoClearPool;
+        private static bool? _defaultAutoClearConnectionPool;
 
         /// <summary>
-        /// Gets or sets whether Horseshoe.NET autoclears connection pools.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Oracle.AutoClearPool and OrganizationalDefaultSettings: key = Oracle.AutoClearPool)
+        /// Gets or sets whether Horseshoe.NET instructs connections to clear their pool upon closing.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Oracle.AutoClearConnectionPool and OrganizationalDefaultSettings: key = Oracle.AutoClearConnectionPool)
         /// </summary>
-        public static bool AutoClearPool
+        public static bool AutoClearConnectionPool
         {
+            // ref: https://stackoverflow.com/questions/54373754/oracle-managed-dataaccess-connection-object-is-keeping-the-connection-open
             get
             {
-                return _defaultAutoClearPool
-                    ?? Config.GetNBoolean("Horseshoe.NET:Oracle.AutoClearPool")
-                    ?? OrganizationalDefaultSettings.GetNBoolean("Oracle.AutoClearPool")
+                return _defaultAutoClearConnectionPool
+                    ?? Config.GetNBoolean("Horseshoe.NET:Oracle.AutoClearConnectionPool")
+                    ?? OrganizationalDefaultSettings.GetNBoolean("Oracle.AutoClearConnectionPool")
                     ?? false;
             }
             set
             {
-                _defaultAutoClearPool = value;
+                _defaultAutoClearConnectionPool = value;
             }
         }
 

@@ -89,7 +89,7 @@ namespace Horseshoe.NET
             //Set("Oracle.Credentials", new Credential("OracleUser", "gyHt82bNmre457sjd709Aq1==", isEncryptedPassword: true));
             //Set("Oracle.AdditionalConnectionAttributes", "Integrated Security=SSQI|Attribute1=Value1");
             //Set("Oracle.Timeout", 30);
-            //Set("Oracle.AutoClearPool", true);
+            //Set("Oracle.AutoClearConnectionPool", true);
             //Set("Oracle.ServerList", "ORADBSVR01|'NAME'11.22.33.44:9999;SERVICE1|ORADBSVR02:9999;SERVICE1;INSTANCE1");
 
             //Set("Sms.From", "sms@myorganization.com");
