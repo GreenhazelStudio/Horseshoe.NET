@@ -12,7 +12,7 @@ namespace Horseshoe.NET.OracleDb
         static string _defaultConnectionStringName;
 
         /// <summary>
-        /// Gets or sets the default Oracle connection string name used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Oracle.ConnectionStringName)
+        /// Gets or sets the default Oracle connection string name used by Horseshoe.NET.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Oracle.ConnectionStringName)
         /// </summary>
         public static string DefaultConnectionStringName
         {
@@ -31,7 +31,7 @@ namespace Horseshoe.NET.OracleDb
         private static bool _isEncryptedPassword;
 
         /// <summary>
-        /// Gets the default Oracle connection string used by DataAccess.  Note: Overrides other settings (i.e. OrganizationalDefaultSettings: key = OracleDb.ConnectionString)
+        /// Gets the default Oracle connection string used by Horseshoe.NET.  Note: Overrides other settings (i.e. OrganizationalDefaultSettings: key = Oracle.ConnectionString)
         /// </summary>
         public static string DefaultConnectionString
         {
@@ -52,7 +52,7 @@ namespace Horseshoe.NET.OracleDb
         }
 
         /// <summary>
-        /// Sets the default Oracle connection string used by DataAccess. 
+        /// Sets the default Oracle connection string used by Horseshoe.NET. 
         /// </summary>
         public static void SetDefaultConnectionString(string connectionString, bool isEncryptedPassword = false)
         {
@@ -63,7 +63,7 @@ namespace Horseshoe.NET.OracleDb
         private static OraServer _defaultServer;
 
         /// <summary>
-        /// Gets or sets the default Oracle server used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Oracle.Server and OrganizationalDefaultSettings: key = OracleDb.Server)
+        /// Gets or sets the default Oracle server used by Horseshoe.NET.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Oracle.Server and OrganizationalDefaultSettings: key = Oracle.Server)
         /// </summary>
         public static OraServer DefaultServer
         {
@@ -86,7 +86,7 @@ namespace Horseshoe.NET.OracleDb
         private static string _defaultDataSource;
 
         /// <summary>
-        /// Gets or sets the default Oracle datasource used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Oracle.DataSource and OrganizationalDefaultSettings: key = OracleDb.DataSource)
+        /// Gets or sets the default Oracle datasource used by Horseshoe.NET.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Oracle.DataSource and OrganizationalDefaultSettings: key = Oracle.DataSource)
         /// </summary>
         public static string DefaultDataSource
         {
@@ -106,7 +106,7 @@ namespace Horseshoe.NET.OracleDb
         private static Credential? _defaultCredentials;
 
         /// <summary>
-        /// Gets or sets the default Oracle credentials used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Oracle.UserID|Password and OrganizationalDefaultSettings: key = OracleDb.Credentials)
+        /// Gets or sets the default Oracle credentials used by Horseshoe.NET.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Oracle.UserID|Password and OrganizationalDefaultSettings: key = Oracle.Credentials)
         /// </summary>
         public static Credential? DefaultCredentials
         {
@@ -125,7 +125,7 @@ namespace Horseshoe.NET.OracleDb
         private static IDictionary<string, string> _defaultAdditionalConnectionAttributes;
 
         /// <summary>
-        /// Gets or sets the additional Oracle connection string attributes used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Oracle.AdditionalConnectionAttributes and OrganizationalDefaultSettings: key = OracleDb.AdditionalConnectionAttributes)
+        /// Gets or sets the additional Oracle connection string attributes used by Horseshoe.NET.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Oracle.AdditionalConnectionAttributes and OrganizationalDefaultSettings: key = Oracle.AdditionalConnectionAttributes)
         /// </summary>
         public static IDictionary<string, string> DefaultAdditionalConnectionAttributes
         {
@@ -144,7 +144,7 @@ namespace Horseshoe.NET.OracleDb
         private static int? _defaultTimeout;
 
         /// <summary>
-        /// Gets or sets the Oracle timeout used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Oracle.Timeout and OrganizationalDefaultSettings: key = OracleDb.Timeout)
+        /// Gets or sets the Oracle timeout used by Horseshoe.NET.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Oracle.Timeout and OrganizationalDefaultSettings: key = Oracle.Timeout)
         /// </summary>
         public static int? DefaultTimeout
         {
@@ -152,7 +152,7 @@ namespace Horseshoe.NET.OracleDb
             {
                 return _defaultTimeout
                     ?? Config.GetNInt("Horseshoe.NET:Oracle.Timeout")
-                    ?? OrganizationalDefaultSettings.GetNInt("Oracle.Timeout"); 
+                    ?? OrganizationalDefaultSettings.GetNInt("Oracle.Timeout");
             }
             set
             {
@@ -160,10 +160,31 @@ namespace Horseshoe.NET.OracleDb
             }
         }
 
+        // ref: https://stackoverflow.com/questions/54373754/oracle-managed-dataaccess-connection-object-is-keeping-the-connection-open
+        private static bool? _defaultAutoClearPool;
+
+        /// <summary>
+        /// Gets or sets whether Horseshoe.NET autoclears connection pools.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Oracle.AutoClearPool and OrganizationalDefaultSettings: key = Oracle.AutoClearPool)
+        /// </summary>
+        public static bool AutoClearPool
+        {
+            get
+            {
+                return _defaultAutoClearPool
+                    ?? Config.GetNBoolean("Horseshoe.NET:Oracle.AutoClearPool")
+                    ?? OrganizationalDefaultSettings.GetNBoolean("Oracle.AutoClearPool")
+                    ?? false;
+            }
+            set
+            {
+                _defaultAutoClearPool = value;
+            }
+        }
+
         private static IEnumerable<OraServer> _serverList;
 
         /// <summary>
-        /// Gets or sets a list of Oracle servers for OraServer's Lookup() method.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Oracle.ServerList and OrganizationalDefaultSettings: key = OracleDb.ServerList)
+        /// Gets or sets a list of Oracle servers for OraServer's Lookup() method.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Oracle.ServerList and OrganizationalDefaultSettings: key = Oracle.ServerList)
         /// </summary>
         public static IEnumerable<OraServer> ServerList
         {

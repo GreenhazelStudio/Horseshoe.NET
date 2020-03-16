@@ -161,7 +161,11 @@ namespace Horseshoe.NET.OracleDb
                 Credential = GetOracleCredentials(WhichCredentials(connectionInfo: connectionInfo, announce: true), options: options)
             };
             conn.Open();
-            OracleConnection.ClearPool(conn);
+            if (OracleSettings.AutoClearPool)
+            {
+                // ref: https://stackoverflow.com/questions/54373754/oracle-managed-dataaccess-connection-object-is-keeping-the-connection-open
+                OracleConnection.ClearPool(conn);   // will clear on close
+            }
             return conn;
         }
 
