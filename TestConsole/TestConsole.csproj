@@ -32,6 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -45,7 +46,8 @@
     <Compile Include="DateTests.cs" />
     <Compile Include="AppTests.cs" />
     <Compile Include="CryptoTests.cs" />
-    <Compile Include="DataTests.cs" />
+    <Compile Include="OracleTests.cs" />
+    <Compile Include="SqlTests.cs" />
     <Compile Include="EmailTests.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

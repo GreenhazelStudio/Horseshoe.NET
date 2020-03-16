@@ -161,6 +161,7 @@ namespace Horseshoe.NET.OracleDb
                 Credential = GetOracleCredentials(WhichCredentials(connectionInfo: connectionInfo, announce: true), options: options)
             };
             conn.Open();
+            OracleConnection.ClearPool(conn);
             return conn;
         }
 

@@ -13,14 +13,14 @@ using Horseshoe.NET.SqlDb;
 
 namespace TestConsole
 {
-    class DataTests : Routine
+    class SqlTests : Routine
     {
-        public override Title Title => "Data Tests";
+        public override Title Title => "Sql Tests";
         public override bool Looping => true;
 
         static string Statement { get; set; }
 
-        static DataTests()
+        static SqlTests()
         {
             SqlUtil.UsingStatement += (stmt) => Statement = stmt;
         }
