@@ -122,7 +122,7 @@ namespace Horseshoe.NET.ConsoleX
             (
                 title: title,
                 customMenuItems: autoAppendExitRoutineMenuItem
-                    ? CollectionUtil.ConcatIf(customMenuItems, new[] { CreateExitRoutineMenuItem() })
+                    ? CollectionUtil.Concat(customMenuItems, new[] { CreateExitRoutineMenuItem() })
                     : customMenuItems,
                 prompt: prompt,
                 padBefore: padBefore,
@@ -154,7 +154,7 @@ namespace Horseshoe.NET.ConsoleX
                 renderer: renderer,
                 title: title,
                 customMenuItems: autoAppendExitRoutineMenuItem 
-                    ? CollectionUtil.ConcatIf(customMenuItems, new[] { CreateExitRoutineMenuItem() })
+                    ? CollectionUtil.Concat(customMenuItems, new[] { CreateExitRoutineMenuItem() })
                     : customMenuItems,
                 prompt: prompt,
                 padAfter: padAfter,

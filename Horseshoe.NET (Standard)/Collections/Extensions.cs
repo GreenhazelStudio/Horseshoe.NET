@@ -44,9 +44,30 @@ namespace Horseshoe.NET.Collections
             return CollectionUtil.Merge(dictionary, dictionaryToMerge, mergeValuesFunc: mergeValuesFunc);
         }
 
-        public static IEnumerable<T> ConcatIf<T>(this IEnumerable<T> collection, IEnumerable<T> collectionToAppend)
+        public static T[] Concat<T>(this T[] array, IEnumerable<T> collectionToAppend)
         {
-            return CollectionUtil.ConcatIf(collection, collectionToAppend);
+            if (collectionToAppend == null) return array;
+            return (array as IEnumerable<T>).Concat(collectionToAppend).ToArray();
+        }
+
+        public static IEnumerable<T> ConcatIf<T>(this IEnumerable<T> collection, IEnumerable<T> collectionToAppend, bool condition)
+        {
+            return CollectionUtil.ConcatIf(collection, collectionToAppend, condition);
+        }
+
+        public static IEnumerable<T> ConcatIf<T>(this IEnumerable<T> collection, IEnumerable<T> collectionToAppend, Func<bool> condition)
+        {
+            return CollectionUtil.ConcatIf(collection, collectionToAppend, condition);
+        }
+
+        public static T[] ConcatIf<T>(this T[] array, IEnumerable<T> collectionToAppend, bool condition)
+        {
+            return CollectionUtil.ConcatIf(array, collectionToAppend, condition).ToArray();
+        }
+
+        public static T[] ConcatIf<T>(this T[] array, IEnumerable<T> collectionToAppend, Func<bool> condition)
+        {
+            return CollectionUtil.ConcatIf(array, collectionToAppend, condition).ToArray();
         }
 
         public static IEnumerable<T> Pad<T>(this IEnumerable<T> collection, int targetSize, CollectionPosition position = CollectionPosition.End, T padWith = default, bool cannotExceedTargetSize = false)
