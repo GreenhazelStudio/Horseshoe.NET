@@ -199,7 +199,50 @@ namespace Horseshoe.NET.Collections
         }
 
         /// <summary>
-        /// Trims all the strings in a collection.
+        /// Condititionally appends two collections
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection"></param>
+        /// <param name="collectionToAppend"></param>
+        /// <param name="condition"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> Concat<T>(IEnumerable<T> collection, IEnumerable<T> collectionToAppend)
+        {
+            if (collection == null) return collectionToAppend;
+            if (collectionToAppend == null) return collection;
+            return collection.Concat(collectionToAppend);
+        }
+
+        /// <summary>
+        /// Condititionally appends two collections
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection"></param>
+        /// <param name="collectionToAppend"></param>
+        /// <param name="condition"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> ConcatIf<T>(IEnumerable<T> collection, IEnumerable<T> collectionToAppend, bool condition)
+        {
+            if (condition) return Concat(collection, collectionToAppend);
+            return collection;
+        }
+
+        /// <summary>
+        /// Condititionally appends two collections
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection"></param>
+        /// <param name="collectionToAppend"></param>
+        /// <param name="condition"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> ConcatIf<T>(IEnumerable<T> collection, IEnumerable<T> collectionToAppend, Func<bool> condition)
+        {
+            if (condition.Invoke()) return Concat(collection, collectionToAppend);
+            return collection;
+        }
+
+        /// <summary>
+        /// Trims all the strings in a collection and returns a new collection
         /// </summary>
         /// <param name="collection"></param>
         /// <returns></returns>
@@ -213,7 +256,7 @@ namespace Horseshoe.NET.Collections
         }
 
         /// <summary>
-        /// Zaps all the strings in a collection.
+        /// Zaps all the strings in a collection and returns a new collections
         /// </summary>
         /// <param name="collection"></param>
         /// <returns></returns>
@@ -430,14 +473,6 @@ namespace Horseshoe.NET.Collections
                 }
             }
             return dictionary;
-        }
-
-        public static IEnumerable<T> ConcatIf<T>(IEnumerable<T> collection, IEnumerable<T> collectionToAppend)
-        {
-            if (collection == null) return collectionToAppend;
-            if (collectionToAppend == null) return collection;
-            return collection
-                .Concat(collectionToAppend);
         }
     }
 }

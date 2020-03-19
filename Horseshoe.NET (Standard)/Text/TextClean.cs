@@ -452,7 +452,7 @@ namespace Horseshoe.NET.Text
                     { 'y', new[] { 'ŷ', 'ƴ', 'ȳ', 'ɏ', 'ỳ' } },
                     { 'z', new[] { 'ź', 'ż', 'ž', 'ƶ', 'ȥ', 'ɀ' } },
                 },
-                (latinCharArray, extendedLatinCharArray) => latinCharArray.ConcatIf(extendedLatinCharArray).ToArray()
+                (latinCharArray, extendedLatinCharArray) => latinCharArray.Concat(extendedLatinCharArray)
             )
         );
 
@@ -530,7 +530,7 @@ namespace Horseshoe.NET.Text
                     { "ou", new[] { 'ȣ' } },
                     { "qp", new[] { 'ȹ' } },
                 },
-                (latinCharArray, extendedLatinCharArray) => latinCharArray.ConcatIf(extendedLatinCharArray).ToArray()
+                (latinCharArray, extendedLatinCharArray) => latinCharArray.Concat(extendedLatinCharArray)
             )
         );
 
@@ -597,7 +597,7 @@ namespace Horseshoe.NET.Text
                     { 'u', new[] { 'ὐ', 'ὑ', 'ὒ', 'ὓ', 'ὔ', 'ὕ', 'ὖ', 'ὗ', 'ὺ', 'ύ', 'ῠ', 'ῡ', 'ῢ', 'ΰ', 'ῦ', 'ῧ' } },
                     { 'w', new[] { 'ὠ', 'ὡ', 'ὢ', 'ὣ', 'ὤ', 'ὥ', 'ὦ', 'ὧ', 'ὼ', 'ώ', 'ᾠ', 'ᾡ', 'ᾢ', 'ᾣ', 'ᾤ', 'ᾥ', 'ᾦ', 'ᾧ', 'ῲ', 'ῳ', 'ῴ', 'ῶ', 'ῷ' } },
                 },
-                (latinCharArray, extendedLatinCharArray) => latinCharArray.ConcatIf(extendedLatinCharArray).ToArray()
+                (latinCharArray, extendedLatinCharArray) => latinCharArray.Concat(extendedLatinCharArray)
             )
         );
 
