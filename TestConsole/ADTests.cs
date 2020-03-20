@@ -19,7 +19,8 @@ namespace TestConsole
 
         string[] Menu => new[]
         {
-            "What is my domain controller?"
+            "What is my domain controller?",
+            "Authenticate"
         };
 
         public override void Do()
@@ -34,6 +35,20 @@ namespace TestConsole
             {
                 case "What is my domain controller?":
                     Console.WriteLine("My domain controller: " + TextUtil.RevealNullOrBlank(ADUtil.DetectDomainController()));
+                    break;
+                case "Authenticate":
+                    var userName = PromptInput("Enter an AD user name: ");
+                    var passWord = PromptPassword("Enter the password: ");
+                    Exception ex;
+                    var userInfo = ADUtil.Authenticate(userName, passWord);
+                    if (userInfo != null)
+                    {
+                        Console.WriteLine("Authenticated.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Incorrect user name or password.");
+                    }
                     break;
             }
         }
