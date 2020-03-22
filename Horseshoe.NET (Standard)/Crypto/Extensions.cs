@@ -27,36 +27,12 @@ namespace Horseshoe.NET.Crypto
 
         public static IEnumerable<int> GetValidKeySizes(this SymmetricAlgorithm algorithm)
         {
-            var list = new List<int>();
-            foreach (var ks in algorithm.LegalKeySizes)
-            {
-                for (int i = ks.MinSize; i <= ks.MaxSize; i += ks.SkipSize)
-                {
-                    list.Add(i);
-                }
-            }
-            list = list
-                .Distinct()
-                .OrderBy(i => i)
-                .ToList();
-            return list;
+            return CryptoUtil.GetValidKeySizes(algorithm.LegalKeySizes);
         }
 
         public static IEnumerable<int> GetValidBlockSizes(this SymmetricAlgorithm algorithm)
         {
-            var list = new List<int>();
-            foreach (var ks in algorithm.LegalBlockSizes)
-            {
-                for (int i = ks.MinSize; i <= ks.MaxSize; i += ks.SkipSize)
-                {
-                    list.Add(i);
-                }
-            }
-            list = list
-                .Distinct()
-                .OrderBy(i => i)
-                .ToList();
-            return list;
+            return CryptoUtil.GetValidKeySizes(algorithm.LegalBlockSizes);
         }
     }
 }

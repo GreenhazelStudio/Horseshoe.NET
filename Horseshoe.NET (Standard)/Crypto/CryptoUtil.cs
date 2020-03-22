@@ -104,5 +104,34 @@ namespace Horseshoe.NET.Crypto
             if (padding.HasValue) algorithm.Padding = padding.Value;
             return algorithm;
         }
+
+        public static IEnumerable<int> GetValidKeySizes(KeySizes[] keySizes)
+        {
+            var list = new List<int>();
+            foreach (var keySize in keySizes)
+            {
+                if (keySize.MinSize == keySize.MaxSize)
+                {
+                    list.Add(keySize.MinSize);
+                }
+                else if (keySize.SkipSize == 0)   // this should never happen
+                {
+                    list.Add(keySize.MinSize);
+                    list.Add(keySize.MaxSize);
+                }
+                else
+                {
+                    for (int i = keySize.MinSize; i <= keySize.MaxSize; i += keySize.SkipSize)
+                    {
+                        list.Add(i);
+                    }
+                }
+            }
+            list = list
+                .Distinct()
+                .OrderBy(i => i)
+                .ToList();
+            return list;
+        }
     }
 }
