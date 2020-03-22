@@ -10,6 +10,9 @@
     <ProjectReference Include="..\Horseshoe.NET (Standard)\Horseshoe.NET (Standard).csproj" />
     <ProjectReference Include="..\Horseshoe.NET.ActiveDirectory (Standard)\Horseshoe.NET.ActiveDirectory (Standard).csproj" />
     <ProjectReference Include="..\Horseshoe.NET.Excel (Standard)\Horseshoe.NET.Excel (Standard).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET.Odbc (Standard)\Horseshoe.NET.Odbc (Standard).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET.OracleDb (Standard)\Horseshoe.NET.OracleDb (Standard).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET.SqlDb (Standard)\Horseshoe.NET.SqlDb (Standard).csproj" />
   </ItemGroup>
 
 </Project>

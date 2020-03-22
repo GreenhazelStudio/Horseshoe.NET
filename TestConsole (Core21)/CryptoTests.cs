@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 using Horseshoe.NET;
 using Horseshoe.NET.Application;
+using Horseshoe.NET.Collections;
 using Horseshoe.NET.ConsoleX;
 using Horseshoe.NET.Crypto;
 using Horseshoe.NET.Text;
@@ -25,6 +26,9 @@ namespace TestConsole
             "Hash (Default => SHA256 + salt)",
             "Encrypt Password",
             "Decrypt Password",
+            "Encrypt 3 Passwords (random key, IV)",
+            "Encrypt 3 Passwords (same key random IV)",
+            "Encrypt 3 Passwords (same key, IV)",
         };
 
         public override void Do()
@@ -32,7 +36,8 @@ namespace TestConsole
             Console.WriteLine();
             var selection = PromptMenu
             (
-                Menu
+                Menu,
+                title: "Crypto Tests"
             );
             RenderListTitle(selection.SelectedItem);
             CryptoSettings.DefaultHashAlgorithm = null;
@@ -57,19 +62,40 @@ namespace TestConsole
                     var input3 = PromptInput("Enter text to hash: ");
                     var hash3 = Hash.String(input3);
                     Console.WriteLine(hash3);
-                    Console.WriteLine();
                     break;
                 case "Encrypt Password":
                     var passwordToEncrypt = PromptInput("Enter password to encrypt: ");
                     var encryptedPassword = Encrypt.String(passwordToEncrypt);
                     Console.WriteLine(encryptedPassword);
-                    Console.WriteLine();
                     break;
                 case "Decrypt Password":
                     var passwordToDecrypt = PromptInput("Enter password to decrypt: ");
                     var decryptedPassword = Decrypt.String(passwordToDecrypt);
                     Console.WriteLine(decryptedPassword);
-                    Console.WriteLine();
+                    break;
+                case "Encrypt 3 Passwords (random key, IV)":
+                    for (int i = 0; i < 3; i++)
+                    {
+                        var algorithm = new System.Security.Cryptography.RijndaelManaged();
+                        var ciphertext = Encrypt.String("This is your life!", new CryptoOptions { Algorithm = algorithm });
+                        Console.WriteLine("This is your life!" + " -> " + ciphertext.Crop(26, truncateMarker: TruncateMarker.LongEllipsis) + " -- Key: " + string.Join(", ", algorithm.Key).Crop(26, truncateMarker: TruncateMarker.LongEllipsis) + " -- IV: " + string.Join(", ", algorithm.IV).Crop(26, truncateMarker: TruncateMarker.LongEllipsis));
+                    }
+                    break;
+                case "Encrypt 3 Passwords (same key random IV)":
+                    for (int i = 0; i < 3; i++)
+                    {
+                        var algorithm = new System.Security.Cryptography.RijndaelManaged { Key = CollectionUtil.Fill(32, fillWith: (byte)32) };
+                        var ciphertext = Encrypt.String("This is your life!", new CryptoOptions { Algorithm = algorithm });
+                        Console.WriteLine("This is your life!" + " -> " + ciphertext.Crop(26, truncateMarker: TruncateMarker.LongEllipsis) + " -- Key: " + string.Join(", ", algorithm.Key).Crop(26, truncateMarker: TruncateMarker.LongEllipsis) + " -- IV: " + string.Join(", ", algorithm.IV).Crop(26, truncateMarker: TruncateMarker.LongEllipsis));
+                    }
+                    break;
+                case "Encrypt 3 Passwords (same key, IV)":
+                    for (int i = 0; i < 3; i++)
+                    {
+                        var algorithm = new System.Security.Cryptography.RijndaelManaged { Key = CollectionUtil.Fill(32, fillWith: (byte)32), IV = CollectionUtil.Fill(16, fillWith: (byte)16) };
+                        var ciphertext = Encrypt.String("This is your life!", new CryptoOptions { Algorithm = algorithm });
+                        Console.WriteLine("This is your life!" + " -> " + ciphertext.Crop(26, truncateMarker: TruncateMarker.LongEllipsis) + " -- Key: " + string.Join(", ", algorithm.Key).Crop(26, truncateMarker: TruncateMarker.LongEllipsis) + " -- IV: " + string.Join(", ", algorithm.IV).Crop(26, truncateMarker: TruncateMarker.LongEllipsis));
+                    }
                     break;
             }
         }
