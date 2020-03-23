@@ -39,6 +39,7 @@ namespace TestConsole
                     "Build SSRS URLs",
                     "Display file sizes",
                     "Test FTP Upload",
+                    "Test FTPS Upload",
                     "Test SFTP Upload",
                     "Test FTP Download",
                     "Test SFTP Download",
@@ -51,8 +52,8 @@ namespace TestConsole
                 },
                 title: "SSRS Test Menu"
             );
-            var ftpPseudoConnectionString = "ftp://nexusftp@192.168.155.130//u02/app/se4prod/del4/work/edidir/flat_in?password=nexusftp";
-            var sftpPseudoConnectionString = "sftp://nexusftp@192.168.155.130//u02/app/se4prod/del4/work/edidir/flat_in?password=nexusftp";
+            var ftpPseudoConnectionString = "ftp://username@11.22.33.44/dir/subdir?password=password";
+            var sftpPseudoConnectionString = "sftp://username@11.22.33.44//root/subdir?password=password";
 
             switch (selection.SelectedItem)
             {
@@ -83,6 +84,14 @@ namespace TestConsole
                         "hello.txt",
                         "Hello World!",
                         connectionInfo: FtpUtil.ParseFtpConnectionString(ftpPseudoConnectionString)
+                    );
+                    break;
+                case "Test FTPS Upload":
+                    Ftp.UploadFile
+                    (
+                        "hello.txt",
+                        "Hello World!",
+                        connectionInfo: FtpUtil.ParseFtpConnectionString(ftpPseudoConnectionString.Replace("ftp://", "ftps://"))
                     );
                     break;
                 case "Test SFTP Upload":
@@ -174,7 +183,7 @@ namespace TestConsole
                     var connStrs = new[]
                     {
                         "ftp://george@11.22.33.44/dir/subdir?encryptedPassword=akdj$8iO(d@1sd==",
-                        "ftp://george@11.22.33.44:9001/dir/subdir?encryptedPassword=akdj$8iO(d@1sd==",
+                        "ftps://george@11.22.33.44:9001//root/subdir?encryptedPassword=akdj$8iO(d@1sd==",
                         "george@11.22.33.44/dir/subdir?encryptedPassword=akdj$8iO(d@1sd==",
                     };
                     foreach(var str in connStrs)

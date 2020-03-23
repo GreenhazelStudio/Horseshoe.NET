@@ -286,18 +286,20 @@ namespace Horseshoe.NET.IO.Ftp
             string method,
             string serverPath,
             string serverFileName,
-            Action<FtpWebRequest> requestAction,
-            Action<FtpWebResponse> responseAction
+            Action<FtpWebRequest> requestAction,   // optional
+            Action<FtpWebResponse> responseAction  // required
         )
         {
             string server;
             int? port;
+            bool enableSsl;
             Credential? credentials;
 
             if (connectionInfo != null)
             {
                 server = connectionInfo.Server;
                 port = connectionInfo.Port;
+                enableSsl = connectionInfo.EnableSsl;
                 credentials = connectionInfo.Credentials;
                 serverPath = connectionInfo.ServerPath ?? serverPath;
             }
@@ -305,31 +307,30 @@ namespace Horseshoe.NET.IO.Ftp
             {
                 server = FtpSettings.DefaultFtpServer;
                 port = FtpSettings.DefaultPort;
+                enableSsl = FtpSettings.DefaultEnableSsl;
                 credentials = FtpSettings.DefaultCredentials;
                 serverPath = serverPath ?? FtpSettings.DefaultServerPath;
             }
 
             // Get the object used to communicate with the server
-            var uriString = CreateRequestUriString(server, port, serverPath, serverFileName);
+            var uriString = CreateRequestUriString(server, port, enableSsl, serverPath, serverFileName);
             var request = (FtpWebRequest)WebRequest.Create(uriString);
+            if (enableSsl)
+            {
+                request.EnableSsl = true;
+            }
             request.Method = method;
             request.Credentials = credentials?.ToNetworkCredentials() ?? new NetworkCredential("anonymous", "ftpuser");
             
-            if (requestAction != null)
-            {
-                requestAction.Invoke(request);
-            }
+            requestAction?.Invoke(request);
             
-            if(responseAction != null)
+            using (var response = (FtpWebResponse)request.GetResponse())
             {
-                using (var response = (FtpWebResponse)request.GetResponse())
-                {
-                    responseAction.Invoke(response);
-                }
+                responseAction.Invoke(response);
             }
         }
 
-        static string CreateRequestUriString(string server, int? port, string serverPath, string fileName)
+        static string CreateRequestUriString(string server, int? port, bool enableSsl, string serverPath, string fileName)
         {
             if (server == null) throw new ArgumentNullException(nameof(server));
             var sb = new StringBuilder()
@@ -348,6 +349,11 @@ namespace Horseshoe.NET.IO.Ftp
                 (
                     port.HasValue,
                     ":" + port
+                )
+                .AppendIf
+                (
+                    !port.HasValue && enableSsl,
+                    ":990"
                 )
                 .Append("/");
             if (serverPath != null)

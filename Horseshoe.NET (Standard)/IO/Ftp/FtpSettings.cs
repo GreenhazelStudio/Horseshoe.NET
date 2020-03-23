@@ -25,6 +25,25 @@ namespace Horseshoe.NET.IO.Ftp
             }
         }
 
+        private static bool? _defaultEnableSsl;
+
+        /// <summary>
+        /// Gets or sets whether FTP will use SSL.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Ftp.EnableSsl and OrganizationalDefaultSettings: key = Ftp.EnableSsl)
+        /// </summary>
+        public static bool DefaultEnableSsl
+        {
+            get
+            {
+                return _defaultEnableSsl
+                    ?? Config.GetNBoolean("Horseshoe.NET:Ftp.EnableSsl")
+                    ?? OrganizationalDefaultSettings.GetBoolean("Ftp.EnableSsl");
+            }
+            set
+            {
+                _defaultEnableSsl = value;
+            }
+        }
+
         private static int? _defaultPort;
 
         /// <summary>
@@ -35,7 +54,7 @@ namespace Horseshoe.NET.IO.Ftp
             get
             {
                 return _defaultPort
-                    ?? Config.GetNInt("Horseshoe.NET:Ftp.Port") 
+                    ?? Config.GetNInt("Horseshoe.NET:Ftp.Port")
                     ?? OrganizationalDefaultSettings.GetNInt("Ftp.Port");
             }
             set

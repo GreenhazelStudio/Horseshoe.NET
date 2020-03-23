@@ -18,6 +18,11 @@ namespace Horseshoe.NET.IO.Ftp
             {
                 connectionString = connectionString.Substring(6);  // remove scheme to continue parsing
             }
+            else if (connectionString.ToLower().StartsWith("ftps://"))
+            {
+                connectionString = connectionString.Substring(7);  // remove scheme to continue parsing
+                connectionInfo.EnableSsl = true;
+            }
 
             if (connectionString.Contains("://"))
             {
