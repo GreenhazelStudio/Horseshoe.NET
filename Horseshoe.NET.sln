@@ -53,6 +53,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horseshoe.NET.Odbc", "Horse
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horseshoe.NET.Odbc (Standard)", "Horseshoe.NET.Odbc (Standard)\Horseshoe.NET.Odbc (Standard).csproj", "{809C50BD-A8E2-4C58-B3F0-2B71C8F52280}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horseshoe.NET.SecureIO", "Horseshoe.NET.SecureIO\Horseshoe.NET.SecureIO.csproj", "{E3B9FB53-9289-4211-A0EE-B557B96ABD98}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horseshoe.NET.SecureIO (Standard)", "Horseshoe.NET.SecureIO (Standard)\Horseshoe.NET.SecureIO (Standard).csproj", "{C8A0DBC0-AC16-4D7F-9ED7-E6646C03A77D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -159,6 +163,14 @@ Global
 		{809C50BD-A8E2-4C58-B3F0-2B71C8F52280}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{809C50BD-A8E2-4C58-B3F0-2B71C8F52280}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{809C50BD-A8E2-4C58-B3F0-2B71C8F52280}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3B9FB53-9289-4211-A0EE-B557B96ABD98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3B9FB53-9289-4211-A0EE-B557B96ABD98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3B9FB53-9289-4211-A0EE-B557B96ABD98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3B9FB53-9289-4211-A0EE-B557B96ABD98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8A0DBC0-AC16-4D7F-9ED7-E6646C03A77D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8A0DBC0-AC16-4D7F-9ED7-E6646C03A77D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8A0DBC0-AC16-4D7F-9ED7-E6646C03A77D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8A0DBC0-AC16-4D7F-9ED7-E6646C03A77D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
