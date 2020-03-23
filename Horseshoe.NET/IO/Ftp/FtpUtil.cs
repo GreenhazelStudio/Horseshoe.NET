@@ -10,13 +10,13 @@ namespace Horseshoe.NET.IO.Ftp
     {
         public static FtpConnectionInfo ParseFtpConnectionString(string connectionString)
         {
-            // example connection string: ftp://george@11.22.33.44/dir/subdir?encryptedPassword=akdj$8iO(d@1sd==
+            // example pseudo connection string: ftp://george@11.22.33.44/dir/subdir?encryptedPassword=akdj$8iO(d@1sd==
             if (connectionString == null) return null;
 
             var connectionInfo = new FtpConnectionInfo();
             if (connectionString.ToLower().StartsWith("ftp://"))
             {
-                connectionString = connectionString.Substring(6); // remove sheme to continue parsing
+                connectionString = connectionString.Substring(6);  // remove scheme to continue parsing
             }
 
             if (connectionString.Contains("://"))

@@ -115,41 +115,25 @@ namespace Horseshoe.NET.IO.Ftp
             string serverPath = null
         )
         {
-            string server;
-            int? port;
-            Credential? credentials;
-
-            if (connectionInfo != null)
-            {
-                server = connectionInfo.Server;
-                port = connectionInfo.Port;
-                credentials = connectionInfo.Credentials;
-                serverPath = connectionInfo.ServerPath ?? serverPath;
-            }
-            else
-            {
-                server = FtpSettings.DefaultFtpServer;
-                port = FtpSettings.DefaultPort;
-                credentials = FtpSettings.DefaultCredentials;
-                serverPath = serverPath ?? FtpSettings.DefaultServerPath;
-            }
-
-            // Get the object used to communicate with the server
-            var uriString = CreateRequestUriString(server, port, serverPath, fileName);
-            var request = (FtpWebRequest)WebRequest.Create(uriString);
-            request.Method = WebRequestMethods.Ftp.UploadFile;
-            request.Credentials = credentials?.ToNetworkCredentials() ?? new NetworkCredential("anonymous", "ftpuser");
-            request.ContentLength = contents.LongLength;
-
-            using (Stream requestStream = request.GetRequestStream())
-            {
-                requestStream.Write(contents, 0, contents.Length);
-            }
-
-            using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
-            {
-                FileUploaded?.Invoke(TextUtil.RevealNullOrBlank(fileName), contents.LongLength, (int)response.StatusCode, response.StatusDescription);
-            }
+            ConnectAndDoAction
+            (
+                connectionInfo,
+                WebRequestMethods.Ftp.UploadFile,
+                serverPath,
+                fileName,
+                requestAction: (request) =>
+                {
+                    request.ContentLength = contents.LongLength;
+                    using (Stream requestStream = request.GetRequestStream())
+                    {
+                        requestStream.Write(contents, 0, contents.Length);
+                    }
+                },
+                responseAction: (response) =>
+                {
+                    FileUploaded?.Invoke(TextUtil.RevealNullOrBlank(fileName), contents.LongLength, (int)response.StatusCode, response.StatusDescription);
+                }
+            );
         }
 
         public static void DownloadFile
@@ -186,37 +170,21 @@ namespace Horseshoe.NET.IO.Ftp
         )
         {
             var memoryStream = new NamedMemoryStream(serverFileName);
-            string server;
-            int? port;
-            Credential? credentials;
 
-            if (connectionInfo != null)
-            {
-                server = connectionInfo.Server;
-                port = connectionInfo.Port;
-                credentials = connectionInfo.Credentials;
-                serverPath = connectionInfo.ServerPath ?? serverPath;
-            }
-            else
-            {
-                server = FtpSettings.DefaultFtpServer;
-                port = FtpSettings.DefaultPort;
-                credentials = FtpSettings.DefaultCredentials;
-                serverPath = serverPath ?? FtpSettings.DefaultServerPath;
-            }
-
-            // Get the object used to communicate with the server
-            var uriString = CreateRequestUriString(server, port, serverPath, serverFileName);
-            var request = (FtpWebRequest)WebRequest.Create(uriString);
-            request.Method = WebRequestMethods.Ftp.DownloadFile;
-            request.Credentials = credentials?.ToNetworkCredentials() ?? new NetworkCredential("anonymous", "ftpuser");
-
-            using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
-            {
-                var stream = response.GetResponseStream();
-                stream.CopyTo(memoryStream);
-                FileDownloaded?.Invoke(serverFileName, memoryStream.Length, (int)response.StatusCode, response.StatusDescription);
-            }
+            ConnectAndDoAction
+            (
+                connectionInfo,
+                WebRequestMethods.Ftp.DownloadFile,
+                serverPath,
+                serverFileName,
+                requestAction: null,
+                responseAction: (response) =>
+                {
+                    var stream = response.GetResponseStream();
+                    stream.CopyTo(memoryStream);
+                    FileDownloaded?.Invoke(serverFileName, memoryStream.Length, (int)response.StatusCode, response.StatusDescription);
+                }
+            );
 
             return memoryStream;
         }
@@ -228,34 +196,10 @@ namespace Horseshoe.NET.IO.Ftp
             string serverPath = null
         )
         {
-            string[] contents;
-            Regex filter = null;
-            string server;
-            int? port;
-            Credential? credentials;
-
-            if (connectionInfo != null)
-            {
-                server = connectionInfo.Server;
-                port = connectionInfo.Port;
-                credentials = connectionInfo.Credentials;
-                serverPath = connectionInfo.ServerPath ?? serverPath;
-            }
-            else
-            {
-                server = FtpSettings.DefaultFtpServer;
-                port = FtpSettings.DefaultPort;
-                credentials = FtpSettings.DefaultCredentials;
-                serverPath = serverPath ?? FtpSettings.DefaultServerPath;
-            }
-
-            // Get the object used to communicate with the server
-            var uriString = CreateRequestUriString(server, port, serverPath, null);
-            var request = (FtpWebRequest)WebRequest.Create(uriString);
-            request.Method = WebRequestMethods.Ftp.ListDirectory;
-            request.Credentials = credentials?.ToNetworkCredentials() ?? new NetworkCredential("anonymous", "ftpuser");
+            string[] contents = null;
 
             // Convert the file mask to regex
+            Regex filter = null;
             if (fileMask == FtpFileMasks.NoExtension)
             {
                 filter = new Regex("^[^.]+$");
@@ -265,18 +209,26 @@ namespace Horseshoe.NET.IO.Ftp
                 filter = new Regex(fileMask.Replace(".", @"\.").Replace("*", ".*").Replace("?", "."), RegexOptions.IgnoreCase);
             }
 
-            using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
-            {
-                var streamReader = new StreamReader(response.GetResponseStream());
-                contents = streamReader.ReadToEnd().Replace("\r\n", "\n").Split('\n');
-                if (filter != null)
+            ConnectAndDoAction
+            (
+                connectionInfo,
+                WebRequestMethods.Ftp.ListDirectoryDetails,
+                serverPath,
+                null,
+                requestAction: null,
+                responseAction: (response) =>
                 {
-                    contents = contents
-                        .Where(s => filter.IsMatch(s))
-                        .ToArray();
+                    var streamReader = new StreamReader(response.GetResponseStream());
+                    contents = streamReader.ReadToEnd().Replace("\r\n", "\n").Split('\n'); if (filter != null)
+                    {
+                        contents = contents
+                            .Where(s => filter.IsMatch(s))
+                            .ToArray();
+                    }
+
+                    DirectoryContentsListed?.Invoke(contents.Length, (int)response.StatusCode, response.StatusDescription);
                 }
-                DirectoryContentsListed?.Invoke(contents.Length, (int)response.StatusCode, response.StatusDescription);
-            }
+            );
 
             return contents;
         }
@@ -287,38 +239,22 @@ namespace Horseshoe.NET.IO.Ftp
             string serverPath = null
         )
         {
-            string[] contents;
-            string server;
-            int? port;
-            Credential? credentials;
+            string[] contents = null;
 
-            if (connectionInfo != null)
-            {
-                server = connectionInfo.Server;
-                port = connectionInfo.Port;
-                credentials = connectionInfo.Credentials;
-                serverPath = connectionInfo.ServerPath ?? serverPath;
-            }
-            else
-            {
-                server = FtpSettings.DefaultFtpServer;
-                port = FtpSettings.DefaultPort;
-                credentials = FtpSettings.DefaultCredentials;
-                serverPath = serverPath ?? FtpSettings.DefaultServerPath;
-            }
-
-            // Get the object used to communicate with the server
-            var uriString = CreateRequestUriString(server, port, serverPath, null);
-            var request = (FtpWebRequest)WebRequest.Create(uriString);
-            request.Method = WebRequestMethods.Ftp.ListDirectoryDetails;
-            request.Credentials = credentials?.ToNetworkCredentials() ?? new NetworkCredential("anonymous", "ftpuser");
-
-            using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
-            {
-                var streamReader = new StreamReader(response.GetResponseStream());
-                contents = streamReader.ReadToEnd().Replace("\r\n", "\n").Split('\n');
-                DirectoryContentsListed?.Invoke(contents.Length, (int)response.StatusCode, response.StatusDescription);
-            }
+            ConnectAndDoAction
+            (
+                connectionInfo,
+                WebRequestMethods.Ftp.ListDirectoryDetails,
+                serverPath,
+                null,
+                requestAction: null,
+                responseAction: (response) =>
+                {
+                    var streamReader = new StreamReader(response.GetResponseStream());
+                    contents = streamReader.ReadToEnd().Replace("\r\n", "\n").Split('\n');
+                    DirectoryContentsListed?.Invoke(contents.Length, (int)response.StatusCode, response.StatusDescription);
+                }
+            );
 
             return contents;
         }
@@ -328,6 +264,30 @@ namespace Horseshoe.NET.IO.Ftp
             string serverFileName,
             FtpConnectionInfo connectionInfo = null,
             string serverPath = null
+        )
+        {
+            ConnectAndDoAction
+            (
+                connectionInfo,
+                WebRequestMethods.Ftp.DeleteFile,
+                serverPath,
+                serverFileName,
+                requestAction: null,
+                responseAction: (response) =>
+                {
+                    FileDeleted?.Invoke(serverFileName, (int)response.StatusCode, response.StatusDescription);
+                }
+            );
+        }
+
+        static void ConnectAndDoAction
+        (
+            FtpConnectionInfo connectionInfo,
+            string method,
+            string serverPath,
+            string serverFileName,
+            Action<FtpWebRequest> requestAction,
+            Action<FtpWebResponse> responseAction
         )
         {
             string server;
@@ -352,12 +312,20 @@ namespace Horseshoe.NET.IO.Ftp
             // Get the object used to communicate with the server
             var uriString = CreateRequestUriString(server, port, serverPath, serverFileName);
             var request = (FtpWebRequest)WebRequest.Create(uriString);
-            request.Method = WebRequestMethods.Ftp.DeleteFile;
+            request.Method = method;
             request.Credentials = credentials?.ToNetworkCredentials() ?? new NetworkCredential("anonymous", "ftpuser");
-
-            using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
+            
+            if (requestAction != null)
             {
-                FileDeleted?.Invoke(serverFileName, (int)response.StatusCode, response.StatusDescription);
+                requestAction.Invoke(request);
+            }
+            
+            if(responseAction != null)
+            {
+                using (var response = (FtpWebResponse)request.GetResponse())
+                {
+                    responseAction.Invoke(response);
+                }
             }
         }
 
