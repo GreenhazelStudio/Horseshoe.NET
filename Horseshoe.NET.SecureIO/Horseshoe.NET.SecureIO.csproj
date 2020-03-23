@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="Renci.SshNet, Version=2016.1.0.0, Culture=neutral, PublicKeyToken=1cee9f8bde3db106, processorArchitecture=MSIL">
       <HintPath>..\packages\SSH.NET.2016.1.0\lib\net40\Renci.SshNet.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -57,6 +58,7 @@
     <ProjectReference Include="..\Horseshoe.NET\Horseshoe.NET.csproj">
       <Project>{2c647857-6298-47c1-97bc-ad180d55dd33}</Project>
       <Name>Horseshoe.NET</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
