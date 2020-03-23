@@ -8,14 +8,14 @@ using Horseshoe.NET.IO.Ftp;
 
 namespace Horseshoe.NET.SecureIO.Sftp
 {
-    public static class FtpUtil
+    public static class SftpUtil
     {
-        public static FtpConnectionInfo ParseSftpConnectionString(string connectionString)
+        public static SftpConnectionInfo ParseSftpConnectionString(string connectionString)
         {
             // example pseudo connection string: sftp://george@11.22.33.44/dir/subdir?encryptedPassword=akdj$8iO(d@1sd==
             if (connectionString == null) return null;
 
-            var connectionInfo = new FtpConnectionInfo();
+            var connectionInfo = new SftpConnectionInfo();
             if (connectionString.ToLower().StartsWith("sftp://"))
             {
                 connectionString = connectionString.Substring(7);  // remove scheme to continue parsing
@@ -58,7 +58,7 @@ namespace Horseshoe.NET.SecureIO.Sftp
             if (pos > 0)
             {
                 connectionInfo.Server = connectionString.Substring(0, pos);
-                connectionInfo.ServerPath = connectionString.Substring(pos);
+                connectionInfo.ServerPath = connectionString.Substring(pos + 1);
             }
             else
             {

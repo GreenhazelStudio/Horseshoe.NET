@@ -10,6 +10,7 @@ using Horseshoe.NET.ConsoleX;
 using Horseshoe.NET.IO;
 using Horseshoe.NET.IO.Ftp;
 using Horseshoe.NET.IO.ReportingServices;
+using Horseshoe.NET.SecureIO.Sftp;
 
 namespace TestConsole
 {
@@ -24,6 +25,9 @@ namespace TestConsole
             Ftp.FileUploaded += (fileName, fileSize, statusCode, statusDescription) => Console.WriteLine("Upload results: " + fileName + " - " + FileUtil.GetDisplayFileSize(fileSize) + " - " + statusDescription);
             Ftp.FileDeleted += (fileName, statusCode, statusDescription) => Console.WriteLine("Delete results: " + fileName + " - " + statusDescription);
             Ftp.DirectoryContentsListed += (count, statusCode, statusDescription) => Console.WriteLine("Dir listing results: x" + count + " - " + statusDescription);
+            Sftp.FileUploaded += (fileName, fileSize, statusCode, statusDescription) => Console.WriteLine("Upload results: " + fileName + " - " + FileUtil.GetDisplayFileSize(fileSize) + " - " + statusDescription);
+            Sftp.FileDeleted += (fileName, statusCode, statusDescription) => Console.WriteLine("Delete results: " + fileName + " - " + statusDescription);
+            Sftp.DirectoryContentsListed += (count, statusCode, statusDescription) => Console.WriteLine("Dir listing results: x" + count + " - " + statusDescription);
         }
 
         public override void Do()
@@ -35,14 +39,21 @@ namespace TestConsole
                     "Build SSRS URLs",
                     "Display file sizes",
                     "Test FTP Upload",
+                    "Test SFTP Upload",
                     "Test FTP Download",
+                    "Test SFTP Download",
                     "Test FTP Delete",
+                    "Test SFTP Delete",
                     "List FTP Directory",
+                    "List SFTP Directory",
                     "regex",
                     "FTP connection string parse tests"
                 },
                 title: "SSRS Test Menu"
             );
+            var ftpPseudoConnectionString = "ftp://nexusftp@192.168.155.130//u02/app/se4prod/del4/work/edidir/flat_in?password=nexusftp";
+            var sftpPseudoConnectionString = "sftp://nexusftp@192.168.155.130//u02/app/se4prod/del4/work/edidir/flat_in?password=nexusftp";
+
             switch (selection.SelectedItem)
             {
                 case "Build SSRS URLs":
@@ -71,38 +82,79 @@ namespace TestConsole
                     (
                         "hello.txt",
                         "Hello World!",
-                        connectionInfo: FtpUtil.ParseFtpConnectionString("ftp://username@11.22.33.44/my_dir?password=password")
+                        connectionInfo: FtpUtil.ParseFtpConnectionString(ftpPseudoConnectionString)
+                    );
+                    break;
+                case "Test SFTP Upload":
+                    Sftp.UploadFile
+                    (
+                        "hello.txt",
+                        "Hello World!",
+                        connectionInfo: SftpUtil.ParseSftpConnectionString(sftpPseudoConnectionString)
                     );
                     break;
                 case "Test FTP Download":
                     var stream = Ftp.DownloadFile
                     (
                         "hello.txt",
-                        connectionInfo: FtpUtil.ParseFtpConnectionString("ftp://username@11.22.33.44/my_dir?password=password")
+                        connectionInfo: FtpUtil.ParseFtpConnectionString(ftpPseudoConnectionString)
                     );
                     Console.WriteLine("File length: " + stream.Length);
                     Console.WriteLine("File contents: " + Encoding.Default.GetString(stream.ToArray()));
+                    break;
+                case "Test SFTP Download":
+                    var sstream = Sftp.DownloadFile
+                    (
+                        "hello.txt",
+                        connectionInfo: SftpUtil.ParseSftpConnectionString(sftpPseudoConnectionString)
+                    );
+                    Console.WriteLine("File length: " + sstream.Length);
+                    Console.WriteLine("File contents: " + Encoding.Default.GetString(sstream.ToArray()));
                     break;
                 case "Test FTP Delete":
                     Ftp.DeleteFile
                     (
                         "hello.txt",
-                        connectionInfo: FtpUtil.ParseFtpConnectionString("ftp://username@11.22.33.44/my_dir?password=password")
+                        connectionInfo: FtpUtil.ParseFtpConnectionString(ftpPseudoConnectionString)
+                    );
+                    break;
+                case "Test SFTP Delete":
+                    Sftp.DeleteFile
+                    (
+                        "hello.txt",
+                        connectionInfo: SftpUtil.ParseSftpConnectionString(sftpPseudoConnectionString)
                     );
                     break;
                 case "List FTP Directory":
                     var dirContents = Ftp.ListDirectoryContents
                     (
-                        connectionInfo: FtpUtil.ParseFtpConnectionString("ftp://username@11.22.33.44/my_dir?password=password")
+                        connectionInfo: FtpUtil.ParseFtpConnectionString(ftpPseudoConnectionString)
                     );
                     Console.WriteLine("Directory contents:");
-                    Console.WriteLine(string.Join(Environment.NewLine, dirContents));
+                    Console.WriteLine(dirContents.Any() ? string.Join(Environment.NewLine, dirContents) : "[0 results]");
                     Console.WriteLine();
 
                     dirContents = Ftp.ListDirectoryContents
                     (
                         fileMask: FtpFileMasks.Txt,
-                        connectionInfo: FtpUtil.ParseFtpConnectionString("ftp://username@11.22.33.44/my_dir?password=password")
+                        connectionInfo: FtpUtil.ParseFtpConnectionString(ftpPseudoConnectionString)
+                    );
+                    Console.WriteLine("Directory contents (.txt files only):");
+                    Console.WriteLine(dirContents.Any() ? string.Join(Environment.NewLine, dirContents) : "[0 results]");
+                    break;
+                case "List SFTP Directory":
+                    var sdirContents = Sftp.ListDirectoryContents
+                    (
+                        connectionInfo: SftpUtil.ParseSftpConnectionString(sftpPseudoConnectionString)
+                    );
+                    Console.WriteLine("Directory contents:");
+                    Console.WriteLine(string.Join(Environment.NewLine, sdirContents));
+                    Console.WriteLine();
+
+                    dirContents = Sftp.ListDirectoryContents
+                    (
+                        fileMask: FtpFileMasks.Txt,
+                        connectionInfo: SftpUtil.ParseSftpConnectionString(sftpPseudoConnectionString)
                     );
                     Console.WriteLine("Directory contents (.txt files only):");
                     Console.WriteLine(string.Join(Environment.NewLine, dirContents));

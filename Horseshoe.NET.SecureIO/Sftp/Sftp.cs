@@ -26,7 +26,7 @@ namespace Horseshoe.NET.SecureIO.Sftp
         public static void UploadFile
         (
             string filePath,
-            FtpConnectionInfo connectionInfo = null,
+            SftpConnectionInfo connectionInfo = null,
             string serverPath = null,
             string serverFileName = null,
             bool isBinary = false,
@@ -54,7 +54,7 @@ namespace Horseshoe.NET.SecureIO.Sftp
         public static void UploadFile
         (
             FileInfo file,
-            FtpConnectionInfo connectionInfo = null,
+            SftpConnectionInfo connectionInfo = null,
             string serverPath = null,
             string serverFileName = null,
             bool isBinary = false,
@@ -76,7 +76,7 @@ namespace Horseshoe.NET.SecureIO.Sftp
         (
             string fileName,
             string contents,
-            FtpConnectionInfo connectionInfo = null,
+            SftpConnectionInfo connectionInfo = null,
             string serverPath = null,
             Encoding encoding = null
         )
@@ -90,7 +90,7 @@ namespace Horseshoe.NET.SecureIO.Sftp
         public static void UploadFile
         (
             NamedMemoryStream namedStream,
-            FtpConnectionInfo connectionInfo = null,
+            SftpConnectionInfo connectionInfo = null,
             string serverPath = null
         )
         {
@@ -101,12 +101,13 @@ namespace Horseshoe.NET.SecureIO.Sftp
         (
             string fileName,
             byte[] contents,
-            FtpConnectionInfo connectionInfo = null,
+            SftpConnectionInfo connectionInfo = null,
             string serverPath = null
         )
         {
             var memoryStream = new MemoryStream();
             memoryStream.Write(contents, 0, contents.Length);
+            memoryStream.Position = 0;
             UploadFile(fileName, memoryStream, connectionInfo: connectionInfo, serverPath: serverPath);
         }
 
@@ -114,7 +115,7 @@ namespace Horseshoe.NET.SecureIO.Sftp
         (
             string fileName,
             Stream contents,
-            FtpConnectionInfo connectionInfo = null,
+            SftpConnectionInfo connectionInfo = null,
             string serverPath = null
         )
         {
@@ -141,7 +142,7 @@ namespace Horseshoe.NET.SecureIO.Sftp
             string serverFileName,
             string downloadFilePath,
             bool overwrite = false,
-            FtpConnectionInfo connectionInfo = null,
+            SftpConnectionInfo connectionInfo = null,
             string serverPath = null
         )
         {
@@ -165,7 +166,7 @@ namespace Horseshoe.NET.SecureIO.Sftp
         public static NamedMemoryStream DownloadFile
         (
             string serverFileName,
-            FtpConnectionInfo connectionInfo = null,
+            SftpConnectionInfo connectionInfo = null,
             string serverPath = null
         )
         {
@@ -192,7 +193,7 @@ namespace Horseshoe.NET.SecureIO.Sftp
         public static string[] ListDirectoryContents
         (
             string fileMask = null,
-            FtpConnectionInfo connectionInfo = null,
+            SftpConnectionInfo connectionInfo = null,
             string serverPath = null
         )
         {
@@ -216,13 +217,12 @@ namespace Horseshoe.NET.SecureIO.Sftp
                 action: (server, resultantServerPath) =>
                 {
                     var files = server.ListDirectory(resultantServerPath);
-                    contents = files.Select(f => f.Name).ToArray();
-                    if (filter != null)
-                    {
-                        contents = contents
-                            .Where(s => filter.IsMatch(s))
-                            .ToArray();
-                    }
+                    contents = files
+                        .Select(f => f.Name)
+                        .Where(s => !s.In(".", "..") && (filter?.IsMatch(s) ?? true))  // filter out '.' and '..' and apply file mask filter 
+                        .OrderBy(s => s.Contains(".") ? 1 : 0)
+                        .ThenBy(s => s)
+                        .ToArray();
                     DirectoryContentsListed?.Invoke(contents.Length, 0, "List directory action raised no errors");
                 }
             );
@@ -233,7 +233,7 @@ namespace Horseshoe.NET.SecureIO.Sftp
         public static void DeleteFile
         (
             string serverFileName,
-            FtpConnectionInfo connectionInfo = null,
+            SftpConnectionInfo connectionInfo = null,
             string serverPath = null
         )
         {
@@ -255,7 +255,7 @@ namespace Horseshoe.NET.SecureIO.Sftp
 
         static void ConnectAndDoAction
         (
-            FtpConnectionInfo connectionInfo,
+            SftpConnectionInfo connectionInfo,
             string serverPath,
             Action<SftpClient, string> action    // server, resultantServerPath
         )
@@ -291,11 +291,6 @@ namespace Horseshoe.NET.SecureIO.Sftp
             else
             {
                 password = credentials.Password;
-            }
-
-            if (serverPath.StartsWith("/"))
-            {
-                serverPath = serverPath.Substring(1);
             }
 
             // Get the object used to communicate with the server

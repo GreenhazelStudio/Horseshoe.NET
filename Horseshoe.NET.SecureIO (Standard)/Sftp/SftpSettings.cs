@@ -9,7 +9,7 @@ namespace Horseshoe.NET.SecureIO.Sftp
         private static string _defaultFtpServer;
 
         /// <summary>
-        /// Gets or sets the default FTP server.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Sftp.Server and OrganizationalDefaultSettings: key = Sftp.Server)
+        /// Gets or sets the default SFTP server.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Sftp.Server and OrganizationalDefaultSettings: key = Sftp.Server)
         /// </summary>
         public static string DefaultFtpServer
         {
@@ -28,7 +28,7 @@ namespace Horseshoe.NET.SecureIO.Sftp
         private static int? _defaultPort;
 
         /// <summary>
-        /// Gets or sets the default FTP port.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Sftp.Port and OrganizationalDefaultSettings: key = Sftp.Port)
+        /// Gets or sets the default SFTP port.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Sftp.Port and OrganizationalDefaultSettings: key = Sftp.Port)
         /// </summary>
         public static int? DefaultPort
         {
@@ -47,7 +47,7 @@ namespace Horseshoe.NET.SecureIO.Sftp
         static Credential? _defaultCredentials;
 
         /// <summary>
-        /// Gets or sets the default credentials used by FTP.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Sftp.UserName|Password|IsEncryptedPassword|Domain and OrganizationalDefaultSettings: key = Sftp.Credentials)
+        /// Gets or sets the default credentials used by SFTP.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Sftp.UserName|Password|IsEncryptedPassword|Domain and OrganizationalDefaultSettings: key = Sftp.Credentials)
         /// </summary>
         public static Credential? DefaultCredentials
         {
@@ -66,7 +66,7 @@ namespace Horseshoe.NET.SecureIO.Sftp
         static string _defaultServerPath;
 
         /// <summary>
-        /// Gets or sets the default server path used by FTP.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Sftp.ServerPath and OrganizationalDefaultSettings: key = Sftp.ServerPath)
+        /// Gets or sets the default server path used by SFTP.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Sftp.ServerPath and OrganizationalDefaultSettings: key = Sftp.ServerPath)
         /// </summary>
         public static string DefaultServerPath
         {
@@ -74,7 +74,7 @@ namespace Horseshoe.NET.SecureIO.Sftp
             {
                 return _defaultServerPath
                     ?? Config.Get("Horseshoe.NET:Sftp.ServerPath")
-                    ?? "/";
+                    ?? "";
             }
             set
             {

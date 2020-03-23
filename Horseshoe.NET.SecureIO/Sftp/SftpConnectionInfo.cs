@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 using Horseshoe.NET.Text;
 
-namespace Horseshoe.NET.IO.Ftp
+namespace Horseshoe.NET.SecureIO.Sftp
 {
-    public class FtpConnectionInfo
+    public class SftpConnectionInfo
     {
         public string Server { get; set; }
         public int? Port { get; set; }
@@ -17,7 +17,7 @@ namespace Horseshoe.NET.IO.Ftp
 
         public override string ToString()
         {
-            return "ftp://" +
+            return "sftp://" +
                 (Credentials.HasValue ? Credentials.Value.UserName + "@" : "") +
                 TextUtil.RevealNullOrBlank(Server) +
                 (Port.HasValue ? ":" + Port : "") +

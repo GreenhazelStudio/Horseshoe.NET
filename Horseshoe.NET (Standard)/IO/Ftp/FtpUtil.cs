@@ -56,7 +56,7 @@ namespace Horseshoe.NET.IO.Ftp
             if (pos > 0)
             {
                 connectionInfo.Server = connectionString.Substring(0, pos);
-                connectionInfo.ServerPath = connectionString.Substring(pos);
+                connectionInfo.ServerPath = connectionString.Substring(pos + 1);
             }
             else
             {

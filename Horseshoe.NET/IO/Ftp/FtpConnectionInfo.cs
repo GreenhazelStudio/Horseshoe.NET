@@ -12,7 +12,7 @@ namespace Horseshoe.NET.IO.Ftp
     {
         public string Server { get; set; }
         public int? Port { get; set; }
-        public string ServerPath { get; set; }
+        public string ServerPath { get; set; } = "";
         public Credential? Credentials { get; set; } 
 
         public override string ToString()
@@ -21,7 +21,7 @@ namespace Horseshoe.NET.IO.Ftp
                 (Credentials.HasValue ? Credentials.Value.UserName + "@" : "") +
                 TextUtil.RevealNullOrBlank(Server) +
                 (Port.HasValue ? ":" + Port : "") +
-                (ServerPath != null ? (ServerPath.StartsWith("/") ? "" : "/") + ServerPath : "") +
+                "/" + (ServerPath ?? "") +
                 (Credentials.HasValue ? (Credentials.Value.HasSecurePassword ? "?password=<secure>" : (Credentials.Value.IsEncryptedPassword ? "?encryptedPassword=" + Credentials.Value.Password : "?password=" + (Credentials.Value.Password == null ? "[null]" : "******"))) : "");
         }
     }

@@ -74,7 +74,7 @@ namespace Horseshoe.NET.IO.Ftp
             {
                 return _defaultServerPath
                     ?? Config.Get("Horseshoe.NET:Ftp.ServerPath")
-                    ?? "/";
+                    ?? "";
             }
             set
             {

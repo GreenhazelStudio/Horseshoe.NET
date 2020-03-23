@@ -212,7 +212,7 @@ namespace Horseshoe.NET.IO.Ftp
             ConnectAndDoAction
             (
                 connectionInfo,
-                WebRequestMethods.Ftp.ListDirectoryDetails,
+                WebRequestMethods.Ftp.ListDirectory,
                 serverPath,
                 null,
                 requestAction: null,
@@ -352,15 +352,13 @@ namespace Horseshoe.NET.IO.Ftp
                 .Append("/");
             if (serverPath != null)
             {
-                sb  .AppendIf
+                sb  .Append
                     (
-                        serverPath.StartsWith("/"),
-                        serverPath.Substring(1),
                         serverPath
                     )
                     .AppendIf
                     (
-                        !serverPath.EndsWith("/"),
+                        serverPath.Length > 0 && !serverPath.EndsWith("/"),
                         "/"
                     );
             }

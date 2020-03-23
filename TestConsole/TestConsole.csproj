@@ -74,6 +74,10 @@
       <Project>{ef577431-b6c3-49b3-af18-4974383c59d1}</Project>
       <Name>Horseshoe.NET.OracleDb</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Horseshoe.NET.SecureIO\Horseshoe.NET.SecureIO.csproj">
+      <Project>{e3b9fb53-9289-4211-a0ee-b557b96abd98}</Project>
+      <Name>Horseshoe.NET.SecureIO</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Horseshoe.NET.SqlDb\Horseshoe.NET.SqlDb.csproj">
       <Project>{d9a0bf85-7d85-46ee-8bb5-3f75dc36830a}</Project>
       <Name>Horseshoe.NET.SqlDb</Name>
