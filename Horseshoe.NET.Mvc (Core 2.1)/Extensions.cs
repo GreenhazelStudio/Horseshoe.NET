@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
+using System.Net.Sockets;
 using System.Text;
 
 using Horseshoe.NET.Text;
@@ -17,14 +19,14 @@ namespace Horseshoe.NET.Mvc
             return streamReader.ReadToEnd();
         }
 
-        public static string GetAbsoluteApplicationPath(this HttpRequest request, string virtualSubpath = null, bool includeQueryString = false, bool forceHttps = false)
+        public static string GetAbsoluteApplicationPath(this HttpRequest request, string virtualSubpath = null, bool includeQueryString = false, string overrideScheme = null, string overrideHost = null, int? overridePort = null, string overridePathBase = null)
         {
-            var sb = new StringBuilder(forceHttps ? "https" : request.Scheme)   // http
+            var sb = new StringBuilder(overrideScheme ?? request.Scheme)   // http
                 .Append("://")
-                .Append(request.Host)                    // dev-web01.dev.local:8080
-                .Append(request.PathBase);               // /test_props
+                .Append(overrideHost == null ? request.Host.ToString() : overrideHost + (overridePort.HasValue ? ":" + overridePort : ""))    // dev-web01.dev.local:8080
+                .Append(overridePathBase ?? request.PathBase);             // /test_props
 
-            if (virtualSubpath != null)                  // /api
+            if (virtualSubpath != null)                                    // /api
             {
                 if (!sb.ToString().EndsWith("/"))
                 {
@@ -42,7 +44,7 @@ namespace Horseshoe.NET.Mvc
 
             if (includeQueryString && request.QueryString.HasValue)
             {
-                if (virtualSubpath == null && !request.PathBase.HasValue)
+                if (virtualSubpath == null && overridePathBase == null && !request.PathBase.HasValue)
                 {
                     sb.Append("/");
                 }
@@ -52,14 +54,31 @@ namespace Horseshoe.NET.Mvc
             return sb.ToString();
         }
 
+        public static string GetRemoteIPAddress(this HttpRequest request)
+        {
+            return GetRemoteIPAddress(request.HttpContext);
+        }
+
         public static string GetRemoteIPAddress(this HttpContext httpContext)
         {
             return TextUtil.Zap(httpContext.Connection.RemoteIpAddress);
         }
 
+        public static string GetRemoteMachineName(this HttpRequest request)
+        {
+            return GetRemoteMachineName(request.HttpContext);
+        }
+
         public static string GetRemoteMachineName(this HttpContext httpContext)
         {
-            return TextUtil.Zap(httpContext.Request.Host.Host);
+            try
+            {
+                return Dns.GetHostEntry(httpContext.Connection.RemoteIpAddress).HostName;
+            }
+            catch (SocketException)
+            {
+                return null;
+            }
         }
 
         public static string GetUserName(this HttpContext httpContext)

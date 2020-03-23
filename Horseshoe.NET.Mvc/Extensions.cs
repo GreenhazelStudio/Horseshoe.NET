@@ -22,20 +22,25 @@ namespace Horseshoe.NET.Mvc
             }
         }
 
-        public static string GetAbsoluteApplicationPath(this HttpRequestBase request, string virtualSubpath = null, bool excludeQueryString = false, bool forceHttps = false)
+        public static string GetAbsoluteApplicationPath(this HttpRequestBase request, string virtualSubpath = null, bool includeQueryString = false, string overrideScheme = null, string overrideHost = null, int? overridePort = null, string overrideApplicationPath = null)
         {
             var uri = request.Url;
-            var sb = new StringBuilder(forceHttps ? "https" : uri.Scheme)  // http
+            var sb = new StringBuilder(overrideScheme ?? uri.Scheme)          // http
                 .Append("://")
-                .Append(uri.Host)                        // dev-web01.dev.local
+                .Append(overrideHost ?? uri.Host)                             // dev-web01.dev.local
                 .AppendIf
                 (
-                    uri.Port != 0 && !(uri.Scheme.ToLower() + uri.Port).In("http80", "https443"),
-                    ":" + uri.Port                       // :8080
+                    overridePort.HasValue,
+                    ":" + overridePort                                        // :8080
                 )
-                .Append(request.ApplicationPath);        // /test_props
+                .AppendIf
+                (
+                    !overridePort.HasValue && uri.Port != 0 && !((overrideScheme ?? uri.Scheme).ToLower() + uri.Port).In("http80", "https443"),
+                    ":" + uri.Port                                            // :8080
+                )
+                .Append(overrideApplicationPath ?? request.ApplicationPath);  // /test_props
 
-            if (virtualSubpath != null)                  // /api
+            if (virtualSubpath != null)                                       // /api
             {
                 if (!sb.ToString().EndsWith("/"))
                 {
@@ -51,9 +56,9 @@ namespace Horseshoe.NET.Mvc
                 }
             }
 
-            if (!excludeQueryString && uri.Query.Length > 0)
+            if (includeQueryString && uri.Query.Length > 0)
             {
-                if (virtualSubpath == null && request.ApplicationPath.Length == 0)
+                if (virtualSubpath == null && (overrideApplicationPath ?? request.ApplicationPath).Length == 0)
                 {
                     sb.Append("/");
                 }
@@ -65,12 +70,34 @@ namespace Horseshoe.NET.Mvc
 
         public static string GetRemoteIPAddress(this HttpContext httpContext)
         {
-            return TextUtil.Zap(httpContext.Request?.UserHostAddress);
+            return GetRemoteIPAddress(httpContext.Request);
+        }
+
+        public static string GetRemoteIPAddress(this HttpRequest request)
+        {
+            return TextUtil.Zap(request.UserHostAddress);
+        }
+
+        public static string GetRemoteIPAddress(this HttpRequestBase request)
+        {
+            return TextUtil.Zap(request.UserHostAddress);
         }
 
         public static string GetRemoteMachineName(this HttpContext httpContext)
         {
-            return TextUtil.Zap(httpContext.Request?.UserHostName);
+            return GetRemoteMachineName(httpContext.Request);
+        }
+
+        public static string GetRemoteMachineName(this HttpRequest request)
+        {
+            if (string.Equals(request.UserHostName, GetRemoteIPAddress(request))) return null;
+            return TextUtil.Zap(request.UserHostName);
+        }
+
+        public static string GetRemoteMachineName(this HttpRequestBase request)
+        {
+            if (string.Equals(request.UserHostName, GetRemoteIPAddress(request))) return null;
+            return TextUtil.Zap(request.UserHostName);
         }
 
         public static string GetUserName(this HttpContext httpContext)

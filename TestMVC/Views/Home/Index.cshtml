@@ -1,4 +1,7 @@
-﻿@{
+﻿@using Horseshoe.NET
+@using Horseshoe.NET.Mvc
+
+@{
     ViewBag.Title = "Home Page";
 }
 
@@ -24,4 +27,55 @@
             }
     </style>
 }
+
+<table class="test-table">
+    <tr>
+        <th class="section-header" colspan="2">Machine Properties</th>
+    </tr>
+    <tr>
+        <th>IPv4 Addresses</th>
+        <td>@Html.Raw(string.Join("<br />", Machine.IPv4Addresses))</td>
+    </tr>
+    <tr>
+        <th>IPv6 Addresses</th>
+        <td>@Html.Raw(string.Join("<br />", Machine.IPv6Addresses))</td>
+    </tr>
+    <tr>
+        <th>Name</th>
+        <td>@Machine.Name</td>
+    </tr>
+    <tr>
+        <th>Fully Qualified Name</th>
+        <td>@Machine.FullyQualifiedName</td>
+    </tr>
+</table>
+
+<table class="test-table">
+    <tr>
+        <th class="section-header" colspan="2">Request Extensions</th>
+    </tr>
+    <tr>
+        <th>Remote IP Address</th>
+        <td>@(Request.GetRemoteIPAddress())</td>
+    </tr>
+    <tr>
+        <th>Remote Machine Name</th>
+        <td>@(Request.GetRemoteMachineName())</td>
+    </tr>
+    <tr>
+        <th>Original Request Body</th>
+        <td>@(ViewBag.OriginalRequestBody ?? "(click submit)")</td>
+    </tr>
+    <tr>
+        <th></th>
+        <td>
+            @using (Html.BeginForm("OriginalRequestBodyTest", "Home", FormMethod.Post))
+            {
+                <span>intValue1=</span><input name="intValue1" value="1" size="2" />
+                <span>textValue1=</span><input name="textValue1" value="summer eve" /><br />
+                <button type="submit">submit</button>
+            }
+        </td>
+    </tr>
+</table>
 

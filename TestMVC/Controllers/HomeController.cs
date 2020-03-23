@@ -4,16 +4,32 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-using TestMVC.ViewModels;
+using Horseshoe.NET.Mvc;
 
 namespace TestMVC.Controllers
 {
     public class HomeController : Controller
     {
+        string OriginalRequestBody
+        {
+            get => (string)Session["OriginalRequestBody"];
+            set
+            {
+                if (value != null)
+                {
+                    Session["OriginalRequestBody"] = value;
+                }
+                else
+                {
+                    Session.Remove("OriginalRequestBody");
+                }
+            }
+        }
+
         public ActionResult Index()
         {
-            var c = System.Web.HttpContext.Current;
-            var hc = HttpContext; 
+            ViewBag.OriginalRequestBody = OriginalRequestBody;
+            OriginalRequestBody = null;
             return View();
         }
 
@@ -29,6 +45,20 @@ namespace TestMVC.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+
+        [HttpPost]
+        public ActionResult OriginalRequestBodyTest(int? intValue1, string textValue1)
+        {
+            var result =
+            //    "intValue=" + TextUtil.RevealNullOrBlank(intValue1) + Environment.NewLine +
+            //    "textValue1=" + TextUtil.RevealNullOrBlank(textValue1);
+            //result += Environment.NewLine + 
+            //    "original_request_body=" + 
+            OriginalRequestBody = Request.GetOriginalRequestBody();
+            //Model.RequestBodyTestResult = result;
+            return RedirectToAction("Index");
         }
     }
 }

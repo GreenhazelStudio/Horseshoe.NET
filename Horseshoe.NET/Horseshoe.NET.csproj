@@ -103,6 +103,7 @@
     <Compile Include="IO\FileImport\Delegates.cs" />
     <Compile Include="IO\Ftp\Delegates.cs" />
     <Compile Include="IO\NamedMemoryStream.cs" />
+    <Compile Include="Machine.cs" />
     <Compile Include="StringList.cs" />
     <Compile Include="IO\Email\HtmlEmail.cs" />
     <Compile Include="IO\Email\PlainEmail.cs" />
