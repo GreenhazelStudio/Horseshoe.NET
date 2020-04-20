@@ -34,16 +34,11 @@ namespace Horseshoe.NET.ActiveDirectory
         public string ExtensionAttribute1 { get; set; }
         public string ParentPath { get; set; }
         public OUInfo OU { get; set; }
-
-        /* * * * * * * * * * * * * * * * * * 
-         * Collection Properties
-         * * * * * * * * * * * * * * * * * */
         public IEnumerable<string> GroupNames { get; set; }
 
-        /* * * * * * * * * * * * * * * * * * 
-         * Custom Properties
-         * * * * * * * * * * * * * * * * * */
-        public string Division => Department;
-
+        public override string ToString()
+        {
+            return DisplayName + " OU=" + string.Join(" > ", OU.PseudoPath);
+        }
     }
 }
