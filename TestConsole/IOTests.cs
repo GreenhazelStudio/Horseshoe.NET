@@ -10,6 +10,7 @@ using Horseshoe.NET.ConsoleX;
 using Horseshoe.NET.IO;
 using Horseshoe.NET.IO.Ftp;
 using Horseshoe.NET.IO.ReportingServices;
+using Horseshoe.NET.IO.WebServices;
 using Horseshoe.NET.SecureIO.Sftp;
 
 namespace TestConsole
@@ -48,7 +49,8 @@ namespace TestConsole
                     "List FTP Directory",
                     "List SFTP Directory",
                     "regex",
-                    "FTP connection string parse tests"
+                    "FTP connection string parse tests",
+                    "WebService w/ Header"
                 },
                 title: "SSRS Test Menu"
             );
@@ -202,7 +204,14 @@ namespace TestConsole
                         Console.WriteLine();
                     }
                     break;
-                
+                case "WebService w/ Header":
+                    var wshUrl = "http://localhost:58917/fake/path";
+                    var headers = new Dictionary<string, string> { { "My-Custom-Header", "Frankenstein" } };
+                    Console.WriteLine("calling " + wshUrl + "...");
+                    int status = 0;
+                    var response = WebService.GetJson(wshUrl, headers: headers, returnMeta: (meta) => { status = meta.StatusCode; });
+                    Console.WriteLine("(" + status + ") " + response);
+                    break;
             }
         }
     }

@@ -10,8 +10,6 @@ namespace Horseshoe.NET.IO.WebServices
 {
     public static class WebServiceUtil
     {
-        public static Action<string> RawResponseReceived;
-
         public static Action<string> JsonPayloadGenerated;
 
         private static Regex PropertyNameFromBackingFieldRegex { get; } = new Regex(@"(?<=\<)[A-Z_]+(?=\>k__BackingField)", RegexOptions.IgnoreCase);

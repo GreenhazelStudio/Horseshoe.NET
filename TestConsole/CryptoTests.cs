@@ -24,6 +24,7 @@ namespace TestConsole
             "Hash (Default)",
             "Hash (SHA256 + salt)",
             "Hash (Default => SHA256 + salt)",
+            "Hash File (MD5)",
             "Encrypt Password",
             "Decrypt Password",
             "Encrypt 3 Passwords (random key, IV)",
@@ -62,6 +63,11 @@ namespace TestConsole
                     var input3 = PromptInput("Enter text to hash: ");
                     var hash3 = Hash.String(input3);
                     Console.WriteLine(hash3);
+                    break;
+                case "Hash File (MD5)":
+                    var fileToHashPath = PromptInput("Input file (or drag and drop): ").Replace("\"", "");
+                    var fileHash = Hash.File(fileToHashPath, new HashOptions { Algorithm = new System.Security.Cryptography.MD5CryptoServiceProvider() });
+                    Console.WriteLine("Hash: " + fileHash);
                     break;
                 case "Encrypt Password":
                     var passwordToEncrypt = PromptInput("Enter password to encrypt: ");
