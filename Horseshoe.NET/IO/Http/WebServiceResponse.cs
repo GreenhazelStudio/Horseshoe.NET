@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-using Horseshoe.NET.IO.WebServices.Enums;
+using Horseshoe.NET.IO.Http.Enums;
 
 using Newtonsoft.Json;
 
-namespace Horseshoe.NET.IO.WebServices
+namespace Horseshoe.NET.IO.Http
 {
     /// <summary>
     /// A custom Web API action result that can help overcome the limitations of exception result handling by treating caught
     /// exceptions as part of a standard HTTP 200 responses thereby preserving the exceptions' details. 
     /// This version of GenericResponse (with type parameter) is typically used for decoding API call responses after they are received by the caller.
     /// </summary>
-    public class WSResponse<E> where E : class
+    public class WebServiceResponse<E> where E : class
     {
         /// <summary>
         /// The data to return to the caller (will be JSONified)
@@ -38,7 +38,7 @@ namespace Horseshoe.NET.IO.WebServices
         /// The status (i.e. Ok, Error) of this response
         /// </summary>
         [JsonProperty]
-        public ResponseStatus Status { get; set; } = ResponseStatus.Ok;
+        public WebServiceResponseStatus Status { get; set; } = WebServiceResponseStatus.Ok;
 
         /// <summary>
         /// The status (i.e. Ok, Error) of this response (for client-side JavaScript)
@@ -55,7 +55,7 @@ namespace Horseshoe.NET.IO.WebServices
         /// <summary>
         /// Default constructor
         /// </summary>
-        public WSResponse()
+        public WebServiceResponse()
         {
         }
 
@@ -63,7 +63,7 @@ namespace Horseshoe.NET.IO.WebServices
         /// Constructor for a normal response (not used, client code typically only calls contructors w/ params in WSResponse, not WSResponse&lt;E&gt;)
         /// </summary>
         /// <param name="data"></param>
-        public WSResponse(E data)
+        public WebServiceResponse(E data)
         {
             this.Data = data;
         }
@@ -72,10 +72,10 @@ namespace Horseshoe.NET.IO.WebServices
         /// Constructor for an error type response (not used, client code typically only calls contructors w/ params in WSResponse, not WSResponse&lt;E&gt;)
         /// </summary>
         /// <param name="ex"></param>
-        public WSResponse(ExceptionInfo ex)
+        public WebServiceResponse(ExceptionInfo ex)
         {
             this.Exception = ExceptionInfo.From(ex);
-            Status = ResponseStatus.Error;
+            Status = WebServiceResponseStatus.Error;
         }
 
         /// <summary>
@@ -83,10 +83,10 @@ namespace Horseshoe.NET.IO.WebServices
         /// </summary>
         /// <param name="data"></param>
         /// <param name="ex"></param>
-        public WSResponse(E data, ExceptionInfo ex) : this(data)
+        public WebServiceResponse(E data, ExceptionInfo ex) : this(data)
         {
             this.Exception = ex;
-            Status = ResponseStatus.Error;
+            Status = WebServiceResponseStatus.Error;
         }
     }
 
@@ -95,12 +95,12 @@ namespace Horseshoe.NET.IO.WebServices
     /// exceptions as part of a standard HTTP 200 responses thereby preserving the exceptions' details. 
     /// This version of GenericResponse (no type parameter) is typically used for encoding the API call responses to be returned to the caller.
     /// </summary>
-    public class WSResponse : WSResponse<object>
+    public class WebServiceResponse : WebServiceResponse<object>
     {
         /// <summary>
         /// Default constructor
         /// </summary>
-        public WSResponse()
+        public WebServiceResponse()
         {
         }
 
@@ -108,7 +108,7 @@ namespace Horseshoe.NET.IO.WebServices
         /// Constructor for a normal response
         /// </summary>
         /// <param name="data"></param>
-        public WSResponse(object data) : base(data)
+        public WebServiceResponse(object data) : base(data)
         {
         }
 
@@ -116,7 +116,7 @@ namespace Horseshoe.NET.IO.WebServices
         /// Constructor for an error type response
         /// </summary>
         /// <param name="ex"></param>
-        public WSResponse(ExceptionInfo ex) : base(ex)
+        public WebServiceResponse(ExceptionInfo ex) : base(ex)
         {
         }
 
@@ -125,7 +125,7 @@ namespace Horseshoe.NET.IO.WebServices
         /// </summary>
         /// <param name="data"></param>
         /// <param name="ex"></param>
-        public WSResponse(object data, ExceptionInfo ex) : base(data, ex) 
+        public WebServiceResponse(object data, ExceptionInfo ex) : base(data, ex) 
         {
         }
     }

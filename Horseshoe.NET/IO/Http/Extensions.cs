@@ -5,7 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Horseshoe.NET.IO.WebServices
+namespace Horseshoe.NET.IO.Http
 {
     public static class Extensions
     {

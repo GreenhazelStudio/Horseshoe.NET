@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Horseshoe.NET.IO.WebServices
+namespace Horseshoe.NET.IO.Http
 {
     public static class WebServiceUtil
     {

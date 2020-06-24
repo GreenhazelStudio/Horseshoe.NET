@@ -10,7 +10,7 @@ using Horseshoe.NET.ConsoleX;
 using Horseshoe.NET.IO;
 using Horseshoe.NET.IO.Ftp;
 using Horseshoe.NET.IO.ReportingServices;
-using Horseshoe.NET.IO.WebServices;
+using Horseshoe.NET.IO.Http;
 using Horseshoe.NET.SecureIO.Sftp;
 
 namespace TestConsole
@@ -209,7 +209,7 @@ namespace TestConsole
                     var headers = new Dictionary<string, string> { { "My-Custom-Header", "Frankenstein" } };
                     Console.WriteLine("calling " + wshUrl + "...");
                     int status = 0;
-                    var response = WebService.GetJson(wshUrl, headers: headers, returnMeta: (meta) => { status = meta.StatusCode; });
+                    var response = WebService.Get(wshUrl, headers: headers, returnMetadata: (meta) => { status = meta.StatusCode; });
                     Console.WriteLine("(" + status + ") " + response);
                     break;
             }
