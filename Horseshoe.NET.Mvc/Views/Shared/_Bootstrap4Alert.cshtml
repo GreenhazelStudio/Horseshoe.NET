@@ -1,6 +1,7 @@
 ﻿@* Generator: MvcView *@
 
 @using Horseshoe.NET.Bootstrap
+@using Horseshoe.NET.Bootstrap.Extensions
 @using Horseshoe.NET.Text
 
 @model Bootstrap4.Alert
@@ -18,7 +19,7 @@
                 <strong>@Model.Emphasis</strong>@(" - ")
             }
 
-            var message = TextUtil.RevealNullOrBlank(TextUtil.Zap(Model.Message));
+            var message = TextUtil.RevealNullOrBlank(Horseshoe.NET.ObjectClean.Methods.ZapString(Model.Message));
             if (Model.EncodeHtml)
             {
                 @message
@@ -44,16 +45,18 @@
                     </div>
 
                     var preStyles = Model.IsMessageDetailsPreFormatted ? "font-family:Consolas,monospace;font-size:.8em;white-space:pre;" : "";
-                    <div id="@alertDetailsElementID" style="display:none;@preStyles">@if (Model.IsMessageDetailsEncodeHtml)
+                    <div id="@alertDetailsElementID" style="display:none;@preStyles">
+                        @if (Model.IsMessageDetailsEncodeHtml)
                         {
                             @Model.MessageDetails
                         }
                         else
                         {
                             @Html.Raw(Model.MessageDetails)
-                        }</div>
-                }
+                        }
+                </div>
             }
+        }
         }
     </div>
 }

@@ -5,12 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Horseshoe.NET;
-using Horseshoe.NET.Application;
 using Horseshoe.NET.Collections;
 using Horseshoe.NET.ConsoleX;
 using Horseshoe.NET.Crypto;
 using Horseshoe.NET.Text;
+using Horseshoe.NET.Text.Extensions;
 
 namespace TestConsole
 {

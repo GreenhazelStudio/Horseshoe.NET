@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Horseshoe.NET.Extensions;
+
 namespace Horseshoe.NET.Dates
 {
     public struct Age

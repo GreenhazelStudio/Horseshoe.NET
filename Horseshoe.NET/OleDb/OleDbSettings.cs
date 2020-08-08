@@ -37,7 +37,7 @@ namespace Horseshoe.NET.OleDb
             get
             {
                 return _GetConnectionString(_defaultConnectionString, _isEncryptedPassword)
-                    ?? _GetConnectionString(Config.GetConnectionString(DefaultConnectionStringName, suppressErrors: true), Config.GetBoolean("Horseshoe.NET:OleDb.IsEncryptedPassword"))
+                    ?? _GetConnectionString(Config.GetConnectionString(DefaultConnectionStringName, suppressErrors: true), Config.GetBool("Horseshoe.NET:OleDb.IsEncryptedPassword"))
                     ?? _GetConnectionString(OrganizationalDefaultSettings.GetString("OleDb.ConnectionString"), OrganizationalDefaultSettings.GetBoolean("OleDb.IsEncryptedPassword"));
             }
         }
@@ -92,7 +92,7 @@ namespace Horseshoe.NET.OleDb
                     (
                         Config.Get("Horseshoe.NET:OleDb.UserID"),
                         Config.Get("Horseshoe.NET:OleDb.Password"),
-                        isEncryptedPassword: Config.GetBoolean("Horseshoe.NET:OleDb.IsEncryptedPassword")
+                        isEncryptedPassword: Config.GetBool("Horseshoe.NET:OleDb.IsEncryptedPassword")
                     )
                     ?? OrganizationalDefaultSettings.GetNullable<Credential>("OleDb.Credentials");
             }

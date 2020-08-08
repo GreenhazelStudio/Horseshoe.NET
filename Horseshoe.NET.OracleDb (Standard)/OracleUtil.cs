@@ -11,10 +11,11 @@ using System.Text.RegularExpressions;
 using Oracle.ManagedDataAccess.Client;
 
 using Horseshoe.NET.Collections;
+using Horseshoe.NET.Collections.Extensions;
 using Horseshoe.NET.Crypto;
 using Horseshoe.NET.Db;
+using static Horseshoe.NET.ObjectClean.Methods;
 using Horseshoe.NET.OracleDb.Meta;
-using Horseshoe.NET.Text;
 
 namespace Horseshoe.NET.OracleDb
 {
@@ -280,10 +281,10 @@ namespace Horseshoe.NET.OracleDb
 
                 if (parts.Length > 1)
                 {
-                    serviceName = parts[1].Zap();
+                    serviceName = ZapString(parts[1]);
                     if (parts.Length > 2)
                     {
-                        instanceName = parts[2].Zap();
+                        instanceName = ZapString(parts[2]);
                     }
                 }
                 return new OraServer(dataSource, serviceName: serviceName, instanceName: instanceName, name: name ?? dataSource);

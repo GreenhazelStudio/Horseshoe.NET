@@ -9,8 +9,11 @@ using System.Linq;
 using Horseshoe.NET.Crypto;
 using Horseshoe.NET.Db;
 using static Horseshoe.NET.Db.DataUtil;
+using Horseshoe.NET.Db.Extensions;
+using static Horseshoe.NET.ObjectClean.Methods;
 using Horseshoe.NET.Objects;
 using Horseshoe.NET.Text;
+using Horseshoe.NET.Text.Extensions;
 
 namespace Horseshoe.NET.OleDb
 {
@@ -86,7 +89,7 @@ namespace Horseshoe.NET.OleDb
                     var properties = ObjectUtil.GetPublicInstanceProperties(typeof(E));
                     var objectArrays = AsObjects(conn, statement, out DataColumn[] dataColumns, timeout: timeout, autoTrunc: autoTrunc, suppressErrors: suppressErrors);
                     var normalizedColumnNames = dataColumns
-                        .Select(c => c.ColumnName.Zap(textCleanMode: TextCleanMode.RemoveWhitespace))
+                        .Select(c => ZapString(c.ColumnName, textCleanMode: TextCleanMode.RemoveWhitespace))
                         .ToArray();
                     foreach (var objects in objectArrays)
                     {
@@ -158,7 +161,7 @@ namespace Horseshoe.NET.OleDb
                             case AutoTruncate.Trim:
                                 return stringValue.Trim();
                             case AutoTruncate.Zap:
-                                return stringValue.Zap();
+                                return ZapString(stringValue);
                         }
                     }
                     return obj;
@@ -483,7 +486,7 @@ namespace Horseshoe.NET.OleDb
                     var properties = ObjectUtil.GetPublicInstanceProperties(typeof(E));
                     var objectArrays = SQL.AsObjects(conn, statement, out DataColumn[] dataColumns, timeout: timeout, autoTrunc: autoTrunc, suppressErrors: suppressErrors);
                     var normalizedColumnNames = dataColumns
-                        .Select(c => c.ColumnName.Zap(textCleanMode: TextCleanMode.RemoveWhitespace))
+                        .Select(c => ZapString(c.ColumnName, textCleanMode: TextCleanMode.RemoveWhitespace))
                         .ToArray();
                     foreach (var objects in objectArrays)
                     {
@@ -907,7 +910,7 @@ namespace Horseshoe.NET.OleDb
                         {
                             var dataColumns = reader.GetDataColumns();
                             var normalizedColumnNames = dataColumns
-                                .Select(c => c.ColumnName.Zap(textCleanMode: TextCleanMode.RemoveWhitespace))
+                                .Select(c => ZapString(c.ColumnName, textCleanMode: TextCleanMode.RemoveWhitespace))
                                 .ToArray();
                             object[] objects;
                             while (reader.Read())
@@ -1206,7 +1209,7 @@ namespace Horseshoe.NET.OleDb
                             case AutoTruncate.Trim:
                                 return stringValue.Trim();
                             case AutoTruncate.Zap:
-                                return stringValue.Zap();
+                                return ZapString(stringValue);
                         }
                     }
                     return obj;
@@ -1329,7 +1332,7 @@ namespace Horseshoe.NET.OleDb
                     var properties = ObjectUtil.GetPublicInstanceProperties(typeof(E));
                     var objectArrays = AsObjects(conn, statement, out DataColumn[] dataColumns, timeout: timeout, autoTrunc: autoTrunc, suppressErrors: suppressErrors);
                     var normalizedColumnNames = dataColumns
-                        .Select(c => c.ColumnName.Zap(textCleanMode: TextCleanMode.RemoveWhitespace))
+                        .Select(c => ZapString(c.ColumnName, textCleanMode: TextCleanMode.RemoveWhitespace))
                         .ToArray();
                     foreach (var objects in objectArrays)
                     {
@@ -1418,7 +1421,7 @@ namespace Horseshoe.NET.OleDb
                             case AutoTruncate.Trim:
                                 return stringValue.Trim();
                             case AutoTruncate.Zap:
-                                return stringValue.Zap();
+                                return ZapString(stringValue);
                         }
                     }
                     return obj;

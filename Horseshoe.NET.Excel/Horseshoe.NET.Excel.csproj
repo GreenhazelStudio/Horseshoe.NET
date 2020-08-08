@@ -61,7 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExcelColumn.cs" />
-    <Compile Include="Extensions.cs" />
+    <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Interop\ConvertExcelFile.cs" />
     <Compile Include="Interop\ExcelFileTypeByExtension.cs" />
     <Compile Include="ExcelUtil.cs" />

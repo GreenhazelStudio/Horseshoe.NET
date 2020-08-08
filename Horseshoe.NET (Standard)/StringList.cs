@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Horseshoe.NET.Collections;
+using Horseshoe.NET.Collections.Extensions;
 
 namespace Horseshoe.NET
 {

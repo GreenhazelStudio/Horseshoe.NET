@@ -54,7 +54,7 @@ namespace Horseshoe.NET.SecureIO.Sftp
             get
             {
                 return _defaultCredentials
-                    ?? Credential.Build(Config.Get("Horseshoe.NET:Sftp.UserName"), Config.Get("Horseshoe.NET:Sftp.Password"), isEncryptedPassword: Config.GetBoolean("Horseshoe.NET:Sftp.IsEncryptedPassword"))
+                    ?? Credential.Build(Config.Get("Horseshoe.NET:Sftp.UserName"), Config.Get("Horseshoe.NET:Sftp.Password"), isEncryptedPassword: Config.GetBool("Horseshoe.NET:Sftp.IsEncryptedPassword"))
                     ?? OrganizationalDefaultSettings.GetNullable<Credential>("Sftp.Credentials");
             }
             set

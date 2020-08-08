@@ -5,8 +5,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-using Horseshoe.NET.Text;
 using static Horseshoe.NET.Db.DataUtil;
+using static Horseshoe.NET.ObjectClean.Methods;
 
 namespace Horseshoe.NET.Db
 {
@@ -21,12 +21,12 @@ namespace Horseshoe.NET.Db
 
         public Filter(string columnName, FilterMode filterMode, DbProduct? product = null) :
             this(columnName, filterMode, null, product: product)
-        {
+        { 
         }
 
         public Filter(string columnName, FilterMode filterMode, object[] values, DbProduct? product = null)
         {
-            ColumnName = TextUtil.Zap(columnName);
+            ColumnName = ZapString(columnName);
             FilterMode = filterMode;
             Values = values;
             Vendor = product;

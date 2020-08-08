@@ -37,7 +37,7 @@ namespace Horseshoe.NET.Odbc
             get
             {
                 return _GetConnectionString(_defaultConnectionString, _isEncryptedPassword)
-                    ?? _GetConnectionString(Config.GetConnectionString(DefaultConnectionStringName, suppressErrors: true), Config.GetBoolean("Horseshoe.NET:Odbc.IsEncryptedPassword"))
+                    ?? _GetConnectionString(Config.GetConnectionString(DefaultConnectionStringName, suppressErrors: true), Config.GetBool("Horseshoe.NET:Odbc.IsEncryptedPassword"))
                     ?? _GetConnectionString(OrganizationalDefaultSettings.GetString("Odbc.ConnectionString"), OrganizationalDefaultSettings.GetBoolean("Odbc.IsEncryptedPassword"));
             }
         }
@@ -92,7 +92,7 @@ namespace Horseshoe.NET.Odbc
                     (
                         Config.Get("Horseshoe.NET:Odbc.UserID"),
                         Config.Get("Horseshoe.NET:Odbc.Password"),
-                        isEncryptedPassword: Config.GetBoolean("Horseshoe.NET:Odbc.IsEncryptedPassword")
+                        isEncryptedPassword: Config.GetBool("Horseshoe.NET:Odbc.IsEncryptedPassword")
                     )
                     ?? OrganizationalDefaultSettings.GetNullable<Credential>("Odbc.Credentials");
             }

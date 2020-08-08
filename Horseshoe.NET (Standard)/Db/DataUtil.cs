@@ -5,8 +5,9 @@ using System.Linq;
 using System.Security;
 using System.Text.RegularExpressions;
 
-using Horseshoe.NET.Collections;
+using Horseshoe.NET.Collections.Extensions;
 using Horseshoe.NET.Crypto;
+using static Horseshoe.NET.ObjectClean.Methods;
 using Horseshoe.NET.Text;
 
 namespace Horseshoe.NET.Db
@@ -36,7 +37,7 @@ namespace Horseshoe.NET.Db
         public static string ParseConnectionStringValue(string key, string connectionString)
         {
             var match = new Regex("(?<=" + key + "=)[^;]+", RegexOptions.IgnoreCase).Match(connectionString);
-            return TextUtil.Zap(match.Value);
+            return ZapString(match.Value);
         }
 
         public static string ParseConnectionStringValue(ConnectionStringPart part, string connectionString)
@@ -168,7 +169,7 @@ namespace Horseshoe.NET.Db
                             items[i] = stringValue.Trim();
                             break;
                         case AutoTruncate.Zap:
-                            items[i] = stringValue.Zap();
+                            items[i] = ZapString(stringValue);
                             break;
                     }
                 }

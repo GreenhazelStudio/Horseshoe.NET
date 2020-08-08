@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-using Horseshoe.NET.Collections;
+using Horseshoe.NET.Collections.Extensions;
 
 namespace Horseshoe.NET.IO.ReportingServices
 {

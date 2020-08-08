@@ -8,7 +8,7 @@ using Oracle.ManagedDataAccess.Client;
 
 using Horseshoe.NET.Crypto;
 using Horseshoe.NET.Db;
-using Horseshoe.NET.Text;
+using Horseshoe.NET.Text.Extensions;
 
 namespace Horseshoe.NET.OracleDb
 {

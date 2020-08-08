@@ -7,7 +7,8 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
 
-using Horseshoe.NET.Text;
+using Horseshoe.NET.Text.Extensions;
+using static Horseshoe.NET.ObjectClean.Methods;
 
 namespace Horseshoe.NET.Application
 {
@@ -50,7 +51,7 @@ namespace Horseshoe.NET.Application
             // load error prone variables
             try
             {
-                consoleTitle = TextUtil.Zap(Console.Title);
+                consoleTitle = ZapString(Console.Title);
             }
             finally { }
 

@@ -51,7 +51,7 @@ namespace Horseshoe.NET.Bootstrap
             get
             {
                 return _autoCloseable
-                    ?? Config.GetNBoolean("Horseshoe.NET:Bootstrap.AutoCloseable")
+                    ?? Config.GetNBool("Horseshoe.NET:Bootstrap.AutoCloseable")
                     ?? OrganizationalDefaultSettings.GetNBoolean("Bootstrap.AutoCloseable")
                     ?? false;
             }

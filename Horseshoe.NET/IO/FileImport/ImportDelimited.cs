@@ -6,10 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Horseshoe.NET.Collections;
+using Horseshoe.NET.Collections.Extensions;
 using static Horseshoe.NET.IO.FileImport.ImportUtil;
+using static Horseshoe.NET.ObjectClean.Methods;
 using Horseshoe.NET.Text;
-using static Horseshoe.NET.Text.TextUtil;  // Zap(), etc.
 
 namespace Horseshoe.NET.IO.FileImport
 {
@@ -163,7 +163,7 @@ namespace Horseshoe.NET.IO.FileImport
             _list.Add(PostParseString(_valueTemp.ToString(), autoTrunc));
             _valueTemp.Clear();
 
-            if (_list.Count == 1 && Zap(_list[0]) == null)
+            if (_list.Count == 1 && ZapString(_list[0]) == null)
             {
                 return null;
             }

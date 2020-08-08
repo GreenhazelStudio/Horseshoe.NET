@@ -6,12 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Horseshoe.NET.Collections;
+using Horseshoe.NET.Collections.Extensions;
+using Horseshoe.NET.Excel.Extensions;
 using Horseshoe.NET.IO.FileImport;
 using static Horseshoe.NET.IO.FileImport.ImportUtil;
+using static Horseshoe.NET.ObjectClean.Methods;
 using Horseshoe.NET.Objects;
 using Horseshoe.NET.Text;
-using static Horseshoe.NET.Text.TextUtil;  // Zap(), etc.
 
 using NPOI.HSSF.UserModel;
 using NPOI.XSSF.UserModel;
@@ -502,8 +503,8 @@ namespace Horseshoe.NET.Excel
                     E e = new E();
                     for (int i = 0; i < columns.Length; i++)
                     {
-                        var propertyName = Zap(columns[i].Name, textCleanMode: TextCleanMode.RemoveWhitespace, charsToRemove: charsToRemove);
-                        e.SetInstanceProperty(propertyName, array[i], ignoreCase: true);
+                        var propertyName = ZapString(columns[i].Name, textCleanMode: TextCleanMode.RemoveWhitespace, charsToRemove: charsToRemove);
+                        ObjectUtil.SetInstanceProperty(e, propertyName, array[i], ignoreCase: true);
                     }
                     list.Add(e);
                 }

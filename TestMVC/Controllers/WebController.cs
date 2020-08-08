@@ -7,7 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 
 using Horseshoe.NET.Bootstrap;
-using Horseshoe.NET.Mvc;
+using Horseshoe.NET.Mvc.Extensions;
 using Horseshoe.NET.Text;
 
 using TestMVC.ViewModels;

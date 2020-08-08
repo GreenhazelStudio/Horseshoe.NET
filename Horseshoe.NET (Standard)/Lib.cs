@@ -5,6 +5,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
+using Horseshoe.NET.Extensions;
+
 namespace Horseshoe.NET
 {
     public static class Lib

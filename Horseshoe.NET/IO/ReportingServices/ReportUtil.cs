@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
-using Horseshoe.NET.Text;
+using Horseshoe.NET.Text.Extensions;
 
 namespace Horseshoe.NET.IO.ReportingServices
 {

@@ -38,7 +38,7 @@ namespace Horseshoe.NET.SqlDb
             get
             {
                 return _GetConnectionString(_defaultConnectionString, _isEncryptedPassword)
-                    ?? _GetConnectionString(Config.GetConnectionString(DefaultConnectionStringName, suppressErrors: true), Config.GetBoolean("Horseshoe.NET:Sql.IsEncryptedPassword"))
+                    ?? _GetConnectionString(Config.GetConnectionString(DefaultConnectionStringName, suppressErrors: true), Config.GetBool("Horseshoe.NET:Sql.IsEncryptedPassword"))
                     ?? _GetConnectionString(OrganizationalDefaultSettings.GetString("Sql.ConnectionString"), OrganizationalDefaultSettings.GetBoolean("Sql.IsEncryptedPassword"));
             }
         }
@@ -136,7 +136,7 @@ namespace Horseshoe.NET.SqlDb
                     (
                         Config.Get("Horseshoe.NET:Sql.UserID"), 
                         Config.Get("Horseshoe.NET:Sql.Password"), 
-                        isEncryptedPassword: Config.GetBoolean("Horseshoe.NET:Sql.IsEncryptedPassword")
+                        isEncryptedPassword: Config.GetBool("Horseshoe.NET:Sql.IsEncryptedPassword")
                     )
                     ?? OrganizationalDefaultSettings.GetNullable<Credential>("Sql.Credentials");
             }

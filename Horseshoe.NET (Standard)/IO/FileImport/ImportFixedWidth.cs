@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Horseshoe.NET.Collections;
+using Horseshoe.NET.Collections.Extensions;
 using static Horseshoe.NET.IO.FileImport.ImportUtil;
+using static Horseshoe.NET.ObjectClean.Methods;
 using Horseshoe.NET.Objects;
 using Horseshoe.NET.Text;
-using static Horseshoe.NET.Text.TextUtil;
 
 namespace Horseshoe.NET.IO.FileImport
 {
@@ -133,8 +133,8 @@ namespace Horseshoe.NET.IO.FileImport
                         E e = new E();
                         for (int i = 0; i < columns.Length; i++)
                         {
-                            var propertyName = Zap(columns[i].Name, textCleanMode: TextCleanMode.RemoveWhitespace, charsToRemove: charsToRemove);
-                            e.SetInstanceProperty(propertyName, array[i], ignoreCase: true);
+                            var propertyName = ZapString(columns[i].Name, textCleanMode: TextCleanMode.RemoveWhitespace, charsToRemove: charsToRemove);
+                            ObjectUtil.SetInstanceProperty(e, propertyName, array[i], ignoreCase: true);
                         }
                         list.Add(e);
                     }

@@ -6,7 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 
 using Horseshoe.NET.Bootstrap;
-using Horseshoe.NET.WebForms;
+using Horseshoe.NET.WebForms.Extensions;
 
 namespace TestWebForms
 {

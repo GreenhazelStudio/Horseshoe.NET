@@ -7,7 +7,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 
+using Horseshoe.NET.Extensions;
+using static Horseshoe.NET.ObjectClean.Methods;
 using Horseshoe.NET.Text;
+using Horseshoe.NET.Text.Extensions;
 
 namespace Horseshoe.NET.IO
 {
@@ -42,7 +45,7 @@ namespace Horseshoe.NET.IO
             var targetPath = Path.Combine
             (
                 targetDirectory ?? Path.GetTempPath(),
-                targetFileName ?? TextUtil.Zap(ParseFileNameFromURL(url, "file", fileType))
+                targetFileName ?? ZapString(ParseFileNameFromURL(url, "file", fileType))
             );
             var bytes = BytesFromWeb(url, credentials: credentials);
             File.WriteAllBytes(targetPath, bytes);

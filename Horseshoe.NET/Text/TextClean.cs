@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-using Horseshoe.NET.Collections;
+using Horseshoe.NET.Collections.Extensions;
 
 namespace Horseshoe.NET.Text
 {

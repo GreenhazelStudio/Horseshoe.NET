@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using static Horseshoe.NET.Objects.ObjectUtil;
+using static Horseshoe.NET.ObjectClean.Methods;
 
 namespace Horseshoe.NET.IO.FileImport
 {
@@ -74,9 +74,9 @@ namespace Horseshoe.NET.IO.FileImport
 
         public static Column NDecimal(string name, int width = 0) => new NullableColumn { Name = name, Width = width, DataType = DataType.Decimal, ValueConverter = (obj) => ZapNDecimal(obj) };
 
-        public static Column Boolean(string name, int width = 0) => new Column { Name = name, Width = width, DataType = DataType.Boolean, ValueConverter = (obj) => ZapBoolean(obj) };
+        public static Column Boolean(string name, int width = 0) => new Column { Name = name, Width = width, DataType = DataType.Boolean, ValueConverter = (obj) => ZapBool(obj) };
 
-        public static Column NBoolean(string name, int width = 0) => new NullableColumn { Name = name, Width = width, DataType = DataType.Boolean, ValueConverter = (obj) => ZapNBoolean(obj) };
+        public static Column NBoolean(string name, int width = 0) => new NullableColumn { Name = name, Width = width, DataType = DataType.Boolean, ValueConverter = (obj) => ZapNBool(obj) };
 
         public static Column Date(string name, int width = 0) => new Column
         {

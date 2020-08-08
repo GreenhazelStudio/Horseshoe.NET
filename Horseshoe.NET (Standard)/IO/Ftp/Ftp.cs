@@ -7,7 +7,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
+using Horseshoe.NET.Extensions;
 using Horseshoe.NET.Text;
+using Horseshoe.NET.Text.Extensions;
 
 namespace Horseshoe.NET.IO.Ftp
 {

@@ -4,8 +4,11 @@ using System.Linq;
 using System.Security;
 using System.Text;
 
-using Horseshoe.NET.Collections;
-using Horseshoe.NET.Text;
+using Horseshoe.NET.Collections.Extensions;
+using Horseshoe.NET.ConsoleX.Extensions;
+using Horseshoe.NET.Extensions;
+using static Horseshoe.NET.ObjectClean.Methods;
+using Horseshoe.NET.Text.Extensions;
 
 namespace Horseshoe.NET.ConsoleX
 {
@@ -108,11 +111,11 @@ namespace Horseshoe.NET.ConsoleX
                 {
                     if (custItem.PrependToMenu)
                     {
-                        menuItemUniformer.InsertUniqueMenuItem(prependedCount++, TextUtil.Zap(custItem.Command) ?? "<┘", custItem.Text);
+                        menuItemUniformer.InsertUniqueMenuItem(prependedCount++, ZapString(custItem.Command) ?? "<┘", custItem.Text);
                     }
                     else
                     {
-                        menuItemUniformer.AddUniqueMenuItem(TextUtil.Zap(custItem.Command) ?? "<┘", custItem.Text);
+                        menuItemUniformer.AddUniqueMenuItem(ZapString(custItem.Command) ?? "<┘", custItem.Text);
                     }
                 }
             }
