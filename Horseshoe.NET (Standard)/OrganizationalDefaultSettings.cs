@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,6 +48,8 @@ namespace Horseshoe.NET
 
         static OrganizationalDefaultSettings()
         {
+            //Set("ActiveDirectory.Domain", "mydomain.com");
+
             //Set("Bootstrap.ExceptionRendering", Bootstrap.ExceptionRenderingPolicy.Dynamic);
             //Set("Bootstrap.AutoCloseable", true);
 
@@ -109,6 +111,7 @@ namespace Horseshoe.NET
             //Set("WebService.Credentials", new Credential("WebServiceUser", "gyHt82bNmre457sjd709Aq1==", isEncryptedPassword: true));
         }
 
+        [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "May be used by organizations who customize Horseshoe.NET via this class.")]
         static void Set(string key, object value)
         {
             if (value != null)

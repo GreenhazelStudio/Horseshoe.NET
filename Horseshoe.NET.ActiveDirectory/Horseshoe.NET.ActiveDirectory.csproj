@@ -50,6 +50,7 @@
     <Compile Include="ObjectClass.cs" />
     <Compile Include="OUInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ADSettings.cs" />
     <Compile Include="UserInfo.cs" />
     <Compile Include="UserProperty.cs" />
   </ItemGroup>

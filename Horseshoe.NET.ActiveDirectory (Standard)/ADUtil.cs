@@ -18,9 +18,20 @@ namespace Horseshoe.NET.ActiveDirectory
         private static readonly Regex ParseOURegex = new Regex(@"(?<=OU\=)[^,]+");
 
         /// <summary>
+        /// Builds a PrincipalContext of type 'Domain' for AD query operations
+        /// </summary>
+        public static PrincipalContext GetDomainContext(string domain = null)
+        {
+            var _domain = domain ?? ADSettings.DefaultDomain;
+            return _domain == null
+                ? new PrincipalContext(ContextType.Domain)
+                : new PrincipalContext(ContextType.Domain, _domain);
+        }
+
+        /// <summary>
         /// Validates user credentials and, if successful, returns the associated user information
         /// </summary>
-        public static UserInfo Authenticate(string samAccountName, string plainTextPassword)
+        public static UserInfo Authenticate(string samAccountName, string plainTextPassword, string domain = null)
         {
             if (string.IsNullOrEmpty(samAccountName))
             {
@@ -28,7 +39,7 @@ namespace Horseshoe.NET.ActiveDirectory
             }
             try
             {
-                using (var context = new PrincipalContext(ContextType.Domain))
+                using (var context = GetDomainContext(domain))
                 {
                     if (context.ValidateCredentials(samAccountName, plainTextPassword, ContextOptions.Negotiate))
                     {
@@ -51,14 +62,14 @@ namespace Horseshoe.NET.ActiveDirectory
         /// <summary>
         /// Validates user credentials (other than SAMAccountName) and, if successful, returns the associated user information
         /// </summary>
-        public static UserInfo Authenticate(string userSearchTerm, string plainTextPassword, UserProperty? userProperty = null)
+        public static UserInfo LookupAndAuthenticate(string userSearchTerm, string plainTextPassword, UserProperty? userProperty = null, string domain = null)
         {
             if (string.IsNullOrEmpty(userSearchTerm))
             {
                 throw new ADException("Please supply a search term");
             }
             var userInfo = LookupUser(userSearchTerm, userProperty: userProperty);
-            return Authenticate(userInfo.SAMAccountName, plainTextPassword);
+            return Authenticate(userInfo.SAMAccountName, plainTextPassword, domain: domain);
         }
 
         /* * * * * * * * * * * * * * * * * * * 
