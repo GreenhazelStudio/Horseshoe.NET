@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Horseshoe.NET.Text;
+using static Horseshoe.NET.ObjectClean.Methods;
 
 namespace Horseshoe.NET.OracleDb.Meta
 {
@@ -46,7 +46,7 @@ namespace Horseshoe.NET.OracleDb.Meta
 
         internal static OraColumnType LookupColumnType(string type)
         {
-            return TextUtil.ZapNEnum<OraColumnType>(type, ignoreCase: true, suppressErrors: true) 
+            return ZapNEnum<OraColumnType>(type, ignoreCase: true, suppressErrors: true) 
                 ?? OraColumnType.NON_STANDARD_COLUMN_TYPE;
         }
 

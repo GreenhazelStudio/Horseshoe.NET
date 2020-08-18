@@ -4,8 +4,8 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
-using Horseshoe.NET.Application;
 using Horseshoe.NET.Text;
+using Horseshoe.NET.Text.Extensions;
 
 namespace Horseshoe.NET.Objects
 {
@@ -21,206 +21,6 @@ namespace Horseshoe.NET.Objects
             if (IsNull(obj)) return true;
             if (obj is string stringValue && stringValue.Trim().Length == 0) return true;
             return false;
-        }
-
-        public static string ZapString(object obj, string defaultValue = null)
-        {
-            if (IsNullOrBlank(obj)) return defaultValue;
-            if (obj is string stringValue) return stringValue.Trim();
-            return obj.ToString();
-        }
-
-        public static byte ZapByte(object obj, byte defaultValue = default)
-        {
-            return ZapNByte(obj) ?? defaultValue;
-        }
-
-        public static byte? ZapNByte(object obj)
-        {
-            if (IsNullOrBlank(obj)) return null;
-            if (obj is byte byteValue) return byteValue;
-            try
-            {
-                return Convert.ToByte(obj);
-            }
-            catch (Exception ex)
-            {
-                throw new UtilityException("\"" + obj + "\" cannot be converted to byte", ex);
-            }
-        }
-
-        public static short ZapShort(object obj, short defaultValue = default)
-        {
-            return ZapNShort(obj) ?? defaultValue;
-        }
-
-        public static short? ZapNShort(object obj)
-        {
-            if (IsNullOrBlank(obj)) return null;
-            if (obj is short shortValue) return shortValue;
-            try
-            {
-                return Convert.ToInt16(obj);
-            }
-            catch (Exception ex)
-            {
-                throw new UtilityException("\"" + obj + "\" cannot be converted to short", ex);
-            }
-        }
-
-        public static int ZapInt(object obj, int defaultValue = default)
-        {
-            return ZapNInt(obj) ?? defaultValue;
-        }
-
-        public static int? ZapNInt(object obj)
-        {
-            if (IsNullOrBlank(obj)) return null;
-            if (obj is int intValue) return intValue;
-            try
-            {
-                return Convert.ToInt32(obj);
-            }
-            catch (Exception ex)
-            {
-                throw new UtilityException("\"" + obj + "\" cannot be converted to int", ex);
-            }
-        }
-
-        public static long ZapLong(object obj, long defaultValue = default)
-        {
-            return ZapNLong(obj) ?? defaultValue;
-        }
-
-        public static long? ZapNLong(object obj)
-        {
-            if (IsNullOrBlank(obj)) return null;
-            if (obj is long longValue) return longValue;
-            try
-            {
-                return Convert.ToInt64(obj);
-            }
-            catch (Exception ex)
-            {
-                throw new UtilityException("\"" + obj + "\" cannot be converted to long", ex);
-            }
-        }
-
-        public static float ZapFloat(object obj, float defaultValue = default)
-        {
-            return ZapNFloat(obj) ?? defaultValue;
-        }
-
-        public static float? ZapNFloat(object obj)
-        {
-            if (IsNullOrBlank(obj)) return null;
-            if (obj is float floatValue) return floatValue;
-            try
-            {
-                return (float)Convert.ToDouble(obj);
-            }
-            catch (Exception ex)
-            {
-                throw new UtilityException("\"" + obj + "\" cannot be converted to float", ex);
-            }
-        }
-
-        public static double ZapDouble(object obj, double defaultValue = default)
-        {
-            return ZapNDouble(obj) ?? defaultValue;
-        }
-
-        public static double? ZapNDouble(object obj)
-        {
-            if (IsNullOrBlank(obj)) return null;
-            if (obj is double doubleValue) return doubleValue;
-            try
-            {
-                return Convert.ToDouble(obj);
-            }
-            catch (Exception ex)
-            {
-                throw new UtilityException("\"" + obj + "\" cannot be converted to double", ex);
-            }
-        }
-
-        public static decimal ZapDecimal(object obj, decimal defaultValue = default)
-        {
-            return ZapNDecimal(obj) ?? defaultValue;
-        }
-
-        public static decimal? ZapNDecimal(object obj)
-        {
-            if (IsNullOrBlank(obj)) return null;
-            if (obj is decimal decimalValue) return decimalValue;
-            try
-            {
-                return Convert.ToDecimal(obj);
-            }
-            catch (Exception ex)
-            {
-                throw new UtilityException("\"" + obj + "\" cannot be converted to decimal", ex);
-            }
-        }
-
-        public static bool ZapBoolean(object obj, bool defaultValue = default)
-        {
-            return ZapNBoolean(obj) ?? defaultValue;
-        }
-
-        public static bool? ZapNBoolean(object obj)
-        {
-            if (IsNullOrBlank(obj)) return null;
-            if (obj is bool boolValue) return boolValue;
-            if (obj is string stringValue) return TextUtil.ZapNBoolean(stringValue);
-            try
-            {
-                return Convert.ToBoolean(obj);
-            }
-            catch (Exception ex)
-            {
-                throw new UtilityException("\"" + obj + "\" cannot be converted to bool", ex);
-            }
-        }
-
-        public static DateTime ZapDateTime(object obj, DateTime defaultValue = default)
-        {
-            return ZapNDateTime(obj) ?? defaultValue;
-        }
-
-        public static DateTime? ZapNDateTime(object obj)
-        {
-            if (IsNullOrBlank(obj)) return null;
-            if (obj is DateTime dateTimeValue) return dateTimeValue;
-            try
-            {
-                return Convert.ToDateTime(obj);
-            }
-            catch (Exception ex)
-            {
-                throw new UtilityException("\"" + obj + "\" cannot be converted to DateTime", ex);
-            }
-        }
-
-        public static T ZapEnum<T>(object obj, T defaultValue = default) where T : struct
-        {
-            return ZapNEnum<T>(obj) ?? defaultValue;
-        }
-
-        public static T? ZapNEnum<T>(object obj, bool ignoreCase = false) where T : struct
-        {
-            if (!typeof(T).IsEnum) throw new UtilityException("Not an enum type: " + typeof(T).FullName);
-            if (IsNullOrBlank(obj)) return null;
-            if (obj is T enumValue) return enumValue;
-            if (obj is string stringValue) return TextUtil.ZapNEnum<T>(stringValue, ignoreCase: ignoreCase);
-            try
-            {
-                return (T)Enum.ToObject(typeof(T), obj);
-            }
-            catch(Exception ex)
-            {
-                throw new UtilityException("\"" + obj + "\" cannot be converted to " + typeof(T).FullName + " due to: " + ex.Message, ex);
-            }
         }
 
         public static PropertyInfo[] GetProperties<T>(BindingFlags? bindingFlags = null, Func<PropertyInfo, bool> filter = null) where T : class
@@ -279,7 +79,7 @@ namespace Horseshoe.NET.Objects
         {
             if (type == null) throw new UtilityException("type cannot be null");
             if (name == null) throw new UtilityException("name cannot be null");
-            if (!name.Equals(TextUtil.Zap(name, textCleanMode: TextCleanMode.RemoveWhitespace))) throw new UtilityException("name cannot contain whitespace");
+            if (name.HasWhitespace()) throw new UtilityException("name cannot contain whitespace");
             var searchCriteria = SearchCriteria.Equals(name, ignoreCase: ignoreCase);
             bool filter(PropertyInfo property) => searchCriteria.Evaluate(property.Name);
             var properties = GetProperties(type, bindingFlags: bindingFlags, filter: filter);

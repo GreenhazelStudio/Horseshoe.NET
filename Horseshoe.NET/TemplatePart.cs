@@ -16,7 +16,7 @@ namespace Horseshoe.NET
         internal string GetReplacementTemplatePart(object value)    // e.g. "5/16/2012"
         {
             string format = Format == null ? "" : ":" + Format;
-            return string.Format("{0" + format + "}", value.GetNestedPropertyValue(PropertyName).Value);
+            return string.Format("{0" + format + "}", ObjectUtil.GetNestedPropertyValue(value, PropertyName).Value);
         }
 
         internal static TemplatePart Parse(string rawTemplatePart)

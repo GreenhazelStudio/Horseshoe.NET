@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using static Horseshoe.NET.ObjectClean.Methods;
 using Horseshoe.NET.Text;
 
 namespace Horseshoe.NET.IO.FileImport
@@ -56,7 +57,7 @@ namespace Horseshoe.NET.IO.FileImport
         {
             if (autoTrunc == AutoTruncate.Zap)
             {
-                value = TextUtil.Zap(value);
+                value = ZapString(value);
             }
             else if (autoTrunc == AutoTruncate.Trim)
             {

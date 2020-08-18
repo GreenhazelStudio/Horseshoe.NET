@@ -8,9 +8,12 @@ using System.Threading;
 
 using Horseshoe.NET.Crypto;
 using Horseshoe.NET.Db;
+using Horseshoe.NET.Db.Extensions;
 using static Horseshoe.NET.Db.DataUtil;
+using Horseshoe.NET.ObjectClean.Extensions;
 using Horseshoe.NET.Objects;
 using Horseshoe.NET.Text;
+using Horseshoe.NET.Text.Extensions;
 
 using Oracle.ManagedDataAccess.Client;
 
@@ -88,7 +91,7 @@ namespace Horseshoe.NET.OracleDb
                     var properties = ObjectUtil.GetPublicInstanceProperties(typeof(E));
                     var objectArrays = AsObjects(conn, statement, out DataColumn[] dataColumns, timeout: timeout, autoTrunc: autoTrunc, suppressErrors: suppressErrors);
                     var normalizedColumnNames = dataColumns
-                        .Select(c => c.ColumnName.Zap(textCleanMode: TextCleanMode.RemoveWhitespace))
+                        .Select(c => c.ColumnName.ZapString(textCleanMode: TextCleanMode.RemoveWhitespace))
                         .ToArray();
                     foreach (var objects in objectArrays)
                     {
@@ -558,7 +561,7 @@ namespace Horseshoe.NET.OracleDb
                     var properties = ObjectUtil.GetPublicInstanceProperties(typeof(E));
                     var objectArrays = SQL.AsObjects(conn, statement, out DataColumn[] dataColumns, timeout: timeout, autoTrunc: autoTrunc, suppressErrors: suppressErrors);
                     var normalizedColumnNames = dataColumns
-                        .Select(c => c.ColumnName.Zap(textCleanMode: TextCleanMode.RemoveWhitespace))
+                        .Select(c => c.ColumnName.ZapString(textCleanMode: TextCleanMode.RemoveWhitespace))
                         .ToArray();
                     foreach (var objects in objectArrays)
                     {
@@ -1036,7 +1039,7 @@ namespace Horseshoe.NET.OracleDb
                                 {
                                     var dataColumns = reader.GetDataColumns();
                                     var normalizedColumnNames = dataColumns
-                                        .Select(c => c.ColumnName.Zap(textCleanMode: TextCleanMode.RemoveWhitespace))
+                                        .Select(c => c.ColumnName.ZapString(textCleanMode: TextCleanMode.RemoveWhitespace))
                                         .ToArray();
                                     object[] objects;
                                     while (reader.Read())
@@ -1549,7 +1552,7 @@ namespace Horseshoe.NET.OracleDb
                     var properties = ObjectUtil.GetPublicInstanceProperties(typeof(E));
                     var objectArrays = AsObjects(conn, statement, out DataColumn[] dataColumns, timeout: timeout, autoTrunc: autoTrunc, suppressErrors: suppressErrors);
                     var normalizedColumnNames = dataColumns
-                        .Select(c => c.ColumnName.Zap(textCleanMode: TextCleanMode.RemoveWhitespace))
+                        .Select(c => c.ColumnName.ZapString(textCleanMode: TextCleanMode.RemoveWhitespace))
                         .ToArray();
                     foreach (var objects in objectArrays)
                     {

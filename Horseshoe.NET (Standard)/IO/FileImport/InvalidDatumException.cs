@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Horseshoe.NET.Text;
+using Horseshoe.NET.Text.Extensions;
 
 namespace Horseshoe.NET.IO.FileImport
 {

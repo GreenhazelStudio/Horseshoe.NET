@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Horseshoe.NET.Bootstrap.Extensions;
+using Horseshoe.NET.Extensions;
+
 namespace Horseshoe.NET.Bootstrap
 {
     public static class Bootstrap3

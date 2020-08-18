@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 
 using Horseshoe.NET.Collections;
-using Horseshoe.NET.Text;
+using Horseshoe.NET.Collections.Extensions;
+using static Horseshoe.NET.ObjectClean.Methods;
 
 namespace Horseshoe.NET.SqlDb.Meta
 {
@@ -16,7 +17,7 @@ namespace Horseshoe.NET.SqlDb.Meta
 
         public DbServer(string dataSource, DbVersion version = null, string name = null) : base(name ?? dataSource, SqlObjectType.Server)
         {
-            DataSource = TextUtil.Zap(dataSource) ?? throw new UtilityException("Data source cannot be null or blank");
+            DataSource = ZapString(dataSource) ?? throw new UtilityException("Data source cannot be null or blank");
             Version = version;
         }
 

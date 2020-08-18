@@ -57,11 +57,11 @@
     <Compile Include="Bootstrap\Bootstrap3.cs" />
     <Compile Include="Bootstrap\Bootstrap4.cs" />
     <Compile Include="Bootstrap\ExceptionRenderingPolicy.cs" />
-    <Compile Include="Bootstrap\Extensions.cs" />
+    <Compile Include="Bootstrap\Extensions\Extensions.cs" />
     <Compile Include="Bootstrap\BootstrapSettings.cs" />
     <Compile Include="Collections\CollectionPosition.cs" />
     <Compile Include="Collections\CollectionUtil.cs" />
-    <Compile Include="Collections\Extensions.cs" />
+    <Compile Include="Collections\Extensions\Extensions.cs" />
     <Compile Include="Collections\ImmutableDictionary.cs" />
     <Compile Include="Collections\Iteration.cs" />
     <Compile Include="Collections\IterationException.cs" />
@@ -69,7 +69,7 @@
     <Compile Include="ConsoleX\ConsoleApp.cs" />
     <Compile Include="ConsoleX\ConsoleUtil.cs" />
     <Compile Include="ConsoleX\CustomMenuItem.cs" />
-    <Compile Include="ConsoleX\Extensions.cs" />
+    <Compile Include="ConsoleX\Extensions\Extensions.cs" />
     <Compile Include="ConsoleX\ListIndexPolicy.cs" />
     <Compile Include="ConsoleX\LRUniformer.cs" />
     <Compile Include="ConsoleX\MenuSelection.cs" />
@@ -81,10 +81,12 @@
     <Compile Include="Crypto\CryptoUtil.cs" />
     <Compile Include="Crypto\Decrypt.cs" />
     <Compile Include="Crypto\Encrypt.cs" />
-    <Compile Include="Crypto\Extensions.cs" />
+    <Compile Include="Crypto\Extensions\Extensions.cs" />
     <Compile Include="Crypto\Hash.cs" />
     <Compile Include="Crypto\HashOptions.cs" />
     <Compile Include="Crypto\CryptoSettings.cs" />
+    <Compile Include="ObjectClean\Extensions\Extensions.cs" />
+    <Compile Include="ObjectClean\Methods.cs" />
     <Compile Include="Dates\Age.cs" />
     <Compile Include="Db\AutoSort.cs" />
     <Compile Include="Db\Column.cs" />
@@ -93,7 +95,7 @@
     <Compile Include="Db\DataUtil.cs" />
     <Compile Include="Db\DbProduct.cs" />
     <Compile Include="Db\Delegates.cs" />
-    <Compile Include="Db\Extensions.cs" />
+    <Compile Include="Db\Extensions\Extensions.cs" />
     <Compile Include="Db\Filter.cs" />
     <Compile Include="Db\FilterMode.cs" />
     <Compile Include="Db\SystemValue.cs" />
@@ -105,7 +107,7 @@
     <Compile Include="IO\Ftp\Delegates.cs" />
     <Compile Include="IO\Http\WebDocument.cs" />
     <Compile Include="IO\NamedMemoryStream.cs" />
-    <Compile Include="IO\Http\Extensions.cs" />
+    <Compile Include="IO\Http\Extensions\Extensions.cs" />
     <Compile Include="IO\Http\HttpResponseMetadata.cs" />
     <Compile Include="Machine.cs" />
     <Compile Include="StringList.cs" />
@@ -120,7 +122,7 @@
     <Compile Include="IO\Email\SmtpConnectionInfo.cs" />
     <Compile Include="IO\Email\SmtpUtil.cs" />
     <Compile Include="ExceptionInfo.cs" />
-    <Compile Include="Extensions.cs" />
+    <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="CustomMapping.cs" />
     <Compile Include="IO\FileImport\DataErrorHandlingPolicy.cs" />
     <Compile Include="IO\FileImport\DataImportException.cs" />
@@ -145,7 +147,7 @@
     <Compile Include="IO\FileImport\Column.cs" />
     <Compile Include="IO\FileImport\DataType.cs" />
     <Compile Include="IO\DirectoryCopyMode.cs" />
-    <Compile Include="IO\FileImport\Extensions.cs" />
+    <Compile Include="IO\FileImport\Extensions\Extensions.cs" />
     <Compile Include="IO\FileSize.cs" />
     <Compile Include="IO\FileType.cs" />
     <Compile Include="IO\FileUtil.cs" />
@@ -166,7 +168,7 @@
     <Compile Include="Lib.cs" />
     <Compile Include="Logic.cs" />
     <Compile Include="NumberUtil.cs" />
-    <Compile Include="Objects\Extensions.cs" />
+    <Compile Include="Objects\Extensions\Extensions.cs" />
     <Compile Include="Objects\IPropertyValue.cs" />
     <Compile Include="Objects\ObjectUtil.cs" />
     <Compile Include="Objects\PropertyValue.cs" />
@@ -178,7 +180,7 @@
     <Compile Include="Text\Delegates.cs" />
     <Compile Include="Text\Deserialize.cs" />
     <Compile Include="Text\Direction.cs" />
-    <Compile Include="Text\Extensions.cs" />
+    <Compile Include="Text\Extensions\Extensions.cs" />
     <Compile Include="Text\RepeatMode.cs" />
     <Compile Include="Text\SearchCriteria.cs" />
     <Compile Include="Text\Serialize.cs" />
@@ -188,7 +190,7 @@
     <Compile Include="Text\TruncateMarker.cs" />
     <Compile Include="UtilityException.cs" />
     <Compile Include="ValidationException.cs" />
-    <Compile Include="WebForms\Extensions.cs" />
+    <Compile Include="WebForms\Extensions\Extensions.cs" />
     <Compile Include="WebForms\WebFormsBootstrap3Alert.cs" />
     <Compile Include="WebForms\WebFormsBootstrap4Alert.cs" />
   </ItemGroup>

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-using Horseshoe.NET.Mvc;
+using Horseshoe.NET.Mvc.Extensions;
 
 namespace TestMVC.Controllers
 {

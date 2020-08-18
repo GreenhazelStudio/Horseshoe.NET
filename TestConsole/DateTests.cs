@@ -5,10 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Horseshoe.NET;
-using Horseshoe.NET.Application;
+using Horseshoe.NET.Extensions;
 using Horseshoe.NET.ConsoleX;
-using Horseshoe.NET.Text;
 
 namespace TestConsole
 {

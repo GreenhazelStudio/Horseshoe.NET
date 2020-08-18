@@ -27,13 +27,19 @@ namespace ASP
     using System.Web.UI;
     using System.Web.WebPages;
     
-    #line 1 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+    #line 3 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
     using Horseshoe.NET.Bootstrap;
     
     #line default
     #line hidden
     
-    #line 2 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+    #line 4 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+    using Horseshoe.NET.Bootstrap.Extensions;
+    
+    #line default
+    #line hidden
+    
+    #line 5 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
     using Horseshoe.NET.Text;
     
     #line default
@@ -48,10 +54,12 @@ namespace ASP
         }
         public override void Execute()
         {
+WriteLiteral("\r\n\r\n");
+
 WriteLiteral("\r\n");
 
             
-            #line 6 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+            #line 9 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
   
 
             
@@ -59,27 +67,27 @@ WriteLiteral("\r\n");
             #line hidden
 WriteLiteral("    <div");
 
-WriteAttribute("class", Tuple.Create(" class=\"", 100), Tuple.Create("\"", 193)
-, Tuple.Create(Tuple.Create("", 108), Tuple.Create("alert", 108), true)
+WriteAttribute("class", Tuple.Create(" class=\"", 171), Tuple.Create("\"", 264)
+, Tuple.Create(Tuple.Create("", 179), Tuple.Create("alert", 179), true)
             
-            #line 7 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
-, Tuple.Create(Tuple.Create(" ", 113), Tuple.Create<System.Object, System.Int32>(Model.AlertType.ToCssClass() + (Model.Closeable ? " alert-dismissible" : "")
+            #line 10 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+, Tuple.Create(Tuple.Create(" ", 184), Tuple.Create<System.Object, System.Int32>(Model.AlertType.ToCssClass() + (Model.Closeable ? " alert-dismissible" : "")
             
             #line default
             #line hidden
-, 114), false)
+, 185), false)
 );
 
 WriteLiteral(">\r\n");
 
             
-            #line 8 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+            #line 11 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
         
             
             #line default
             #line hidden
             
-            #line 8 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+            #line 11 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
           
             if (Model.Closeable)
             {
@@ -100,7 +108,7 @@ WriteLiteral(" aria-label=\"close\"");
 WriteLiteral(">&times;</button>\r\n");
 
             
-            #line 12 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+            #line 15 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
             }
 
             if (Model.Emphasis != null)
@@ -112,7 +120,7 @@ WriteLiteral(">&times;</button>\r\n");
 WriteLiteral("                <strong>");
 
             
-            #line 16 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+            #line 19 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
                    Write(Model.Emphasis);
 
             
@@ -121,24 +129,24 @@ WriteLiteral("                <strong>");
 WriteLiteral("</strong>");
 
             
-            #line 16 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+            #line 19 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
                                                 
             
             #line default
             #line hidden
             
-            #line 16 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+            #line 19 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
                                             Write(" - ");
 
             
             #line default
             #line hidden
             
-            #line 16 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+            #line 19 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
                                                         
             }
 
-            var message = TextUtil.RevealNullOrBlank(TextUtil.Zap(Model.Message));
+            var message = TextUtil.RevealNullOrBlank(Horseshoe.NET.ObjectClean.Methods.ZapString(Model.Message));
             if (Model.EncodeHtml)
             {
                 
@@ -146,14 +154,14 @@ WriteLiteral("</strong>");
             #line default
             #line hidden
             
-            #line 22 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+            #line 25 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
            Write(message);
 
             
             #line default
             #line hidden
             
-            #line 22 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+            #line 25 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
                         
             }
             else
@@ -163,14 +171,14 @@ WriteLiteral("</strong>");
             #line default
             #line hidden
             
-            #line 26 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+            #line 29 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
            Write(Html.Raw(message.Replace("\r\n", "<br />").Replace("\n", "<br />")));
 
             
             #line default
             #line hidden
             
-            #line 26 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+            #line 29 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
                                                                                     
             }
 
@@ -191,7 +199,7 @@ WriteLiteral(">\r\n");
 WriteLiteral("                        ");
 
             
-            #line 34 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+            #line 37 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
                    Write(Html.Raw(Model.MessageDetails));
 
             
@@ -200,7 +208,7 @@ WriteLiteral("                        ");
 WriteLiteral("\r\n                    </div>\r\n");
 
             
-            #line 36 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+            #line 39 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
                 }
                 else
                 {
@@ -213,23 +221,23 @@ WriteLiteral("                    <div>\r\n                        <a");
 
 WriteLiteral(" href=\"javascript:;\"");
 
-WriteAttribute("onclick", Tuple.Create(" onclick=\"", 1310), Tuple.Create("\"", 1381)
-, Tuple.Create(Tuple.Create("", 1320), Tuple.Create("Bootstrap3.toggleAlertDetails(this,", 1320), true)
-, Tuple.Create(Tuple.Create(" ", 1355), Tuple.Create("\'", 1356), true)
+WriteAttribute("onclick", Tuple.Create(" onclick=\"", 1412), Tuple.Create("\"", 1483)
+, Tuple.Create(Tuple.Create("", 1422), Tuple.Create("Bootstrap3.toggleAlertDetails(this,", 1422), true)
+, Tuple.Create(Tuple.Create(" ", 1457), Tuple.Create("\'", 1458), true)
             
-            #line 41 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
-             , Tuple.Create(Tuple.Create("", 1357), Tuple.Create<System.Object, System.Int32>(alertDetailsElementID
+            #line 44 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+             , Tuple.Create(Tuple.Create("", 1459), Tuple.Create<System.Object, System.Int32>(alertDetailsElementID
             
             #line default
             #line hidden
-, 1357), false)
-, Tuple.Create(Tuple.Create("", 1379), Tuple.Create("\')", 1379), true)
+, 1459), false)
+, Tuple.Create(Tuple.Create("", 1481), Tuple.Create("\')", 1481), true)
 );
 
 WriteLiteral(">show details</a>\r\n                    </div>\r\n");
 
             
-            #line 43 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+            #line 46 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
 
                     var preStyles = Model.IsMessageDetailsPreFormatted ? "font-family:Consolas,monospace;font-size:.8em;white-space:pre;" : "";
 
@@ -238,46 +246,52 @@ WriteLiteral(">show details</a>\r\n                    </div>\r\n");
             #line hidden
 WriteLiteral("                    <div");
 
-WriteAttribute("id", Tuple.Create(" id=\"", 1600), Tuple.Create("\"", 1627)
+WriteAttribute("id", Tuple.Create(" id=\"", 1702), Tuple.Create("\"", 1729)
             
-            #line 45 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
-, Tuple.Create(Tuple.Create("", 1605), Tuple.Create<System.Object, System.Int32>(alertDetailsElementID
-            
-            #line default
-            #line hidden
-, 1605), false)
-);
-
-WriteAttribute("style", Tuple.Create(" style=\"", 1628), Tuple.Create("\"", 1659)
-, Tuple.Create(Tuple.Create("", 1636), Tuple.Create("display:none;", 1636), true)
-            
-            #line 45 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
-, Tuple.Create(Tuple.Create("", 1649), Tuple.Create<System.Object, System.Int32>(preStyles
+            #line 48 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+, Tuple.Create(Tuple.Create("", 1707), Tuple.Create<System.Object, System.Int32>(alertDetailsElementID
             
             #line default
             #line hidden
-, 1649), false)
+, 1707), false)
 );
 
-WriteLiteral(">");
+WriteAttribute("style", Tuple.Create(" style=\"", 1730), Tuple.Create("\"", 1761)
+, Tuple.Create(Tuple.Create("", 1738), Tuple.Create("display:none;", 1738), true)
+            
+            #line 48 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+, Tuple.Create(Tuple.Create("", 1751), Tuple.Create<System.Object, System.Int32>(preStyles
+            
+            #line default
+            #line hidden
+, 1751), false)
+);
+
+WriteLiteral(">\r\n");
 
             
-            #line 45 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
-                                                                                      if (Model.IsMessageDetailsEncodeHtml)
+            #line 49 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+                        
+            
+            #line default
+            #line hidden
+            
+            #line 49 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+                         if (Model.IsMessageDetailsEncodeHtml)
                         {
                             
             
             #line default
             #line hidden
             
-            #line 47 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+            #line 51 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
                        Write(Model.MessageDetails);
 
             
             #line default
             #line hidden
             
-            #line 47 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+            #line 51 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
                                                  
                         }
                         else
@@ -287,23 +301,24 @@ WriteLiteral(">");
             #line default
             #line hidden
             
-            #line 51 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+            #line 55 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
                        Write(Html.Raw(Model.MessageDetails));
 
             
             #line default
             #line hidden
             
-            #line 51 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+            #line 55 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
                                                            
                         }
+
             
             #line default
             #line hidden
-WriteLiteral("</div>\r\n");
+WriteLiteral("                    </div>\r\n");
 
             
-            #line 53 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+            #line 58 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
                 }
             }
         
@@ -313,7 +328,7 @@ WriteLiteral("</div>\r\n");
 WriteLiteral("\r\n    </div>\r\n");
 
             
-            #line 57 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+            #line 62 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
 
             
             #line default
@@ -321,7 +336,7 @@ WriteLiteral("\r\n    </div>\r\n");
 WriteLiteral("\r\n");
 
             
-            #line 58 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+            #line 63 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
  if (Model.MessageDetails != null && !Model.IsMessageDetailsHidden)
 {
 
@@ -366,7 +381,7 @@ WriteLiteral(@">
 ");
 
             
-            #line 91 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
+            #line 96 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
 }
 
             

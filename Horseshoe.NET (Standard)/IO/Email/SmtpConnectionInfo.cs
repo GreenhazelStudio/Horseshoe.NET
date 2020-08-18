@@ -2,6 +2,7 @@
 using System.Net.Mail;
 
 using Horseshoe.NET.Crypto;
+using Horseshoe.NET.Extensions;
 
 namespace Horseshoe.NET.IO.Email
 {

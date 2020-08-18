@@ -5,7 +5,7 @@ using System.Text;
 using System.Web;
 
 using Horseshoe.NET.Application;
-using Horseshoe.NET.Mvc;
+using Horseshoe.NET.Mvc.Extensions;
 
 namespace TestMVC.ViewModels
 {

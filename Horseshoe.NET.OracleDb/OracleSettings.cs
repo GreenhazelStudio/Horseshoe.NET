@@ -38,7 +38,7 @@ namespace Horseshoe.NET.OracleDb
             get
             {
                 return _GetConnectionString(_defaultConnectionString, _isEncryptedPassword)
-                    ?? _GetConnectionString(Config.GetConnectionString(DefaultConnectionStringName, suppressErrors: true), Config.GetBoolean("Horseshoe.NET:Oracle.IsEncryptedPassword"))
+                    ?? _GetConnectionString(Config.GetConnectionString(DefaultConnectionStringName, suppressErrors: true), Config.GetBool("Horseshoe.NET:Oracle.IsEncryptedPassword"))
                     ?? _GetConnectionString(OrganizationalDefaultSettings.GetString("Oracle.ConnectionString"), OrganizationalDefaultSettings.GetBoolean("Oracle.IsEncryptedPassword"));
             }
         }
@@ -113,7 +113,7 @@ namespace Horseshoe.NET.OracleDb
             get
             {
                 return _defaultCredentials
-                    ?? Credential.Build(Config.Get("Horseshoe.NET:Oracle.UserID"), Config.Get("Horseshoe.NET:Oracle.Password"), isEncryptedPassword: Config.GetBoolean("Horseshoe.NET:Oracle.IsEncryptedPassword"))
+                    ?? Credential.Build(Config.Get("Horseshoe.NET:Oracle.UserID"), Config.Get("Horseshoe.NET:Oracle.Password"), isEncryptedPassword: Config.GetBool("Horseshoe.NET:Oracle.IsEncryptedPassword"))
                     ?? OrganizationalDefaultSettings.GetNullable<Credential>("Oracle.Credentials");
             }
             set
@@ -171,7 +171,7 @@ namespace Horseshoe.NET.OracleDb
             get
             {
                 return _defaultAutoClearConnectionPool
-                    ?? Config.GetNBoolean("Horseshoe.NET:Oracle.AutoClearConnectionPool")
+                    ?? Config.GetNBool("Horseshoe.NET:Oracle.AutoClearConnectionPool")
                     ?? OrganizationalDefaultSettings.GetNBoolean("Oracle.AutoClearConnectionPool")
                     ?? false;
             }

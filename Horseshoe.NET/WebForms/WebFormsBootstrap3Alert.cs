@@ -5,7 +5,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 
 using Horseshoe.NET.Bootstrap;
-using Horseshoe.NET.Text;
+using Horseshoe.NET.Bootstrap.Extensions;
 
 namespace Horseshoe.NET.WebForms
 {

@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 using Horseshoe.NET;
 using Horseshoe.NET.Bootstrap;
 using Horseshoe.NET.Mvc;
+using Horseshoe.NET.Mvc.Extensions;
 using Horseshoe.NET.Text;
+using Horseshoe.NET.Text.Extensions;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

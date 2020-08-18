@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data;
 
-using static Horseshoe.NET.Objects.ObjectUtil;
+using static Horseshoe.NET.ObjectClean.Methods;
 
 namespace Horseshoe.NET.Db
 {

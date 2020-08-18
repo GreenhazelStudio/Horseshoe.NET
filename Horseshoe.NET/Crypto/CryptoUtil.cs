@@ -3,6 +3,9 @@ using System.Linq;
 using System.Security.Cryptography;
 
 using Horseshoe.NET.Collections;
+using Horseshoe.NET.Collections.Extensions;
+using Horseshoe.NET.Crypto.Extensions;
+using Horseshoe.NET.Extensions;
 
 namespace Horseshoe.NET.Crypto
 {

@@ -2,8 +2,8 @@
 using System.Globalization;
 using System.Text;
 
+using static Horseshoe.NET.ObjectClean.Methods;
 using Horseshoe.NET.Objects;
-using Horseshoe.NET.Text;
 
 using Microsoft.Extensions.Configuration;
 
@@ -58,8 +58,7 @@ namespace Horseshoe.NET.Application
 
         public static byte GetByte(string key, byte defaultValue = default, bool required = false, NumberStyles? numberStyles = null, IFormatProvider provider = null)
         {
-            var value = GetNByte(key, required: required, numberStyles: numberStyles, provider: provider);
-            return value ?? defaultValue;
+            return GetNByte(key, required: required, numberStyles: numberStyles, provider: provider) ?? defaultValue;
         }
 
         public static byte? GetNByte(string key, bool required = false, NumberStyles? numberStyles = null, IFormatProvider provider = null)
@@ -67,33 +66,21 @@ namespace Horseshoe.NET.Application
             var value = Get(key);
             if (value != null)
             {
-                return TextUtil.ZapNByte(value, numberStyles: numberStyles, provider: provider);
+                return ZapNByte(value, numberStyles: numberStyles, provider: provider);
             }
-            else
+            if (!numberStyles.HasValue && provider == null)
             {
                 value = Get(key + "[hex]");
                 if (value != null)
                 {
-                    return TextUtil.ZapNByte_Hex(value);
+                    return ZapNByte(value, numberStyles: NumberStyles.HexNumber);
                 }
-                else if (required)
-                {
-                    throw new UtilityException("Required configuration not found: " + key);
-                }
-                return null;
             }
-        }
-
-        public static byte GetByte_Hex(string key, byte defaultValue = default, bool required = false)
-        {
-            var value = GetNByte_Hex(key, required: required);
-            return value ?? defaultValue;
-        }
-
-        public static byte? GetNByte_Hex(string key, bool required = false)
-        {
-            var value = GetNByte(key, required: required, numberStyles: NumberStyles.HexNumber, provider: null);
-            return value;
+            if (required)
+            {
+                throw new UtilityException("Required configuration not found: " + key);
+            }
+            return null;
         }
 
         public static byte[] GetBytes(string key, bool required = false, Encoding encoding = default)
@@ -105,8 +92,7 @@ namespace Horseshoe.NET.Application
 
         public static int GetInt(string key, int defaultValue = default, bool required = false, NumberStyles? numberStyles = null, IFormatProvider provider = null)
         {
-            var value = GetNInt(key, required: required, numberStyles: numberStyles, provider: provider);
-            return value ?? defaultValue;
+            return GetNInt(key, required: required, numberStyles: numberStyles, provider: provider) ?? defaultValue;
         }
 
         public static int? GetNInt(string key, bool required = false, NumberStyles? numberStyles = null, IFormatProvider provider = null)
@@ -114,57 +100,45 @@ namespace Horseshoe.NET.Application
             var value = Get(key);
             if (value != null)
             {
-                return TextUtil.ZapNInt(value, numberStyles: numberStyles, provider: provider);
+                return ZapNInt(value, numberStyles: numberStyles, provider: provider);
             }
-            else
+            if (!numberStyles.HasValue && provider == null)
             {
                 value = Get(key + "[hex]");
                 if (value != null)
                 {
-                    return TextUtil.ZapNInt_Hex(value);
+                    return ZapNInt(value, numberStyles: NumberStyles.HexNumber);
                 }
-                else if (required)
-                {
-                    throw new UtilityException("Required configuration not found: " + key);
-                }
-                return null;
             }
+            if (required)
+            {
+                throw new UtilityException("Required configuration not found: " + key);
+            }
+            return null;
         }
 
-        public static int GetInt_Hex(string key, int defaultValue = default, bool required = false)
-        {
-            var value = GetNInt_Hex(key, required: required);
-            return value ?? defaultValue;
-        }
-
-        public static int? GetNInt_Hex(string key, bool required = false)
-        {
-            var value = GetNInt(key, required: required, numberStyles: NumberStyles.HexNumber, provider: null);
-            return value;
-        }
-
-        public static bool GetBoolean(string key, bool defaultValue = false, bool required = false)
+        public static bool GetBool(string key, bool defaultValue = false, bool required = false)
         {
             var value = Get(key, required: required);
-            return TextUtil.ZapBoolean(value, defaultValue: defaultValue);
+            return ZapBool(value, defaultValue: defaultValue);
         }
 
-        public static bool? GetNBoolean(string key, bool required = false)
+        public static bool? GetNBool(string key, bool required = false)
         {
             var value = Get(key, required: required);
-            return TextUtil.ZapNBoolean(value);
+            return ZapNBool(value);
         }
 
         public static T GetEnum<T>(string key, T defaultValue = default, bool ignoreCase = false, bool required = false, bool suppressErrors = false) where T : struct
         {
             var value = Get(key, required: required);
-            return TextUtil.ZapEnum<T>(value, defaultValue: defaultValue, ignoreCase: ignoreCase, suppressErrors: suppressErrors);
+            return ZapEnum<T>(value, defaultValue: defaultValue, ignoreCase: ignoreCase, suppressErrors: suppressErrors);
         }
 
         public static T? GetNEnum<T>(string key, bool ignoreCase = false, bool required = false, bool suppressErrors = false) where T : struct
         {
             var value = Get(key, required: required);
-            return TextUtil.ZapNEnum<T>(value, ignoreCase: ignoreCase, suppressErrors: suppressErrors);
+            return ZapNEnum<T>(value, ignoreCase: ignoreCase, suppressErrors: suppressErrors);
         }
 
         public static string GetConnectionString(string name, bool suppressErrors = false)

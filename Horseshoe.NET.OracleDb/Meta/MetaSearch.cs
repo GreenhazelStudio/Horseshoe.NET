@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Horseshoe.NET.Db;
-using Horseshoe.NET.Objects;
+using static Horseshoe.NET.ObjectClean.Methods;
 using Horseshoe.NET.Text;
 
 using Oracle.ManagedDataAccess.Client;
@@ -574,12 +574,12 @@ namespace Horseshoe.NET.OracleDb.Meta
                     )
                     {
                         Parent = tableOrView.Schema != null ? tableOrView : tableOrView.SetSchemaByName(reader["schema"] as string),
-                        Length = ObjectUtil.ZapInt(reader["length"]),
-                        Precision = ObjectUtil.ZapNInt(reader["precision"]),
-                        Scale = ObjectUtil.ZapNInt(reader["scale"]),
-                        IsNullable = ObjectUtil.ZapBoolean(reader["isNullable"]),
+                        Length = ZapInt(reader["length"]),
+                        Precision = ZapNInt(reader["precision"]),
+                        Scale = ZapNInt(reader["scale"]),
+                        IsNullable = ZapBool(reader["isNullable"]),
                         ColumnID = Convert.ToInt32(reader["columnID"]),
-                        DefaultValue = ObjectUtil.ZapString(reader["defaultValue"])
+                        DefaultValue = ZapString(reader["defaultValue"])
                     },
                     timeout: timeout
                 );

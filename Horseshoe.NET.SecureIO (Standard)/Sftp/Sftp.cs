@@ -7,9 +7,11 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 using Horseshoe.NET.Crypto;
+using Horseshoe.NET.Extensions;
 using Horseshoe.NET.IO;
 using Horseshoe.NET.IO.Ftp;
 using Horseshoe.NET.Text;
+using Horseshoe.NET.Text.Extensions;
 
 using Renci.SshNet;
 

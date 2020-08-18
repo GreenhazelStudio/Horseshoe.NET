@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Horseshoe.NET.Crypto;
+using Horseshoe.NET.IO.Http.Extensions;
 using Horseshoe.NET.Text;
 
 namespace Horseshoe.NET.IO.Http

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using static Horseshoe.NET.ObjectClean.Methods;
 using Horseshoe.NET.Text;
 
 namespace Horseshoe.NET.Collections
@@ -264,7 +265,7 @@ namespace Horseshoe.NET.Collections
         {
             if (collection == null) return null;
             collection = collection
-                .Select(str => str?.Zap(textCleanMode: textCleanMode, customTextCleanDictionary: customTextCleanDictionary, charsToRemove: charsToRemove))
+                .Select(str => ZapString(str, textCleanMode: textCleanMode, customTextCleanDictionary: customTextCleanDictionary, charsToRemove: charsToRemove))
                 .ToList();
             return collection;
         }
@@ -400,8 +401,8 @@ namespace Horseshoe.NET.Collections
 
             if (typeof(E) == typeof(string) && ignoreCase)
             {
-                var ucaseControlCollection = distinctControlCollection.Select(item => TextUtil.Zap(item)?.ToUpper()).ToList();
-                var ucaseCompareCollection = distinctCompareCollection.Select(item => TextUtil.Zap(item)?.ToUpper()).ToList();
+                var ucaseControlCollection = distinctControlCollection.Select(item => ZapString(item)?.ToUpper()).ToList();
+                var ucaseCompareCollection = distinctCompareCollection.Select(item => ZapString(item)?.ToUpper()).ToList();
                 return !ucaseCompareCollection.Any(item => !ucaseControlCollection.Contains(item));
             }
             return !distinctCompareCollection.Any(item => !distinctControlCollection.Contains(item));
@@ -416,8 +417,8 @@ namespace Horseshoe.NET.Collections
 
             if (typeof(E) == typeof(string) && ignoreCase)
             {
-                var ucaseControlCollection = controlCollection.Select(item => TextUtil.Zap(item)?.ToUpper()).ToList();
-                var ucaseCompareCollection = compareCollection.Select(item => TextUtil.Zap(item)?.ToUpper()).ToList();
+                var ucaseControlCollection = controlCollection.Select(item => ZapString(item)?.ToUpper()).ToList();
+                var ucaseCompareCollection = compareCollection.Select(item => ZapString(item)?.ToUpper()).ToList();
                 for (int i = 0; i < ucaseControlCollection.Count; i++)
                 {
                     if (!string.Equals(ucaseControlCollection[i], ucaseCompareCollection[i]))
