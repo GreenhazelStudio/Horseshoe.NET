@@ -14,8 +14,8 @@ namespace Horseshoe.NET.ActiveDirectory
 {
     public static class ADUtil
     {
-        private static readonly Regex ParseCNRegex = new Regex(@"(?<=CN\=)[^,]+");
-        private static readonly Regex ParseOURegex = new Regex(@"(?<=OU\=)[^,]+");
+        static Regex ParseCNRegex { get; } = new Regex(@"(?<=CN\=)[^,]+");
+        static Regex ParseOURegex { get; } = new Regex(@"(?<=OU\=)[^,]+");
 
         /// <summary>
         /// Builds a PrincipalContext of type 'Domain' for AD query operations
@@ -39,7 +39,7 @@ namespace Horseshoe.NET.ActiveDirectory
             }
             try
             {
-                using (var context = GetDomainContext(domain))
+                using (var context = GetDomainContext(domain: domain))
                 {
                     if (context.ValidateCredentials(samAccountName, plainTextPassword, ContextOptions.Negotiate))
                     {
@@ -68,7 +68,7 @@ namespace Horseshoe.NET.ActiveDirectory
             {
                 throw new ADException("Please supply a search term");
             }
-            var userInfo = LookupUser(userSearchTerm, userProperty: userProperty);
+            var userInfo = LookupUser(userSearchTerm, userProperty: userProperty, domain: domain);
             return Authenticate(userInfo.SAMAccountName, plainTextPassword, domain: domain);
         }
 
@@ -76,18 +76,21 @@ namespace Horseshoe.NET.ActiveDirectory
          *  USER LOOKUP FUNCTIONS (full-text)
          * * * * * * * * * * * * * * * * * * */
 
-        public static UserInfo LookupUser(string userSearchTerm, UserProperty? userProperty = null)
+        public static UserInfo LookupUser(string userSearchTerm, UserProperty? userProperty = null, string domain = null)
         {
             var userInfo = BuildUser
             (
-                RawLookupUser(userSearchTerm, userProperty: userProperty)
+                RawLookupUser(userSearchTerm, userProperty: userProperty, domain: domain)
             );
             return userInfo;
         }
 
-        private static DirectoryEntry RawLookupUser(string userSearchTerm, UserProperty? userProperty = null)
+        private static DirectoryEntry RawLookupUser(string userSearchTerm, UserProperty? userProperty = null, string domain = null)
         {
-            var entry = new DirectoryEntry();
+            var _domain = domain ?? ADSettings.DefaultDomain;
+            var entry = _domain == null
+                ? new DirectoryEntry()
+                : new DirectoryEntry(ToLdapUrl(dc: _domain));
             var mySearcher = new DirectorySearcher(entry)
             {
                 Filter = userProperty.HasValue
@@ -130,18 +133,21 @@ namespace Horseshoe.NET.ActiveDirectory
          *  PERSON USER LOOKUP FUNCTIONS (full-text)
          * * * * * * * * * * * * * * * * * * * * * * */
 
-        public static UserInfo LookupPersonUser(string searchTerm, UserProperty? userProperty = null)
+        public static UserInfo LookupPersonUser(string searchTerm, UserProperty? userProperty = null, string domain = null)
         {
             var userInfo = BuildUser
             (
-                RawLookupPersonUser(searchTerm, userProperty: userProperty)
+                RawLookupPersonUser(searchTerm, userProperty: userProperty, domain: domain)
             );
             return userInfo;
         }
 
-        private static DirectoryEntry RawLookupPersonUser(string userSearchTerm, UserProperty? userProperty = null)
+        private static DirectoryEntry RawLookupPersonUser(string userSearchTerm, UserProperty? userProperty = null, string domain = null)
         {
-            var entry = new DirectoryEntry();
+            var _domain = domain ?? ADSettings.DefaultDomain;
+            var entry = _domain == null
+                ? new DirectoryEntry()
+                : new DirectoryEntry(ToLdapUrl(dc: _domain));
             var mySearcher = new DirectorySearcher(entry)
             {
                 Filter = userProperty.HasValue
@@ -184,9 +190,12 @@ namespace Horseshoe.NET.ActiveDirectory
          *  USER SEARCH FUNCTIONS (partial-text)
          * * * * * * * * * * * * * * * * * * * * */
 
-        public static IEnumerable<DirectoryEntry> RawSearchUsers(string userSearchTerm, UserProperty? userProperty = null)
+        public static IEnumerable<DirectoryEntry> RawSearchUsers(string userSearchTerm, UserProperty? userProperty = null, string domain = null)
         {
-            var entry = new DirectoryEntry();
+            var _domain = domain ?? ADSettings.DefaultDomain;
+            var entry = _domain == null
+                ? new DirectoryEntry()
+                : new DirectoryEntry(ToLdapUrl(dc: _domain));
             var mySearcher = new DirectorySearcher(entry)
             {
                 Filter = userProperty.HasValue
@@ -218,9 +227,12 @@ namespace Horseshoe.NET.ActiveDirectory
          *  PERSON USER SEARCH FUNCTIONS (partial-text)
          * * * * * * * * * * * * * * * * * * * * * * * * */
 
-        public static IEnumerable<DirectoryEntry> RawSearchPersonUsers(string userSearchTerm, UserProperty? userProperty = null)
+        public static IEnumerable<DirectoryEntry> RawSearchPersonUsers(string userSearchTerm, UserProperty? userProperty = null, string domain = null)
         {
-            var entry = new DirectoryEntry();
+            var _domain = domain ?? ADSettings.DefaultDomain;
+            var entry = _domain == null
+                ? new DirectoryEntry()
+                : new DirectoryEntry(ToLdapUrl(dc: _domain));
             var mySearcher = new DirectorySearcher(entry)
             {
                 Filter = userProperty.HasValue
@@ -252,9 +264,12 @@ namespace Horseshoe.NET.ActiveDirectory
          *  OU LISTING FUNCTIONS
          * * * * * * * * * * * * */
 
-        public static IEnumerable<OUInfo> ListOUs(bool recursive = false)
+        public static IEnumerable<OUInfo> ListOUs(bool recursive = false, string domain = null)
         {
-            var entry = new DirectoryEntry();
+            var _domain = domain ?? ADSettings.DefaultDomain;
+            var entry = _domain == null
+                ? new DirectoryEntry()
+                : new DirectoryEntry(ToLdapUrl(dc: _domain));
             var mySearcher = new DirectorySearcher(entry)
             {
                 Filter = FilterFactory.BuildAllOUsFilter()
@@ -573,12 +588,50 @@ namespace Horseshoe.NET.ActiveDirectory
             return new string[] { };
         }
 
-        public static string DetectDomainController()
+        public static DomainController DetectDomainController(string domain = null)
         {
-            using (var context = new PrincipalContext(ContextType.Domain))
+            using (var context = GetDomainContext(domain: domain))
             {
-                return context.ConnectedServer;
+                return new DomainController { Name = context.ConnectedServer };
             }
+        }
+
+        public static string ToLdapUrl(string dc = null, string ou = null, string[] ous = null, string cn = null)
+        {
+            var sb = new StringBuilder("LDAP://");
+            var prependComma = false;
+            if (dc != null)
+            {
+                sb.Append(string.Join(",", dc.Split('.').Select(part => "DC=" + part)));
+                prependComma = true;
+            }
+            if (ou != null)
+            {
+                if (prependComma)
+                {
+                    sb.Append(",");
+                }
+                sb.Append("OU=" + ou);
+                prependComma = true;
+            }
+            if (ous != null)
+            {
+                if (prependComma)
+                {
+                    sb.Append(",");
+                }
+                sb.Append(string.Join(",", ous.Select(_ou => "OU=" + _ou)));
+                prependComma = true;
+            }
+            if (cn != null)
+            {
+                if (prependComma)
+                {
+                    sb.Append(",");
+                }
+                sb.Append("CN=" + cn);
+            }
+            return sb.ToString();
         }
     }
 }

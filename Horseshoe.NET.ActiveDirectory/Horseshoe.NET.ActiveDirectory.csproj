@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="ADException.cs" />
     <Compile Include="ADUtil.cs" />
+    <Compile Include="DomainController.cs" />
     <Compile Include="FilterFactory.cs" />
     <Compile Include="ObjectCategory.cs" />
     <Compile Include="ObjectClass.cs" />
