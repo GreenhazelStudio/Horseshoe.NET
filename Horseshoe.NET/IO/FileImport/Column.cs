@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using static Horseshoe.NET.ObjectClean.Methods;
+using  Horseshoe.NET.Objects.Clean;
 
 namespace Horseshoe.NET.IO.FileImport
 {
@@ -58,32 +58,32 @@ namespace Horseshoe.NET.IO.FileImport
 
         public static Column Object(string name, int width = 0) => new Column { Name = name, Width = width, DataType = DataType.Object };
 
-        public static Column String(string name, int width = 0) => new Column { Name = name, Width = width, DataType = DataType.String, ValueConverter = (obj) => ZapString(obj) ?? "" };
+        public static Column String(string name, int width = 0) => new Column { Name = name, Width = width, DataType = DataType.String, ValueConverter = (obj) => Zap.String(obj) ?? "" };
 
-        public static Column NString(string name, int width = 0) => new NullableColumn { Name = name, Width = width, DataType = DataType.String, ValueConverter = (obj) => ZapString(obj) };
+        public static Column NString(string name, int width = 0) => new NullableColumn { Name = name, Width = width, DataType = DataType.String, ValueConverter = (obj) => Zap.String(obj) };
 
-        public static Column Byte(string name, int width = 0) => new Column { Name = name, Width = width, DataType = DataType.Byte, ValueConverter = (obj) => ZapByte(obj) };
+        public static Column Byte(string name, int width = 0) => new Column { Name = name, Width = width, DataType = DataType.Byte, ValueConverter = (obj) => Zap.Byte(obj) };
 
-        public static Column NByte(string name, int width = 0) => new NullableColumn { Name = name, Width = width, DataType = DataType.Byte, ValueConverter = (obj) => ZapNByte(obj) };
+        public static Column NByte(string name, int width = 0) => new NullableColumn { Name = name, Width = width, DataType = DataType.Byte, ValueConverter = (obj) => Zap.NByte(obj) };
 
-        public static Column Int(string name, int width = 0) => new Column { Name = name, Width = width, DataType = DataType.Integer, ValueConverter = (obj) => ZapInt(obj) };
+        public static Column Int(string name, int width = 0) => new Column { Name = name, Width = width, DataType = DataType.Integer, ValueConverter = (obj) => Zap.Int(obj) };
 
-        public static Column NInt(string name, int width = 0) => new NullableColumn { Name = name, Width = width, DataType = DataType.Integer, ValueConverter = (obj) => ZapNInt(obj) };
+        public static Column NInt(string name, int width = 0) => new NullableColumn { Name = name, Width = width, DataType = DataType.Integer, ValueConverter = (obj) => Zap.NInt(obj) };
 
-        public static Column Decimal(string name, int width = 0) => new Column { Name = name, Width = width, DataType = DataType.Decimal, ValueConverter = (obj) => ZapDecimal(obj) };
+        public static Column Decimal(string name, int width = 0) => new Column { Name = name, Width = width, DataType = DataType.Decimal, ValueConverter = (obj) => Zap.Decimal(obj) };
 
-        public static Column NDecimal(string name, int width = 0) => new NullableColumn { Name = name, Width = width, DataType = DataType.Decimal, ValueConverter = (obj) => ZapNDecimal(obj) };
+        public static Column NDecimal(string name, int width = 0) => new NullableColumn { Name = name, Width = width, DataType = DataType.Decimal, ValueConverter = (obj) => Zap.NDecimal(obj) };
 
-        public static Column Boolean(string name, int width = 0) => new Column { Name = name, Width = width, DataType = DataType.Boolean, ValueConverter = (obj) => ZapBool(obj) };
+        public static Column Boolean(string name, int width = 0) => new Column { Name = name, Width = width, DataType = DataType.Boolean, ValueConverter = (obj) => Zap.Bool(obj) };
 
-        public static Column NBoolean(string name, int width = 0) => new NullableColumn { Name = name, Width = width, DataType = DataType.Boolean, ValueConverter = (obj) => ZapNBool(obj) };
+        public static Column NBoolean(string name, int width = 0) => new NullableColumn { Name = name, Width = width, DataType = DataType.Boolean, ValueConverter = (obj) => Zap.NBool(obj) };
 
         public static Column Date(string name, int width = 0) => new Column
         {
             Name = name,
             Width = width,
             DataType = DataType.DateTime,
-            ValueConverter = (obj) => ZapDateTime(obj),
+            ValueConverter = (obj) => Zap.DateTime(obj),
             Format = DateFormat
         };
 
@@ -92,7 +92,7 @@ namespace Horseshoe.NET.IO.FileImport
             Name = name,
             Width = width,
             DataType = DataType.DateTime,
-            ValueConverter = (obj) => ZapNDateTime(obj),
+            ValueConverter = (obj) => Zap.NDateTime(obj),
             Format = DateFormat
         };
 

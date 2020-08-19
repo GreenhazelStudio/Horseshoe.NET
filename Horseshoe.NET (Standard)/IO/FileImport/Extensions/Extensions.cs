@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using static Horseshoe.NET.ObjectClean.Methods;
+using Horseshoe.NET.Objects.Clean;
 
 namespace Horseshoe.NET.IO.FileImport.Extensions
 {
@@ -16,7 +16,7 @@ namespace Horseshoe.NET.IO.FileImport.Extensions
             {
                 if (obj is string str)
                 {
-                    if (ZapString(str) != null) return false;
+                    if (Zap.String(str) != null) return false;
                 }
                 else if (obj != null)
                 {

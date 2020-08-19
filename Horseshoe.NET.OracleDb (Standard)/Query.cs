@@ -10,8 +10,8 @@ using Horseshoe.NET.Crypto;
 using Horseshoe.NET.Db;
 using Horseshoe.NET.Db.Extensions;
 using static Horseshoe.NET.Db.DataUtil;
-using Horseshoe.NET.ObjectClean.Extensions;
 using Horseshoe.NET.Objects;
+using Horseshoe.NET.Objects.Clean.Extensions;
 using Horseshoe.NET.Text;
 using Horseshoe.NET.Text.Extensions;
 

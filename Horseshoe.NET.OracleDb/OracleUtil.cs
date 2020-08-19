@@ -14,7 +14,7 @@ using Horseshoe.NET.Collections;
 using Horseshoe.NET.Collections.Extensions;
 using Horseshoe.NET.Crypto;
 using Horseshoe.NET.Db;
-using static Horseshoe.NET.ObjectClean.Methods;
+using Horseshoe.NET.Objects.Clean;
 using Horseshoe.NET.OracleDb.Meta;
 
 namespace Horseshoe.NET.OracleDb
@@ -281,10 +281,10 @@ namespace Horseshoe.NET.OracleDb
 
                 if (parts.Length > 1)
                 {
-                    serviceName = ZapString(parts[1]);
+                    serviceName = Zap.String(parts[1]);
                     if (parts.Length > 2)
                     {
-                        instanceName = ZapString(parts[2]);
+                        instanceName = Zap.String(parts[2]);
                     }
                 }
                 return new OraServer(dataSource, serviceName: serviceName, instanceName: instanceName, name: name ?? dataSource);

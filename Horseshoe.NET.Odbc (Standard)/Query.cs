@@ -10,8 +10,8 @@ using Horseshoe.NET.Crypto;
 using Horseshoe.NET.Db;
 using Horseshoe.NET.Db.Extensions;
 using static Horseshoe.NET.Db.DataUtil;
-using Horseshoe.NET.ObjectClean.Extensions;
 using Horseshoe.NET.Objects;
+using Horseshoe.NET.Objects.Clean.Extensions;
 using Horseshoe.NET.Text;
 using Horseshoe.NET.Text.Extensions;
 
@@ -160,7 +160,7 @@ namespace Horseshoe.NET.Odbc
                             case AutoTruncate.Trim:
                                 return stringValue.Trim();
                             case AutoTruncate.Zap:
-                                return stringValue.Zap();
+                                return stringValue.ZapString();
                         }
                     }
                     return obj;
@@ -1208,7 +1208,7 @@ namespace Horseshoe.NET.Odbc
                             case AutoTruncate.Trim:
                                 return stringValue.Trim();
                             case AutoTruncate.Zap:
-                                return stringValue.Zap();
+                                return stringValue.ZapString();
                         }
                     }
                     return obj;
@@ -1420,7 +1420,7 @@ namespace Horseshoe.NET.Odbc
                             case AutoTruncate.Trim:
                                 return stringValue.Trim();
                             case AutoTruncate.Zap:
-                                return stringValue.Zap();
+                                return stringValue.ZapString();
                         }
                     }
                     return obj;

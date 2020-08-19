@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using static Horseshoe.NET.ObjectClean.Methods;
+using Horseshoe.NET.Objects.Clean;
 
 using NPOI.SS.UserModel;
 
@@ -27,7 +27,7 @@ namespace Horseshoe.NET.Excel.Extensions
             var cellType = cell.CellType == CellType.Formula
                 ? cell.CachedFormulaResultType
                 : cell.CellType;
-            return cellType == CellType.String && ZapString(cell.StringCellValue) == null;
+            return cellType == CellType.String && Zap.String(cell.StringCellValue) == null;
         }
     }
 }

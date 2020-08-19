@@ -10,8 +10,8 @@ using Horseshoe.NET.Collections.Extensions;
 using Horseshoe.NET.Excel.Extensions;
 using Horseshoe.NET.IO.FileImport;
 using static Horseshoe.NET.IO.FileImport.ImportUtil;
-using static Horseshoe.NET.ObjectClean.Methods;
 using Horseshoe.NET.Objects;
+using Horseshoe.NET.Objects.Clean;
 using Horseshoe.NET.Text;
 
 using NPOI.HSSF.UserModel;
@@ -503,7 +503,7 @@ namespace Horseshoe.NET.Excel
                     E e = new E();
                     for (int i = 0; i < columns.Length; i++)
                     {
-                        var propertyName = ZapString(columns[i].Name, textCleanMode: TextCleanMode.RemoveWhitespace, charsToRemove: charsToRemove);
+                        var propertyName = Zap.String(columns[i].Name, textCleanMode: TextCleanMode.RemoveWhitespace, charsToRemove: charsToRemove);
                         ObjectUtil.SetInstanceProperty(e, propertyName, array[i], ignoreCase: true);
                     }
                     list.Add(e);
@@ -727,14 +727,16 @@ namespace Horseshoe.NET.Excel
                 {
                     case CellType.String:
                     case CellType.Blank:
-                        value = cell.StringCellValue;
                         switch (autoTrunc)
                         {
                             case AutoTruncate.Trim:
                                 value = cell.StringCellValue.Trim();
                                 break;
                             case AutoTruncate.Zap:
-                                value = Zap(cell.StringCellValue);
+                                value = Zap.String(cell.StringCellValue);
+                                break;
+                            default:
+                                value = cell.StringCellValue;
                                 break;
                         }
                         break;

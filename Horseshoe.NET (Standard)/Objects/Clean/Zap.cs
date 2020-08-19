@@ -8,42 +8,50 @@ using System.Threading.Tasks;
 using Horseshoe.NET.Extensions;
 using Horseshoe.NET.Text;
 
-namespace Horseshoe.NET.ObjectClean
+namespace Horseshoe.NET.Objects.Clean
 {
-    public static class Methods
+    public static class Zap
     {
-        public static object Zap(object obj)
+        public static object Object(object obj, Func<object, bool> evaluatesToNull = null)
         {
             if (obj is null || obj is DBNull) return null;
-            if (obj is string stringValue) return _ZapString(stringValue, TextCleanMode.RemoveNonprintables, null, null);
+            if (evaluatesToNull?.Invoke(obj) ?? false) return null;
+            if (obj is string stringValue) return _String(stringValue, TextCleanMode.RemoveNonprintables, null, null);
             return obj;
         }
 
-        public static string ZapString(object obj, TextCleanMode textCleanMode = TextCleanMode.RemoveNonprintables, object customTextCleanDictionary = null, char[] charsToRemove = null)
+        public static string String(object obj, TextCleanMode textCleanMode = TextCleanMode.None, object customTextCleanDictionary = null, char[] charsToRemove = null, Func<object, bool> evaluatesToNull = null)
         {
-            if (obj is null || obj is DBNull) return null;
-            return _ZapString(obj.ToString(), textCleanMode, customTextCleanDictionary, charsToRemove);
+            if ((obj = Object(obj, evaluatesToNull: evaluatesToNull)) is null) return null;
+            if (obj is string stringValue)
+            {
+                return _String(stringValue, textCleanMode, customTextCleanDictionary, charsToRemove);
+            }
+            stringValue = obj.ToString().Trim();
+            if (stringValue.Length == 0) return null;
+            return stringValue;
         }
 
-        static string _ZapString(string stringValue, TextCleanMode textCleanMode, object customTextCleanDictionary, char[] charsToRemove)
+        static string _String(string stringValue, TextCleanMode textCleanMode, object customTextCleanDictionary, char[] charsToRemove)
         {
             stringValue = stringValue.Trim();
             if (stringValue.Length > 0)
             {
-                stringValue = TextClean.CleanString(stringValue, textCleanMode: textCleanMode, customTextCleanDictionary: customTextCleanDictionary, charsToRemove: charsToRemove).Trim();
+                stringValue = TextClean.CleanString(stringValue, textCleanMode: textCleanMode, customTextCleanDictionary: customTextCleanDictionary, charsToRemove: charsToRemove);
+                stringValue = stringValue.Trim();
             }
             if (stringValue.Length == 0) return null;
             return stringValue;
         }
 
-        public static bool ZapBool(object obj, bool defaultValue = false, string[] trueValues = null, string[] falseValues = null, bool ignoreCase = false, bool treatArbitraryAsFalse = false)
+        public static bool Bool(object obj, bool defaultValue = false, string[] trueValues = null, string[] falseValues = null, bool ignoreCase = false, bool treatArbitraryAsFalse = false)
         {
-            return ZapNBool(obj, trueValues: trueValues, falseValues: falseValues, ignoreCase: ignoreCase, treatArbitraryAsFalse: treatArbitraryAsFalse) ?? defaultValue;
+            return NBool(obj, trueValues: trueValues, falseValues: falseValues, ignoreCase: ignoreCase, treatArbitraryAsFalse: treatArbitraryAsFalse) ?? defaultValue;
         }
 
-        public static bool? ZapNBool(object obj, string[] trueValues = null, string[] falseValues = null, bool ignoreCase = false, bool treatArbitraryAsFalse = false)
+        public static bool? NBool(object obj, string[] trueValues = null, string[] falseValues = null, bool ignoreCase = false, bool treatArbitraryAsFalse = false, Func<object, bool> evaluatesToNull = null)
         {
-            if ((obj = Zap(obj)) is null) return null;
+            if ((obj = Object(obj, evaluatesToNull: evaluatesToNull)) is null) return null;
             if (obj is bool boolValue) return boolValue;
             if (obj is byte byteValue) return byteValue == 1;
             if (obj is short shortValue) return shortValue == 1;
@@ -86,14 +94,14 @@ namespace Horseshoe.NET.ObjectClean
             throw new UtilityException("Cannot convert object of type \"" + obj.GetType().Name + "\" to bool");
         }
 
-        public static byte ZapByte(object obj, byte defaultValue = 0, bool force = false, NumberStyles? numberStyles = null, IFormatProvider provider = null)
+        public static byte Byte(object obj, byte defaultValue = 0, bool force = false, NumberStyles? numberStyles = null, IFormatProvider provider = null)
         {
-            return ZapNByte(obj, force: force, numberStyles: numberStyles, provider: provider) ?? defaultValue;
+            return NByte(obj, force: force, numberStyles: numberStyles, provider: provider) ?? defaultValue;
         }
 
-        public static byte? ZapNByte(object obj, bool force = false, NumberStyles? numberStyles = null, IFormatProvider provider = null)
+        public static byte? NByte(object obj, bool force = false, NumberStyles? numberStyles = null, IFormatProvider provider = null, Func<object, bool> evaluatesToNull = null)
         {
-            if ((obj = Zap(obj)) is null) return null;
+            if ((obj = Object(obj, evaluatesToNull: evaluatesToNull)) is null) return null;
             if (obj is bool boolValue) return (byte)(boolValue ? 1 : 0);
             if (obj is byte byteValue) return byteValue;
             var rangeMsg = " is outside the range of " + typeof(byte).FullName;
@@ -151,14 +159,14 @@ namespace Horseshoe.NET.ObjectClean
             throw new UtilityException("Cannot convert object of type \"" + obj.GetType().Name + "\" to byte");
         }
 
-        public static short ZapShort(object obj, short defaultValue = 0, bool force = false, NumberStyles? numberStyles = null, IFormatProvider provider = null)
+        public static short Short(object obj, short defaultValue = 0, bool force = false, NumberStyles? numberStyles = null, IFormatProvider provider = null)
         {
-            return ZapNShort(obj, force: force, numberStyles: numberStyles, provider: provider) ?? defaultValue;
+            return NShort(obj, force: force, numberStyles: numberStyles, provider: provider) ?? defaultValue;
         }
 
-        public static short? ZapNShort(object obj, bool force = false, NumberStyles? numberStyles = null, IFormatProvider provider = null)
+        public static short? NShort(object obj, bool force = false, NumberStyles? numberStyles = null, IFormatProvider provider = null, Func<object, bool> evaluatesToNull = null)
         {
-            if ((obj = Zap(obj)) is null) return null;
+            if ((obj = Object(obj, evaluatesToNull: evaluatesToNull)) is null) return null;
             if (obj is bool boolValue) return (short)(boolValue ? 1 : 0);
             if (obj is byte byteValue) return byteValue;
             if (obj is short shortValue) return shortValue;
@@ -211,14 +219,14 @@ namespace Horseshoe.NET.ObjectClean
             throw new UtilityException("Cannot convert object of type \"" + obj.GetType().Name + "\" to short");
         }
 
-        public static int ZapInt(object obj, int defaultValue = 0, bool force = false, NumberStyles? numberStyles = null, IFormatProvider provider = null)
+        public static int Int(object obj, int defaultValue = 0, bool force = false, NumberStyles? numberStyles = null, IFormatProvider provider = null)
         {
-            return ZapNInt(obj, force: force, numberStyles: numberStyles, provider: provider) ?? defaultValue;
+            return NInt(obj, force: force, numberStyles: numberStyles, provider: provider) ?? defaultValue;
         }
 
-        public static int? ZapNInt(object obj, bool force = false, NumberStyles? numberStyles = null, IFormatProvider provider = null)
+        public static int? NInt(object obj, bool force = false, NumberStyles? numberStyles = null, IFormatProvider provider = null, Func<object, bool> evaluatesToNull = null)
         {
-            if ((obj = Zap(obj)) is null) return null;
+            if ((obj = Object(obj, evaluatesToNull: evaluatesToNull)) is null) return null;
             if (obj is bool boolValue) return boolValue ? 1 : 0;
             if (obj is byte byteValue) return byteValue;
             if (obj is short shortValue) return shortValue;
@@ -266,14 +274,14 @@ namespace Horseshoe.NET.ObjectClean
             throw new UtilityException("Cannot convert object of type \"" + obj.GetType().Name + "\" to int");
         }
 
-        public static long ZapLong(object obj, long defaultValue = 0, bool force = false, NumberStyles? numberStyles = null, IFormatProvider provider = null)
+        public static long Long(object obj, long defaultValue = 0, bool force = false, NumberStyles? numberStyles = null, IFormatProvider provider = null)
         {
-            return ZapNLong(obj, force: force, numberStyles: numberStyles, provider: provider) ?? defaultValue;
+            return NLong(obj, force: force, numberStyles: numberStyles, provider: provider) ?? defaultValue;
         }
 
-        public static long? ZapNLong(object obj, bool force = false, NumberStyles? numberStyles = null, IFormatProvider provider = null)
+        public static long? NLong(object obj, bool force = false, NumberStyles? numberStyles = null, IFormatProvider provider = null, Func<object, bool> evaluatesToNull = null)
         {
-            if ((obj = Zap(obj)) is null) return null;
+            if ((obj = Object(obj, evaluatesToNull: evaluatesToNull)) is null) return null;
             if (obj is bool boolValue) return boolValue ? 1 : 0;
             if (obj is byte byteValue) return byteValue;
             if (obj is short shortValue) return shortValue;
@@ -316,14 +324,14 @@ namespace Horseshoe.NET.ObjectClean
             throw new UtilityException("Cannot convert object of type \"" + obj.GetType().Name + "\" to long");
         }
 
-        public static decimal ZapDecimal(object obj, decimal defaultValue = 0, bool force = false, NumberStyles? numberStyles = null, IFormatProvider provider = null)
+        public static decimal Decimal(object obj, decimal defaultValue = 0, bool force = false, NumberStyles? numberStyles = null, IFormatProvider provider = null)
         {
-            return ZapNDecimal(obj, force: force, numberStyles: numberStyles, provider: provider) ?? defaultValue;
+            return NDecimal(obj, force: force, numberStyles: numberStyles, provider: provider) ?? defaultValue;
         }
 
-        public static decimal? ZapNDecimal(object obj, bool force = false, NumberStyles? numberStyles = null, IFormatProvider provider = null)
+        public static decimal? NDecimal(object obj, bool force = false, NumberStyles? numberStyles = null, IFormatProvider provider = null, Func<object, bool> evaluatesToNull = null)
         {
-            if ((obj = Zap(obj)) is null) return null;
+            if ((obj = Object(obj, evaluatesToNull: evaluatesToNull)) is null) return null;
             if (obj is bool boolValue) return boolValue ? 1 : 0;
             if (obj is byte byteValue) return byteValue;
             if (obj is short shortValue) return shortValue;
@@ -361,14 +369,14 @@ namespace Horseshoe.NET.ObjectClean
             throw new UtilityException("Cannot convert object of type \"" + obj.GetType().Name + "\" to decimal");
         }
 
-        public static float ZapFloat(object obj, float defaultValue = 0, bool force = false, NumberStyles? numberStyles = null, IFormatProvider provider = null)
+        public static float Float(object obj, float defaultValue = 0, bool force = false, NumberStyles? numberStyles = null, IFormatProvider provider = null)
         {
-            return ZapNFloat(obj, force: force, numberStyles: numberStyles, provider: provider) ?? defaultValue;
+            return NFloat(obj, force: force, numberStyles: numberStyles, provider: provider) ?? defaultValue;
         }
 
-        public static float? ZapNFloat(object obj, bool force = false, NumberStyles? numberStyles = null, IFormatProvider provider = null)
+        public static float? NFloat(object obj, bool force = false, NumberStyles? numberStyles = null, IFormatProvider provider = null, Func<object, bool> evaluatesToNull = null)
         {
-            if ((obj = Zap(obj)) is null) return null;
+            if ((obj = Object(obj, evaluatesToNull: evaluatesToNull)) is null) return null;
             if (obj is bool boolValue) return boolValue ? 1 : 0;
             if (obj is byte byteValue) return byteValue;
             if (obj is short shortValue) return shortValue;
@@ -401,14 +409,14 @@ namespace Horseshoe.NET.ObjectClean
             throw new UtilityException("Cannot convert object of type \"" + obj.GetType().Name + "\" to float");
         }
 
-        public static double ZapDouble(object obj, double defaultValue = 0, NumberStyles? numberStyles = null, IFormatProvider provider = null)
+        public static double Double(object obj, double defaultValue = 0, NumberStyles? numberStyles = null, IFormatProvider provider = null)
         {
-            return ZapNDouble(obj, numberStyles: numberStyles, provider: provider) ?? defaultValue;
+            return NDouble(obj, numberStyles: numberStyles, provider: provider) ?? defaultValue;
         }
 
-        public static double? ZapNDouble(object obj, NumberStyles? numberStyles = null, IFormatProvider provider = null)
+        public static double? NDouble(object obj, NumberStyles? numberStyles = null, IFormatProvider provider = null, Func<object, bool> evaluatesToNull = null)
         {
-            if ((obj = Zap(obj)) is null) return null;
+            if ((obj = Object(obj, evaluatesToNull: evaluatesToNull)) is null) return null;
             if (obj is bool boolValue) return boolValue ? 1 : 0;
             if (obj is byte byteValue) return byteValue;
             if (obj is short shortValue) return shortValue;
@@ -435,25 +443,25 @@ namespace Horseshoe.NET.ObjectClean
             throw new UtilityException("Cannot convert object of type \"" + obj.GetType().Name + "\" to double");
         }
 
-        public static DateTime ZapDateTime(object obj, DateTime defaultValue = default, IFormatProvider provider = null, DateTimeStyles? dateTimeStyles = null)
+        public static DateTime DateTime(object obj, DateTime defaultValue = default, IFormatProvider provider = null, DateTimeStyles? dateTimeStyles = null)
         {
-            return ZapNDateTime(obj, provider: provider, dateTimeStyles: dateTimeStyles) ?? defaultValue;
+            return NDateTime(obj, provider: provider, dateTimeStyles: dateTimeStyles) ?? defaultValue;
         }
 
-        public static DateTime? ZapNDateTime(object obj, IFormatProvider provider = null, DateTimeStyles? dateTimeStyles = null)
+        public static DateTime? NDateTime(object obj, IFormatProvider provider = null, DateTimeStyles? dateTimeStyles = null, Func<object, bool> evaluatesToNull = null)
         {
-            if ((obj = Zap(obj)) is null) return null;
+            if ((obj = Object(obj, evaluatesToNull: evaluatesToNull)) is null) return null;
             if (obj is DateTime dateTimeValue) return dateTimeValue;
             if (obj is string stringValue)
             {
                 if (provider != null || dateTimeStyles.HasValue)
                 {
-                    if (DateTime.TryParse(stringValue, provider, dateTimeStyles ?? default, out dateTimeValue))
+                    if (System.DateTime.TryParse(stringValue, provider, dateTimeStyles ?? default, out dateTimeValue))
                     {
                         return dateTimeValue;
                     }
                 }
-                else if (DateTime.TryParse(stringValue, out dateTimeValue))
+                else if (System.DateTime.TryParse(stringValue, out dateTimeValue))
                 {
                     return dateTimeValue;
                 }
@@ -462,23 +470,23 @@ namespace Horseshoe.NET.ObjectClean
             throw new UtilityException("Cannot convert object of type \"" + obj.GetType().Name + "\" to DateTime");
         }
 
-        public static T ZapEnum<T>(object obj, T defaultValue = default, bool ignoreCase = false, bool suppressErrors = false) where T : struct
+        public static T Enum<T>(object obj, T defaultValue = default, bool ignoreCase = false, bool suppressErrors = false) where T : struct
         {
-            return ZapNEnum<T>(obj, ignoreCase: ignoreCase, suppressErrors: suppressErrors) ?? defaultValue;
+            return NEnum<T>(obj, ignoreCase: ignoreCase, suppressErrors: suppressErrors) ?? defaultValue;
         }
 
-        public static T? ZapNEnum<T>(object obj, bool ignoreCase = false, bool suppressErrors = false) where T : struct
+        public static T? NEnum<T>(object obj, bool ignoreCase = false, bool suppressErrors = false, Func<object, bool> evaluatesToNull = null) where T : struct
         {
-            if ((obj = Zap(obj)) is null) return null;
+            if ((obj = Object(obj, evaluatesToNull: evaluatesToNull)) is null) return null;
             var type = typeof(T);
             if (!type.IsEnum) throw new UtilityException("Not an enum type: " + type.FullName);
             if (obj is T tValue) return tValue;
             object tempObj = null;
             try
             {
-                if (obj is byte byteValue) tempObj = Enum.ToObject(type, byteValue);
-                if (obj is int intValue) tempObj = Enum.ToObject(type, intValue);
-                if (obj is long longValue) tempObj = Enum.ToObject(type, longValue);
+                if (obj is byte byteValue) tempObj = System.Enum.ToObject(type, byteValue);
+                if (obj is int intValue) tempObj = System.Enum.ToObject(type, intValue);
+                if (obj is long longValue) tempObj = System.Enum.ToObject(type, longValue);
             }
             catch
             {
@@ -488,7 +496,7 @@ namespace Horseshoe.NET.ObjectClean
             if (obj is string stringValue)
             {
                 stringValue = TextClean.CleanString(stringValue, textCleanMode: TextCleanMode.RemoveWhitespace);
-                if (Enum.TryParse(stringValue, ignoreCase, out T enumValue))
+                if (System.Enum.TryParse(stringValue, ignoreCase, out T enumValue))
                 {
                     return enumValue;
                 }

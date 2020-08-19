@@ -7,7 +7,7 @@ using System.Web;
 using System.Web.UI;
 
 using Horseshoe.NET.Bootstrap;
-using static Horseshoe.NET.ObjectClean.Methods;
+using Horseshoe.NET.Objects.Clean;
 
 namespace Horseshoe.NET.WebForms.Extensions
 {
@@ -25,27 +25,27 @@ namespace Horseshoe.NET.WebForms.Extensions
 
         public static string GetRemoteIPAddress(this Page page)
         {
-            return ZapString(page.Request?.UserHostAddress);
+            return Zap.String(page.Request?.UserHostAddress);
         }
 
         public static string GetRemoteIPAddress(this HttpContext httpContext)
         {
-            return ZapString(httpContext.Request?.UserHostAddress);
+            return Zap.String(httpContext.Request?.UserHostAddress);
         }
 
         public static string GetRemoteMachineName(this Page page)
         {
-            return ZapString(page.Request?.UserHostName);
+            return Zap.String(page.Request?.UserHostName);
         }
 
         public static string GetRemoteMachineName(this HttpContext httpContext)
         {
-            return ZapString(httpContext.Request?.UserHostName);
+            return Zap.String(httpContext.Request?.UserHostName);
         }
 
         public static string GetUserName(this HttpContext httpContext)
         {
-            return ZapString(httpContext.User?.Identity.Name) ?? ZapString(httpContext.Request?.ServerVariables["UNMAPPED_REMOTE_USER"]);
+            return Zap.String(httpContext.User?.Identity.Name) ?? Zap.String(httpContext.Request?.ServerVariables["UNMAPPED_REMOTE_USER"]);
         }
     }
 }

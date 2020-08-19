@@ -7,7 +7,7 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
 
-using static Horseshoe.NET.ObjectClean.Methods;
+using Horseshoe.NET.Objects.Clean;
 
 namespace Horseshoe.NET.Application
 {
@@ -58,7 +58,7 @@ namespace Horseshoe.NET.Application
                 // load win variables
                 try
                 {
-                    consoleTitle = ZapString(Console.Title);
+                    consoleTitle = Zap.String(Console.Title);
                 }
                 finally { }
 

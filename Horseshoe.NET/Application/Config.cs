@@ -3,8 +3,8 @@ using System.Configuration;
 using System.Globalization;
 using System.Text;
 
-using static Horseshoe.NET.ObjectClean.Methods;
 using Horseshoe.NET.Objects;
+using Horseshoe.NET.Objects.Clean;
 
 namespace Horseshoe.NET.Application
 {
@@ -50,14 +50,14 @@ namespace Horseshoe.NET.Application
             var value = Get(key);
             if (value != null)
             {
-                return ZapNByte(value, numberStyles: numberStyles, provider: provider);
+                return Zap.NByte(value, numberStyles: numberStyles, provider: provider);
             }
             if (!numberStyles.HasValue && provider == null)
             {
                 value = Get(key + "[hex]");
                 if (value != null)
                 {
-                    return ZapNByte(value, numberStyles: NumberStyles.HexNumber);
+                    return Zap.NByte(value, numberStyles: NumberStyles.HexNumber);
                 }
             }
             if (required)
@@ -84,14 +84,14 @@ namespace Horseshoe.NET.Application
             var value = Get(key);
             if (value != null)
             {
-                return ZapNInt(value, numberStyles: numberStyles, provider: provider);
+                return Zap.NInt(value, numberStyles: numberStyles, provider: provider);
             }
             if (!numberStyles.HasValue && provider == null)
             {
                 value = Get(key + "[hex]");
                 if (value != null)
                 {
-                    return ZapNInt(value, numberStyles: NumberStyles.HexNumber);
+                    return Zap.NInt(value, numberStyles: NumberStyles.HexNumber);
                 }
             }
             if (required)
@@ -104,25 +104,25 @@ namespace Horseshoe.NET.Application
         public static bool GetBool(string key, bool defaultValue = false, bool required = false)
         {
             var value = Get(key, required: required);
-            return ZapBool(value, defaultValue: defaultValue);
+            return Zap.Bool(value, defaultValue: defaultValue);
         }
 
         public static bool? GetNBool(string key, bool required = false)
         {
             var value = Get(key, required: required);
-            return ZapNBool(value);
+            return Zap.NBool(value);
         }
 
         public static T GetEnum<T>(string key, T defaultValue = default, bool ignoreCase = false, bool required = false, bool suppressErrors = false) where T : struct
         {
             var value = Get(key, required: required);
-            return ZapEnum<T>(value, defaultValue: defaultValue, ignoreCase: ignoreCase, suppressErrors: suppressErrors);
+            return Zap.Enum<T>(value, defaultValue: defaultValue, ignoreCase: ignoreCase, suppressErrors: suppressErrors);
         }
 
         public static T? GetNEnum<T>(string key, bool ignoreCase = false, bool required = false, bool suppressErrors = false) where T : struct
         {
             var value = Get(key, required: required);
-            return ZapNEnum<T>(value, ignoreCase: ignoreCase, suppressErrors: suppressErrors);
+            return Zap.NEnum<T>(value, ignoreCase: ignoreCase, suppressErrors: suppressErrors);
         }
 
         public static string GetConnectionString(string name, bool suppressErrors = false)

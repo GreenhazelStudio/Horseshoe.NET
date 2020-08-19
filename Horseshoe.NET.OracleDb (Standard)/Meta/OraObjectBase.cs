@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-using static Horseshoe.NET.ObjectClean.Methods;
+using Horseshoe.NET.Objects.Clean;
 
 namespace Horseshoe.NET.OracleDb.Meta
 {
@@ -86,7 +86,7 @@ namespace Horseshoe.NET.OracleDb.Meta
             {
                 throw new UtilityException("Malformed object name: " + name);
             }
-            return ZapString(_name);
+            return Zap.String(_name);
         }
 
         static Regex NoQuotePattern { get; } = new Regex(@"^[A-Z0-9_]+$", RegexOptions.IgnoreCase);

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 using Horseshoe.NET.Collections.Extensions;
 using static Horseshoe.NET.IO.FileImport.ImportUtil;
-using static Horseshoe.NET.ObjectClean.Methods;
+using Horseshoe.NET.Objects.Clean;
 using Horseshoe.NET.Text;
 
 namespace Horseshoe.NET.IO.FileImport
@@ -163,7 +163,7 @@ namespace Horseshoe.NET.IO.FileImport
             _list.Add(PostParseString(_valueTemp.ToString(), autoTrunc));
             _valueTemp.Clear();
 
-            if (_list.Count == 1 && ZapString(_list[0]) == null)
+            if (_list.Count == 1 && Zap.String(_list[0]) == null)
             {
                 return null;
             }

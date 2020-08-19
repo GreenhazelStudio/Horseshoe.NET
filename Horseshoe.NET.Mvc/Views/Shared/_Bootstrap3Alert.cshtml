@@ -2,6 +2,7 @@
 
 @using Horseshoe.NET.Bootstrap
 @using Horseshoe.NET.Bootstrap.Extensions
+@using Horseshoe.NET.Objects.Clean
 @using Horseshoe.NET.Text
 
 @model Bootstrap3.Alert
@@ -19,7 +20,7 @@
                 <strong>@Model.Emphasis</strong>@(" - ")
             }
 
-            var message = TextUtil.RevealNullOrBlank(Horseshoe.NET.ObjectClean.Methods.ZapString(Model.Message));
+            var message = TextUtil.RevealNullOrBlank(Zap.String(Model.Message));
             if (Model.EncodeHtml)
             {
                 @message

@@ -10,7 +10,7 @@ using System.Web;
 
 using Microsoft.AspNetCore.Http;
 
-using static Horseshoe.NET.ObjectClean.Methods;
+using Horseshoe.NET.Objects.Clean;
 
 namespace Horseshoe.NET.Mvc.Extensions
 {
@@ -70,7 +70,7 @@ namespace Horseshoe.NET.Mvc.Extensions
 
         public static string GetRemoteIPAddress(this HttpContext httpContext)
         {
-            return ZapString(httpContext.Connection.RemoteIpAddress);
+            return Zap.String(httpContext.Connection.RemoteIpAddress);
         }
 
         public static string GetRemoteMachineName(this HttpRequest request)
@@ -92,7 +92,7 @@ namespace Horseshoe.NET.Mvc.Extensions
 
         public static string GetUserName(this HttpContext httpContext)
         {
-            return ZapString(httpContext.User?.Identity.Name);
+            return Zap.String(httpContext.User?.Identity.Name);
         }
     }
 }

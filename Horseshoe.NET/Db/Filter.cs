@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 using static Horseshoe.NET.Db.DataUtil;
-using static Horseshoe.NET.ObjectClean.Methods;
+using Horseshoe.NET.Objects.Clean;
 
 namespace Horseshoe.NET.Db
 {
@@ -26,7 +26,7 @@ namespace Horseshoe.NET.Db
 
         public Filter(string columnName, FilterMode filterMode, object[] values, DbProduct? product = null)
         {
-            ColumnName = ZapString(columnName);
+            ColumnName = Zap.String(columnName);
             FilterMode = filterMode;
             Values = values;
             Vendor = product;

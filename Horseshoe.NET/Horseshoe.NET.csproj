@@ -85,8 +85,7 @@
     <Compile Include="Crypto\Hash.cs" />
     <Compile Include="Crypto\HashOptions.cs" />
     <Compile Include="Crypto\CryptoSettings.cs" />
-    <Compile Include="ObjectClean\Extensions\Extensions.cs" />
-    <Compile Include="ObjectClean\Methods.cs" />
+    <Compile Include="Objects\Clean\Extensions\Extensions.cs" />
     <Compile Include="Dates\Age.cs" />
     <Compile Include="Db\AutoSort.cs" />
     <Compile Include="Db\Column.cs" />
@@ -110,6 +109,7 @@
     <Compile Include="IO\Http\Extensions\Extensions.cs" />
     <Compile Include="IO\Http\HttpResponseMetadata.cs" />
     <Compile Include="Machine.cs" />
+    <Compile Include="Objects\Clean\Zap.cs" />
     <Compile Include="StringList.cs" />
     <Compile Include="IO\Email\HtmlEmail.cs" />
     <Compile Include="IO\Email\PlainEmail.cs" />

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-using static Horseshoe.NET.ObjectClean.Methods;
+using Horseshoe.NET.Objects.Clean;
 
 namespace Horseshoe.NET.SqlDb.Meta
 {
@@ -101,7 +101,7 @@ namespace Horseshoe.NET.SqlDb.Meta
             {
                 throw new UtilityException("Malformed object name: " + name);
             }
-            return ZapString(_name);
+            return Zap.String(_name);
         }
 
         public override bool Equals(object other)

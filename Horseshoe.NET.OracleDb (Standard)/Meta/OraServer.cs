@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using static Horseshoe.NET.ObjectClean.Methods;
+using Horseshoe.NET.Objects.Clean;
 
 namespace Horseshoe.NET.OracleDb.Meta
 {
@@ -18,7 +18,7 @@ namespace Horseshoe.NET.OracleDb.Meta
 
         public OraServer(string dataSource, string serviceName = null, string instanceName = null, string name = null) : base(name ?? dataSource, OraObjectType.Server)
         {
-            DataSource = ZapString(dataSource) ?? throw new UtilityException("Data source cannot be null or blank");
+            DataSource = Zap.String(dataSource) ?? throw new UtilityException("Data source cannot be null or blank");
             ServiceName = serviceName;
             InstanceName = instanceName;
         }

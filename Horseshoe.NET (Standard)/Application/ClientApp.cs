@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Text;
 
 using Horseshoe.NET.Text.Extensions;
-using static Horseshoe.NET.ObjectClean.Methods;
+using Horseshoe.NET.Objects.Clean;
 
 namespace Horseshoe.NET.Application
 {
@@ -51,7 +51,7 @@ namespace Horseshoe.NET.Application
             // load error prone variables
             try
             {
-                consoleTitle = ZapString(Console.Title);
+                consoleTitle = Zap.String(Console.Title);
             }
             finally { }
 

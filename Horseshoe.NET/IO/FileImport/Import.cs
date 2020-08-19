@@ -8,8 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Horseshoe.NET.Collections.Extensions;
-using static Horseshoe.NET.ObjectClean.Methods;
 using Horseshoe.NET.Objects;
+using Horseshoe.NET.Objects.Clean;
 using Horseshoe.NET.Text;
 
 namespace Horseshoe.NET.IO.FileImport
@@ -530,7 +530,7 @@ namespace Horseshoe.NET.IO.FileImport
                         E e = new E();
                         for (int i = 0; i < columns.Length; i++)
                         {
-                            var propertyName = ZapString(columns[i].Name, textCleanMode: TextCleanMode.RemoveWhitespace, charsToRemove: charsToRemove);
+                            var propertyName = Zap.String(columns[i].Name, textCleanMode: TextCleanMode.RemoveWhitespace, charsToRemove: charsToRemove);
                             ObjectUtil.SetInstanceProperty(e, propertyName, array[i], ignoreCase: true);
                         }
                         list.Add(e);

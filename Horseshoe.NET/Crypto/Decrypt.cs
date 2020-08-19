@@ -5,7 +5,7 @@ using System.Security;
 using System.Security.Cryptography;
 
 using Horseshoe.NET.Crypto.Extensions;
-using static Horseshoe.NET.ObjectClean.Methods;
+using Horseshoe.NET.Objects.Clean;
 using Horseshoe.NET.Text;
 
 namespace Horseshoe.NET.Crypto
@@ -46,7 +46,7 @@ namespace Horseshoe.NET.Crypto
         {
             var plainBytes = Bytes(cipherBytes, options: options);
             var plainText = (options?.Encoding ?? CryptoSettings.DefaultEncoding).GetString(plainBytes);
-            return ZapString(plainText);
+            return Zap.String(plainText);
         }
 
         public static SecureString BytesToSecureString(byte[] cipherBytes, CryptoOptions options = null)

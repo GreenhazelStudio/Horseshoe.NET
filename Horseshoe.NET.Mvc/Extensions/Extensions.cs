@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 
 using Horseshoe.NET.Extensions;
-using static Horseshoe.NET.ObjectClean.Methods;
+using Horseshoe.NET.Objects.Clean;
 using Horseshoe.NET.Text;
 using Horseshoe.NET.Text.Extensions;
 
@@ -78,12 +78,12 @@ namespace Horseshoe.NET.Mvc.Extensions
 
         public static string GetRemoteIPAddress(this HttpRequest request)
         {
-            return ZapString(request.UserHostAddress);
+            return Zap.String(request.UserHostAddress);
         }
 
         public static string GetRemoteIPAddress(this HttpRequestBase request)
         {
-            return ZapString(request.UserHostAddress);
+            return Zap.String(request.UserHostAddress);
         }
 
         public static string GetRemoteMachineName(this HttpContext httpContext)
@@ -94,18 +94,18 @@ namespace Horseshoe.NET.Mvc.Extensions
         public static string GetRemoteMachineName(this HttpRequest request)
         {
             if (string.Equals(request.UserHostName, GetRemoteIPAddress(request))) return null;
-            return ZapString(request.UserHostName);
+            return Zap.String(request.UserHostName);
         }
 
         public static string GetRemoteMachineName(this HttpRequestBase request)
         {
             if (string.Equals(request.UserHostName, GetRemoteIPAddress(request))) return null;
-            return ZapString(request.UserHostName);
+            return Zap.String(request.UserHostName);
         }
 
         public static string GetUserName(this HttpContext httpContext)
         {
-            return ZapString(httpContext.User?.Identity.Name) ?? ZapString(httpContext.Request?.ServerVariables["UNMAPPED_REMOTE_USER"]);
+            return Zap.String(httpContext.User?.Identity.Name) ?? Zap.String(httpContext.Request?.ServerVariables["UNMAPPED_REMOTE_USER"]);
         }
     }
 }
