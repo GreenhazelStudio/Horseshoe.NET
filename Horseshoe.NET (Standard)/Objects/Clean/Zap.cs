@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Microsoft.Extensions.Primitives;
+
 using Horseshoe.NET.Extensions;
 using Horseshoe.NET.Text;
 
@@ -17,6 +19,15 @@ namespace Horseshoe.NET.Objects.Clean
             if (obj is null || obj is DBNull) return null;
             if (evaluatesToNull?.Invoke(obj) ?? false) return null;
             if (obj is string stringValue) return _String(stringValue, TextCleanMode.RemoveNonprintables, null, null);
+            if (obj is StringValues stringValuesValue)
+            {
+                switch (stringValuesValue.Count)
+                {
+                    case 0: return null;
+                    case 1: return stringValuesValue.Single();
+                    default: return string.Join(", ", stringValuesValue);
+                }
+            }
             return obj;
         }
 
