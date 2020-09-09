@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 using static Horseshoe.NET.Db.DataUtil;
-using Horseshoe.NET.Objects.Clean;
+using Horseshoe.NET.Objects;
 
 namespace Horseshoe.NET.Db
 {

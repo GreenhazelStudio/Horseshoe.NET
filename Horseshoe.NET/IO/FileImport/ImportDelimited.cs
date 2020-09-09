@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 using Horseshoe.NET.Collections.Extensions;
 using static Horseshoe.NET.IO.FileImport.ImportUtil;
-using Horseshoe.NET.Objects.Clean;
+using Horseshoe.NET.Objects;
 using Horseshoe.NET.Text;
 
 namespace Horseshoe.NET.IO.FileImport

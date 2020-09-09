@@ -7,7 +7,7 @@ using System.Web;
 using System.Web.UI;
 
 using Horseshoe.NET.Bootstrap;
-using Horseshoe.NET.Objects.Clean;
+using Horseshoe.NET.Objects;
 
 namespace Horseshoe.NET.WebForms.Extensions
 {

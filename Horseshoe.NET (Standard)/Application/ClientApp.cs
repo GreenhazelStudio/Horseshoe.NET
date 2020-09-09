@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Reflection;
 using System.Text;
 
 using Horseshoe.NET.Text.Extensions;
-using Horseshoe.NET.Objects.Clean;
+using Horseshoe.NET.Objects;
 
 namespace Horseshoe.NET.Application
 {
@@ -24,7 +22,6 @@ namespace Horseshoe.NET.Application
             get
             {
                 return _appType
-                    ?? Config.GetNEnum<AppType>("Horseshoe.NET:AppType")
                     ?? DetectAppType()
                     ?? default;
             }
@@ -127,8 +124,7 @@ namespace Horseshoe.NET.Application
         {
             get
             {
-                return _appMode
-                    ?? Config.GetNEnum<AppMode>("Horseshoe.NET:AppMode");
+                return _appMode;
             }
             set
             {

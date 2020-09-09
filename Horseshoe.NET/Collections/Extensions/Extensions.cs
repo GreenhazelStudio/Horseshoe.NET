@@ -170,14 +170,14 @@ namespace Horseshoe.NET.Collections.Extensions
             return CollectionUtil.Trim(collection);
         }
 
-        public static IEnumerable<string> Zap(this IEnumerable<string> collection, TextCleanMode textCleanMode = default, object customTextCleanDictionary = null, char[] charsToRemove = null)
+        public static IEnumerable<string> Zap(this IEnumerable<string> collection, TextCleanRules textCleanRules = null)
         {
-            return CollectionUtil.Zap(collection, textCleanMode: textCleanMode, customTextCleanDictionary: customTextCleanDictionary, charsToRemove: charsToRemove);
+            return CollectionUtil.Zap(collection, textCleanRules: textCleanRules);
         }
 
-        public static IEnumerable<string> ZapAndPrune(this IEnumerable<string> collection, TextCleanMode textCleanMode = default, object customTextCleanDictionary = null, char[] charsToRemove = null, PrunePolicy prunePolicy = default)
+        public static IEnumerable<string> ZapAndPrune(this IEnumerable<string> collection, TextCleanRules textCleanRules = null, PrunePolicy prunePolicy = default)
         {
-            return CollectionUtil.ZapAndPrune(collection, textCleanMode: textCleanMode, customTextCleanDictionary: customTextCleanDictionary, charsToRemove: charsToRemove, prunePolicy: prunePolicy);
+            return CollectionUtil.ZapAndPrune(collection, textCleanRules: textCleanRules, prunePolicy: prunePolicy);
         }
 
         public static bool StartsWith<E>(this IEnumerable<E> controlCollection, IEnumerable<E> partialCollection)

@@ -40,7 +40,7 @@ namespace ASP
     #line hidden
     
     #line 5 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
-    using Horseshoe.NET.Objects.Clean;
+    using Horseshoe.NET.Objects;
     
     #line default
     #line hidden
@@ -73,15 +73,15 @@ WriteLiteral("\r\n");
             #line hidden
 WriteLiteral("    <div");
 
-WriteAttribute("class", Tuple.Create(" class=\"", 207), Tuple.Create("\"", 300)
-, Tuple.Create(Tuple.Create("", 215), Tuple.Create("alert", 215), true)
+WriteAttribute("class", Tuple.Create(" class=\"", 201), Tuple.Create("\"", 294)
+, Tuple.Create(Tuple.Create("", 209), Tuple.Create("alert", 209), true)
             
             #line 11 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
-, Tuple.Create(Tuple.Create(" ", 220), Tuple.Create<System.Object, System.Int32>(Model.AlertType.ToCssClass() + (Model.Closeable ? " alert-dismissible" : "")
+, Tuple.Create(Tuple.Create(" ", 214), Tuple.Create<System.Object, System.Int32>(Model.AlertType.ToCssClass() + (Model.Closeable ? " alert-dismissible" : "")
             
             #line default
             #line hidden
-, 221), false)
+, 215), false)
 );
 
 WriteLiteral(">\r\n");
@@ -227,17 +227,17 @@ WriteLiteral("                    <div>\r\n                        <a");
 
 WriteLiteral(" href=\"javascript:;\"");
 
-WriteAttribute("onclick", Tuple.Create(" onclick=\"", 1415), Tuple.Create("\"", 1486)
-, Tuple.Create(Tuple.Create("", 1425), Tuple.Create("Bootstrap3.toggleAlertDetails(this,", 1425), true)
-, Tuple.Create(Tuple.Create(" ", 1460), Tuple.Create("\'", 1461), true)
+WriteAttribute("onclick", Tuple.Create(" onclick=\"", 1409), Tuple.Create("\"", 1480)
+, Tuple.Create(Tuple.Create("", 1419), Tuple.Create("Bootstrap3.toggleAlertDetails(this,", 1419), true)
+, Tuple.Create(Tuple.Create(" ", 1454), Tuple.Create("\'", 1455), true)
             
             #line 45 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
-             , Tuple.Create(Tuple.Create("", 1462), Tuple.Create<System.Object, System.Int32>(alertDetailsElementID
+             , Tuple.Create(Tuple.Create("", 1456), Tuple.Create<System.Object, System.Int32>(alertDetailsElementID
             
             #line default
             #line hidden
-, 1462), false)
-, Tuple.Create(Tuple.Create("", 1484), Tuple.Create("\')", 1484), true)
+, 1456), false)
+, Tuple.Create(Tuple.Create("", 1478), Tuple.Create("\')", 1478), true)
 );
 
 WriteLiteral(">show details</a>\r\n                    </div>\r\n");
@@ -252,25 +252,25 @@ WriteLiteral(">show details</a>\r\n                    </div>\r\n");
             #line hidden
 WriteLiteral("                    <div");
 
-WriteAttribute("id", Tuple.Create(" id=\"", 1705), Tuple.Create("\"", 1732)
+WriteAttribute("id", Tuple.Create(" id=\"", 1699), Tuple.Create("\"", 1726)
             
             #line 49 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
-, Tuple.Create(Tuple.Create("", 1710), Tuple.Create<System.Object, System.Int32>(alertDetailsElementID
+, Tuple.Create(Tuple.Create("", 1704), Tuple.Create<System.Object, System.Int32>(alertDetailsElementID
             
             #line default
             #line hidden
-, 1710), false)
+, 1704), false)
 );
 
-WriteAttribute("style", Tuple.Create(" style=\"", 1733), Tuple.Create("\"", 1764)
-, Tuple.Create(Tuple.Create("", 1741), Tuple.Create("display:none;", 1741), true)
+WriteAttribute("style", Tuple.Create(" style=\"", 1727), Tuple.Create("\"", 1758)
+, Tuple.Create(Tuple.Create("", 1735), Tuple.Create("display:none;", 1735), true)
             
             #line 49 "..\..\Views\Shared\_Bootstrap3Alert.cshtml"
-, Tuple.Create(Tuple.Create("", 1754), Tuple.Create<System.Object, System.Int32>(preStyles
+, Tuple.Create(Tuple.Create("", 1748), Tuple.Create<System.Object, System.Int32>(preStyles
             
             #line default
             #line hidden
-, 1754), false)
+, 1748), false)
 );
 
 WriteLiteral(">\r\n");

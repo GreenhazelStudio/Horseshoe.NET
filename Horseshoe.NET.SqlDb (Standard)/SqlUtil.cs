@@ -28,10 +28,6 @@ namespace Horseshoe.NET.SqlDb
             if (SqlSettings.DefaultConnectionString != null)
             {
                 announcePrefix = "CONFIG CONNSTR";
-                if (SqlSettings.DefaultConnectionStringName != null)
-                {
-                    announcePrefix += "(" + SqlSettings.DefaultConnectionStringName + "?)";
-                }
                 return SqlSettings.DefaultConnectionString;
             }
 

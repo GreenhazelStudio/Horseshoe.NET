@@ -12,9 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Horseshoe.NET (Standard)\Horseshoe.NET (Standard).csproj" />
-    <ProjectReference Include="..\Horseshoe.NET.ActiveDirectory (Standard)\Horseshoe.NET.ActiveDirectory (Standard).csproj" />
-    <ProjectReference Include="..\Horseshoe.NET.Excel (Standard)\Horseshoe.NET.Excel (Standard).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET (Core 2.0)\Horseshoe.NET (Core 2.0).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET.ActiveDirectory (Core 2.0)\Horseshoe.NET.ActiveDirectory (Core 2.0).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET.Excel (Core 2.0)\Horseshoe.NET.Excel (Core 2.0).csproj" />
     <ProjectReference Include="..\Horseshoe.NET.Mvc (Core 2.1)\Horseshoe.NET.Mvc (Core 2.1).csproj" />
   </ItemGroup>
 

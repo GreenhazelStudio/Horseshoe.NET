@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Horseshoe.NET.Db;
-using Horseshoe.NET.Objects.Clean;
+using Horseshoe.NET.Objects;
 using Horseshoe.NET.Text;
 
 using Oracle.ManagedDataAccess.Client;

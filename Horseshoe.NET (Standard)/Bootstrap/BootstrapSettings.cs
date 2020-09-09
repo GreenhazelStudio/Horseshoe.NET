@@ -13,7 +13,6 @@ namespace Horseshoe.NET.Bootstrap
             get
             {
                 return _defaultExceptionRendering
-                    ?? GetExceptionRenderingPolicy(Config.GetNEnum<ExceptionRenderingPolicy>("Horseshoe.NET:Bootstrap.ExceptionRendering"))
                     ?? GetExceptionRenderingPolicy(OrganizationalDefaultSettings.GetNullable<ExceptionRenderingPolicy>("Bootstrap.ExceptionRendering"))
                     ?? ExceptionRenderingPolicy.Preclude;
             }
@@ -51,7 +50,6 @@ namespace Horseshoe.NET.Bootstrap
             get
             {
                 return _autoCloseable
-                    ?? Config.GetNBool("Horseshoe.NET:Bootstrap.AutoCloseable")
                     ?? OrganizationalDefaultSettings.GetNBoolean("Bootstrap.AutoCloseable")
                     ?? false;
             }

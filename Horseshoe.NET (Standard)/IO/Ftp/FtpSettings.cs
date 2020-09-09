@@ -1,7 +1,5 @@
 ﻿using System;
 
-using Horseshoe.NET.Application;
-
 namespace Horseshoe.NET.IO.Ftp
 {
     public static class FtpSettings
@@ -16,7 +14,6 @@ namespace Horseshoe.NET.IO.Ftp
             get
             {
                 return _defaultFtpServer
-                    ?? Config.Get("Horseshoe.NET:Ftp.Server") 
                     ?? OrganizationalDefaultSettings.GetString("Ftp.Server");
             }
             set
@@ -35,7 +32,6 @@ namespace Horseshoe.NET.IO.Ftp
             get
             {
                 return _defaultEnableSsl
-                    ?? Config.GetNBool("Horseshoe.NET:Ftp.EnableSsl")
                     ?? OrganizationalDefaultSettings.GetBoolean("Ftp.EnableSsl");
             }
             set
@@ -54,7 +50,6 @@ namespace Horseshoe.NET.IO.Ftp
             get
             {
                 return _defaultPort
-                    ?? Config.GetNInt("Horseshoe.NET:Ftp.Port")
                     ?? OrganizationalDefaultSettings.GetNInt("Ftp.Port");
             }
             set
@@ -73,7 +68,6 @@ namespace Horseshoe.NET.IO.Ftp
             get
             {
                 return _defaultCredentials
-                    ?? Credential.Build(Config.Get("Horseshoe.NET:Ftp.UserName"), Config.Get("Horseshoe.NET:Ftp.Password"), isEncryptedPassword: Config.GetBool("Horseshoe.NET:Ftp.IsEncryptedPassword"), domain: Config.Get("Horseshoe.NET:Ftp.Domain"))
                     ?? OrganizationalDefaultSettings.GetNullable<Credential>("Ftp.Credentials");
             }
             set
@@ -92,7 +86,6 @@ namespace Horseshoe.NET.IO.Ftp
             get
             {
                 return _defaultServerPath
-                    ?? Config.Get("Horseshoe.NET:Ftp.ServerPath")
                     ?? "";
             }
             set

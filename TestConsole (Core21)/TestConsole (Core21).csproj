@@ -7,12 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Horseshoe.NET (Standard)\Horseshoe.NET (Standard).csproj" />
-    <ProjectReference Include="..\Horseshoe.NET.ActiveDirectory (Standard)\Horseshoe.NET.ActiveDirectory (Standard).csproj" />
-    <ProjectReference Include="..\Horseshoe.NET.Excel (Standard)\Horseshoe.NET.Excel (Standard).csproj" />
-    <ProjectReference Include="..\Horseshoe.NET.Odbc (Standard)\Horseshoe.NET.Odbc (Standard).csproj" />
-    <ProjectReference Include="..\Horseshoe.NET.OracleDb (Standard)\Horseshoe.NET.OracleDb (Standard).csproj" />
-    <ProjectReference Include="..\Horseshoe.NET.SqlDb (Standard)\Horseshoe.NET.SqlDb (Standard).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET (Core 2.0)\Horseshoe.NET (Core 2.0).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET.ActiveDirectory (Core 2.0)\Horseshoe.NET.ActiveDirectory (Core 2.0).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET.Excel (Core 2.0)\Horseshoe.NET.Excel (Core 2.0).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET.Odbc (Core 2.0)\Horseshoe.NET.Odbc (Core 2.0).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET.OracleDb (Core 2.0)\Horseshoe.NET.OracleDb (Core 2.0).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET.SqlDb (Core 2.0)\Horseshoe.NET.SqlDb (Core 2.0).csproj" />
   </ItemGroup>
 
 </Project>

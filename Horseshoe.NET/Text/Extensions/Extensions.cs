@@ -8,9 +8,9 @@ namespace Horseshoe.NET.Text.Extensions
 {
     public static class Extensions
     {
-        public static string Clean(this string text, TextCleanMode textCleanMode = TextCleanMode.None, object customTextCleanDictionary = null, char[] charsToRemove = null)
+        public static string Clean(this string text, TextCleanRules rules)
         {
-            return TextClean.CleanString(text, textCleanMode: textCleanMode, customTextCleanDictionary: customTextCleanDictionary, charsToRemove: charsToRemove);
+            return TextClean.CleanString(text, rules);
         }
 
         public static string Fill(this string text, int targetLength, bool allowOverflow = false)

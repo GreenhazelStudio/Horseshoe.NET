@@ -1,0 +1,30 @@
+﻿namespace Horseshoe.NET.Db
+{
+    public enum FilterMode
+    {
+        Equals,
+        NotEquals,
+        Contains,
+        NotContains,
+        StartsWith,
+        NotStartsWith,
+        EndsWith,
+        NotEndsWith,
+        GreaterThan,
+        GreaterThanOrEquals,
+        LessThan,
+        LessThanOrEquals,
+        In,
+        NotIn,
+        Between,
+        NotBetween,
+        BetweenExclusive,
+        NotBetweenInclusive,
+        BetweenExclusiveLowerBoundOnly,
+        NotBetweenExclusiveLowerBoundOnly,
+        BetweenExclusiveUpperBoundOnly,
+        NotBetweenExclusiveUpperBoundOnly,
+        IsNull,
+        IsNotNull
+    }
+}

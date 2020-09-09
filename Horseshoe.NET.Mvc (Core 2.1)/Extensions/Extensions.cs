@@ -10,10 +10,7 @@ using System.Web;
 
 using Microsoft.AspNetCore.Http;
 
-using Horseshoe.NET.Extensions;
-using Horseshoe.NET.Objects.Clean;
-using Horseshoe.NET.Text;
-using Horseshoe.NET.Text.Extensions;
+using Horseshoe.NET.Objects;
 
 namespace Horseshoe.NET.Mvc.Extensions
 {

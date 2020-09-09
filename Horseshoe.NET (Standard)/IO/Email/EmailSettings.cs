@@ -1,7 +1,5 @@
 ﻿using System;
 
-using Horseshoe.NET.Application;
-
 namespace Horseshoe.NET.IO.Email
 {
     public static class EmailSettings
@@ -16,7 +14,6 @@ namespace Horseshoe.NET.IO.Email
             get
             {
                 return _defaultSmtpServer
-                    ?? Config.Get("Horseshoe.NET:Email.SmtpServer") 
                     ?? OrganizationalDefaultSettings.GetString("Email.SmtpServer");
             }
             set
@@ -35,7 +32,6 @@ namespace Horseshoe.NET.IO.Email
             get
             {
                 return _defaultPort
-                    ?? Config.GetNInt("Horseshoe.NET:Email.SmtpPort") 
                     ?? OrganizationalDefaultSettings.GetNInt("Email.SmtpPort");
             }
             set
@@ -54,7 +50,6 @@ namespace Horseshoe.NET.IO.Email
             get
             {
                 return _defaultEnableSsl
-                    ?? Config.GetNBool("Horseshoe.NET:Email.EnableSsl")
                     ?? OrganizationalDefaultSettings.GetBoolean("Email.EnableSsl");
             }
             set
@@ -73,7 +68,6 @@ namespace Horseshoe.NET.IO.Email
             get
             {
                 return _defaultCredentials
-                    ?? Credential.Build(Config.Get("Horseshoe.NET:Email.UserName"), Config.Get("Horseshoe.NET:Email.Password"), isEncryptedPassword: Config.GetBool("Horseshoe.NET:Email.IsEncryptedPassword"), domain: Config.Get("Horseshoe.NET:Email.Domain"))
                     ?? OrganizationalDefaultSettings.GetNullable<Credential>("Email.Credentials");
             }
             set
@@ -92,7 +86,6 @@ namespace Horseshoe.NET.IO.Email
             get
             {
                 return _defaultFrom
-                    ?? Config.Get("Horseshoe.NET:Email.From")
                     ?? OrganizationalDefaultSettings.GetString("Email.From");
             }
             set
@@ -111,7 +104,6 @@ namespace Horseshoe.NET.IO.Email
             get
             {
                 return _defaultFooterText
-                    ?? Config.Get("Horseshoe.NET:Email.Footer")
                     ?? OrganizationalDefaultSettings.GetString("Email.Footer");
             }
             set

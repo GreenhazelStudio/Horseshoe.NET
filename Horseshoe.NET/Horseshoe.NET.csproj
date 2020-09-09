@@ -91,7 +91,6 @@
     <Compile Include="Crypto\Hash.cs" />
     <Compile Include="Crypto\HashOptions.cs" />
     <Compile Include="Crypto\CryptoSettings.cs" />
-    <Compile Include="Objects\Clean\Extensions\Extensions.cs" />
     <Compile Include="Dates\Age.cs" />
     <Compile Include="Db\AutoSort.cs" />
     <Compile Include="Db\Column.cs" />
@@ -115,7 +114,7 @@
     <Compile Include="IO\Http\Extensions\Extensions.cs" />
     <Compile Include="IO\Http\HttpResponseMetadata.cs" />
     <Compile Include="Machine.cs" />
-    <Compile Include="Objects\Clean\Zap.cs" />
+    <Compile Include="Objects\Zap.cs" />
     <Compile Include="StringList.cs" />
     <Compile Include="IO\Email\HtmlEmail.cs" />
     <Compile Include="IO\Email\PlainEmail.cs" />
@@ -187,11 +186,16 @@
     <Compile Include="Text\Deserialize.cs" />
     <Compile Include="Text\Direction.cs" />
     <Compile Include="Text\Extensions\Extensions.cs" />
+    <Compile Include="Text\Internal\NewtonsoftJsonImpl.cs" />
+    <Compile Include="Text\Internal\SystemTextJsonImpl.cs" />
+    <Compile Include="Text\JsonProvider.cs" />
     <Compile Include="Text\RepeatMode.cs" />
     <Compile Include="Text\SearchCriteria.cs" />
     <Compile Include="Text\Serialize.cs" />
     <Compile Include="Text\TextClean.cs" />
+    <Compile Include="Text\TextCleanRules.cs" />
     <Compile Include="Text\TextCleanMode.cs" />
+    <Compile Include="Text\TextSettings.cs" />
     <Compile Include="Text\TextUtil.cs" />
     <Compile Include="Text\TruncateMarker.cs" />
     <Compile Include="UtilityException.cs" />

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Horseshoe.NET.Application;
-
 namespace Horseshoe.NET.ActiveDirectory
 {
     public static class ADSettings
@@ -17,7 +15,6 @@ namespace Horseshoe.NET.ActiveDirectory
             get
             {
                 return _defaultDomain
-                    ?? Config.Get("Horseshoe.NET:ActiveDirectory.Domain")
                     ?? OrganizationalDefaultSettings.GetString("ActiveDirectory.Domain");
             }
             set

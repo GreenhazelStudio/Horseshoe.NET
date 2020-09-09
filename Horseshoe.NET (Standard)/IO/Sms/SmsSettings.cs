@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Horseshoe.NET.Application;
-
 namespace Horseshoe.NET.IO.Sms
 {
     public static class SmsSettings
@@ -20,7 +18,6 @@ namespace Horseshoe.NET.IO.Sms
             get
             {
                 return _defaultFrom
-                    ?? Config.Get("Horseshoe.NET:Sms.From")
                     ?? OrganizationalDefaultSettings.GetString("Sms.From");
             }
             set

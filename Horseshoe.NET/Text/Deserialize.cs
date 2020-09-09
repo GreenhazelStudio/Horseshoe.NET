@@ -5,34 +5,40 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Newtonsoft.Json;
+using Horseshoe.NET.Text.Internal;
 
 namespace Horseshoe.NET.Text
 {
     public static class Deserialize
     {
-        public static object Json(string json, Func<string, string> preDeserializationFunc = null)
+        public static object Json(string json, Type objectType = null, Func<string, string> preDeserializationFunc = null)
         {
-            if (json == null) return null;
-            if (preDeserializationFunc != null)
+            switch (TextSettings.JsonProvider)
             {
-                json = preDeserializationFunc.Invoke(json);
+                case JsonProvider.NewtonsoftJson:
+                    return NewtonsoftJsonImpl.Deserialize(json, objectType: objectType, preDeserializationFunc: preDeserializationFunc);
+                case JsonProvider.SystemTextJson:
+                    if (objectType == null)
+                    {
+                        throw new UtilityException("The System.Text.Json provider requires 'objectType' to be specified.");
+                    }
+                    return SystemTextJsonImpl.Deserialize(json, objectType, preDeserializationFunc: preDeserializationFunc);
+                default:
+                    throw new UtilityException("Cannot find a JSON provider.  Try adding Newtonsoft.Json (a.k.a. Json.NET) or System.Text.Json");
             }
-            var jsonReader = new JsonTextReader(new StringReader(json));
-            object obj = new JsonSerializer().Deserialize(jsonReader);
-            return obj;
         }
 
         public static E Json<E>(string json, Func<string, string> preDeserializationFunc = null)
         {
-            if (json == null) return default;
-            if (preDeserializationFunc != null)
+            switch (TextSettings.JsonProvider)
             {
-                json = preDeserializationFunc.Invoke(json);
+                case JsonProvider.NewtonsoftJson:
+                    return NewtonsoftJsonImpl.Deserialize<E>(json, preDeserializationFunc: preDeserializationFunc);
+                case JsonProvider.SystemTextJson:
+                    return SystemTextJsonImpl.Deserialize<E>(json, preDeserializationFunc: preDeserializationFunc);
+                default:
+                    throw new UtilityException("Cannot find a JSON provider.  Try adding Newtonsoft.Json (a.k.a. Json.NET) or System.Text.Json");
             }
-            var jsonReader = new JsonTextReader(new StringReader(json));
-            E obj = new JsonSerializer().Deserialize<E>(jsonReader);
-            return obj;
         }
     }
 }

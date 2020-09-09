@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Horseshoe.NET (Standard)\Horseshoe.NET (Standard).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET (Core 3.0)\Horseshoe.NET (Core 3.0).csproj" />
     <ProjectReference Include="..\Horseshoe.NET.Mvc (Core 3.0)\Horseshoe.NET.Mvc (Core 3.0).csproj" />
   </ItemGroup>
 

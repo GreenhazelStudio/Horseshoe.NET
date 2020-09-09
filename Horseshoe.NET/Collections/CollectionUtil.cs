@@ -260,11 +260,11 @@ namespace Horseshoe.NET.Collections
         /// </summary>
         /// <param name="collection"></param>
         /// <returns></returns>
-        public static IEnumerable<string> Zap(IEnumerable<string> collection, TextCleanMode textCleanMode = default, object customTextCleanDictionary = null, char[] charsToRemove = null)
+        public static IEnumerable<string> Zap(IEnumerable<string> collection, TextCleanRules textCleanRules = null)
         {
             if (collection == null) return null;
             collection = collection
-                .Select(str => Objects.Clean.Zap.String(str, textCleanMode: textCleanMode, customTextCleanDictionary: customTextCleanDictionary, charsToRemove: charsToRemove))
+                .Select(str => Objects.Zap.String(str, textCleanRules: textCleanRules))
                 .ToList();
             return collection;
         }
@@ -274,9 +274,9 @@ namespace Horseshoe.NET.Collections
         /// </summary>
         /// <param name="collection"></param>
         /// <returns></returns>
-        public static IEnumerable<string> ZapAndPrune(IEnumerable<string> collection, TextCleanMode textCleanMode = default, object customTextCleanDictionary = null, char[] charsToRemove = null, PrunePolicy prunePolicy = default)
+        public static IEnumerable<string> ZapAndPrune(IEnumerable<string> collection, TextCleanRules textCleanRules = null, PrunePolicy prunePolicy = default)
         {
-            var list = Zap(collection, textCleanMode: textCleanMode, customTextCleanDictionary: customTextCleanDictionary, charsToRemove: charsToRemove)
+            var list = Zap(collection, textCleanRules: textCleanRules)
                 ?.ToList();
 
             if (list == null || !list.Any()) return list;
@@ -400,8 +400,8 @@ namespace Horseshoe.NET.Collections
 
             if (typeof(E) == typeof(string) && ignoreCase)
             {
-                var ucaseControlCollection = distinctControlCollection.Select(item => Objects.Clean.Zap.String(item)?.ToUpper()).ToList();
-                var ucaseCompareCollection = distinctCompareCollection.Select(item => Objects.Clean.Zap.String(item)?.ToUpper()).ToList();
+                var ucaseControlCollection = distinctControlCollection.Select(item => Objects.Zap.String(item)?.ToUpper()).ToList();
+                var ucaseCompareCollection = distinctCompareCollection.Select(item => Objects.Zap.String(item)?.ToUpper()).ToList();
                 return !ucaseCompareCollection.Any(item => !ucaseControlCollection.Contains(item));
             }
             return !distinctCompareCollection.Any(item => !distinctControlCollection.Contains(item));
@@ -416,8 +416,8 @@ namespace Horseshoe.NET.Collections
 
             if (typeof(E) == typeof(string) && ignoreCase)
             {
-                var ucaseControlCollection = controlCollection.Select(item => Objects.Clean.Zap.String(item)?.ToUpper()).ToList();
-                var ucaseCompareCollection = compareCollection.Select(item => Objects.Clean.Zap.String(item)?.ToUpper()).ToList();
+                var ucaseControlCollection = controlCollection.Select(item => Objects.Zap.String(item)?.ToUpper()).ToList();
+                var ucaseCompareCollection = compareCollection.Select(item => Objects.Zap.String(item)?.ToUpper()).ToList();
                 for (int i = 0; i < ucaseControlCollection.Count; i++)
                 {
                     if (!string.Equals(ucaseControlCollection[i], ucaseCompareCollection[i]))

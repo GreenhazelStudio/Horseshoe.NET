@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 
 using Horseshoe.NET.Extensions;
-using Horseshoe.NET.Objects.Clean;
-using Horseshoe.NET.Text;
+using Horseshoe.NET.Objects;
 using Horseshoe.NET.Text.Extensions;
 
 namespace Horseshoe.NET.Mvc.Extensions

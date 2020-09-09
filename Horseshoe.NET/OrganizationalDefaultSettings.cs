@@ -106,6 +106,8 @@ namespace Horseshoe.NET
             //Set("Sql.Timeout", 30);
             //Set("Sql.ServerList", "DBSVR01|'NAME'11.22.33.44:9999;2012|DBSVR02;2008R2");
 
+            //Set("Text.JsonProvider", "NewtonsoftJson");
+
             //Set("ReportingServices.ReportServer", "http://reports.mycompany.com/ReportServer");
 
             //Set("WebService.Credentials", new Credential("WebServiceUser", "gyHt82bNmre457sjd709Aq1==", isEncryptedPassword: true));

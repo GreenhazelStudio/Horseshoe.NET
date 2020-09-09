@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Text;
 
 using Horseshoe.NET.Objects;
-using Horseshoe.NET.Objects.Clean;
 
 namespace Horseshoe.NET.Application
 {

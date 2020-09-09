@@ -11,7 +11,6 @@ using Horseshoe.NET.Excel.Extensions;
 using Horseshoe.NET.IO.FileImport;
 using static Horseshoe.NET.IO.FileImport.ImportUtil;
 using Horseshoe.NET.Objects;
-using Horseshoe.NET.Objects.Clean;
 using Horseshoe.NET.Text;
 
 using NPOI.HSSF.UserModel;
@@ -503,7 +502,7 @@ namespace Horseshoe.NET.Excel
                     E e = new E();
                     for (int i = 0; i < columns.Length; i++)
                     {
-                        var propertyName = Zap.String(columns[i].Name, textCleanMode: TextCleanMode.RemoveWhitespace, charsToRemove: charsToRemove);
+                        var propertyName = Zap.String(columns[i].Name, textCleanRules: new TextCleanRules { Mode = TextCleanMode.RemoveWhitespace, CharsToRemove = charsToRemove });
                         ObjectUtil.SetInstanceProperty(e, propertyName, array[i], ignoreCase: true);
                     }
                     list.Add(e);

@@ -10,7 +10,6 @@ using Horseshoe.NET.Crypto;
 using Horseshoe.NET.Db;
 using static Horseshoe.NET.Db.DataUtil;
 using Horseshoe.NET.Db.Extensions;
-using Horseshoe.NET.Objects.Clean;
 using Horseshoe.NET.Objects;
 using Horseshoe.NET.Text;
 using Horseshoe.NET.Text.Extensions;
@@ -89,7 +88,7 @@ namespace Horseshoe.NET.OleDb
                     var properties = ObjectUtil.GetPublicInstanceProperties(typeof(E));
                     var objectArrays = AsObjects(conn, statement, out DataColumn[] dataColumns, timeout: timeout, autoTrunc: autoTrunc, suppressErrors: suppressErrors);
                     var normalizedColumnNames = dataColumns
-                        .Select(c => Zap.String(c.ColumnName, textCleanMode: TextCleanMode.RemoveWhitespace))
+                        .Select(c => Zap.String(c.ColumnName, textCleanRules: new TextCleanRules(TextCleanMode.RemoveWhitespace)))
                         .ToArray();
                     foreach (var objects in objectArrays)
                     {
@@ -486,7 +485,7 @@ namespace Horseshoe.NET.OleDb
                     var properties = ObjectUtil.GetPublicInstanceProperties(typeof(E));
                     var objectArrays = SQL.AsObjects(conn, statement, out DataColumn[] dataColumns, timeout: timeout, autoTrunc: autoTrunc, suppressErrors: suppressErrors);
                     var normalizedColumnNames = dataColumns
-                        .Select(c => Zap.String(c.ColumnName, textCleanMode: TextCleanMode.RemoveWhitespace))
+                        .Select(c => Zap.String(c.ColumnName, textCleanRules: new TextCleanRules(TextCleanMode.RemoveWhitespace)))
                         .ToArray();
                     foreach (var objects in objectArrays)
                     {
@@ -910,7 +909,7 @@ namespace Horseshoe.NET.OleDb
                         {
                             var dataColumns = reader.GetDataColumns();
                             var normalizedColumnNames = dataColumns
-                                .Select(c => Zap.String(c.ColumnName, textCleanMode: TextCleanMode.RemoveWhitespace))
+                                .Select(c => Zap.String(c.ColumnName, textCleanRules: new TextCleanRules(TextCleanMode.RemoveWhitespace)))
                                 .ToArray();
                             object[] objects;
                             while (reader.Read())
@@ -1332,7 +1331,7 @@ namespace Horseshoe.NET.OleDb
                     var properties = ObjectUtil.GetPublicInstanceProperties(typeof(E));
                     var objectArrays = AsObjects(conn, statement, out DataColumn[] dataColumns, timeout: timeout, autoTrunc: autoTrunc, suppressErrors: suppressErrors);
                     var normalizedColumnNames = dataColumns
-                        .Select(c => Zap.String(c.ColumnName, textCleanMode: TextCleanMode.RemoveWhitespace))
+                        .Select(c => Zap.String(c.ColumnName, textCleanRules: new TextCleanRules(TextCleanMode.RemoveWhitespace)))
                         .ToArray();
                     foreach (var objects in objectArrays)
                     {

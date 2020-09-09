@@ -14,7 +14,7 @@ using Horseshoe.NET.Collections;
 using Horseshoe.NET.Collections.Extensions;
 using Horseshoe.NET.Crypto;
 using Horseshoe.NET.Db;
-using Horseshoe.NET.Objects.Clean;
+using Horseshoe.NET.Objects;
 using Horseshoe.NET.OracleDb.Meta;
 
 namespace Horseshoe.NET.OracleDb
@@ -34,10 +34,6 @@ namespace Horseshoe.NET.OracleDb
             if (OracleSettings.DefaultConnectionString != null)
             {
                 announcePrefix = "CONFIG CONNSTR";
-                if (OracleSettings.DefaultConnectionStringName != null)
-                {
-                    announcePrefix += "(" + OracleSettings.DefaultConnectionStringName + "?)";
-                }
                 return OracleSettings.DefaultConnectionString;
             }
 

@@ -12,127 +12,128 @@ namespace Horseshoe.NET.Text
     // UniCode ref https://en.wikipedia.org/wiki/List_of_Unicode_characters#Basic_Latin
     public static class TextClean
     {
-        public static event TextCleanCharacterIdentified CharacterIdentified;
+        public static event CharCleaned CharCleaned;
 
-        public static string CleanString(string text, TextCleanMode textCleanMode = default, object customTextCleanDictionary = null, char[] charsToRemove = null)
+        public static string CleanString(string text, TextCleanRules rules)
         {
-            if ((textCleanMode & TextCleanMode.RemoveWhitespace) == TextCleanMode.RemoveWhitespace)
-            {
-                text = WhitespaceRegex.Replace(text, "");
-            }
-            else if ((textCleanMode & TextCleanMode.NormalizeAndCombineWhitespace) == TextCleanMode.NormalizeAndCombineWhitespace)
-            {
-                text = WhitespaceRegex.Replace(text, " ");
-            }
+            if (text == null) return null;
+            if (rules == null) return text;
 
             var list = new List<char>(text.ToCharArray());
 
-            if ((textCleanMode & TextCleanMode.NormalizeWhitespace) == TextCleanMode.NormalizeWhitespace || textCleanMode == TextCleanMode.All || textCleanMode == TextCleanMode.AllExtended)
+            if (rules.Mode != TextCleanMode.None)
             {
-                CleanString(list, Whitespaces, ' ', category: nameof(Whitespaces));
-            }
-
-            if ((textCleanMode & TextCleanMode.RemoveNonprintables) == TextCleanMode.RemoveNonprintables || textCleanMode == TextCleanMode.All || textCleanMode == TextCleanMode.AllExtended)
-            {
-                CleanString(list, Nonprintables, "", category: nameof(Nonprintables));
-            }
-
-            if ((textCleanMode & TextCleanMode.NormalizePunctuation) == TextCleanMode.NormalizePunctuation || textCleanMode == TextCleanMode.All || textCleanMode == TextCleanMode.AllExtended)
-            {
-                CleanString(list, Punctuation, category: nameof(Punctuation));
-                CleanString(list, ComplexPunctuation, category: nameof(ComplexPunctuation));
-            }
-
-            if ((textCleanMode & TextCleanMode.NormalizeNumbersMathAndProgramming) == TextCleanMode.NormalizeNumbersMathAndProgramming || textCleanMode == TextCleanMode.All || textCleanMode == TextCleanMode.AllExtended)
-            {
-                CleanString(list, NumbersMathAndProgramming, category: nameof(NumbersMathAndProgramming));
-                CleanString(list, ComplexNumbersMathAndProgramming, category: nameof(ComplexNumbersMathAndProgramming));
-            }
-
-            if ((textCleanMode & TextCleanMode.NormalizeSuperscriptsAndSubscripts) == TextCleanMode.NormalizeSuperscriptsAndSubscripts || textCleanMode == TextCleanMode.All || textCleanMode == TextCleanMode.AllExtended)
-            {
-                CleanString(list, SuperscriptsAndSubscripts, category: nameof(SuperscriptsAndSubscripts));
-            }
-
-            if ((textCleanMode & TextCleanMode.NormalizeLatin) == TextCleanMode.NormalizeLatin || textCleanMode == TextCleanMode.All)
-            {
-                CleanString(list, Latin, category: nameof(Latin));
-                CleanString(list, ComplexLatin, category: nameof(ComplexLatin));
-            }
-
-            if ((textCleanMode & TextCleanMode.NormalizeLatinExtended) == TextCleanMode.NormalizeLatinExtended || textCleanMode == TextCleanMode.AllExtended)
-            {
-                CleanString(list, LatinExtended, category: nameof(LatinExtended));
-                CleanString(list, ComplexLatinExtended, category: nameof(ComplexLatinExtended));
-            }
-
-            if ((textCleanMode & TextCleanMode.NormalizeGreek) == TextCleanMode.NormalizeGreek || textCleanMode == TextCleanMode.All)
-            {
-                CleanString(list, Greek, category: nameof(Greek));
-                CleanString(list, ComplexGreek, category: nameof(ComplexGreek));
-            }
-
-            if ((textCleanMode & TextCleanMode.NormalizeGreekExtended) == TextCleanMode.NormalizeGreekExtended || textCleanMode == TextCleanMode.AllExtended)
-            {
-                CleanString(list, GreekExtended, category: nameof(GreekExtended));
-                CleanString(list, ComplexGreek, category: nameof(ComplexGreek));                // there is no complex greek extended at this time
-            }
-
-            if ((textCleanMode & TextCleanMode.NormalizeCyrillic) == TextCleanMode.NormalizeCyrillic || textCleanMode == TextCleanMode.All || textCleanMode == TextCleanMode.AllExtended)
-            {
-                CleanString(list, Cyrillic, category: nameof(Cyrillic));
-                CleanString(list, ComplexCyrillic, category: nameof(ComplexCyrillic));
-            }
-
-            if ((textCleanMode & TextCleanMode.NormalizeSymbols) == TextCleanMode.NormalizeSymbols || textCleanMode == TextCleanMode.All || textCleanMode == TextCleanMode.AllExtended)
-            {
-                CleanString(list, Symbols, category: nameof(Symbols));
-                CleanString(list, ComplexSymbols, category: nameof(ComplexSymbols));
-            }
-
-            if (customTextCleanDictionary != null)
-            {
-                if (customTextCleanDictionary is IDictionary<char, char[]> dictionary)
+                if ((rules.Mode & TextCleanMode.RemoveWhitespace) == TextCleanMode.RemoveWhitespace)
                 {
-                    CleanString(list, dictionary, category: null, isCustomDictionary: true);
+                    text = WhitespaceRegex.Replace(text, "");
+                    list = new List<char>(text.ToCharArray());
                 }
-                else if (customTextCleanDictionary is IDictionary<string, char[]> complexDictionary)
+                else if ((rules.Mode & TextCleanMode.NormalizeAndCombineWhitespace) == TextCleanMode.NormalizeAndCombineWhitespace)
                 {
-                    CleanString(list, complexDictionary, category: null, isCustomDictionary: true);
+                    text = WhitespaceRegex.Replace(text, " ");
+                    list = new List<char>(text.ToCharArray());
                 }
-                else
+
+                if ((rules.Mode & TextCleanMode.NormalizeWhitespace) == TextCleanMode.NormalizeWhitespace || rules.Mode == TextCleanMode.All || rules.Mode == TextCleanMode.AllExtended)
                 {
-                    throw new UtilityException("customDictionary must be either of type IDictionary<char, char[]> or IDictionary<string, char[]>");
+                    CleanString(list, Whitespaces, ' ', category: nameof(Whitespaces));
+                }
+
+                if ((rules.Mode & TextCleanMode.RemoveNonprintables) == TextCleanMode.RemoveNonprintables || rules.Mode == TextCleanMode.All || rules.Mode == TextCleanMode.AllExtended)
+                {
+                    CleanString(list, Nonprintables, "", category: nameof(Nonprintables));
+                }
+
+                if ((rules.Mode & TextCleanMode.NormalizePunctuation) == TextCleanMode.NormalizePunctuation || rules.Mode == TextCleanMode.All || rules.Mode == TextCleanMode.AllExtended)
+                {
+                    CleanString(list, Punctuation, category: nameof(Punctuation));
+                    CleanString(list, ComplexPunctuation, category: nameof(ComplexPunctuation));
+                }
+
+                if ((rules.Mode & TextCleanMode.NormalizeNumbersMathAndProgramming) == TextCleanMode.NormalizeNumbersMathAndProgramming || rules.Mode == TextCleanMode.All || rules.Mode == TextCleanMode.AllExtended)
+                {
+                    CleanString(list, NumbersMathAndProgramming, category: nameof(NumbersMathAndProgramming));
+                    CleanString(list, ComplexNumbersMathAndProgramming, category: nameof(ComplexNumbersMathAndProgramming));
+                }
+
+                if ((rules.Mode & TextCleanMode.NormalizeSuperscriptsAndSubscripts) == TextCleanMode.NormalizeSuperscriptsAndSubscripts || rules.Mode == TextCleanMode.All || rules.Mode == TextCleanMode.AllExtended)
+                {
+                    CleanString(list, SuperscriptsAndSubscripts, category: nameof(SuperscriptsAndSubscripts));
+                }
+
+                if ((rules.Mode & TextCleanMode.NormalizeLatin) == TextCleanMode.NormalizeLatin || rules.Mode == TextCleanMode.All)
+                {
+                    CleanString(list, Latin, category: nameof(Latin));
+                    CleanString(list, ComplexLatin, category: nameof(ComplexLatin));
+                }
+
+                if ((rules.Mode & TextCleanMode.NormalizeLatinExtended) == TextCleanMode.NormalizeLatinExtended || rules.Mode == TextCleanMode.AllExtended)
+                {
+                    CleanString(list, LatinExtended, category: nameof(LatinExtended));
+                    CleanString(list, ComplexLatinExtended, category: nameof(ComplexLatinExtended));
+                }
+
+                if ((rules.Mode & TextCleanMode.NormalizeGreek) == TextCleanMode.NormalizeGreek || rules.Mode == TextCleanMode.All)
+                {
+                    CleanString(list, Greek, category: nameof(Greek));
+                    CleanString(list, ComplexGreek, category: nameof(ComplexGreek));
+                }
+
+                if ((rules.Mode & TextCleanMode.NormalizeGreekExtended) == TextCleanMode.NormalizeGreekExtended || rules.Mode == TextCleanMode.AllExtended)
+                {
+                    CleanString(list, GreekExtended, category: nameof(GreekExtended));
+                    CleanString(list, ComplexGreek, category: nameof(ComplexGreek));                // there is no complex greek extended at this time
+                }
+
+                if ((rules.Mode & TextCleanMode.NormalizeCyrillic) == TextCleanMode.NormalizeCyrillic || rules.Mode == TextCleanMode.All || rules.Mode == TextCleanMode.AllExtended)
+                {
+                    CleanString(list, Cyrillic, category: nameof(Cyrillic));
+                    CleanString(list, ComplexCyrillic, category: nameof(ComplexCyrillic));
+                }
+
+                if ((rules.Mode & TextCleanMode.NormalizeSymbols) == TextCleanMode.NormalizeSymbols || rules.Mode == TextCleanMode.All || rules.Mode == TextCleanMode.AllExtended)
+                {
+                    CleanString(list, Symbols, category: nameof(Symbols));
+                    CleanString(list, ComplexSymbols, category: nameof(ComplexSymbols));
                 }
             }
 
-            if (charsToRemove != null)
+            if (rules.CustomMap is IDictionary<char, char[]> dictionary)
             {
-                CleanString(list, charsToRemove, "", category: nameof(charsToRemove), isCustomDictionary: true);
+                CleanString(list, dictionary, category: null, isCustomDictionary: true);
+            }
+            else if (rules.CustomMap is IDictionary<string, char[]> complexDictionary)
+            {
+                CleanString(list, complexDictionary, category: null, isCustomDictionary: true);
+            }
+
+            if (rules.CharsToRemove != null)
+            {
+                CleanString(list, rules.CharsToRemove, "", category: "", isCustomDictionary: true);
             }
 
             text = new string(list.ToArray());
             return text;
         }
 
-        public static string CleanString(string text, char[] charsToReplace, char replacement, string category = null, bool isCustomDictionary = false)
+        public static string CleanString(string text, IEnumerable<char> charsToReplace, char replacement, string category = null, bool isCustomDictionary = false)
         {
             var list = new List<char>(text.ToCharArray());
             CleanString(list, charsToReplace, replacement, category: category, isCustomDictionary: isCustomDictionary);
             return new string(list.ToArray());
         }
 
-        public static void CleanString(List<char> list, char[] charsToReplace, char replacement, string category = null, bool isCustomDictionary = false)
+        public static void CleanString(List<char> list, IEnumerable<char> charsToReplace, char replacement, string category = null, bool isCustomDictionary = false)
         {
             int pos;
             foreach (char c in charsToReplace)
             {
-                if (CharacterIdentified != null)
+                if (CharCleaned != null)
                 {
                     pos = list.IndexOf(c);
                     if (pos > -1)
                     {
-                        CharacterIdentified.Invoke(c, new string(new[] { replacement }), pos, category, isCustomDictionary);
+                        CharCleaned.Invoke(c, new string(new[] { replacement }), pos, category, isCustomDictionary);
                     }
                 }
 
@@ -140,25 +141,25 @@ namespace Horseshoe.NET.Text
             }
         }
 
-        public static string CleanString(string text, char[] charsToReplace, string replacement, string category = null, bool isCustomDictionary = false)
+        public static string CleanString(string text, IEnumerable<char> charsToReplace, string replacement, string category = null, bool isCustomDictionary = false)
         {
             var list = new List<char>(text.ToCharArray());
             CleanString(list, charsToReplace, replacement, category: category, isCustomDictionary: isCustomDictionary);
             return new string(list.ToArray());
         }
 
-        public static void CleanString(List<char> list, char[] charsToReplace, string replacement, string category = null, bool isCustomDictionary = false)
+        public static void CleanString(List<char> list, IEnumerable<char> charsToReplace, string replacement, string category = null, bool isCustomDictionary = false)
         {
             int pos;
             var replacements = replacement.ToCharArray();
             foreach (char c in charsToReplace)
             {
-                if (CharacterIdentified != null)
+                if (CharCleaned != null)
                 {
                     pos = list.IndexOf(c);
                     if (pos > -1)
                     {
-                        CharacterIdentified.Invoke(c, replacement, pos, category, isCustomDictionary);
+                        CharCleaned.Invoke(c, replacement, pos, category, isCustomDictionary);
                     }
                 }
 

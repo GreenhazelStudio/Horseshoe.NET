@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 using Horseshoe.NET.Collections.Extensions;
 using Horseshoe.NET.Crypto;
-using Horseshoe.NET.Objects.Clean;
+using Horseshoe.NET.Objects;
 using Horseshoe.NET.Text;
 
 namespace Horseshoe.NET.Db

@@ -78,7 +78,7 @@ namespace Horseshoe.NET.ConsoleX
                 }
             }
 
-            input = TextClean.CleanString(input, TextCleanMode.RemoveWhitespace);
+            input = TextClean.CleanString(input, rules: new TextCleanRules(TextCleanMode.RemoveWhitespace));
 
             var match = NumericRangePattern.Match(input);
 

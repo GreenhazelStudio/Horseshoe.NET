@@ -7,7 +7,7 @@ using System.Text;
 using Horseshoe.NET.Collections.Extensions;
 using Horseshoe.NET.ConsoleX.Extensions;
 using Horseshoe.NET.Extensions;
-using Horseshoe.NET.Objects.Clean;
+using Horseshoe.NET.Objects;
 using Horseshoe.NET.Text.Extensions;
 
 namespace Horseshoe.NET.ConsoleX

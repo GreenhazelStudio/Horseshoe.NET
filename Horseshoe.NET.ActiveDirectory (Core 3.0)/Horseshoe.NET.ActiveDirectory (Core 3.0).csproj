@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <RootNamespace>Horseshoe.NET.ActiveDirectory</RootNamespace>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>assembly-signing-key.snk</AssemblyOriginatorKeyFile>
+    <Version>1.0.9.3</Version>
+    <Authors>Carl Thomas</Authors>
+    <Company>Greenhazel Studio</Company>
+    <Description>Services for Active Directory authentication and LDAP querying</Description>
+    <Copyright>Copyright © 2020 Greenhazel Studio</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.DirectoryServices" Version="4.7.0" />
+    <PackageReference Include="System.DirectoryServices.AccountManagement" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Horseshoe.NET (Core 3.0)\Horseshoe.NET (Core 3.0).csproj" />
+  </ItemGroup>
+
+</Project>

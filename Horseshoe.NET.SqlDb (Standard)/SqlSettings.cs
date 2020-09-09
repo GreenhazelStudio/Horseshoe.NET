@@ -9,24 +9,6 @@ namespace Horseshoe.NET.SqlDb
 {
     public static class SqlSettings
     {
-        static string _defaultConnectionStringName;
-
-        /// <summary>
-        /// Gets or sets the default SQL Server connection string name used by DataAccess.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Sql.ConnectionStringName)
-        /// </summary>
-        public static string DefaultConnectionStringName
-        {
-            get
-            {
-                return _defaultConnectionStringName
-                    ?? Config.Get("Horseshoe.NET:Sql.ConnectionStringName");
-            }
-            set
-            {
-                _defaultConnectionStringName = value;
-            }
-        }
-
         private static string _defaultConnectionString;
         private static bool _isEncryptedPassword;
 
@@ -38,7 +20,6 @@ namespace Horseshoe.NET.SqlDb
             get
             {
                 return _GetConnectionString(_defaultConnectionString, _isEncryptedPassword)
-                    ?? _GetConnectionString(Config.GetConnectionString(DefaultConnectionStringName, suppressErrors: true), Config.GetBool("Horseshoe.NET:Sql.IsEncryptedPassword"))
                     ?? _GetConnectionString(OrganizationalDefaultSettings.GetString("Sql.ConnectionString"), OrganizationalDefaultSettings.GetBoolean("Sql.IsEncryptedPassword"));
             }
         }
@@ -72,7 +53,6 @@ namespace Horseshoe.NET.SqlDb
                 if (_defaultServer == null)
                 {
                     _defaultServer =      // DBSVR01 (lookup / versionless) or 'NAME'11.22.33.44:9999;2012 or DBSVR02;2008R2
-                        Config.Get("Horseshoe.NET:Sql.Server", parseFunc: (raw) => DbServer.Parse(raw)) ??
                         OrganizationalDefaultSettings.Get("Sql.Server", parseFunc: (raw) => DbServer.Parse((string)raw));
                 }
                 return _defaultServer;
@@ -93,7 +73,6 @@ namespace Horseshoe.NET.SqlDb
             get
             {
                 return _defaultDataSource         // e.g. DBSVR01
-                    ?? Config.Get("Horseshoe.NET:Sql.DataSource")
                     ?? OrganizationalDefaultSettings.GetString("Sql.DataSource")
                     ?? DefaultServer?.DataSource;
             }
@@ -113,7 +92,6 @@ namespace Horseshoe.NET.SqlDb
             get
             {
                 return _defaultInitialCatalog           // e.g. CustomerDatabase
-                    ?? Config.Get("Horseshoe.NET:Sql.InitialCatalog")
                     ?? OrganizationalDefaultSettings.GetString("Sql.InitialCatalog");
             }
             set
@@ -132,12 +110,6 @@ namespace Horseshoe.NET.SqlDb
             get
             {
                 return _defaultCredentials
-                    ?? Credential.Build
-                    (
-                        Config.Get("Horseshoe.NET:Sql.UserID"), 
-                        Config.Get("Horseshoe.NET:Sql.Password"), 
-                        isEncryptedPassword: Config.GetBool("Horseshoe.NET:Sql.IsEncryptedPassword")
-                    )
                     ?? OrganizationalDefaultSettings.GetNullable<Credential>("Sql.Credentials");
             }
             set
@@ -156,7 +128,6 @@ namespace Horseshoe.NET.SqlDb
             get
             {
                 return _defaultAdditionalConnectionAttributes         // e.g. Integrated Security=SSQI|Attribute1=Value1
-                    ?? Config.Get("Horseshoe.NET:Sql.AdditionalConnectionAttributes", parseFunc: (raw) => DataUtil.ParseAdditionalConnectionAttributes(raw))
                     ?? OrganizationalDefaultSettings.Get("Sql.AdditionalConnectionAttributes", parseFunc: (raw) => DataUtil.ParseAdditionalConnectionAttributes((string)raw));
             }
             set
@@ -175,7 +146,6 @@ namespace Horseshoe.NET.SqlDb
             get
             {
                 return _defaultTimeout         // e.g. 30 (Microsoft default)
-                    ?? Config.GetNInt("Horseshoe.NET:Sql.Timeout")
                     ?? OrganizationalDefaultSettings.GetNInt("Sql.Timeout");
             }
             set
@@ -196,7 +166,6 @@ namespace Horseshoe.NET.SqlDb
                 if (_serverList == null)
                 {
                     _serverList =          // e.g. DBSVR01|'NAME'11.22.33.44:9999;2012|DBSVR02;2008R2
-                        Config.Get("Horseshoe.NET:Sql.ServerList", parseFunc: (raw) => DbServer.ParseList(raw)) ??
                         OrganizationalDefaultSettings.Get("Sql.ServerList", parseFunc: (raw) => DbServer.ParseList((string)raw));
                 }
                 return _serverList;

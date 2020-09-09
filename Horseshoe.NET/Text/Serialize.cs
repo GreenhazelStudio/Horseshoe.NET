@@ -5,21 +5,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Newtonsoft.Json;
+using Horseshoe.NET.Text.Internal;
 
 namespace Horseshoe.NET.Text
 {
     public static class Serialize
     {
-        public static event JsonPayloadGenerated JsonPayloadGenerated;
+        public static event JsonGenerated JsonGenerated;
 
-        public static string Json(object obj)
+        public static string Json(object obj, bool indented = true)
         {
-            var sb = new StringBuilder();
-            var jsonWriter = new JsonTextWriter(new StringWriter(sb));
-            new JsonSerializer().Serialize(jsonWriter, obj);
-            JsonPayloadGenerated?.Invoke(sb.ToString());
-            return sb.ToString();
+            string json;
+            switch (TextSettings.JsonProvider)
+            {
+                case JsonProvider.NewtonsoftJson:
+                    json = NewtonsoftJsonImpl.Serialize(obj, indented: indented);
+                    JsonGenerated?.Invoke(json);
+                    return json;
+                case JsonProvider.SystemTextJson:
+                    json = SystemTextJsonImpl.Serialize(obj, indented: indented);
+                    JsonGenerated?.Invoke(json);
+                    return json;
+                default:
+                    throw new UtilityException("Cannot find a JSON provider.  Try adding Newtonsoft.Json (a.k.a. Json.NET) or System.Text.Json");
+            }
         }
     }
 }

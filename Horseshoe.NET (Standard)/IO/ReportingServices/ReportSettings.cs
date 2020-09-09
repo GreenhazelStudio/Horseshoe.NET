@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Horseshoe.NET.Application;
-
 namespace Horseshoe.NET.IO.ReportingServices
 {
     public static class ReportSettings
@@ -20,7 +18,6 @@ namespace Horseshoe.NET.IO.ReportingServices
             get
             {
                 return _defaultReportServer
-                    ?? Config.Get("Horseshoe.NET:ReportingServices.ReportServer")
                     ?? OrganizationalDefaultSettings.GetString("ReportingServices.ReportServer");
             }
             set

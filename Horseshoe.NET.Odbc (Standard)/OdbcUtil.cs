@@ -26,10 +26,6 @@ namespace Horseshoe.NET.Odbc
             if (OdbcSettings.DefaultConnectionString != null)
             {
                 announcePrefix = "CONFIG CONNSTR";
-                if (OdbcSettings.DefaultConnectionStringName != null)
-                {
-                    announcePrefix += "(" + OdbcSettings.DefaultConnectionStringName + "?)";
-                }
                 return OdbcSettings.DefaultConnectionString;
             }
 

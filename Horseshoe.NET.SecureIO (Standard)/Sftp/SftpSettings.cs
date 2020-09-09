@@ -1,7 +1,5 @@
 ﻿using System;
 
-using Horseshoe.NET.Application;
-
 namespace Horseshoe.NET.SecureIO.Sftp
 {
     public static class SftpSettings
@@ -16,7 +14,6 @@ namespace Horseshoe.NET.SecureIO.Sftp
             get
             {
                 return _defaultFtpServer
-                    ?? Config.Get("Horseshoe.NET:Sftp.Server") 
                     ?? OrganizationalDefaultSettings.GetString("Sftp.Server");
             }
             set
@@ -35,7 +32,6 @@ namespace Horseshoe.NET.SecureIO.Sftp
             get
             {
                 return _defaultPort
-                    ?? Config.GetNInt("Horseshoe.NET:Sftp.Port") 
                     ?? OrganizationalDefaultSettings.GetNInt("Sftp.Port");
             }
             set
@@ -54,7 +50,6 @@ namespace Horseshoe.NET.SecureIO.Sftp
             get
             {
                 return _defaultCredentials
-                    ?? Credential.Build(Config.Get("Horseshoe.NET:Sftp.UserName"), Config.Get("Horseshoe.NET:Sftp.Password"), isEncryptedPassword: Config.GetBool("Horseshoe.NET:Sftp.IsEncryptedPassword"))
                     ?? OrganizationalDefaultSettings.GetNullable<Credential>("Sftp.Credentials");
             }
             set
@@ -73,7 +68,6 @@ namespace Horseshoe.NET.SecureIO.Sftp
             get
             {
                 return _defaultServerPath
-                    ?? Config.Get("Horseshoe.NET:Sftp.ServerPath")
                     ?? "";
             }
             set

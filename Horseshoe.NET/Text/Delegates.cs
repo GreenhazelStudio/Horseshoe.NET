@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace Horseshoe.NET.Text
 {
-    public delegate void JsonPayloadGenerated(string payload);
-    public delegate void TextCleanCharacterIdentified(char charIdentified, string replacement, int position, string category, bool isCustomDictionary);
+    public delegate void JsonGenerated(string json);
+    public delegate void CharCleaned(char charIdentified, string replacement, int position, string category, bool isCustomDictionary);
 }

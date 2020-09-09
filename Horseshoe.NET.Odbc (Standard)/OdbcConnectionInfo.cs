@@ -42,12 +42,6 @@ namespace Horseshoe.NET.Odbc
                 return ConnectionString;
             }
 
-            if (ConnectionStringName != null)
-            {
-                announcePrefix = "CONNINFO CONNSTR('" + ConnectionStringName + "')";
-                return Config.GetConnectionString(ConnectionStringName);
-            }
-
             if (DataSource == null)
             {
                 announcePrefix = "CONNINFO [null] DATASOURCE";

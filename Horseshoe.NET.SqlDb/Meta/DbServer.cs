@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 using Horseshoe.NET.Collections;
 using Horseshoe.NET.Collections.Extensions;
-using Horseshoe.NET.Objects.Clean;
+using Horseshoe.NET.Objects;
 
 namespace Horseshoe.NET.SqlDb.Meta
 {

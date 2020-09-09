@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-
-using Horseshoe.NET.Application;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Horseshoe.NET.Db
 {
@@ -18,13 +17,6 @@ namespace Horseshoe.NET.Db
                         ? DataUtil.DecryptInlinePassword(_connectionString)
                         : _connectionString;
                 }
-                if (ConnectionStringName != null)
-                {
-                    var connectionString = Config.GetConnectionString(ConnectionStringName);
-                    return IsEncryptedPassword
-                        ? DataUtil.DecryptInlinePassword(connectionString)
-                        : connectionString;
-                }
                 return null;
             }
             set
@@ -32,8 +24,6 @@ namespace Horseshoe.NET.Db
                 _connectionString = value;
             }
         }
-
-        public string ConnectionStringName { get; set; }
 
         public bool IsEncryptedPassword { get; set; }
 

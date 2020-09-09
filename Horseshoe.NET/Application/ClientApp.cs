@@ -7,7 +7,7 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
 
-using Horseshoe.NET.Objects.Clean;
+using Horseshoe.NET.Objects;
 
 namespace Horseshoe.NET.Application
 {

@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 
 using Horseshoe.NET.Extensions;
-using Horseshoe.NET.Objects.Clean;
+using Horseshoe.NET.Objects;
 using Horseshoe.NET.Text;
 using Horseshoe.NET.Text.Extensions;
 

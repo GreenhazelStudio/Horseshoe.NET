@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Horseshoe.NET;
 using Horseshoe.NET.ActiveDirectory;
 using Horseshoe.NET.ConsoleX;
-using Horseshoe.NET.Objects.Clean;
+using Horseshoe.NET.Objects;
 
 namespace TestConsole
 {

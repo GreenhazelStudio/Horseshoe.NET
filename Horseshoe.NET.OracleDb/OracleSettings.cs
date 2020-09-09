@@ -93,13 +93,33 @@ namespace Horseshoe.NET.OracleDb
             get
             {
                 return _defaultDataSource     // e.g. ORADBSVR01
-                    ?? Config.Get("Horseshoe.NET:Oracle.DataSource")  
-                    ?? OrganizationalDefaultSettings.GetString("Oracle.DataSource") 
+                    ?? Config.Get("Horseshoe.NET:Oracle.DataSource")
+                    ?? OrganizationalDefaultSettings.GetString("Oracle.DataSource")
                     ?? DefaultServer?.DataSource;
             }
             set
             {
                 _defaultDataSource = value;
+            }
+        }
+
+        private static string _defaultServiceName;
+
+        /// <summary>
+        /// Gets or sets the default Oracle service name used by Horseshoe.NET.  Note: Overrides other settings (i.e. app|web.config: key = Horseshoe.NET:Oracle.ServiceName and OrganizationalDefaultSettings: key = Oracle.ServiceName)
+        /// </summary>
+        public static string DefaultServiceName
+        {
+            get
+            {
+                return _defaultServiceName     // e.g. MYDATABASE
+                    ?? Config.Get("Horseshoe.NET:Oracle.ServiceName")
+                    ?? OrganizationalDefaultSettings.GetString("Oracle.ServiceName")
+                    ?? DefaultServer?.DataSource;
+            }
+            set
+            {
+                _defaultServiceName = value;
             }
         }
 
