@@ -110,6 +110,7 @@
     <Compile Include="IO\FileImport\Delegates.cs" />
     <Compile Include="IO\Ftp\Delegates.cs" />
     <Compile Include="IO\Http\WebDocument.cs" />
+    <Compile Include="IO\Http\WebServiceException.cs" />
     <Compile Include="IO\NamedMemoryStream.cs" />
     <Compile Include="IO\Http\Extensions\Extensions.cs" />
     <Compile Include="IO\Http\HttpResponseMetadata.cs" />

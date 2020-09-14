@@ -12,6 +12,8 @@ using Horseshoe.NET.IO.Ftp;
 using Horseshoe.NET.IO.ReportingServices;
 using Horseshoe.NET.IO.Http;
 using Horseshoe.NET.SecureIO.Sftp;
+using Horseshoe.NET.IO.Http.Enums;
+using System.Runtime.InteropServices;
 
 namespace TestConsole
 {
@@ -50,7 +52,8 @@ namespace TestConsole
                     "List SFTP Directory",
                     "regex",
                     "FTP connection string parse tests",
-                    "WebService w/ Header"
+                    "Web Service",
+                    "Web Service w/ Header"
                 },
                 title: "SSRS Test Menu"
             );
@@ -204,7 +207,37 @@ namespace TestConsole
                         Console.WriteLine();
                     }
                     break;
-                case "WebService w/ Header":
+                case "Web Service":
+                    try
+                    {
+                        WebServiceResponse apiResponse = WebService.Get<WebServiceResponse<IEnumerable<string>>>
+                        (
+                            "https://securesite.com/arrayendpoint",
+                            headers: new Dictionary<string, string>
+                            {
+                                { "Authorization", "Bearer " + "blabla" }
+                            }
+                        );
+
+                        switch (apiResponse.Status)
+                        {
+                            case WebServiceResponseStatus.Ok:
+                                var data = (IEnumerable<string>)apiResponse.Data;
+                                Console.WriteLine("Response: " + string.Join(", ", data));
+                                break;
+                            case WebServiceResponseStatus.Error:
+                                RenderException(apiResponse.Exception);
+                                break;
+                            default:
+                                throw new WebServiceException("Invalid web service response status: " + apiResponse.Status + " (This should never happen.)");
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+                        RenderException(ex);
+                    }
+                    break;
+                case "Web Service w/ Header":
                     var wshUrl = "http://localhost:58917/fake/path";
                     var headers = new Dictionary<string, string> { { "My-Custom-Header", "Frankenstein" } };
                     Console.WriteLine("calling " + wshUrl + "...");

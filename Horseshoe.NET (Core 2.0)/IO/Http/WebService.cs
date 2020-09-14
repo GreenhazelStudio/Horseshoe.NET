@@ -14,13 +14,15 @@ namespace Horseshoe.NET.IO.Http
 {
     public static class WebService
     {
-        public static string Get(string serviceURL, string method = "GET", object id = null, object headers = null, Credential? credentials = null, Action<HttpResponseMetadata> returnMetadata = null)
+        public static string Get(string serviceURL, string method = "GET", object id = null, object headers = null, Credential? credentials = null, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
         {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             serviceURL = GetFinalURL(serviceURL, id);
             var request = (HttpWebRequest)WebRequest.Create(serviceURL);
             request.Method = method;
             ProcessHeaders(request, headers);
             ProcessCredentials(request, credentials);
+            customizeRequest?.Invoke(request);
 
             var response = (HttpWebResponse)request.GetResponse();
             string rawResponse;
@@ -40,13 +42,15 @@ namespace Horseshoe.NET.IO.Http
             return rawResponse;
         }
 
-        public static async Task<string> GetAsync(string serviceURL, string method = "GET", object id = null, object headers = null, Credential? credentials = null, Action<HttpResponseMetadata> returnMetadata = null)
+        public static async Task<string> GetAsync(string serviceURL, string method = "GET", object id = null, object headers = null, Credential? credentials = null, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
         {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             serviceURL = GetFinalURL(serviceURL, id);
             var request = (HttpWebRequest)WebRequest.Create(serviceURL);
             request.Method = method;
             ProcessHeaders(request, headers);
             ProcessCredentials(request, credentials);
+            customizeRequest?.Invoke(request);
 
             var response = await request.GetResponseAsync() as HttpWebResponse;
             string rawResponse;
@@ -66,18 +70,18 @@ namespace Horseshoe.NET.IO.Http
             return rawResponse;
         }
 
-        public static E Get<E>(string serviceURL, string method = "GET", object id = null, object headers = null, Credential? credentials = null, bool zapBackingFields = false, Action<HttpResponseMetadata> returnMetadata = null)
+        public static E Get<E>(string serviceURL, string method = "GET", object id = null, object headers = null, Credential? credentials = null, bool zapBackingFields = false, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
         {
-            var json = Get(serviceURL, method: method, id: id, headers: headers, credentials: credentials, returnMetadata: returnMetadata);
+            var json = Get(serviceURL, method: method, id: id, headers: headers, credentials: credentials, customizeRequest: customizeRequest, returnMetadata: returnMetadata);
             var e = zapBackingFields
                 ? Deserialize.Json<E>(json, preDeserializationFunc: WebServiceUtil.ZapBackingFields)
                 : Deserialize.Json<E>(json);
             return e;
         }
 
-        public static async Task<E> GetAsync<E>(string serviceURL, string method = "GET", object id = null, object headers = null, Credential? credentials = null, bool zapBackingFields = false, Action<HttpResponseMetadata> returnMetadata = null)
+        public static async Task<E> GetAsync<E>(string serviceURL, string method = "GET", object id = null, object headers = null, Credential? credentials = null, bool zapBackingFields = false, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
         {
-            var json = await GetAsync(serviceURL, method: method, id: id, headers: headers, credentials: credentials, returnMetadata: returnMetadata);
+            var json = await GetAsync(serviceURL, method: method, id: id, headers: headers, credentials: credentials, customizeRequest: customizeRequest, returnMetadata: returnMetadata);
             var e = zapBackingFields
                 ? Deserialize.Json<E>(json, preDeserializationFunc: WebServiceUtil.ZapBackingFields)
                 : Deserialize.Json<E>(json);
@@ -85,14 +89,16 @@ namespace Horseshoe.NET.IO.Http
         }
 
         // alt content type: application/x-www-form-urlencoded
-        public static string Post(string serviceURL, string method = "POST", object content = null, string contentType = "application/json", object id = null, Func<object, string> contentSerializer = null, object headers = null, Credential? credentials = null, Action<HttpResponseMetadata> returnMetadata = null)
+        public static string Post(string serviceURL, string method = "POST", object content = null, string contentType = "application/json", object id = null, Func<object, string> contentSerializer = null, object headers = null, Credential? credentials = null, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
         {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             serviceURL = GetFinalURL(serviceURL, id);
             var request = (HttpWebRequest)WebRequest.Create(serviceURL);
             request.ContentType = contentType;
             request.Method = method;
             ProcessHeaders(request, headers);
             ProcessCredentials(request, credentials);
+            customizeRequest?.Invoke(request);
 
             if (content != null || contentSerializer != null)
             {
@@ -138,14 +144,16 @@ namespace Horseshoe.NET.IO.Http
             return rawResponse;
         }
 
-        public async static Task<string> PostAsync(string serviceURL, string method = "POST", object content = null, string contentType = "application/json", object id = null, Func<object, string> contentSerializer = null, object headers = null, Credential? credentials = null, Action<HttpResponseMetadata> returnMetadata = null)
+        public async static Task<string> PostAsync(string serviceURL, string method = "POST", object content = null, string contentType = "application/json", object id = null, Func<object, string> contentSerializer = null, object headers = null, Credential? credentials = null, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
         {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             serviceURL = GetFinalURL(serviceURL, id);
             var request = (HttpWebRequest)WebRequest.Create(serviceURL);
             request.ContentType = contentType;
             request.Method = method;
             ProcessHeaders(request, headers);
             ProcessCredentials(request, credentials);
+            customizeRequest?.Invoke(request);
 
             if (content != null || contentSerializer != null)
             {
@@ -191,86 +199,86 @@ namespace Horseshoe.NET.IO.Http
             return rawResponse;
         }
 
-        public static E Post<E>(string serviceURL, string method = "POST", object content = null, string contentType = "application/json", object headers = null, Credential? credentials = null, bool zapBackingFields = false, Action<HttpResponseMetadata> returnMetadata = null)
+        public static E Post<E>(string serviceURL, string method = "POST", object content = null, string contentType = "application/json", object headers = null, Credential? credentials = null, bool zapBackingFields = false, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
         {
-            var json = Post(serviceURL, method: method, content: content, contentType: contentType, headers: headers, credentials: credentials, returnMetadata: returnMetadata);
+            var json = Post(serviceURL, method: method, content: content, contentType: contentType, headers: headers, credentials: credentials, customizeRequest: customizeRequest, returnMetadata: returnMetadata);
             var e = zapBackingFields
                 ? Deserialize.Json<E>(json, preDeserializationFunc: WebServiceUtil.ZapBackingFields)
                 : Deserialize.Json<E>(json);
             return e;
         }
 
-        public static async Task<E> PostAsync<E>(string serviceURL, string method = "POST", object content = null, string contentType = "application/json", object headers = null, Credential? credentials = null, bool zapBackingFields = false, Action<HttpResponseMetadata> returnMetadata = null)
+        public static async Task<E> PostAsync<E>(string serviceURL, string method = "POST", object content = null, string contentType = "application/json", object headers = null, Credential? credentials = null, bool zapBackingFields = false, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
         {
-            var json = await PostAsync(serviceURL, method: method, content: content, contentType: contentType, headers: headers, credentials: credentials, returnMetadata: returnMetadata);
+            var json = await PostAsync(serviceURL, method: method, content: content, contentType: contentType, headers: headers, credentials: credentials, customizeRequest: customizeRequest, returnMetadata: returnMetadata);
             var e = zapBackingFields
                 ? Deserialize.Json<E>(json, preDeserializationFunc: WebServiceUtil.ZapBackingFields)
                 : Deserialize.Json<E>(json);
             return e;
         }
 
-        public static string Put(string serviceURL, object content, string contentType = "application/json", object id = null, Func<object, string> contentSerializer = null, object headers = null, Credential? credentials = null, Action<HttpResponseMetadata> returnMetadata = null)
+        public static string Put(string serviceURL, object content, string contentType = "application/json", object id = null, Func<object, string> contentSerializer = null, object headers = null, Credential? credentials = null, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
         {
             if (content == null) throw new ArgumentNullException(nameof(content), "cannot be null");
-            return Post(serviceURL, method: "PUT", content: content, contentType: contentType, id: id, contentSerializer: contentSerializer, headers: headers, credentials: credentials, returnMetadata: returnMetadata);
+            return Post(serviceURL, method: "PUT", content: content, contentType: contentType, id: id, contentSerializer: contentSerializer, headers: headers, credentials: credentials, customizeRequest: customizeRequest, returnMetadata: returnMetadata);
         }
 
-        public async static Task<string> PutAsync(string serviceURL, object content, string contentType = "application/json", object id = null, Func<object, string> contentSerializer = null, object headers = null, Credential? credentials = null, Action<HttpResponseMetadata> returnMetadata = null)
+        public async static Task<string> PutAsync(string serviceURL, object content, string contentType = "application/json", object id = null, Func<object, string> contentSerializer = null, object headers = null, Credential? credentials = null, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
         {
             if (content == null) throw new ArgumentNullException(nameof(content), "cannot be null");
-            return await PostAsync(serviceURL, method: "PUT", content: content, contentType: contentType, id: id, contentSerializer: contentSerializer, headers: headers, credentials: credentials, returnMetadata: returnMetadata);
+            return await PostAsync(serviceURL, method: "PUT", content: content, contentType: contentType, id: id, contentSerializer: contentSerializer, headers: headers, credentials: credentials, customizeRequest: customizeRequest, returnMetadata: returnMetadata);
         }
 
-        public static E Put<E>(string serviceURL, object content, string contentType = "application/json", object id = null, object headers = null, Credential? credentials = null, bool zapBackingFields = false, Action<HttpResponseMetadata> returnMetadata = null)
+        public static E Put<E>(string serviceURL, object content, string contentType = "application/json", object id = null, object headers = null, Credential? credentials = null, bool zapBackingFields = false, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
         {
             if (content == null) throw new ArgumentNullException(nameof(content), "cannot be null");
-            var json = Put(serviceURL, content, contentType: contentType, id: id, headers: headers, credentials: credentials, returnMetadata: returnMetadata);
+            var json = Put(serviceURL, content, contentType: contentType, id: id, headers: headers, credentials: credentials, customizeRequest: customizeRequest, returnMetadata: returnMetadata);
             var e = zapBackingFields
                 ? Deserialize.Json<E>(json, preDeserializationFunc: WebServiceUtil.ZapBackingFields)
                 : Deserialize.Json<E>(json);
             return e;
         }
 
-        public static async Task<E> PutAsync<E>(string serviceURL, object content, string contentType = "application/json", object id = null, object headers = null, Credential? credentials = null, bool zapBackingFields = false, Action<HttpResponseMetadata> returnMetadata = null)
+        public static async Task<E> PutAsync<E>(string serviceURL, object content, string contentType = "application/json", object id = null, object headers = null, Credential? credentials = null, bool zapBackingFields = false, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
         {
             if (content == null) throw new ArgumentNullException(nameof(content), "cannot be null");
-            var json = await PutAsync(serviceURL, content, contentType: contentType, id: id, headers: headers, credentials: credentials, returnMetadata: returnMetadata);
+            var json = await PutAsync(serviceURL, content, contentType: contentType, id: id, headers: headers, credentials: credentials, customizeRequest: customizeRequest, returnMetadata: returnMetadata);
             var e = zapBackingFields
                 ? Deserialize.Json<E>(json, preDeserializationFunc: WebServiceUtil.ZapBackingFields)
                 : Deserialize.Json<E>(json);
             return e;
         }
 
-        public static string Delete(string serviceURL, object content = null, string contentType = "application/json", object id = null, Func<object, string> contentSerializer = null, object headers = null, Credential? credentials = null, Action<HttpResponseMetadata> returnMetadata = null)
+        public static string Delete(string serviceURL, object content = null, string contentType = "application/json", object id = null, Func<object, string> contentSerializer = null, object headers = null, Credential? credentials = null, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
         {
             if (content != null)
             {
-                return Post(serviceURL, method: "DELETE", content: content, contentType: contentType, id: id, contentSerializer: contentSerializer, headers: headers, credentials: credentials, returnMetadata: returnMetadata);
+                return Post(serviceURL, method: "DELETE", content: content, contentType: contentType, id: id, contentSerializer: contentSerializer, headers: headers, credentials: credentials, customizeRequest: customizeRequest, returnMetadata: returnMetadata);
             }
-            return Get(serviceURL, method: "DELETE", id: id, headers: headers, credentials: credentials, returnMetadata: returnMetadata);
+            return Get(serviceURL, method: "DELETE", id: id, headers: headers, credentials: credentials, customizeRequest: customizeRequest, returnMetadata: returnMetadata);
         }
 
-        public static async Task<string> DeleteAsync(string serviceURL, string contentType = "application/json", object content = null, object id = null, Func<object, string> contentSerializer = null, object headers = null, Credential? credentials = null, Action<HttpResponseMetadata> returnMetadata = null)
+        public static async Task<string> DeleteAsync(string serviceURL, string contentType = "application/json", object content = null, object id = null, Func<object, string> contentSerializer = null, object headers = null, Credential? credentials = null, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
         {
             if (content != null)
             {
-                return await PostAsync(serviceURL, method: "DELETE", content: content, contentType: contentType, id: id, contentSerializer: contentSerializer, headers: headers, credentials: credentials, returnMetadata: returnMetadata);
+                return await PostAsync(serviceURL, method: "DELETE", content: content, contentType: contentType, id: id, contentSerializer: contentSerializer, headers: headers, credentials: credentials, customizeRequest: customizeRequest, returnMetadata: returnMetadata);
             }
-            return await GetAsync(serviceURL, method: "DELETE", id: id, headers: headers, credentials: credentials, returnMetadata: returnMetadata);
+            return await GetAsync(serviceURL, method: "DELETE", id: id, headers: headers, credentials: credentials, customizeRequest: customizeRequest, returnMetadata: returnMetadata);
         }
 
-        public static E Delete<E>(string serviceURL, object content = null, string contentType = "application/json", object id = null, object headers = null, Credential? credentials = null, bool zapBackingFields = false, Action<HttpResponseMetadata> returnMetadata = null)
+        public static E Delete<E>(string serviceURL, object content = null, string contentType = "application/json", object id = null, object headers = null, Credential? credentials = null, bool zapBackingFields = false, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
         {
-            var json = Delete(serviceURL, content: content, contentType: contentType, id: id, headers: headers, credentials: credentials, returnMetadata: returnMetadata);
+            var json = Delete(serviceURL, content: content, contentType: contentType, id: id, headers: headers, credentials: credentials, customizeRequest: customizeRequest, returnMetadata: returnMetadata);
             var e = zapBackingFields
                 ? Deserialize.Json<E>(json, preDeserializationFunc: WebServiceUtil.ZapBackingFields)
                 : Deserialize.Json<E>(json);
             return e;
         }
 
-        public static async Task<E> DeleteJsonAsync<E>(string serviceURL, object content = null, string contentType = "application/json", object id = null, object headers = null, Credential ? credentials = null, bool zapBackingFields = false, Action<HttpResponseMetadata> returnMetadata = null)
+        public static async Task<E> DeleteJsonAsync<E>(string serviceURL, object content = null, string contentType = "application/json", object id = null, object headers = null, Credential ? credentials = null, bool zapBackingFields = false, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
         {
-            var json = await DeleteAsync(serviceURL, content: content, contentType: contentType, id: id, headers: headers, credentials: credentials, returnMetadata: returnMetadata);
+            var json = await DeleteAsync(serviceURL, content: content, contentType: contentType, id: id, headers: headers, credentials: credentials, customizeRequest: customizeRequest, returnMetadata: returnMetadata);
             var e = zapBackingFields
                 ? Deserialize.Json<E>(json, preDeserializationFunc: WebServiceUtil.ZapBackingFields)
                 : Deserialize.Json<E>(json);

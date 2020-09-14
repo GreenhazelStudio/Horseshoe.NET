@@ -5,7 +5,7 @@
     <RootNamespace>Horseshoe.NET.SecureIO</RootNamespace>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>assembly-signing-key.snk</AssemblyOriginatorKeyFile>
-    <Version>1.0.9.3</Version>
+    <Version>1.0.9.4</Version>
     <Authors>Carl Thomas</Authors>
     <Company>Greenhazel Studio</Company>
     <Description>Adds SFTP to the Horseshoe.NET suite (uses SSH.NET)</Description>
