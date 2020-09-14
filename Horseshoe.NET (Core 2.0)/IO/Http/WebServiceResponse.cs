@@ -10,17 +10,64 @@ using Newtonsoft.Json;
 namespace Horseshoe.NET.IO.Http
 {
     /// <summary>
-    /// A custom Web API action result that can help overcome the limitations of exception result handling by treating caught
-    /// exceptions as part of a standard HTTP 200 responses thereby preserving the exceptions' details. 
-    /// This version of GenericResponse (with type parameter) is typically used for decoding API call responses after they are received by the caller.
+    /// A robust, serializable web API response that can help overcome the limitations of exception handling.
+    /// By catching and returning exceptions in a normal (HTTP 200) resonse the exception details are guaranteed 
+    /// to be preserved.  In some cases ASP.NET actually produces an HTML exception page.  However, in other cases
+    /// a server-side error is manifest as a no detail HTTP 500 error.  In either case, sometimes API calls especially 
+    /// AJAX calls are easier to handle if the return type is consistent. 
     /// </summary>
-    public class WebServiceResponse<E> where E : class
+    public class WebServiceResponse<E> : WebServiceResponse
     {
         /// <summary>
         /// The data to return to the caller (will be JSONified)
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public E Data { get; set; }
+        public new E Data 
+        {
+            get => base.Data != null ? (E)base.Data : default; 
+            set => base.Data = value; 
+        }
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public WebServiceResponse() : base()
+        {
+        }
+
+        /// <summary>
+        /// Constructor for a normal response (not used, client code typically only calls contructors w/ params in WSResponse, not WSResponse&lt;E&gt;)
+        /// </summary>
+        /// <param name="data"></param>
+        public WebServiceResponse(E data)
+        {
+            Data = data;
+        }
+
+        /// <summary>
+        /// Constructor for an error type response (not used, client code typically only calls contructors w/ params in WSResponse, not WSResponse&lt;E&gt;)
+        /// </summary>
+        /// <param name="ex"></param>
+        public WebServiceResponse(ExceptionInfo ex) : base(ex)
+        {
+        }
+    }
+
+    /// <summary>
+    /// A robust, serializable web API response that can help overcome the limitations of exception handling.
+    /// By catching and returning exceptions in a normal (HTTP 200) resonse the exception details are guaranteed 
+    /// to be preserved.  In some cases ASP.NET actually produces an HTML exception page.  However, in other cases
+    /// a server-side error is manifest as a no detail HTTP 500 error.  In either case, sometimes API calls especially 
+    /// AJAX calls are easier to handle if the return type is consistent. 
+    /// </summary>
+    public class WebServiceResponse
+    {
+        /// <summary>
+        /// The data to return to the caller (will be JSONified)
+        /// </summary>
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public object Data { get; set; }
+
 
         /// <summary>
         /// The exception information to return 
@@ -49,54 +96,16 @@ namespace Horseshoe.NET.IO.Http
         /// <summary>
         /// Use this to easily pass a count of something (e.g. number of rows affected in a data operation)
         /// </summary>
-        [JsonProperty]
-        public int Count { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public int? Count { get; set; }
 
         /// <summary>
-        /// Default constructor
+        /// Use this to easily pass a note for client code / developers
         /// </summary>
-        public WebServiceResponse()
-        {
-        }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string Comment { get; set; }
 
-        /// <summary>
-        /// Constructor for a normal response (not used, client code typically only calls contructors w/ params in WSResponse, not WSResponse&lt;E&gt;)
-        /// </summary>
-        /// <param name="data"></param>
-        public WebServiceResponse(E data)
-        {
-            this.Data = data;
-        }
 
-        /// <summary>
-        /// Constructor for an error type response (not used, client code typically only calls contructors w/ params in WSResponse, not WSResponse&lt;E&gt;)
-        /// </summary>
-        /// <param name="ex"></param>
-        public WebServiceResponse(ExceptionInfo ex)
-        {
-            this.Exception = ExceptionInfo.From(ex);
-            Status = WebServiceResponseStatus.Error;
-        }
-
-        /// <summary>
-        /// Constructor for an error type response that includes data (not used, client code typically only calls contructors w/ params in GenericResponse, not GenericResponse&lt;E&gt;)
-        /// </summary>
-        /// <param name="data"></param>
-        /// <param name="ex"></param>
-        public WebServiceResponse(E data, ExceptionInfo ex) : this(data)
-        {
-            this.Exception = ex;
-            Status = WebServiceResponseStatus.Error;
-        }
-    }
-
-    /// <summary>
-    /// A custom Web API action result that can help overcome the limitations of exception result handling by treating caught
-    /// exceptions as part of a standard HTTP 200 responses thereby preserving the exceptions' details. 
-    /// This version of GenericResponse (no type parameter) is typically used for encoding the API call responses to be returned to the caller.
-    /// </summary>
-    public class WebServiceResponse : WebServiceResponse<object>
-    {
         /// <summary>
         /// Default constructor
         /// </summary>
@@ -108,25 +117,19 @@ namespace Horseshoe.NET.IO.Http
         /// Constructor for a normal response
         /// </summary>
         /// <param name="data"></param>
-        public WebServiceResponse(object data) : base(data)
+        public WebServiceResponse(object data)
         {
+            Data = data;
         }
 
         /// <summary>
         /// Constructor for an error type response
         /// </summary>
         /// <param name="ex"></param>
-        public WebServiceResponse(ExceptionInfo ex) : base(ex)
+        public WebServiceResponse(ExceptionInfo ex)
         {
-        }
-
-        /// <summary>
-        /// Constructor for an error type response that includes data
-        /// </summary>
-        /// <param name="data"></param>
-        /// <param name="ex"></param>
-        public WebServiceResponse(object data, ExceptionInfo ex) : base(data, ex) 
-        {
+            Exception = ex;
+            Status = WebServiceResponseStatus.Error;
         }
     }
 }
