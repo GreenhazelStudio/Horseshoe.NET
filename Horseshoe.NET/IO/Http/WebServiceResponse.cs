@@ -14,7 +14,7 @@ namespace Horseshoe.NET.IO.Http
     /// a server-side error is manifest as a no detail HTTP 500 error.  In either case, sometimes API calls especially 
     /// AJAX calls are easier to handle if the return type is consistent. 
     /// </summary>
-    public class WebServiceResponse<E> : IWebServiceResponse<E>
+    public class WebServiceResponse<E> : IWebServiceResponse
     {
         /// <summary>
         /// The data to return to the caller (will be JSONified)
@@ -85,7 +85,7 @@ namespace Horseshoe.NET.IO.Http
     /// a server-side error is manifest as a no detail HTTP 500 error.  In either case, sometimes API calls especially 
     /// AJAX calls are easier to handle if the return type is consistent. 
     /// </summary>
-    public class WebServiceResponse : IWebServiceResponse<object>
+    public class WebServiceResponse : IWebServiceResponse
     {
         /// <summary>
         /// The data to return to the caller (will be JSONified)
@@ -156,12 +156,9 @@ namespace Horseshoe.NET.IO.Http
     /// a server-side error is manifest as a no detail HTTP 500 error.  In either case, sometimes API calls especially 
     /// AJAX calls are easier to handle if the return type is consistent. 
     /// </summary>
-    public interface IWebServiceResponse<E>
+    public interface IWebServiceResponse
     {
-        /// <summary>
-        /// The data to return to the caller (will be JSONified)
-        /// </summary>
-        E Data { get; }
+        //object _Data { get; }
 
         /// <summary>
         /// The exception information to return 
