@@ -124,19 +124,21 @@ namespace Horseshoe.NET.Application
             return Zap.NEnum<T>(value, ignoreCase: ignoreCase, suppressErrors: suppressErrors);
         }
 
-        public static string GetConnectionString(string name, bool suppressErrors = false)
+        public static string GetConnectionString(string name, bool required = false)
         {
             name = name?.Trim();
             if (string.IsNullOrEmpty(name))
             {
-                if (suppressErrors) return null;
-                throw new UtilityException("Invalid connection string name: " + (name == null ? "[null]" : "[blank]"));
+                throw new ArgumentException("Invalid connection string name: " + (name == null ? "[null]" : "[blank]"));
             }
             var connectionString = ConfigurationManager.ConnectionStrings[name];
             if (connectionString == null)
             {
-                if (suppressErrors) return null;
-                throw new UtilityException("No connection string has been configured with this name: " + name);
+                if (required)
+                {
+                    throw new UtilityException("Connection string not found: " + name);
+                }
+                return null;
             }
             return connectionString.ConnectionString;
         }

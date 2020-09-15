@@ -38,7 +38,7 @@ namespace Horseshoe.NET.OracleDb
             get
             {
                 return _GetConnectionString(_defaultConnectionString, _isEncryptedPassword)
-                    ?? _GetConnectionString(Config.GetConnectionString(DefaultConnectionStringName, suppressErrors: true), Config.GetBool("Horseshoe.NET:Oracle.IsEncryptedPassword"))
+                    ?? _GetConnectionString(Config.GetConnectionString(DefaultConnectionStringName), Config.GetBool("Horseshoe.NET:Oracle.IsEncryptedPassword"))
                     ?? _GetConnectionString(OrganizationalDefaultSettings.GetString("Oracle.ConnectionString"), OrganizationalDefaultSettings.GetBoolean("Oracle.IsEncryptedPassword"));
             }
         }

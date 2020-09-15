@@ -64,7 +64,7 @@ namespace Horseshoe.NET.SqlDb
             if (ConnectionStringName != null)
             {
                 announcePrefix = "CONNINFO CONNSTR('" + ConnectionStringName + "')";
-                return Config.GetConnectionString(ConnectionStringName);
+                return Config.GetConnectionString(ConnectionStringName, required: true);
             }
 
             if (DataSource == null)

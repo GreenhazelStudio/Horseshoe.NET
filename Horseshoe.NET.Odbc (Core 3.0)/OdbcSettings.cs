@@ -37,7 +37,7 @@ namespace Horseshoe.NET.Odbc
             get
             {
                 return _GetConnectionString(_defaultConnectionString, _isEncryptedPassword)
-                    ?? _GetConnectionString(Config.GetConnectionString(DefaultConnectionStringName, suppressErrors: true), Config.GetBool("Horseshoe.NET:Odbc.IsEncryptedPassword"))
+                    ?? _GetConnectionString(Config.GetConnectionString(DefaultConnectionStringName), Config.GetBool("Horseshoe.NET:Odbc.IsEncryptedPassword"))
                     ?? _GetConnectionString(OrganizationalDefaultSettings.GetString("Odbc.ConnectionString"), OrganizationalDefaultSettings.GetBoolean("Odbc.IsEncryptedPassword"));
             }
         }

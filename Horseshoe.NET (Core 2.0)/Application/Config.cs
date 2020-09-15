@@ -26,11 +26,7 @@ namespace Horseshoe.NET.Application
         {
             if (Configuration == null)
             {
-                if (required)
-                {
-                    throw new UtilityException("Configuration service not loaded: see Config.LoadService()");
-                }
-                return null;
+                throw new UtilityException("Configuration service not loaded: see Config.LoadConfigurationService()");
             }
             var value = Configuration[key];
             if (value == null && required)
@@ -140,24 +136,25 @@ namespace Horseshoe.NET.Application
             return Zap.NEnum<T>(value, ignoreCase: ignoreCase, suppressErrors: suppressErrors);
         }
 
-        public static string GetConnectionString(string name, bool suppressErrors = false)
+        public static string GetConnectionString(string name, bool required = false)
         {
             if (Configuration == null)
             {
-                if (suppressErrors) return null;
-                throw new UtilityException("Configuration service not loaded: see Config.LoadService()");
+                throw new UtilityException("Configuration service not loaded: see Config.LoadConfigurationService()");
             }
             name = name?.Trim();
             if (string.IsNullOrEmpty(name))
             {
-                if (suppressErrors) return null;
-                throw new UtilityException("Invalid connection string name: " + (name == null ? "[null]" : "[blank]"));
+                throw new ArgumentException("Invalid connection string name: " + (name == null ? "[null]" : "[blank]"));
             }
             var connectionString = Configuration.GetConnectionString(name);
             if (connectionString == null)
             {
-                if (suppressErrors) return null;
-                throw new UtilityException("No connection string has been configured with this name: " + name);
+                if (required) 
+                {
+                    throw new UtilityException("Connection string not found: " + name);
+                }
+                return null;
             }
             return connectionString;
         }

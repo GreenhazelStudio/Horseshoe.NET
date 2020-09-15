@@ -6,7 +6,7 @@
     <Authors>Carl Thomas</Authors>
     <Company>Greenhazel Studio</Company>
     <Copyright>Copyright © 2020 Greenhazel Studio</Copyright>
-    <Version>1.0.9.5</Version>
+    <Version>1.1.0</Version>
     <Description>Adds SFTP to the Horseshoe.NET suite (uses SSH.NET)</Description>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>assembly-signing-key.snk</AssemblyOriginatorKeyFile>
