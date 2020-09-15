@@ -212,7 +212,7 @@ namespace TestConsole
                     {
                         WebServiceResponse apiResponse = WebService.Get<WebServiceResponse<IEnumerable<string>>>
                         (
-                            "https://securesite.com/arrayendpoint",
+                            "https://k.lkedev.com/noauthapi/chshistory/values",
                             headers: new Dictionary<string, string>
                             {
                                 { "Authorization", "Bearer " + "blabla" }

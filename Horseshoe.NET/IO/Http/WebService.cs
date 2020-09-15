@@ -16,9 +16,14 @@ namespace Horseshoe.NET.IO.Http
     {
         public static string Get(string serviceURL, string method = "GET", object id = null, object headers = null, Credential? credentials = null, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
         {
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             serviceURL = GetFinalURL(serviceURL, id);
+            var securityProtocol = ServicePointManager.SecurityProtocol;
+            if (serviceURL.ToLower().StartsWith("https://"))
+            {
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+            }
             var request = (HttpWebRequest)WebRequest.Create(serviceURL);
+            ServicePointManager.SecurityProtocol = securityProtocol;
             request.Method = method;
             ProcessHeaders(request, headers);
             ProcessCredentials(request, credentials);
@@ -44,9 +49,14 @@ namespace Horseshoe.NET.IO.Http
 
         public static async Task<string> GetAsync(string serviceURL, string method = "GET", object id = null, object headers = null, Credential? credentials = null, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
         {
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             serviceURL = GetFinalURL(serviceURL, id);
+            var securityProtocol = ServicePointManager.SecurityProtocol;
+            if (serviceURL.ToLower().StartsWith("https://"))
+            {
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+            }
             var request = (HttpWebRequest)WebRequest.Create(serviceURL);
+            ServicePointManager.SecurityProtocol = securityProtocol;
             request.Method = method;
             ProcessHeaders(request, headers);
             ProcessCredentials(request, credentials);
@@ -91,9 +101,14 @@ namespace Horseshoe.NET.IO.Http
         // alt content type: application/x-www-form-urlencoded
         public static string Post(string serviceURL, string method = "POST", object content = null, string contentType = "application/json", object id = null, Func<object, string> contentSerializer = null, object headers = null, Credential? credentials = null, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
         {
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             serviceURL = GetFinalURL(serviceURL, id);
+            var securityProtocol = ServicePointManager.SecurityProtocol;
+            if (serviceURL.ToLower().StartsWith("https://"))
+            {
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+            }
             var request = (HttpWebRequest)WebRequest.Create(serviceURL);
+            ServicePointManager.SecurityProtocol = securityProtocol;
             request.ContentType = contentType;
             request.Method = method;
             ProcessHeaders(request, headers);
@@ -146,9 +161,14 @@ namespace Horseshoe.NET.IO.Http
 
         public async static Task<string> PostAsync(string serviceURL, string method = "POST", object content = null, string contentType = "application/json", object id = null, Func<object, string> contentSerializer = null, object headers = null, Credential? credentials = null, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
         {
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             serviceURL = GetFinalURL(serviceURL, id);
+            var securityProtocol = ServicePointManager.SecurityProtocol;
+            if (serviceURL.ToLower().StartsWith("https://"))
+            {
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+            }
             var request = (HttpWebRequest)WebRequest.Create(serviceURL);
+            ServicePointManager.SecurityProtocol = securityProtocol;
             request.ContentType = contentType;
             request.Method = method;
             ProcessHeaders(request, headers);

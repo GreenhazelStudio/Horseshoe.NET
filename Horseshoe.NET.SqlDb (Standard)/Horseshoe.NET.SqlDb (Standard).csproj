@@ -6,7 +6,7 @@
     <Description>A typesafe, object-oriented ADO.NET-based SQL Server data access utility</Description>
     <Authors>Carl Thomas</Authors>
     <Company>Greenhazel Studio</Company>
-    <Version>1.0.9.5</Version>
+    <Version>1.0.9.6</Version>
     <Copyright>Copyright © 2020 Greenhazel Studio</Copyright>
     <SignAssembly>true</SignAssembly>
     <DelaySign>false</DelaySign>
