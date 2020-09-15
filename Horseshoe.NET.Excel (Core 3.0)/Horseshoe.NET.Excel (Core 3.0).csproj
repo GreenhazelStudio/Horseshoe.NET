@@ -5,7 +5,7 @@
     <RootNamespace>Horseshoe.NET.Excel</RootNamespace>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>assembly-signing-key.snk</AssemblyOriginatorKeyFile>
-    <Version>1.0.9.4</Version>
+    <Version>1.0.9.5</Version>
     <Authors>Carl Thomas</Authors>
     <Company>Greenhazel Studio</Company>
     <Description>An Excel file import utility for .NET (uses NPOI)</Description>

@@ -5,8 +5,6 @@ using System.Web;
 
 using Horseshoe.NET.IO.Http.Enums;
 
-using Newtonsoft.Json;
-
 namespace Horseshoe.NET.IO.Http
 {
     /// <summary>
@@ -21,7 +19,6 @@ namespace Horseshoe.NET.IO.Http
         /// <summary>
         /// The data to return to the caller (will be JSONified)
         /// </summary>
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public new E Data 
         {
             get => base.Data != null ? (E)base.Data : default; 
@@ -65,44 +62,37 @@ namespace Horseshoe.NET.IO.Http
         /// <summary>
         /// The data to return to the caller (will be JSONified)
         /// </summary>
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public object Data { get; set; }
 
 
         /// <summary>
         /// The exception information to return 
         /// </summary>
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public ExceptionInfo Exception { get; set; }
 
         /// <summary>
         /// The exception type (for client-side JavaScript)
         /// </summary>
-        [JsonProperty]
         public string ExceptionType => Exception?.ClassName;
 
         /// <summary>
         /// The status (i.e. Ok, Error) of this response
         /// </summary>
-        [JsonProperty]
         public WebServiceResponseStatus Status { get; set; } = WebServiceResponseStatus.Ok;
 
         /// <summary>
         /// The status (i.e. Ok, Error) of this response (for client-side JavaScript)
         /// </summary>
-        [JsonProperty]
         public string StatusText => Status.ToString();
 
         /// <summary>
         /// Use this to easily pass a count of something (e.g. number of rows affected in a data operation)
         /// </summary>
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public int? Count { get; set; }
 
         /// <summary>
         /// Use this to easily pass a note for client code / developers
         /// </summary>
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Comment { get; set; }
 
 
