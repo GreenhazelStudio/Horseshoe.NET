@@ -17,15 +17,6 @@ namespace Horseshoe.NET.IO.Http
     public class WebServiceResponse<E> : WebServiceResponse
     {
         /// <summary>
-        /// The data to return to the caller (will be JSONified)
-        /// </summary>
-        public new E Data 
-        {
-            get => base.Data != null ? (E)base.Data : default; 
-            set => base.Data = value; 
-        }
-
-        /// <summary>
         /// Default constructor
         /// </summary>
         public WebServiceResponse() : base()
@@ -48,6 +39,11 @@ namespace Horseshoe.NET.IO.Http
         public WebServiceResponse(ExceptionInfo ex) : base(ex)
         {
         }
+
+        /// <summary>
+        /// The data to return to the caller.
+        /// </summary>
+        public E GetData() => base.GetData<E>();
     }
 
     /// <summary>
@@ -121,5 +117,10 @@ namespace Horseshoe.NET.IO.Http
             Exception = ex;
             Status = WebServiceResponseStatus.Error;
         }
+
+        /// <summary>
+        /// The data to return to the caller, cast to the desired type.
+        /// </summary>
+        public virtual E GetData<E>() => (E)Data;
     }
 }
