@@ -210,7 +210,7 @@ namespace TestConsole
                 case "Web Service":
                     try
                     {
-                        WebServiceResponse apiResponse = WebService.Get<WebServiceResponse<IEnumerable<string>>>
+                        var apiResponse = WebService.Get<WebServiceResponse<IEnumerable<string>>>
                         (
                             "https://k.lkedev.com/noauthapi/chshistory/values",
                             headers: new Dictionary<string, string>
@@ -222,7 +222,7 @@ namespace TestConsole
                         switch (apiResponse.Status)
                         {
                             case WebServiceResponseStatus.Ok:
-                                var data = (IEnumerable<string>)apiResponse.Data;
+                                var data = apiResponse.Data;
                                 Console.WriteLine("Response: " + string.Join(", ", data));
                                 break;
                             case WebServiceResponseStatus.Error:
