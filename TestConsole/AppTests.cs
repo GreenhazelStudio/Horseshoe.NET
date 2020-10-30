@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-using Horseshoe.NET;
 using Horseshoe.NET.Application;
 using Horseshoe.NET.ConsoleX;
 using Horseshoe.NET.Text;
@@ -15,28 +12,16 @@ namespace TestConsole
     class AppTests : Routine
     {
         public override Title Title => "App Tests";
+
         public override bool Looping => true;
 
-        string[] Menu => new[]
+        public override IEnumerable<Routine> Menu => new[]
         {
-            "Console Properties",
-            "Environment Properties",
-            "AppDomain Properties",
-            "Assemblies",
-            "Detect App Type",
-        };
-
-        public override void Do()
-        {
-            Console.WriteLine();
-            var selection = PromptMenu
+            Routine.Build
             (
-                Menu
-            );
-            RenderListTitle(selection.SelectedItem);
-            switch (selection.SelectedItem)
-            {
-                case "Console Properties":
+                "Console Properties",
+                () =>
+                {
                     var consoleProperties = typeof(Console).GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
                     foreach (var prop in consoleProperties)
                     {
@@ -50,8 +35,13 @@ namespace TestConsole
                             Console.WriteLine(ex.GetType().Name);
                         }
                     }
-                    break;
-                case "Environment Properties":
+                }
+            ),
+            Routine.Build
+            (
+                "Environment Properties",
+                () =>
+                {
                     var environmentProperties = typeof(Environment).GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
                     foreach (var prop in environmentProperties)
                     {
@@ -76,8 +66,13 @@ namespace TestConsole
                             Console.WriteLine(ex.GetType().Name);
                         }
                     }
-                    break;
-                case "AppDomain Properties":
+                }
+            ),
+            Routine.Build
+            (
+                "AppDomain Properties",
+                () =>
+                {
                     var appDomainProperties = typeof(AppDomain).GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
                     foreach (var prop in appDomainProperties)
                     {
@@ -98,17 +93,27 @@ namespace TestConsole
                             Console.WriteLine(ex.GetType().Name);
                         }
                     }
-                    break;
-                case "Assemblies":
+                }
+            ),
+            Routine.Build
+            (
+                "Assemblies",
+                () =>
+                {
                     RenderList(AppDomain.CurrentDomain.GetAssemblies(), renderer: (a) => a.FullName);
-                    break;
-                case "Detect App Type":
+                }
+            ),
+            Routine.Build
+            (
+                "Detect App Type",
+                () =>
+                {
                     var sb = new StringBuilder();
                     var appType = ClientApp.DetectAppType(sb);
                     RenderListTitle("Detected: " + (appType?.ToString() ?? "[null]"));
                     Console.WriteLine(sb);
-                    break;
-            }
-        }
+                }
+            )
+        };
     }
 }

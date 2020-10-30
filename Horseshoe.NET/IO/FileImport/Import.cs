@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Horseshoe.NET.Collections;
 using Horseshoe.NET.Collections.Extensions;
 using Horseshoe.NET.Objects;
 using Horseshoe.NET.Text;
@@ -517,9 +518,7 @@ namespace Horseshoe.NET.IO.FileImport
                 var objectArrays = ImportDelimited.AsObjects(stream, delimiter, ref columns, hasHeaderRow, dataErrorHandling);
 
                 // characters to remove (whitespace is already handled) to aid in the conversion of column names to object properties
-                charsToRemove = charsToRemove != null
-                    ? charsToRemove.Concat(new[] { '/', '-', '.', ',' }).ToArray()
-                    : new[] { '/', '-', '.', ',' };
+                charsToRemove = CollectionUtil.Concat(charsToRemove, '/', '-', '.', ',').ToArray();
 
                 // extrapolate object property names from column names, then set property values
                 objectArrays.Iterate

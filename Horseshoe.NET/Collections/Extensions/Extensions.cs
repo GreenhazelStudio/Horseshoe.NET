@@ -44,31 +44,50 @@ namespace Horseshoe.NET.Collections.Extensions
             return CollectionUtil.Merge(dictionary, dictionaryToMerge, mergeValuesFunc: mergeValuesFunc);
         }
 
-        public static T[] Concat<T>(this T[] array, IEnumerable<T> collectionToAppend)
+        public static IEnumerable<T> Concat<T>(this IEnumerable<T> collection, params IEnumerable<T>[] collections)
         {
-            if (collectionToAppend == null) return array;
-            return (array as IEnumerable<T>).Concat(collectionToAppend).ToArray();
+            return CollectionUtil.Concat(collection, collections);
         }
 
-        public static IEnumerable<T> ConcatIf<T>(this IEnumerable<T> collection, IEnumerable<T> collectionToAppend, bool condition)
+        public static IEnumerable<T> ConcatIf<T>(this IEnumerable<T> collection, bool condition, params IEnumerable<T>[] collections)
         {
-            return CollectionUtil.ConcatIf(collection, collectionToAppend, condition);
+            return CollectionUtil.ConcatIf(condition, collection, collections);
         }
 
-        public static IEnumerable<T> ConcatIf<T>(this IEnumerable<T> collection, IEnumerable<T> collectionToAppend, Func<bool> condition)
+        public static IEnumerable<T> ConcatIf<T>(this IEnumerable<T> collection, Func<bool> condition, params IEnumerable<T>[] collections)
         {
-            return CollectionUtil.ConcatIf(collection, collectionToAppend, condition);
+            return CollectionUtil.ConcatIf(condition, collection, collections);
         }
 
-        public static T[] ConcatIf<T>(this T[] array, IEnumerable<T> collectionToAppend, bool condition)
+        public static IEnumerable<T> Concat<T>(this IEnumerable<T> collection, params T[] items)
         {
-            return CollectionUtil.ConcatIf(array, collectionToAppend, condition).ToArray();
+            return CollectionUtil.Concat(collection, items);
         }
 
-        public static T[] ConcatIf<T>(this T[] array, IEnumerable<T> collectionToAppend, Func<bool> condition)
+        public static IEnumerable<T> ConcatIf<T>(this IEnumerable<T> collection, bool condition, params T[] items)
         {
-            return CollectionUtil.ConcatIf(array, collectionToAppend, condition).ToArray();
+            return CollectionUtil.ConcatIf(condition, collection, items);
         }
+
+        public static IEnumerable<T> ConcatIf<T>(this IEnumerable<T> collection, Func<bool> condition, params T[] items)
+        {
+            return CollectionUtil.ConcatIf(condition, collection, items);
+        }
+
+        //public static T[] ConcatArray<T>(this T[] array, params IEnumerable<T>[] collections)
+        //{
+        //    return CollectionUtil.Concat(array, collections).ToArray();
+        //}
+
+        //public static T[] ConcatArrayIf<T>(this T[] array, bool condition, params IEnumerable<T>[] collections)
+        //{
+        //    return CollectionUtil.ConcatIf(condition, array, collections).ToArray();
+        //}
+
+        //public static T[] ConcatArrayIf<T>(this T[] array, Func<bool> condition, params IEnumerable<T>[] collections)
+        //{
+        //    return CollectionUtil.ConcatIf(condition, array, collections).ToArray();
+        //}
 
         public static IEnumerable<T> Pad<T>(this IEnumerable<T> collection, int targetSize, CollectionPosition position = CollectionPosition.End, T padWith = default, bool cannotExceedTargetSize = false)
         {

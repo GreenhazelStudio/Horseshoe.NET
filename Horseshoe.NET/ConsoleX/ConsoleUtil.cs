@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security;
 using System.Text;
-
+using Horseshoe.NET.Collections;
 using Horseshoe.NET.Collections.Extensions;
 using Horseshoe.NET.ConsoleX.Extensions;
 using Horseshoe.NET.Extensions;
@@ -16,21 +16,17 @@ namespace Horseshoe.NET.ConsoleX
     {
         private static int ConsoleWidth { get => Console.WindowWidth - 2; }
 
-        public static void RenderSplash(string welcomeMessage, int padBefore = 1, int padAfter = 2)
+        public static void RenderSplash(IEnumerable<string> splashMessageLines, int padBefore = 1, int padAfter = 2)
         {
-            var welcomeMessageLines = welcomeMessage.Replace(Environment.NewLine, "\n")
-                .Split('\n')
-                .ZapAndPrune()
-                .ToArray();
-            RenderSplash(welcomeMessageLines, padBefore: padBefore, padAfter: padAfter);
-        }
-
-        public static void RenderSplash(string[] welcomeMessageLines, int padBefore = 1, int padAfter = 2)
-        {
+            var list = new List<string>();
+            foreach(var line in splashMessageLines)
+            {
+                list.AddRange(line.Replace("\r\n", "\n").Replace('\r', '\n').Split('\n'));
+            }
             Pad(padBefore);
             Console.WriteLine(" »╔" + "".PadLeft(ConsoleWidth - 4, '═') + "╗«");
             Console.WriteLine(" »║" + "".PadLeft(ConsoleWidth - 4, ' ') + "║«");
-            foreach(var line in welcomeMessageLines)
+            foreach(var line in list)
             {
                 Console.WriteLine(" »║" + line.PadCenter(ConsoleWidth - 4) + "║«");
             }
@@ -67,10 +63,11 @@ namespace Horseshoe.NET.ConsoleX
         public static void RenderMenu<E>
         (
             IEnumerable<E> menuItems,
+            IEnumerable<Routine> customItemsToPrepend = null,
+            IEnumerable<Routine> customItemsToAppend = null,
             Func<E, string> renderer = null,
             int padBefore = 0,
             Title? title = null,
-            IEnumerable<CustomMenuItem> customMenuItems = null,
             int padAfter = 1
         )
         {
@@ -84,7 +81,7 @@ namespace Horseshoe.NET.ConsoleX
                 Pad(padBefore);
             }
 
-            if ((menuItems == null || !menuItems.Any()) && (customMenuItems == null || !customMenuItems.Any()))
+            if (!CollectionUtil.ContainsAny(menuItems) && !CollectionUtil.ContainsAny(customItemsToPrepend) && !CollectionUtil.ContainsAny(customItemsToAppend))
             {
                 Console.WriteLine("[There are no menu items to display]");
                 return;
@@ -104,19 +101,19 @@ namespace Horseshoe.NET.ConsoleX
             }
 
             // add custom menu items
-            if (customMenuItems != null)
+            if (customItemsToPrepend != null)
             {
                 var prependedCount = 0;
-                foreach (var custItem in customMenuItems)
+                foreach (var custItem in customItemsToPrepend)
                 {
-                    if (custItem.PrependToMenu)
-                    {
-                        menuItemUniformer.InsertUniqueMenuItem(prependedCount++, Zap.String(custItem.Command) ?? "<┘", custItem.Text);
-                    }
-                    else
-                    {
-                        menuItemUniformer.AddUniqueMenuItem(Zap.String(custItem.Command) ?? "<┘", custItem.Text);
-                    }
+                    menuItemUniformer.InsertUniqueMenuItem(prependedCount++, Zap.String(custItem.Command) ?? "<┘", custItem.Title);
+                }
+            }
+            if (customItemsToAppend != null)
+            {
+                foreach (var custItem in customItemsToAppend)
+                {
+                    menuItemUniformer.AddUniqueMenuItem(Zap.String(custItem.Command) ?? "<┘", custItem.Title);
                 }
             }
 
@@ -125,64 +122,39 @@ namespace Horseshoe.NET.ConsoleX
         }
 
         /// <summary>
-        /// Displays a menu in the console and waits for user input.
-        /// </summary>
-        public static MenuSelection<object> PromptMenu
-        (
-            Title? title = null,
-            IEnumerable<CustomMenuItem> customMenuItems = null,
-            string prompt = ">",
-            int padBefore = 0,
-            int padAfter = 1,
-            bool allowArbitraryInput = false,
-            bool allowMultipleSelection = false,
-            bool allowExitApplication = true
-        )
-        {
-            return PromptMenu
-            (
-                null as IEnumerable<object>,
-                title: title,
-                customMenuItems: customMenuItems,
-                prompt: prompt,
-                padBefore: padBefore,
-                padAfter: padAfter,
-                allowArbitraryInput: allowArbitraryInput,
-                allowMultipleSelection: allowMultipleSelection,
-                allowExitApplication: allowExitApplication
-            );
-        }
-
-        /// <summary>
-        /// Displays a menu in the console and waits for user input.
+        /// Displays a menu in the console and waits for a user selection.
         /// </summary>
         public static MenuSelection<E> PromptMenu<E>
         (
             IEnumerable<E> menuItems,
+            IEnumerable<Routine> customItemsToPrepend = null,
+            IEnumerable<Routine> customItemsToAppend = null,
             Func<E, string> renderer = null,
             Title? title = null,
-            IEnumerable<CustomMenuItem> customMenuItems = null,
             string prompt = ">",
             int padBefore = 0,
             int padAfter = 1,
             bool allowArbitraryInput = false,
             bool allowMultipleSelection = false,
-            bool allowExitApplication = true
+            bool allowExitApplication = true,
+            Action<MenuSelection<E>> onMenuSelection = null
         ) where E : class
         {
             ValidateMenu
             (
                 menuItems,
-                customMenuItems: customMenuItems
+                customItemsToPrepend,
+                customItemsToAppend
             );
 
             RenderMenu
             (
                 menuItems,
+                customItemsToPrepend: customItemsToPrepend,
+                customItemsToAppend: customItemsToAppend,
                 renderer: renderer,
                 padBefore: padBefore,
                 title: title,
-                customMenuItems: customMenuItems,
                 padAfter: padAfter
             );
 
@@ -190,19 +162,20 @@ namespace Horseshoe.NET.ConsoleX
             {
                 var rawInput = PromptInput(prompt: prompt, allowExitApplication: allowExitApplication);
                 var input = rawInput.Trim();
-                if (customMenuItems != null)
+                var customMenuItems = CollectionUtil.Concat(customItemsToPrepend, customItemsToAppend);
+                MenuSelection<E> menuSelection;
+                foreach (var custItem in customMenuItems ?? Enumerable.Empty<Routine>())
                 {
-                    foreach (var custItem in customMenuItems)
+                    if (string.Equals(input, custItem.Command, StringComparison.CurrentCultureIgnoreCase) && !(custItem is InertRoutine))
                     {
-                        if (string.Equals(input, custItem.Command, StringComparison.CurrentCultureIgnoreCase) && !custItem.Inert)
+                        if (custItem.Action != null)
                         {
-                            if (custItem.Action != null)
-                            {
-                                custItem.Action.Invoke();
-                                return new MenuSelection<E>();
-                            }
-                            return new MenuSelection<E> { CustomMenuItem = custItem };
+                            custItem.Action.Invoke();
+                            return new MenuSelection<E>();
                         }
+                        menuSelection = new MenuSelection<E> { CustomMenuItem = custItem };
+                        onMenuSelection?.Invoke(menuSelection);
+                        return menuSelection;
                     }
                 }
                 if (allowMultipleSelection && input.Length != 0)
@@ -213,12 +186,14 @@ namespace Horseshoe.NET.ConsoleX
                         var selectedItems = selectedIndexes
                             .Select(i => menuItems.ElementAt(i - 1))
                             .ToArray();
-                        return new MenuSelection<E>
+                        menuSelection = new MenuSelection<E>
                         {
                             SelectedIndexes = selectedIndexes,
                             SelectedItems = selectedItems,
                             SelectedAll = all
                         };
+                        onMenuSelection?.Invoke(menuSelection);
+                        return menuSelection;
                     }
                     catch (BenignException ex)
                     {
@@ -229,17 +204,29 @@ namespace Horseshoe.NET.ConsoleX
                 {
                     try
                     {
-                        return new MenuSelection<E>
+                        menuSelection = new MenuSelection<E>
                         {
                             SelectedIndex = index,
                             SelectedItem = menuItems.ElementAt(index - 1)   // convert back to 0-based index;  uses IndexOutOfRangeException for autovalidation
                         };
+                        onMenuSelection?.Invoke(menuSelection);
+                        if (menuSelection.SelectedItem is Routine selectedRoutine)
+                        {
+                            selectedRoutine.Run();
+                        }
+                        return menuSelection;
+                    }
+                    catch (Navigation.ExitAppException)
+                    {
+                        throw;
                     }
                     catch (Exception)
                     {
                         if (allowArbitraryInput)
                         {
-                            return new MenuSelection<E> { ArbitraryInput = rawInput };
+                            menuSelection = new MenuSelection<E> { ArbitraryInput = rawInput };
+                            onMenuSelection?.Invoke(menuSelection);
+                            return menuSelection;
                         }
                         else
                         {
@@ -249,7 +236,9 @@ namespace Horseshoe.NET.ConsoleX
                 }
                 else if (allowArbitraryInput && input.Length != 0)
                 {
-                    return new MenuSelection<E> { ArbitraryInput = rawInput };
+                    menuSelection = new MenuSelection<E> { ArbitraryInput = rawInput };
+                    onMenuSelection?.Invoke(menuSelection);
+                    return menuSelection;
                 }
                 else
                 {
@@ -261,27 +250,40 @@ namespace Horseshoe.NET.ConsoleX
         private static void ValidateMenu<E>
         (
             IEnumerable<E> menuItems,
-            IEnumerable<CustomMenuItem> customMenuItems
+            IEnumerable<Routine> customItemsToPrepend,
+            IEnumerable<Routine> customItemsToAppend
         )
         {
             var menuItemsForCompare = new Dictionary<string, string>();
-            if (customMenuItems != null && customMenuItems.Any())
+            foreach (var custItem in customItemsToPrepend ?? Enumerable.Empty<Routine>())
             {
-                foreach (var custItem in customMenuItems)
+                if (menuItemsForCompare.ContainsKeyIgnoreCase(custItem.Command, out KeyValuePair<string, string> matchingKvp))
                 {
-                    if (menuItemsForCompare.ContainsKeyIgnoreCase(custItem.Command, out KeyValuePair<string, string> matchingKvp))
-                    {
-                        throw new ValidationException("Menu commands must be unique: " + custItem.Command + " - " + custItem.Text + " ... " + matchingKvp.Key + " - " + matchingKvp.Value);
-                    }
-                    if (int.TryParse(custItem.Command, out int checkIndex) && menuItems != null)
-                    {
-                        if (checkIndex >= 1 && checkIndex <= menuItems.Count())
-                        {
-                            throw new ValidationException("Menu commands must be unique: " + custItem.Command + " - " + custItem.Text + " ... " + checkIndex + " - " + menuItems.ElementAt(checkIndex - 1));
-                        }
-                    }
-                    menuItemsForCompare.Add(custItem.Command, custItem.Text);
+                    throw new ValidationException("Menu item commands must be unique: " + custItem.Command + " - " + custItem.Title + " ... " + matchingKvp.Key + " - " + matchingKvp.Value);
                 }
+                if (int.TryParse(custItem.Command, out int checkIndex) && menuItems != null)
+                {
+                    if (checkIndex >= 1 && checkIndex <= menuItems.Count())
+                    {
+                        throw new ValidationException("Menu item commands must be unique: " + custItem.Command + " - " + custItem.Title + " ... " + checkIndex + " - " + menuItems.ElementAt(checkIndex - 1));
+                    }
+                }
+                menuItemsForCompare.Add(custItem.Command, custItem.Title);
+            }
+            foreach (var custItem in customItemsToAppend ?? Enumerable.Empty<Routine>())
+            {
+                if (menuItemsForCompare.ContainsKeyIgnoreCase(custItem.Command, out KeyValuePair<string, string> matchingKvp))
+                {
+                    throw new ValidationException("Menu item commands must be unique: " + custItem.Command + " - " + custItem.Title + " ... " + matchingKvp.Key + " - " + matchingKvp.Value);
+                }
+                if (int.TryParse(custItem.Command, out int checkIndex) && menuItems != null)
+                {
+                    if (checkIndex >= 1 && checkIndex <= menuItems.Count())
+                    {
+                        throw new ValidationException("Menu item commands must be unique: " + custItem.Command + " - " + custItem.Title + " ... " + checkIndex + " - " + menuItems.ElementAt(checkIndex - 1));
+                    }
+                }
+                menuItemsForCompare.Add(custItem.Command, custItem.Title);
             }
         }
 

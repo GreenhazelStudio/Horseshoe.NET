@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-using Horseshoe.NET;
-using Horseshoe.NET.Application;
 using Horseshoe.NET.ConsoleX;
 using Horseshoe.NET.Db;
 using Horseshoe.NET.SqlDb;
@@ -16,32 +12,16 @@ namespace TestConsole
     class SqlTests : Routine
     {
         public override Title Title => "Sql Tests";
+
         public override bool Looping => true;
 
-        static string Statement { get; set; }
-
-        static SqlTests()
+        public override IEnumerable<Routine> Menu => new []
         {
-            SqlUtil.UsingStatement += (stmt) => Statement = stmt;
-        }
-
-        string[] Menu => new string[]
-        {
-            "Not Equals Test"
-        };
-
-        public override void Do()
-        {
-            Console.WriteLine();
-            var selection = PromptMenu
+            Routine.Build
             (
-                Menu,
-                title: "Menu"
-            );
-            RenderListTitle(selection.SelectedItem);
-            switch(selection.SelectedItem)
-            {
-                case "Not Equals Test":
+                "Not Equals Test",
+                () =>
+                {
                     Update.Table
                     (
                         null,
@@ -53,8 +33,15 @@ namespace TestConsole
                         where: Filter.NotEquals("OtherColumn", 15, columnIsNullable: true)
                     );
                     Console.WriteLine(Statement);
-                    break;
-            }
+                }
+            )
+        };
+
+        static string Statement { get; set; }
+
+        static SqlTests()
+        {
+            SqlUtil.UsingStatement += (stmt) => Statement = stmt;
         }
     }
 }

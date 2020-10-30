@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
-using Horseshoe.NET;
 using Horseshoe.NET.ConsoleX;
 using Horseshoe.NET.IO;
 using Horseshoe.NET.IO.Ftp;
@@ -13,60 +11,34 @@ using Horseshoe.NET.IO.ReportingServices;
 using Horseshoe.NET.IO.Http;
 using Horseshoe.NET.SecureIO.Sftp;
 using Horseshoe.NET.IO.Http.Enums;
-using System.Runtime.InteropServices;
 
 namespace TestConsole
 {
     class IOTests : Routine
     {
         public override Title Title => "IO Tests";
+
         public override bool Looping => true;
 
-        static IOTests()
-        {
-            Ftp.RequestUriCreated += (uri) => Console.WriteLine("URI: " + uri);
-            Ftp.FileUploaded += (fileName, fileSize, statusCode, statusDescription) => Console.WriteLine("Upload results: " + fileName + " - " + FileUtil.GetDisplayFileSize(fileSize) + " - " + statusDescription);
-            Ftp.FileDeleted += (fileName, statusCode, statusDescription) => Console.WriteLine("Delete results: " + fileName + " - " + statusDescription);
-            Ftp.DirectoryContentsListed += (count, statusCode, statusDescription) => Console.WriteLine("Dir listing results: x" + count + " - " + statusDescription);
-            Sftp.FileUploaded += (fileName, fileSize, statusCode, statusDescription) => Console.WriteLine("Upload results: " + fileName + " - " + FileUtil.GetDisplayFileSize(fileSize) + " - " + statusDescription);
-            Sftp.FileDeleted += (fileName, statusCode, statusDescription) => Console.WriteLine("Delete results: " + fileName + " - " + statusDescription);
-            Sftp.DirectoryContentsListed += (count, statusCode, statusDescription) => Console.WriteLine("Dir listing results: x" + count + " - " + statusDescription);
-        }
+        readonly string ftpPseudoConnectionString = "ftp://username@11.22.33.44/dir/subdir?password=password";
+        readonly string sftpPseudoConnectionString = "sftp://username@11.22.33.44//root/subdir?password=password";
 
-        public override void Do()
+        public override IEnumerable<Routine> Menu => new[]
         {
-            var selection = PromptMenu
+            Routine.Build
             (
-                new[]
+                "Build SSRS URLs",
+                () =>
                 {
-                    "Build SSRS URLs",
-                    "Display file sizes",
-                    "Test FTP Upload",
-                    "Test FTPS Upload",
-                    "Test SFTP Upload",
-                    "Test FTP Download",
-                    "Test SFTP Download",
-                    "Test FTP Delete",
-                    "Test SFTP Delete",
-                    "List FTP Directory",
-                    "List SFTP Directory",
-                    "regex",
-                    "FTP connection string parse tests",
-                    "Web Service",
-                    "Web Service w/ Header"
-                },
-                title: "SSRS Test Menu"
-            );
-            var ftpPseudoConnectionString = "ftp://username@11.22.33.44/dir/subdir?password=password";
-            var sftpPseudoConnectionString = "sftp://username@11.22.33.44//root/subdir?password=password";
-
-            switch (selection.SelectedItem)
-            {
-                case "Build SSRS URLs":
                     Console.WriteLine("File: " + ReportUtil.BuildFileUrl("/Accounting/Annual Report", reportServer: "http://localhost", parameters: new Dictionary<string, object> { { "parm1", "ezstr" }, { "parm2", "cr&zy str" } }));
                     Console.WriteLine("Link: " + ReportUtil.BuildHyperlinkUrl("/Accounting/Annual Report", reportServer: "http://localhost", parameters: new Dictionary<string, object> { { "parm1", "ezstr" }, { "parm2", "cr&zy str" } }));
-                    break;
-                case "Display file sizes":
+                }
+            ),
+            Routine.Build
+            (
+                "Display file sizes",
+                () =>
+                {
                     Console.WriteLine("-1 B  =>  " + FileUtil.GetDisplayFileSize(-1));
                     Console.WriteLine("-1 B in KB  =>  " + FileUtil.GetDisplayFileSize(-1, unit: FileSize.Unit.KB));
                     Console.WriteLine("0  =>  " + FileUtil.GetDisplayFileSize(0));
@@ -81,33 +53,52 @@ namespace TestConsole
                     Console.WriteLine("1000000 B in GiB  =>  " + FileUtil.GetDisplayFileSize(1000000, unit: FileSize.Unit.GiB));
                     Console.WriteLine("1000000 B in GB w/ 3 dec  =>  " + FileUtil.GetDisplayFileSize(1000000, maxDecimalPlaces: 3, unit: FileSize.Unit.GB));
                     Console.WriteLine("1000000 B in GiB w/ 3 dec  =>  " + FileUtil.GetDisplayFileSize(1000000, maxDecimalPlaces: 3, unit: FileSize.Unit.GiB));
-                    Console.WriteLine();
-                    break;
-                case "Test FTP Upload":
+                }
+            ),
+            Routine.Build
+            (
+                "Test FTP Upload",
+                () =>
+                {
                     Ftp.UploadFile
                     (
                         "hello.txt",
                         "Hello World!",
                         connectionInfo: FtpUtil.ParseFtpConnectionString(ftpPseudoConnectionString)
                     );
-                    break;
-                case "Test FTPS Upload":
+                }
+            ),
+            Routine.Build
+            (
+                "Test FTPS Upload",
+                () =>
+                {
                     Ftp.UploadFile
                     (
                         "hello.txt",
                         "Hello World!",
                         connectionInfo: FtpUtil.ParseFtpConnectionString(ftpPseudoConnectionString.Replace("ftp://", "ftps://"))
                     );
-                    break;
-                case "Test SFTP Upload":
+                }
+            ),
+            Routine.Build
+            (
+                "Test SFTP Upload",
+                () =>
+                {
                     Sftp.UploadFile
                     (
                         "hello.txt",
                         "Hello World!",
                         connectionInfo: SftpUtil.ParseSftpConnectionString(sftpPseudoConnectionString)
                     );
-                    break;
-                case "Test FTP Download":
+                }
+            ),
+            Routine.Build
+            (
+                "Test FTP Download",
+                () =>
+                {
                     var stream = Ftp.DownloadFile
                     (
                         "hello.txt",
@@ -115,8 +106,13 @@ namespace TestConsole
                     );
                     Console.WriteLine("File length: " + stream.Length);
                     Console.WriteLine("File contents: " + Encoding.Default.GetString(stream.ToArray()));
-                    break;
-                case "Test SFTP Download":
+                }
+            ),
+            Routine.Build
+            (
+                "Test SFTP Download",
+                () =>
+                {
                     var sstream = Sftp.DownloadFile
                     (
                         "hello.txt",
@@ -124,22 +120,37 @@ namespace TestConsole
                     );
                     Console.WriteLine("File length: " + sstream.Length);
                     Console.WriteLine("File contents: " + Encoding.Default.GetString(sstream.ToArray()));
-                    break;
-                case "Test FTP Delete":
+                }
+            ),
+            Routine.Build
+            (
+                "Test FTP Delete",
+                () =>
+                {
                     Ftp.DeleteFile
                     (
                         "hello.txt",
                         connectionInfo: FtpUtil.ParseFtpConnectionString(ftpPseudoConnectionString)
                     );
-                    break;
-                case "Test SFTP Delete":
+                }
+            ),
+            Routine.Build
+            (
+                "Test SFTP Delete",
+                () =>
+                {
                     Sftp.DeleteFile
                     (
                         "hello.txt",
                         connectionInfo: SftpUtil.ParseSftpConnectionString(sftpPseudoConnectionString)
                     );
-                    break;
-                case "List FTP Directory":
+                }
+            ),
+            Routine.Build
+            (
+                "List FTP Directory",
+                () =>
+                {
                     var dirContents = Ftp.ListDirectoryContents
                     (
                         connectionInfo: FtpUtil.ParseFtpConnectionString(ftpPseudoConnectionString)
@@ -155,8 +166,13 @@ namespace TestConsole
                     );
                     Console.WriteLine("Directory contents (.txt files only):");
                     Console.WriteLine(dirContents.Any() ? string.Join(Environment.NewLine, dirContents) : "[0 results]");
-                    break;
-                case "List SFTP Directory":
+                }
+            ),
+            Routine.Build
+            (
+                "List SFTP Directory",
+                () =>
+                {
                     var sdirContents = Sftp.ListDirectoryContents
                     (
                         connectionInfo: SftpUtil.ParseSftpConnectionString(sftpPseudoConnectionString)
@@ -165,15 +181,20 @@ namespace TestConsole
                     Console.WriteLine(string.Join(Environment.NewLine, sdirContents));
                     Console.WriteLine();
 
-                    dirContents = Sftp.ListDirectoryContents
+                    var dirContents = Sftp.ListDirectoryContents
                     (
                         fileMask: FtpFileMasks.Txt,
                         connectionInfo: SftpUtil.ParseSftpConnectionString(sftpPseudoConnectionString)
                     );
                     Console.WriteLine("Directory contents (.txt files only):");
                     Console.WriteLine(string.Join(Environment.NewLine, dirContents));
-                    break;
-                case "regex":
+                }
+            ),
+            Routine.Build
+            (
+                "regex",
+                () =>
+                {
                     var regexes = new[] { "^[^.]+$", "^[^\\.]+$" };
                     var testStrings = new[] { "file.txt", "DIR" };
                     foreach (var regex in regexes)
@@ -183,8 +204,13 @@ namespace TestConsole
                             Console.WriteLine("Testing '" + str + "' against '" + regex + "' -> " + Regex.IsMatch(str, regex));
                         }
                     }
-                    break;
-                case "FTP connection string parse tests":
+                }
+            ),
+            Routine.Build
+            (
+                "FTP connection string parse tests",
+                () =>
+                {
                     var connStrs = new[]
                     {
                         "ftp://george@11.22.33.44/dir/subdir?encryptedPassword=akdj$8iO(d@1sd==",
@@ -206,9 +232,14 @@ namespace TestConsole
                         }
                         Console.WriteLine();
                     }
-                    break;
-                case "Web Service":
-                    try
+                }
+            ),
+            Routine.Build
+            (
+                "Web Service",
+                () =>
+                {
+                     try
                     {
                         var apiResponse = WebService.Get<WebServiceResponse<IEnumerable<string>>>
                         (
@@ -236,16 +267,32 @@ namespace TestConsole
                     {
                         RenderException(ex);
                     }
-                    break;
-                case "Web Service w/ Header":
+               }
+            ),
+            Routine.Build
+            (
+                "Web Service w/ Header",
+                () =>
+                {
                     var wshUrl = "http://localhost:58917/fake/path";
                     var headers = new Dictionary<string, string> { { "My-Custom-Header", "Frankenstein" } };
                     Console.WriteLine("calling " + wshUrl + "...");
                     int status = 0;
                     var response = WebService.Get(wshUrl, headers: headers, returnMetadata: (meta) => { status = meta.StatusCode; });
                     Console.WriteLine("(" + status + ") " + response);
-                    break;
-            }
+                }
+            )
+        };
+
+        static IOTests()
+        {
+            Ftp.RequestUriCreated += (uri) => Console.WriteLine("URI: " + uri);
+            Ftp.FileUploaded += (fileName, fileSize, statusCode, statusDescription) => Console.WriteLine("Upload results: " + fileName + " - " + FileUtil.GetDisplayFileSize(fileSize) + " - " + statusDescription);
+            Ftp.FileDeleted += (fileName, statusCode, statusDescription) => Console.WriteLine("Delete results: " + fileName + " - " + statusDescription);
+            Ftp.DirectoryContentsListed += (count, statusCode, statusDescription) => Console.WriteLine("Dir listing results: x" + count + " - " + statusDescription);
+            Sftp.FileUploaded += (fileName, fileSize, statusCode, statusDescription) => Console.WriteLine("Upload results: " + fileName + " - " + FileUtil.GetDisplayFileSize(fileSize) + " - " + statusDescription);
+            Sftp.FileDeleted += (fileName, statusCode, statusDescription) => Console.WriteLine("Delete results: " + fileName + " - " + statusDescription);
+            Sftp.DirectoryContentsListed += (count, statusCode, statusDescription) => Console.WriteLine("Dir listing results: x" + count + " - " + statusDescription);
         }
     }
 }

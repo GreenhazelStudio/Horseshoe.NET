@@ -41,7 +41,7 @@ namespace Horseshoe.NET.ConsoleX
         /// <summary>
         /// The custom command selected by the user.
         /// </summary>
-        public CustomMenuItem CustomMenuItem { get; set; }
+        public Routine CustomMenuItem { get; set; }
     }
 
     public static class MenuSelection

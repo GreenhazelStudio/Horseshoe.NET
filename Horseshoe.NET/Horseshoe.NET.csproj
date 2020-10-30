@@ -72,14 +72,15 @@
     <Compile Include="Collections\Iteration.cs" />
     <Compile Include="Collections\IterationException.cs" />
     <Compile Include="Collections\PrunePolicy.cs" />
+    <Compile Include="ConsoleX\LoopingPolicy.cs" />
     <Compile Include="ConsoleX\ConsoleApp.cs" />
     <Compile Include="ConsoleX\ConsoleUtil.cs" />
-    <Compile Include="ConsoleX\CustomMenuItem.cs" />
     <Compile Include="ConsoleX\Extensions\Extensions.cs" />
     <Compile Include="ConsoleX\ListIndexPolicy.cs" />
     <Compile Include="ConsoleX\LRUniformer.cs" />
     <Compile Include="ConsoleX\MenuSelection.cs" />
     <Compile Include="ConsoleX\Navigation.cs" />
+    <Compile Include="ConsoleX\InertRoutine.cs" />
     <Compile Include="ConsoleX\Routine.cs" />
     <Compile Include="ConsoleX\Title.cs" />
     <Compile Include="Credential.cs" />

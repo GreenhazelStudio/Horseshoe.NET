@@ -15,8 +15,6 @@ namespace Horseshoe.NET.ConsoleX
             Xtra = xtra;
         }
 
-        public static implicit operator Title(string text) => new Title(text);
-
         public override string ToString()
         {
             return Render();
@@ -27,5 +25,8 @@ namespace Horseshoe.NET.ConsoleX
             if (Xtra == null) return Text;
             return Text + " - " + Xtra;
         }
+
+        public static implicit operator Title(string text) => new Title(text);
+        public static implicit operator string(Title title) => title.Render();
     }
 }
