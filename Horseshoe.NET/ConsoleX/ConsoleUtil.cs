@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security;
 using System.Text;
+
 using Horseshoe.NET.Collections;
-using Horseshoe.NET.Collections.Extensions;
 using Horseshoe.NET.ConsoleX.Extensions;
 using Horseshoe.NET.Extensions;
 using Horseshoe.NET.Objects;
+using Horseshoe.NET.Text;
 using Horseshoe.NET.Text.Extensions;
 
 namespace Horseshoe.NET.ConsoleX
@@ -96,7 +97,14 @@ namespace Horseshoe.NET.ConsoleX
                 var counter = 0;
                 foreach (var item in menuItems)
                 {
-                    menuItemUniformer.AddUniqueMenuItem(++counter, renderer != null ? renderer.Invoke(item) : item?.ToString(), lIsIndex: true);
+                    if (item is InertRoutine inertRoutine)
+                    {
+                        menuItemUniformer.AddUniqueItem(null, inertRoutine.Title, ignoreNullL: true);
+                    }
+                    else
+                    {
+                        menuItemUniformer.AddUniqueItem(++counter, renderer != null ? renderer.Invoke(item) : item?.ToString(), lIsIndex: true);
+                    }
                 }
             }
 
@@ -106,14 +114,14 @@ namespace Horseshoe.NET.ConsoleX
                 var prependedCount = 0;
                 foreach (var custItem in customItemsToPrepend)
                 {
-                    menuItemUniformer.InsertUniqueMenuItem(prependedCount++, Zap.String(custItem.Command) ?? "<┘", custItem.Title);
+                    menuItemUniformer.InsertUniqueItem(prependedCount++, string.Equals(custItem.Command, "") ? "<┘" : custItem.Command, custItem.Title, ignoreNullL: true);  // l is null for InertRoutines
                 }
             }
             if (customItemsToAppend != null)
             {
                 foreach (var custItem in customItemsToAppend)
                 {
-                    menuItemUniformer.AddUniqueMenuItem(Zap.String(custItem.Command) ?? "<┘", custItem.Title);
+                    menuItemUniformer.AddUniqueItem(string.Equals(custItem.Command, "") ? "<┘" : custItem.Command, custItem.Title, ignoreNullL: true);  // l is null for InertRoutines
                 }
             }
 

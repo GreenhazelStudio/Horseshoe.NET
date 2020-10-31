@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using Horseshoe.NET.Text.Extensions;
 
-namespace Horseshoe.NET.ConsoleX
+namespace Horseshoe.NET.Text
 {
     public class LRUniformer : List<LRUniformer.Item>
     {
@@ -32,38 +32,38 @@ namespace Horseshoe.NET.ConsoleX
             Insert(index, l.ToString(), r, lIsIndex: lIsIndex, lAlignRight: lAlignRight, rAlignRight: rAlignRight);
         }
 
-        public void AddUniqueMenuItem(string l, string r, bool lIsIndex = false, bool lAlignRight = false, bool rAlignRight = false)
+        public void AddUniqueItem(string l, string r, bool lIsIndex = false, bool lAlignRight = false, bool rAlignRight = false, bool ignoreNullL = false)
         {
-            if (this.Any(i => i.L.Equals(l, StringComparison.OrdinalIgnoreCase)))
+            if ((!ignoreNullL || l != null) && this.Any(i => i.L.Equals(l, StringComparison.OrdinalIgnoreCase)))
             {
-                throw new ValidationException("Duplicate menu commands may not exist within a single menu: " + l);
+                throw new ValidationException("Duplicate item found: " + l + " (" + r + ")");
             }
             Add(l, r, lIsIndex: lIsIndex, lAlignRight: lAlignRight, rAlignRight: rAlignRight);
         }
 
-        public void AddUniqueMenuItem(int l, string r, bool lIsIndex = false, bool lAlignRight = false, bool rAlignRight = false)
+        public void AddUniqueItem(int l, string r, bool lIsIndex = false, bool lAlignRight = false, bool rAlignRight = false, bool ignoreNullL = false)
         {
             if (this.Any(i => i.L.Equals(l.ToString())))
             {
-                throw new ValidationException("Duplicate menu commands may not exist within a single menu: " + l);
+                throw new ValidationException("Duplicate item found: " + l + " (" + r + ")");
             }
             Add(l, r, lIsIndex: lIsIndex, lAlignRight: lAlignRight, rAlignRight: rAlignRight);
         }
 
-        public void InsertUniqueMenuItem(int index, string l, string r, bool lIsIndex = false, bool lAlignRight = false, bool rAlignRight = false)
+        public void InsertUniqueItem(int index, string l, string r, bool lIsIndex = false, bool lAlignRight = false, bool rAlignRight = false, bool ignoreNullL = false)
         {
-            if (this.Any(i => i.L.Equals(l, StringComparison.OrdinalIgnoreCase)))
+            if ((!ignoreNullL || l != null) && this.Any(i => i.L.Equals(l, StringComparison.OrdinalIgnoreCase)))
             {
-                throw new ValidationException("Duplicate menu commands may not exist within a single menu: " + l);
+                throw new ValidationException("Duplicate item found: " + l + " (" + r + ")");
             }
             Insert(index, l, r, lIsIndex: lIsIndex, lAlignRight: lAlignRight, rAlignRight: rAlignRight);
         }
 
-        public void InsertUniqueMenuItem(int index, int l, string r, bool lIsIndex = false, bool lAlignRight = false, bool rAlignRight = false)
+        public void InsertUniqueItem(int index, int l, string r, bool lIsIndex = false, bool lAlignRight = false, bool rAlignRight = false, bool ignoreNullL = false)
         {
             if (this.Any(i => i.L.Equals(l.ToString())))
             {
-                throw new ValidationException("Duplicate menu commands may not exist within a single menu: " + l);
+                throw new ValidationException("Duplicate item found: " + l + " (" + r + ")");
             }
             Insert(index, l, r, lIsIndex: lIsIndex, lAlignRight: lAlignRight, rAlignRight: rAlignRight);
         }

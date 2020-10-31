@@ -199,46 +199,93 @@ namespace Horseshoe.NET.Collections
         }
 
         /// <summary>
-        /// Condititionally appends two collections
+        /// Appends zero or more collections to a collection
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="collection"></param>
-        /// <param name="collectionToAppend"></param>
-        /// <param name="condition"></param>
+        /// <param name="collections"></param>
         /// <returns></returns>
-        public static IEnumerable<T> Concat<T>(IEnumerable<T> collection, IEnumerable<T> collectionToAppend)
+        public static IEnumerable<T> Concat<T>(IEnumerable<T> collection, params IEnumerable<T>[] collections)
         {
-            if (collection == null) return collectionToAppend;
-            if (collectionToAppend == null) return collection;
-            return collection.Concat(collectionToAppend);
+            if (collections == null || !collections.Any(c => c != null)) return collection;
+            var list = new List<T>(collection ?? Enumerable.Empty<T>());
+            foreach (var _collection in collections)
+            {
+                list.AddRange(_collection ?? Enumerable.Empty<T>());
+            }
+            return list;
         }
 
         /// <summary>
-        /// Condititionally appends two collections
+        /// Appends zero or more items to a collection
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="collection"></param>
-        /// <param name="collectionToAppend"></param>
-        /// <param name="condition"></param>
+        /// <param name="collections"></param>
         /// <returns></returns>
-        public static IEnumerable<T> ConcatIf<T>(IEnumerable<T> collection, IEnumerable<T> collectionToAppend, bool condition)
+        public static IEnumerable<T> Concat<T>(IEnumerable<T> collection, params T[] items)
         {
-            if (condition) return Concat(collection, collectionToAppend);
+            if (items == null || !items.Any()) return collection;
+            var list = new List<T>(collection ?? Enumerable.Empty<T>());
+            foreach (var item in items)
+            {
+                list.Add(item);
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// Condititionally appends zero or more collections to a collection
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="condition"></param>
+        /// <param name="collection"></param>
+        /// <param name="collections"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> ConcatIf<T>(bool condition, IEnumerable<T> collection, params IEnumerable<T>[] collections)
+        {
+            if (condition) return Concat(collection, collections);
             return collection;
         }
 
         /// <summary>
-        /// Condititionally appends two collections
+        /// Condititionally appends zero or more collections to a collection
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="collection"></param>
-        /// <param name="collectionToAppend"></param>
         /// <param name="condition"></param>
+        /// <param name="collection"></param>
+        /// <param name="collections"></param>
         /// <returns></returns>
-        public static IEnumerable<T> ConcatIf<T>(IEnumerable<T> collection, IEnumerable<T> collectionToAppend, Func<bool> condition)
+        public static IEnumerable<T> ConcatIf<T>(Func<bool> condition, IEnumerable<T> collection, params IEnumerable<T>[] collections)
         {
-            if (condition.Invoke()) return Concat(collection, collectionToAppend);
+            return ConcatIf(condition.Invoke(), collection, collections);
+        }
+
+        /// <summary>
+        /// Condititionally appends zero or more items to a collection
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="condition"></param>
+        /// <param name="collection"></param>
+        /// <param name="items"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> ConcatIf<T>(bool condition, IEnumerable<T> collection, params T[] items)
+        {
+            if (condition) return Concat(collection, items);
             return collection;
+        }
+
+        /// <summary>
+        /// Condititionally appends zero or more items to a collection
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="condition"></param>
+        /// <param name="collection"></param>
+        /// <param name="items"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> ConcatIf<T>(Func<bool> condition, IEnumerable<T> collection, params T[] items)
+        {
+            return ConcatIf(condition.Invoke(), collection, items);
         }
 
         /// <summary>
@@ -381,6 +428,20 @@ namespace Horseshoe.NET.Collections
             }
 
             return Identical(controlCollection, compareCollection, ignoreCase: ignoreCase);
+        }
+
+        /// <summary>
+        /// Tests a collection for contents, a null collection returns false.
+        /// </summary>
+        /// <typeparam name="T">Any type</typeparam>
+        /// <param name="collection">A collection</param>
+        /// <param name="predicate">An optional filter</param>
+        /// <returns></returns>
+        public static bool ContainsAny<T>(IEnumerable<T> collection, Func<T, bool> predicate = null)
+        {
+            if (collection == null) return false;
+            if (predicate != null) return collection.Any(predicate);
+            return collection.Any();
         }
 
         public static bool ContainsAll<E>(IEnumerable<E> controlCollection, IEnumerable<E> compareCollection, bool ignoreCase = false) where E : IComparable<E>

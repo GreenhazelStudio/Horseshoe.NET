@@ -10,11 +10,92 @@ using Horseshoe.NET.Objects;
 
 namespace Horseshoe.NET.ConsoleX
 {
-    public abstract class ConsoleApp<T> where T : ConsoleApp<T>, new()
+    public abstract class ConsoleApp
     {
-        public virtual bool Looping => true;
+        public virtual string SplashMessage { get; }
 
-        public abstract void Run();
+        public virtual IEnumerable<string> SplashMessageLines { get; }
+
+        public virtual Title MainMenuTitle { get; } = "Main Menu";
+
+        public virtual IEnumerable<Routine> MainMenu { get; }
+
+        public virtual bool DisplayMainMenuRoutineTitles { get; } = true;
+
+        public virtual Action<MenuSelection<Routine>> OnMainMenuSelection { get; }
+
+        public virtual bool Looping { get; } = true;
+
+        public virtual int SpacesAfterLoop { get; } = 1;
+
+        public virtual LoopingPolicy LoopingPolicy { get; }
+
+        public virtual bool DisplayExceptionsRecursively { get; }
+
+        private bool ApplicationExited { get; set; }
+
+        public virtual void Run()
+        {
+            if (MainMenu == null)
+            {
+                throw new UtilityException("ConsoleApp requires one or more of the following overrides: IEnumerable<Routine> MainMenu { get; }, void Run()");
+            }
+            if ((LoopingPolicy & LoopingPolicy.RenderSplash) != LoopingPolicy.RenderSplash)
+            {
+                if (SplashMessageLines != null) RenderSplash(SplashMessageLines);
+                else if (SplashMessage != null) RenderSplash(SplashMessage);
+            }
+            _RunImpl();
+            while (Looping && !ApplicationExited)
+            {
+                if ((LoopingPolicy & LoopingPolicy.ClearScreen) == LoopingPolicy.ClearScreen)
+                {
+                    Console.Clear();
+                }
+                else
+                {
+                    for (int i = 0; i < SpacesAfterLoop; i++)
+                    {
+                        Console.WriteLine();
+                    }
+                }
+                _RunImpl();
+            }
+        }
+
+        private void _RunImpl()
+        {
+            try
+            {
+                if ((LoopingPolicy & LoopingPolicy.RenderSplash) == LoopingPolicy.RenderSplash)
+                {
+                    if (SplashMessageLines != null) RenderSplash(SplashMessageLines);
+                    else if (SplashMessage != null) RenderSplash(SplashMessage);
+                }
+                PromptMenu
+                (
+                    MainMenu,
+                    title: MainMenuTitle,
+                    onMenuSelection: OnMainMenuSelection
+                );
+            }
+            catch (Navigation.ExitAppException ex)   // exit gracefully
+            {
+                ApplicationExited = true;
+                if (ex.ShowPrompt)
+                {
+                    PromptExit(padBefore: 2);
+                }
+            }
+            catch (Exception ex)
+            {
+                RenderException(ex, recursive: DisplayExceptionsRecursively, padBefore: 1);
+                if (!Looping)
+                {
+                    PromptExit(padBefore: 2);
+                }
+            }
+        }
 
         public static void PromptContinue(int padBefore = 0, int padAfter = 0)
         {
@@ -66,57 +147,36 @@ namespace Horseshoe.NET.ConsoleX
             return ConsoleUtil.PromptPasswordSecure(prompt, padBefore: padBefore, padAfter: padAfter);
         }
 
-        public static MenuSelection<object> PromptMenu
-        (
-            Title? title = null,
-            IEnumerable<CustomMenuItem> customMenuItems = null,
-            string prompt = ">",
-            int padBefore = 0,
-            int padAfter = 1,
-            bool allowArbitraryInput = false,
-            bool allowMultipleSelection = false,
-            bool allowExitApplication = true
-        )
-        {
-            return ConsoleUtil.PromptMenu
-            (
-                title: title,
-                customMenuItems: customMenuItems,
-                prompt: prompt,
-                padBefore: padBefore,
-                padAfter: padAfter,
-                allowArbitraryInput: allowArbitraryInput,
-                allowMultipleSelection: allowMultipleSelection,
-                allowExitApplication: allowExitApplication
-            );
-        }
-
         public static MenuSelection<E> PromptMenu<E>
         (
             IEnumerable<E> menuItems,
+            IEnumerable<Routine> customItemsToPrepend = null,
+            IEnumerable<Routine> customItemsToAppend = null,
             Func<E, string> renderer = null,
             Title? title = null,
-            IEnumerable<CustomMenuItem> customMenuItems = null,
             string prompt = ">",
             int padBefore = 0,
             int padAfter = 1,
             bool allowArbitraryInput = false,
             bool allowMultipleSelection = false,
-            bool allowExitApplication = true
+            bool allowExitApplication = true,
+            Action<MenuSelection<E>> onMenuSelection = null
         ) where E : class
         {
             return ConsoleUtil.PromptMenu
             (
                 menuItems,
+                customItemsToPrepend: customItemsToPrepend,
+                customItemsToAppend: customItemsToAppend,
                 renderer: renderer,
                 title: title,
-                customMenuItems: customMenuItems,
                 prompt: prompt,
                 padAfter: padAfter,
                 padBefore: padBefore,
                 allowArbitraryInput: allowArbitraryInput,
                 allowMultipleSelection: allowMultipleSelection,
-                allowExitApplication: allowExitApplication
+                allowExitApplication: allowExitApplication,
+                onMenuSelection: onMenuSelection
             );
         }
 
@@ -140,32 +200,6 @@ namespace Horseshoe.NET.ConsoleX
                 .Select(t => (Routine)ObjectUtil.GetInstance(t))
                 .ToArray();
             return array;
-        }
-
-        public static MenuSelection<Routine> PromptRoutineMenu
-        (
-            IEnumerable<Routine> menu,
-            int padBefore = 0,
-            Title? title = null,
-            int padAfter = 1,
-            string prompt = ">",
-            bool autoRun = false
-        )
-        {
-            var routineSelection = PromptMenu
-            (
-                menu,
-                padBefore: padBefore,
-                title: title,
-                padAfter: padAfter,
-                prompt: prompt
-            );
-
-            if (autoRun)
-            {
-                routineSelection.SelectedItem.Run();
-            }
-            return routineSelection;
         }
 
         public static void RenderAlert(string message, int padBefore = 1, int padAfter = 1)
@@ -209,42 +243,24 @@ namespace Horseshoe.NET.ConsoleX
             ConsoleUtil.RenderMenuTitle(title, padBefore: padBefore, padAfter: padAfter);
         }
 
-        public static void RenderSplash(string welcomeMessage, int padBefore = 1, int padAfter = 2)
+        public static void RenderSplash(string splashMessage, int padBefore = 1, int padAfter = 2)
         {
-            ConsoleUtil.RenderSplash(welcomeMessage, padBefore: padBefore, padAfter: padAfter);
+            RenderSplash(new[] { splashMessage }, padBefore: padBefore, padAfter: padAfter);
         }
 
-        public static void RenderSplash(string[] welcomeMessageLines, int padBefore = 1, int padAfter = 2)
+        public static void RenderSplash(IEnumerable<string> splashMessageLines, int padBefore = 1, int padAfter = 2)
         {
-            ConsoleUtil.RenderSplash(welcomeMessageLines, padBefore: padBefore, padAfter: padAfter);
+            ConsoleUtil.RenderSplash(splashMessageLines, padBefore: padBefore, padAfter: padAfter);
         }
 
-        static T App { get; } = new T();
-
-        public static void StartApp()
+        public static void StartConsoleApp(ConsoleApp app)
         {
-            try
-            {
-                Console.Clear();
-                App.Run();
-                if (App.Looping)
-                {
-                    StartApp();
-                }
-            }
-            catch (Navigation.ExitAppException ex)
-            {
-                // exit normally (benign exception)
-                if (ex.ShowPrompt)
-                {
-                    PromptExit();
-                }
-            }
-            catch (Exception ex)
-            {
-                RenderException(ex, padBefore: 1);
-                PromptExit();
-            }
+            app.Run();
+        }
+
+        public static void StartConsoleApp<T>() where T : ConsoleApp, new()
+        {
+            ((ConsoleApp)ObjectUtil.GetInstance<T>()).Run();
         }
     }
 }

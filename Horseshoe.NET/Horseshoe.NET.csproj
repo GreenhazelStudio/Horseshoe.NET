@@ -77,7 +77,7 @@
     <Compile Include="ConsoleX\ConsoleUtil.cs" />
     <Compile Include="ConsoleX\Extensions\Extensions.cs" />
     <Compile Include="ConsoleX\ListIndexPolicy.cs" />
-    <Compile Include="ConsoleX\LRUniformer.cs" />
+    <Compile Include="Text\LRUniformer.cs" />
     <Compile Include="ConsoleX\MenuSelection.cs" />
     <Compile Include="ConsoleX\Navigation.cs" />
     <Compile Include="ConsoleX\InertRoutine.cs" />

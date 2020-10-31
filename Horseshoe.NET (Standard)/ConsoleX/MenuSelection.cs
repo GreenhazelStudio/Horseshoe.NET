@@ -41,7 +41,7 @@ namespace Horseshoe.NET.ConsoleX
         /// <summary>
         /// The custom command selected by the user.
         /// </summary>
-        public CustomMenuItem CustomMenuItem { get; set; }
+        public Routine CustomMenuItem { get; set; }
     }
 
     public static class MenuSelection
@@ -78,7 +78,7 @@ namespace Horseshoe.NET.ConsoleX
                 }
             }
 
-            input = TextClean.CleanString(input, new TextCleanRules(TextCleanMode.RemoveWhitespace));
+            input = TextClean.CleanString(input, rules: new TextCleanRules(TextCleanMode.RemoveWhitespace));
 
             var match = NumericRangePattern.Match(input);
 

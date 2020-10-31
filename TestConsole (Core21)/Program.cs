@@ -13,30 +13,22 @@ using Horseshoe.NET.Objects;
 
 namespace TestConsole
 {
-    class Program : ConsoleApp<Program>
+    class Program : ConsoleApp
     {
-        public override void Run()
+        public override IEnumerable<Routine> MainMenu { get; } = FindRoutines();
+
+        public override IEnumerable<string> SplashMessageLines => new[]
         {
-            RenderSplash
-            (
-                new[]
-                {
-                    "Welcome to Test Console!",
-                    Lib.DisplayName,
-                    Assembly.GetEntryAssembly()?.GetCustomAttribute<TargetFrameworkAttribute>()?.FrameworkName
-                }
-            );
-            PromptRoutineMenu
-            (
-                FindRoutines(),
-                title: "Main Menu",
-                autoRun: true
-            );
-        }
+            "Welcome to Test Console!",
+            Lib.DisplayName,
+            Assembly.GetEntryAssembly()?.GetCustomAttribute<TargetFrameworkAttribute>()?.FrameworkName
+        };
+
+        public override LoopingPolicy LoopingPolicy => LoopingPolicy.ClearScreen | LoopingPolicy.RenderSplash;
 
         static void Main(string[] args)
         {
-            StartApp();
+            StartConsoleApp<Program>();
         }
     }
 }

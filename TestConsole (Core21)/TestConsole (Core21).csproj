@@ -12,6 +12,7 @@
     <ProjectReference Include="..\Horseshoe.NET.Excel (Core 2.0)\Horseshoe.NET.Excel (Core 2.0).csproj" />
     <ProjectReference Include="..\Horseshoe.NET.Odbc (Core 2.0)\Horseshoe.NET.Odbc (Core 2.0).csproj" />
     <ProjectReference Include="..\Horseshoe.NET.OracleDb (Core 2.0)\Horseshoe.NET.OracleDb (Core 2.0).csproj" />
+    <ProjectReference Include="..\Horseshoe.NET.SecureIO (Core 2.0)\Horseshoe.NET.SecureIO (Core 2.0).csproj" />
     <ProjectReference Include="..\Horseshoe.NET.SqlDb (Core 2.0)\Horseshoe.NET.SqlDb (Core 2.0).csproj" />
   </ItemGroup>
 

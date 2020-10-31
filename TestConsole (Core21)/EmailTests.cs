@@ -5,39 +5,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Horseshoe.NET;
-using Horseshoe.NET.Application;
 using Horseshoe.NET.ConsoleX;
 using Horseshoe.NET.IO.Email;
-using Horseshoe.NET.Text;
 
 namespace TestConsole
 {
     class EmailTests : Routine
     {
         public override Title Title => "Email Tests";
+
         public override bool Looping => true;
 
-        string[] Menu => new[]
+        public override IEnumerable<Routine> Menu => new[]
         {
-            "Plain Email",
-        };
-
-        public override void Do()
-        {
-            Console.WriteLine();
-            var selection = PromptMenu
+            Routine.Build
             (
-                Menu
-            );
-            RenderListTitle(selection.SelectedItem);
-            switch (selection.SelectedItem)
-            {
-                case "Plain Email":
+                "Plain Email",
+                () =>
+                {
                     PlainEmail.Send("Horseshoe.NET email test", "This is a plain email test.", to: "recipient@email.com", from: "sender@email.net", connectionInfo: new SmtpConnectionInfo { Server = "smtp-relay@email.biz" });
                     Console.WriteLine("Email sent!");
-                    break;
-            }
-        }
+                }
+            )
+        };
     }
 }

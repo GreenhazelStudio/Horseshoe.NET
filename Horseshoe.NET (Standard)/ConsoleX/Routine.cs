@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security;
+
 using Horseshoe.NET.Collections;
 
 namespace Horseshoe.NET.ConsoleX
@@ -9,41 +10,93 @@ namespace Horseshoe.NET.ConsoleX
     {
         public virtual Title Title => GetType().FullName;
 
-        public virtual bool ContinuousDisplay => true;
+        public virtual bool RenderTitleOnRun { get; } = true;
 
-        public virtual bool Looping => false;
+        public virtual Title MenuTitle => Title + " Menu";
 
-        public void Run(bool clearScreen = true)
+        public virtual IEnumerable<Routine> Menu { get; }
+
+        public virtual bool AutoAppendExitRoutineMenuItem { get; } = true;
+
+        public virtual bool AutoAppendRestartRoutineMenuItem { get; }
+
+        public virtual Action<MenuSelection<Routine>> OnMenuSelection { get; }
+
+        public virtual Action Action { get; }
+
+        public virtual string Command { get; }
+
+        public virtual bool ContinuousDisplay { get; } = true;
+
+        public virtual bool Looping { get; }
+
+        public virtual LoopingPolicy LoopingPolicy { get; }
+
+        public virtual int SpacesAfterLoop { get; } = 1;
+
+        private bool RoutineRestarted { get; set; }
+
+        private bool RoutineExited { get; set; }
+
+        public virtual void Run()
         {
-            if (clearScreen)
+            if ((Menu == null && Action == null) || (Menu != null && Action != null))
             {
-                Console.Clear();
-                RenderRoutineTitle();
+                throw new UtilityException("Routines must override Run() or exactly one of the following properties: Action, Menu");
             }
-            try
+            RoutineExited = false;
+            bool firstRun = true;
+            while ((Looping || RoutineRestarted || firstRun) && !RoutineExited)
             {
-                Do();
-                if (Looping)
+                RoutineRestarted = false;
+                firstRun = false;
+                if ((LoopingPolicy & LoopingPolicy.ClearScreen) == LoopingPolicy.ClearScreen)
                 {
-                    if (ContinuousDisplay)
+                    Console.Clear();
+                }
+                else if (!firstRun)
+                {
+                    for (int i = 0; i < SpacesAfterLoop; i++)
                     {
                         Console.WriteLine();
                     }
-                    Run(!ContinuousDisplay);
+                }
+                if (RenderTitleOnRun)
+                {
+                    RenderRoutineTitle();
+                }
+                _RunImpl();
+            }
+        }
+
+        private void _RunImpl()
+        {
+            try
+            {
+                if (Action != null)
+                {
+                    Action.Invoke();
+                }
+                if (Menu != null)
+                {
+                    PromptMenu
+                    (
+                        Menu, 
+                        title: MenuTitle,
+                        autoAppendExitRoutineMenuItem: true,
+                        onMenuSelection: OnMenuSelection
+                    );
                 }
             }
             catch (Navigation.RestartRoutineException)
             {
-                // restart routine (benign exception)
-                Run();
+                RoutineRestarted = true;
             }
             catch (Navigation.ExitRoutineException)
             {
-                // exit routine (benign exception)
+                RoutineExited = true;
             }
         }
-
-        public abstract void Do();
 
         protected static void Restart()
         {
@@ -105,90 +158,51 @@ namespace Horseshoe.NET.ConsoleX
             return ConsoleUtil.PromptPasswordSecure(prompt, padBefore: padBefore, padAfter: padAfter);
         }
 
-        public static MenuSelection<object> PromptMenu
-        (
-            Title? title = null,
-            IEnumerable<CustomMenuItem> customMenuItems = null,
-            string prompt = ">",
-            int padBefore = 0,
-            int padAfter = 1,
-            bool autoAppendExitRoutineMenuItem = true,
-            bool allowArbitraryInput = false,
-            bool allowMultipleSelection = false,
-            bool allowExitApplication = true
-        )
-        {
-            return ConsoleUtil.PromptMenu
-            (
-                title: title,
-                customMenuItems: autoAppendExitRoutineMenuItem
-                    ? CollectionUtil.Concat(customMenuItems, new[] { CreateExitRoutineMenuItem() })
-                    : customMenuItems,
-                prompt: prompt,
-                padBefore: padBefore,
-                padAfter: padAfter,
-                allowArbitraryInput: allowArbitraryInput,
-                allowMultipleSelection: allowMultipleSelection,
-                allowExitApplication: allowExitApplication
-            );
-        }
-
         public static MenuSelection<E> PromptMenu<E>
         (
             IEnumerable<E> menuItems,
+            IEnumerable<Routine> customItemsToPrepend = null,
+            IEnumerable<Routine> customItemsToAppend = null,
             Func<E, string> renderer = null,
             Title? title = null,
-            IEnumerable<CustomMenuItem> customMenuItems = null,
             string prompt = ">",
             int padBefore = 0,
             int padAfter = 1,
+            bool autoAppendRestartRoutineMenuItem = false,
             bool autoAppendExitRoutineMenuItem = true,
             bool allowArbitraryInput = false,
             bool allowMultipleSelection = false,
-            bool allowExitApplication = true
+            bool allowExitApplication = true,
+            Action<MenuSelection<E>> onMenuSelection = null
         ) where E : class
         {
             return ConsoleUtil.PromptMenu
             (
                 menuItems,
+                customItemsToPrepend: customItemsToPrepend,
+                customItemsToAppend: BuildCustomMenuItems(customItemsToAppend, autoAppendRestartRoutineMenuItem, autoAppendExitRoutineMenuItem),
                 renderer: renderer,
                 title: title,
-                customMenuItems: autoAppendExitRoutineMenuItem 
-                    ? CollectionUtil.Concat(customMenuItems, new[] { CreateExitRoutineMenuItem() })
-                    : customMenuItems,
                 prompt: prompt,
                 padAfter: padAfter,
                 padBefore: padBefore,
                 allowArbitraryInput: allowArbitraryInput,
                 allowMultipleSelection: allowMultipleSelection,
-                allowExitApplication: allowExitApplication
+                allowExitApplication: allowExitApplication,
+                onMenuSelection: onMenuSelection
             );
         }
 
-        public static MenuSelection<Routine> PromptRoutineMenu
+        private static IEnumerable<Routine> BuildCustomMenuItems
         (
-            IEnumerable<Routine> menu,
-            int padBefore = 0,
-            Title? title = null,
-            int padAfter = 1,
-            string prompt = ">",
-            bool autoRun = false
+            IEnumerable<Routine> customItemsToAppend, 
+            bool autoAppendRestartRoutineMenuItem,
+            bool autoAppendExitRoutineMenuItem
         )
         {
-            var routineSelection = PromptMenu
-            (
-                menu,
-                padBefore: padBefore,
-                title: title,
-                padAfter: padAfter,
-                prompt: prompt
-            );
-
-            if (autoRun)
-            {
-                routineSelection.SelectedItem.Run();
-            }
-            return routineSelection;
+            customItemsToAppend = CollectionUtil.ConcatIf(autoAppendRestartRoutineMenuItem, customItemsToAppend, CreateRestartRoutineMenuItem());
+            customItemsToAppend = CollectionUtil.ConcatIf(autoAppendExitRoutineMenuItem, customItemsToAppend, CreateExitRoutineMenuItem());
+            return customItemsToAppend;
         }
 
         public static void RenderAlert(string message, int padBefore = 1, int padAfter = 1)
@@ -242,39 +256,67 @@ namespace Horseshoe.NET.ConsoleX
             ConsoleUtil.RenderRoutineTitle(title, padBefore: padBefore, padAfter: padAfter);
         }
 
-        protected static CustomMenuItem CreateRestartRoutineMenuItem(string command = "R", string text = "Restart", bool prependToMenu = false, Action beforeRestart = null)
+        protected static Routine CreateRestartRoutineMenuItem(string command = "R", string text = "Restart", Action beforeRestart = null)
         {
-            return new CustomMenuItem
-            {
-                Command = command,
-                Text = text,
-                Action = () =>
+            return BuildCustom
+            (
+                text,
+                () =>
                 {
                     beforeRestart?.Invoke();
-                    Restart();
+                    Restart();  // restart routine
                 },
-                PrependToMenu = prependToMenu
-            };
+                command: command
+            );
         }
 
-        protected static CustomMenuItem CreateExitRoutineMenuItem(string command = "/", string text = "Go Back", bool prependToMenu = false, Action beforeExit = null)
+        protected static Routine CreateExitRoutineMenuItem(string command = "/", string text = "Go Back", Action beforeExit = null)
         {
-            return new CustomMenuItem
-            {
-                Command = command,
-                Text = text,
-                Action = () =>
+            return BuildCustom
+            (
+                text,
+                () =>
                 {
                     beforeExit?.Invoke();
-                    Exit();
+                    Exit();  // exit routine
                 },
-                PrependToMenu = prependToMenu
-            };
+                command: command
+            );
         }
 
         public override string ToString()
         {
-            return Title.ToString();
+            return Title;
+        }
+
+        public static Routine Build(string title, Action action)
+        {
+            return new _BuildImpl(title, action);
+        }
+
+        public static Routine BuildCustom(string title, Action action, string command = "")
+        {
+            return new _BuildImpl(title, action, command: command);
+        }
+
+        internal class _BuildImpl : Routine
+        {
+            public override Title Title { get; }
+
+            public override bool RenderTitleOnRun => false;
+
+            public override Action Action { get; }
+
+            public override string Command { get; }
+
+            public override bool Looping => false;  // redundant
+
+            internal _BuildImpl(string title, Action action, string command = null)
+            {
+                Title = title;
+                Action = action;
+                Command = command;
+            }
         }
     }
 }

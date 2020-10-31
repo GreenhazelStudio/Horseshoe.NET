@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Horseshoe.NET.Collections;
 using Horseshoe.NET.Collections.Extensions;
 using static Horseshoe.NET.IO.FileImport.ImportUtil;
 using Horseshoe.NET.Objects;
@@ -121,9 +122,7 @@ namespace Horseshoe.NET.IO.FileImport
             else
             {
                 // characters to remove (whitespace is removed according to whitespace mode) to convert column names to object properties
-                charsToRemove = charsToRemove != null
-                    ? charsToRemove.Concat(new[] { '/', '-', '.', ',' }).ToArray()
-                    : new[] { '/', '-', '.', ',' };
+                charsToRemove = CollectionUtil.Concat(charsToRemove, '/', '-', '.', ',').ToArray();
 
                 objectArrays.Iterate
                 (
