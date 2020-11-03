@@ -16,9 +16,13 @@ namespace TestConsole
     {
         public override Title Title => "Crypto Tests";
 
+        public override RoutineTitleRenderPolicy RenderTitlePolicy => RoutineTitleRenderPolicy.RenderOnLoop;
+
+        public override Action<MenuSelection<Routine>> OnMenuSelectionRunComplete => (selection) => PromptContinue(padBefore: 2);
+
         public override bool Looping => true;
 
-        public override LoopingPolicy LoopingPolicy => LoopingPolicy.ClearScreen;
+        public override bool ClearScreenOnLoop => true;
 
         public override IEnumerable<Routine> Menu => new[]
         {

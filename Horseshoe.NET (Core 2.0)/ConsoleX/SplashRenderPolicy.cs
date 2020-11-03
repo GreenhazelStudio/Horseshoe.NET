@@ -5,11 +5,9 @@ using System.Text;
 
 namespace Horseshoe.NET.ConsoleX
 {
-    [Flags]
-    public enum LoopingPolicy
+    public enum SplashRenderPolicy
     {
-        NoAction,
-        ClearScreen,
-        RenderSplash
+        RenderOnRun,
+        RenderOnLoop
     }
 }

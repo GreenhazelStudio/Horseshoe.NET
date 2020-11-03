@@ -16,21 +16,25 @@ namespace Horseshoe.NET.ConsoleX
 
         public virtual IEnumerable<string> SplashMessageLines { get; }
 
-        public virtual Title MainMenuTitle { get; } = "Main Menu";
+        public virtual SplashRenderPolicy SplashRenderPolicy { get; }  // = SplashRenderPolicy.RenderOnRun;
+
+        public virtual Title MainMenuTitle => "Main Menu";
 
         public virtual IEnumerable<Routine> MainMenu { get; }
 
-        public virtual bool DisplayMainMenuRoutineTitles { get; } = true;
+        public virtual bool DisplayMainMenuRoutineTitles => true;
 
-        public virtual Action<MenuSelection<Routine>> OnMainMenuSelection { get; }
+        public virtual Action<MenuSelection<Routine>> OnMainMenuSelecting { get; }
 
-        public virtual bool Looping { get; } = true;
+        public virtual bool Looping => true;
 
-        public virtual int SpacesAfterLoop { get; } = 1;
+        public virtual bool ClearScreenOnLoop => true;
 
-        public virtual LoopingPolicy LoopingPolicy { get; }
+        public virtual int SpacesAfterLoop => 1;
 
         public virtual bool DisplayExceptionsRecursively { get; }
+
+        public virtual bool PromptOnExit { get; set; }
 
         private bool ApplicationExited { get; set; }
 
@@ -38,28 +42,33 @@ namespace Horseshoe.NET.ConsoleX
         {
             if (MainMenu == null)
             {
-                throw new UtilityException("ConsoleApp requires one or more of the following overrides: IEnumerable<Routine> MainMenu { get; }, void Run()");
+                throw new UtilityException("ConsoleApp requires one or more of the following overrides: MainMenu property or Run() method");
             }
-            if ((LoopingPolicy & LoopingPolicy.RenderSplash) != LoopingPolicy.RenderSplash)
+            bool firstRun = true;
+            while ((Looping || firstRun) && !ApplicationExited)
             {
-                if (SplashMessageLines != null) RenderSplash(SplashMessageLines);
-                else if (SplashMessage != null) RenderSplash(SplashMessage);
-            }
-            _RunImpl();
-            while (Looping && !ApplicationExited)
-            {
-                if ((LoopingPolicy & LoopingPolicy.ClearScreen) == LoopingPolicy.ClearScreen)
+                if (ClearScreenOnLoop)
                 {
                     Console.Clear();
                 }
-                else
+                else if (!firstRun)
                 {
                     for (int i = 0; i < SpacesAfterLoop; i++)
                     {
                         Console.WriteLine();
                     }
                 }
+                if (firstRun || SplashRenderPolicy == SplashRenderPolicy.RenderOnLoop)
+                {
+                    if (SplashMessageLines != null) RenderSplash(SplashMessageLines);
+                    else if (SplashMessage != null) RenderSplash(SplashMessage);
+                }
                 _RunImpl();
+                firstRun = false;
+            }
+            if (PromptOnExit)
+            {
+                PromptExit(padBefore: 2);
             }
         }
 
@@ -67,33 +76,21 @@ namespace Horseshoe.NET.ConsoleX
         {
             try
             {
-                if ((LoopingPolicy & LoopingPolicy.RenderSplash) == LoopingPolicy.RenderSplash)
-                {
-                    if (SplashMessageLines != null) RenderSplash(SplashMessageLines);
-                    else if (SplashMessage != null) RenderSplash(SplashMessage);
-                }
                 PromptMenu
                 (
                     MainMenu,
                     title: MainMenuTitle,
-                    onMenuSelection: OnMainMenuSelection
+                    onMenuSelecting: OnMainMenuSelecting
                 );
             }
             catch (Navigation.ExitAppException ex)   // exit gracefully
             {
                 ApplicationExited = true;
-                if (ex.ShowPrompt)
-                {
-                    PromptExit(padBefore: 2);
-                }
+                if (ex.ShowPrompt) PromptOnExit = true;
             }
             catch (Exception ex)
             {
                 RenderException(ex, recursive: DisplayExceptionsRecursively, padBefore: 1);
-                if (!Looping)
-                {
-                    PromptExit(padBefore: 2);
-                }
             }
         }
 
@@ -160,7 +157,7 @@ namespace Horseshoe.NET.ConsoleX
             bool allowArbitraryInput = false,
             bool allowMultipleSelection = false,
             bool allowExitApplication = true,
-            Action<MenuSelection<E>> onMenuSelection = null
+            Action<MenuSelection<E>> onMenuSelecting = null
         ) where E : class
         {
             return ConsoleUtil.PromptMenu
@@ -176,7 +173,7 @@ namespace Horseshoe.NET.ConsoleX
                 allowArbitraryInput: allowArbitraryInput,
                 allowMultipleSelection: allowMultipleSelection,
                 allowExitApplication: allowExitApplication,
-                onMenuSelection: onMenuSelection
+                onMenuSelecting: onMenuSelecting
             );
         }
 

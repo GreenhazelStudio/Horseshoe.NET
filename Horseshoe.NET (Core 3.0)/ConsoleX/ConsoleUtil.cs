@@ -7,7 +7,6 @@ using System.Text;
 using Horseshoe.NET.Collections;
 using Horseshoe.NET.ConsoleX.Extensions;
 using Horseshoe.NET.Extensions;
-using Horseshoe.NET.Objects;
 using Horseshoe.NET.Text;
 using Horseshoe.NET.Text.Extensions;
 
@@ -97,13 +96,13 @@ namespace Horseshoe.NET.ConsoleX
                 var counter = 0;
                 foreach (var item in menuItems)
                 {
-                    if (item is InertRoutine inertRoutine)
+                    if (item is MenuItemCategoryLabel inertRoutine)
                     {
                         menuItemUniformer.AddUniqueItem(null, inertRoutine.Title, ignoreNullL: true);
                     }
                     else
                     {
-                        menuItemUniformer.AddUniqueItem(++counter, renderer != null ? renderer.Invoke(item) : item?.ToString(), lIsIndex: true);
+                        menuItemUniformer.AddUniqueItem(++counter, renderer != null ? renderer.Invoke(item) : item?.ToString(), lAlignRight: true);
                     }
                 }
             }
@@ -114,14 +113,14 @@ namespace Horseshoe.NET.ConsoleX
                 var prependedCount = 0;
                 foreach (var custItem in customItemsToPrepend)
                 {
-                    menuItemUniformer.InsertUniqueItem(prependedCount++, string.Equals(custItem.Command, "") ? "<┘" : custItem.Command, custItem.Title, ignoreNullL: true);  // l is null for InertRoutines
+                    menuItemUniformer.InsertUniqueItem(prependedCount++, string.Equals(custItem.Command, "") ? "<┘" : custItem.Command, custItem.Title, lAlignRight: true, ignoreNullL: true);  // l is null for InertRoutines
                 }
             }
             if (customItemsToAppend != null)
             {
                 foreach (var custItem in customItemsToAppend)
                 {
-                    menuItemUniformer.AddUniqueItem(string.Equals(custItem.Command, "") ? "<┘" : custItem.Command, custItem.Title, ignoreNullL: true);  // l is null for InertRoutines
+                    menuItemUniformer.AddUniqueItem(string.Equals(custItem.Command, "") ? "<┘" : custItem.Command, custItem.Title, lAlignRight: true, ignoreNullL: true);  // l is null for InertRoutines
                 }
             }
 
@@ -145,7 +144,8 @@ namespace Horseshoe.NET.ConsoleX
             bool allowArbitraryInput = false,
             bool allowMultipleSelection = false,
             bool allowExitApplication = true,
-            Action<MenuSelection<E>> onMenuSelection = null
+            Action<MenuSelection<E>> onMenuSelecting = null,
+            Action<MenuSelection<E>> onMenuSelectionRunComplete = null
         ) where E : class
         {
             ValidateMenu
@@ -172,17 +172,14 @@ namespace Horseshoe.NET.ConsoleX
                 var input = rawInput.Trim();
                 var customMenuItems = CollectionUtil.Concat(customItemsToPrepend, customItemsToAppend);
                 MenuSelection<E> menuSelection;
-                foreach (var custItem in customMenuItems ?? Enumerable.Empty<Routine>())
+                foreach (var custItem in customMenuItems?.Where(i => !(i is MenuItemCategoryLabel)) ?? Enumerable.Empty<Routine>())
                 {
-                    if (string.Equals(input, custItem.Command, StringComparison.CurrentCultureIgnoreCase) && !(custItem is InertRoutine))
+                    if (string.Equals(input, custItem.Command, StringComparison.CurrentCultureIgnoreCase))
                     {
-                        if (custItem.Action != null)
-                        {
-                            custItem.Action.Invoke();
-                            return new MenuSelection<E>();
-                        }
                         menuSelection = new MenuSelection<E> { CustomMenuItem = custItem };
-                        onMenuSelection?.Invoke(menuSelection);
+                        onMenuSelecting?.Invoke(menuSelection);
+                        menuSelection.CustomMenuItem.Run();
+                        onMenuSelectionRunComplete?.Invoke(menuSelection);
                         return menuSelection;
                     }
                 }
@@ -200,7 +197,6 @@ namespace Horseshoe.NET.ConsoleX
                             SelectedItems = selectedItems,
                             SelectedAll = all
                         };
-                        onMenuSelection?.Invoke(menuSelection);
                         return menuSelection;
                     }
                     catch (BenignException ex)
@@ -210,17 +206,30 @@ namespace Horseshoe.NET.ConsoleX
                 }
                 else if (int.TryParse(input, out int index))
                 {
+                    var liveMenuItems = menuItems.Where(o => !(o is MenuItemCategoryLabel)).ToList();
                     try
                     {
                         menuSelection = new MenuSelection<E>
                         {
                             SelectedIndex = index,
-                            SelectedItem = menuItems.ElementAt(index - 1)   // convert back to 0-based index;  uses IndexOutOfRangeException for autovalidation
+                            SelectedItem = liveMenuItems.ElementAt(index - 1)   // convert back to 0-based index;  uses IndexOutOfRangeException for autovalidation
                         };
-                        onMenuSelection?.Invoke(menuSelection);
+                        onMenuSelecting?.Invoke(menuSelection);
                         if (menuSelection.SelectedItem is Routine selectedRoutine)
                         {
-                            selectedRoutine.Run();
+                            try
+                            {
+                                selectedRoutine.Run();
+                                onMenuSelectionRunComplete?.Invoke(menuSelection);
+                            }
+                            catch (Navigation.ExitAppException)
+                            {
+                                throw;
+                            }
+                            catch (Exception ex)
+                            {
+                                RenderException(ex, padBefore: 1);
+                            }
                         }
                         return menuSelection;
                     }
@@ -233,7 +242,6 @@ namespace Horseshoe.NET.ConsoleX
                         if (allowArbitraryInput)
                         {
                             menuSelection = new MenuSelection<E> { ArbitraryInput = rawInput };
-                            onMenuSelection?.Invoke(menuSelection);
                             return menuSelection;
                         }
                         else
@@ -245,7 +253,6 @@ namespace Horseshoe.NET.ConsoleX
                 else if (allowArbitraryInput && input.Length != 0)
                 {
                     menuSelection = new MenuSelection<E> { ArbitraryInput = rawInput };
-                    onMenuSelection?.Invoke(menuSelection);
                     return menuSelection;
                 }
                 else

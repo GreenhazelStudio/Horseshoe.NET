@@ -5,11 +5,11 @@ using Horseshoe.NET.Collections;
 
 namespace Horseshoe.NET.ConsoleX
 {
-    public class InertRoutine : Routine
+    public class MenuItemCategoryLabel : Routine
     {
         public override Title Title { get; }
 
-        public override bool RenderTitleOnRun => false;
+        public override RoutineTitleRenderPolicy RenderTitlePolicy => RoutineTitleRenderPolicy.NoRender;
 
         public override Title MenuTitle => null;
 
@@ -19,9 +19,13 @@ namespace Horseshoe.NET.ConsoleX
 
         public override int SpacesAfterLoop => 0;
 
-        public InertRoutine(string title)
+        public MenuItemCategoryLabel(string title)
         {
             Title = title;
+        }
+
+        public override void Run()
+        {
         }
     }
 }

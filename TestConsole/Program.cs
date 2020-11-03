@@ -19,7 +19,9 @@ namespace TestConsole
             AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName
         };
 
-        public override LoopingPolicy LoopingPolicy => LoopingPolicy.ClearScreen | LoopingPolicy.RenderSplash;
+        public override SplashRenderPolicy SplashRenderPolicy => SplashRenderPolicy.RenderOnLoop;
+
+        public override bool ClearScreenOnLoop => true;
 
         static void Main(string[] args)
         {

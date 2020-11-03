@@ -24,7 +24,9 @@ namespace TestConsole
             Assembly.GetEntryAssembly()?.GetCustomAttribute<TargetFrameworkAttribute>()?.FrameworkName
         };
 
-        public override LoopingPolicy LoopingPolicy => LoopingPolicy.ClearScreen | LoopingPolicy.RenderSplash;
+        public override SplashRenderPolicy SplashRenderPolicy => SplashRenderPolicy.RenderOnLoop;
+
+        public override bool ClearScreenOnLoop => true;
 
         static void Main(string[] args)
         {

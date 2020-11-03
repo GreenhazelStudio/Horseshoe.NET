@@ -10,62 +10,62 @@ namespace Horseshoe.NET.Text
 {
     public class LRUniformer : List<LRUniformer.Item>
     {
-        public int MaxLWidth => this.Max(i => i.L.Length);
+        public int MaxLWidth => this.Max(i => i.L?.Length) ?? 0;
 
-        public void Add(string l, string r, bool lIsIndex = false, bool lAlignRight = false, bool rAlignRight = false)
+        public void Add(string l, string r, bool lAlignRight = false, bool rAlignRight = false)
         {
-            Add(new Item { L = l, R = r, LIsIndex = lIsIndex, LAlignRight = lAlignRight, RAlignRight = rAlignRight });
+            Add(new Item { L = l, R = r, LAlignRight = lAlignRight, RAlignRight = rAlignRight });
         }
 
-        public void Add(int l, string r, bool lIsIndex = false, bool lAlignRight = false, bool rAlignRight = false)
+        public void Add(int l, string r, bool lAlignRight = false, bool rAlignRight = false)
         {
-            Add(l.ToString(), r, lIsIndex: lIsIndex, lAlignRight: lAlignRight, rAlignRight: rAlignRight);
+            Add(l.ToString(), r, lAlignRight: lAlignRight, rAlignRight: rAlignRight);
         }
 
-        public void Insert(int index, string l, string r, bool lIsIndex = false, bool lAlignRight = false, bool rAlignRight = false)
+        public void Insert(int index, string l, string r, bool lAlignRight = false, bool rAlignRight = false)
         {
-            Insert(index, new Item { L = l, R = r, LIsIndex = lIsIndex, LAlignRight = lAlignRight, RAlignRight = rAlignRight });
+            Insert(index, new Item { L = l, R = r, LAlignRight = lAlignRight, RAlignRight = rAlignRight });
         }
 
-        public void Insert(int index, int l, string r, bool lIsIndex = false, bool lAlignRight = false, bool rAlignRight = false)
+        public void Insert(int index, int l, string r, bool lAlignRight = false, bool rAlignRight = false)
         {
-            Insert(index, l.ToString(), r, lIsIndex: lIsIndex, lAlignRight: lAlignRight, rAlignRight: rAlignRight);
+            Insert(index, l.ToString(), r, lAlignRight: lAlignRight, rAlignRight: rAlignRight);
         }
 
-        public void AddUniqueItem(string l, string r, bool lIsIndex = false, bool lAlignRight = false, bool rAlignRight = false, bool ignoreNullL = false)
+        public void AddUniqueItem(string l, string r, bool lAlignRight = false, bool rAlignRight = false, bool ignoreNullL = false)
         {
-            if ((!ignoreNullL || l != null) && this.Any(i => i.L.Equals(l, StringComparison.OrdinalIgnoreCase)))
+            if ((!ignoreNullL || l != null) && this.Any(i => string.Equals(i.L, l, StringComparison.OrdinalIgnoreCase)))
             {
                 throw new ValidationException("Duplicate item found: " + l + " (" + r + ")");
             }
-            Add(l, r, lIsIndex: lIsIndex, lAlignRight: lAlignRight, rAlignRight: rAlignRight);
+            Add(l, r, lAlignRight: lAlignRight, rAlignRight: rAlignRight);
         }
 
-        public void AddUniqueItem(int l, string r, bool lIsIndex = false, bool lAlignRight = false, bool rAlignRight = false, bool ignoreNullL = false)
+        public void AddUniqueItem(int l, string r, bool lAlignRight = false, bool rAlignRight = false)
         {
-            if (this.Any(i => i.L.Equals(l.ToString())))
+            if (this.Any(i => string.Equals(i.L, l.ToString())))
             {
                 throw new ValidationException("Duplicate item found: " + l + " (" + r + ")");
             }
-            Add(l, r, lIsIndex: lIsIndex, lAlignRight: lAlignRight, rAlignRight: rAlignRight);
+            Add(l, r, lAlignRight: lAlignRight, rAlignRight: rAlignRight);
         }
 
-        public void InsertUniqueItem(int index, string l, string r, bool lIsIndex = false, bool lAlignRight = false, bool rAlignRight = false, bool ignoreNullL = false)
+        public void InsertUniqueItem(int index, string l, string r, bool lAlignRight = false, bool rAlignRight = false, bool ignoreNullL = false)
         {
-            if ((!ignoreNullL || l != null) && this.Any(i => i.L.Equals(l, StringComparison.OrdinalIgnoreCase)))
+            if ((!ignoreNullL || l != null) && this.Any(i => string.Equals(i.L, l, StringComparison.OrdinalIgnoreCase)))
             {
                 throw new ValidationException("Duplicate item found: " + l + " (" + r + ")");
             }
-            Insert(index, l, r, lIsIndex: lIsIndex, lAlignRight: lAlignRight, rAlignRight: rAlignRight);
+            Insert(index, l, r, lAlignRight: lAlignRight, rAlignRight: rAlignRight);
         }
 
-        public void InsertUniqueItem(int index, int l, string r, bool lIsIndex = false, bool lAlignRight = false, bool rAlignRight = false, bool ignoreNullL = false)
+        public void InsertUniqueItem(int index, int l, string r, bool lAlignRight = false, bool rAlignRight = false)
         {
-            if (this.Any(i => i.L.Equals(l.ToString())))
+            if (this.Any(i => string.Equals(i.L, l.ToString())))
             {
                 throw new ValidationException("Duplicate item found: " + l + " (" + r + ")");
             }
-            Insert(index, l, r, lIsIndex: lIsIndex, lAlignRight: lAlignRight, rAlignRight: rAlignRight);
+            Insert(index, l, r, lAlignRight: lAlignRight, rAlignRight: rAlignRight);
         }
 
         public string RenderLSquareBrackets(int width = 0, string padding = null, string truncateMarker = null)
@@ -77,9 +77,11 @@ namespace Horseshoe.NET.Text
             {
                 strb.AppendIf
                     (
-                        item.LIsIndex || item.LAlignRight,
-                        ("[" + item.L + "]").PadLeft(lpad),
-                        ("[" + item.L + "]").PadRight(lpad)
+                        item.L != null,
+                        item.LAlignRight 
+                            ? ("[" + item.L + "]").PadLeft(lpad)
+                            : ("[" + item.L + "]").PadRight(lpad),
+                        "".PadRight(lpad)
                     )
                     .Append(" ")
                     .AppendLine
@@ -100,7 +102,6 @@ namespace Horseshoe.NET.Text
         {
             public string L { get; set; } = "";
             public string R { get; set; }
-            public bool LIsIndex { get; set; }
             public bool LAlignRight { get; set; }
             public bool RAlignRight { get; set; }
         }

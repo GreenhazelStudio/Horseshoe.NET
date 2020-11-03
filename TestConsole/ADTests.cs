@@ -19,10 +19,18 @@ namespace TestConsole
 
         public override Title MenuTitle => new Title(base.MenuTitle, xtra: "Hello " + UserName);
 
-        public override Action<MenuSelection<Routine>> OnMenuSelection => (selection) => RenderListTitle(new Title(selection.SelectedItem.Title, xtra: "[" + UserName + "]"));
+        public override Action<MenuSelection<Routine>> OnMenuSelecting => (selection) => 
+        {
+            if (selection.SelectedItem != null)
+            {
+                Console.WriteLine(selection.SelectedItem.Title + " - [" + UserName + "]");
+                Console.WriteLine();
+            }
+        };
 
         public override IEnumerable<Routine> Menu => new[]
         {
+            new MenuItemCategoryLabel("USER ROUTINES"),
             Routine.Build
             (
                 "Change user",
@@ -38,16 +46,6 @@ namespace TestConsole
                 {
                     var info = ADUtil.LookupUser(UserName);
                     Console.WriteLine(info.DisplayName + " -- " + info.EmailAddress + " -- Dept. = " + info.Department + " -- Extn 1 = " + info.ExtensionAttribute1);
-                }
-            ),
-            Routine.Build
-            (
-                "What is my domain controller?",
-                () =>
-                {
-                    var dc = ADUtil.DetectDomainController();
-                    Console.WriteLine(dc.Name);
-                    Console.WriteLine(dc.LdapUrl);
                 }
             ),
             Routine.Build
@@ -114,7 +112,19 @@ namespace TestConsole
                         RenderAlert("User not found");
                     }
                 }
+            ),            
+            new MenuItemCategoryLabel("DOMAIN ROUTINES"),
+            Routine.Build
+            (
+                "What is my domain controller?",
+                () =>
+                {
+                    var dc = ADUtil.DetectDomainController();
+                    Console.WriteLine(dc.Name);
+                    Console.WriteLine(dc.LdapUrl);
+                }
             ),
+
             Routine.Build
             (
                 "List OUs",
@@ -129,13 +139,6 @@ namespace TestConsole
                 () =>
                 {
                     RenderList(ADUtil.ListOUs(recursive: true));
-                }
-            ),
-            Routine.Build
-            (
-                "List Users",
-                () =>
-                {
                 }
             )
         };

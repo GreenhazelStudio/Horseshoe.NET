@@ -10,29 +10,31 @@ namespace Horseshoe.NET.ConsoleX
     {
         public virtual Title Title => GetType().FullName;
 
-        public virtual bool RenderTitleOnRun { get; } = true;
+        public virtual RoutineTitleRenderPolicy RenderTitlePolicy => RoutineTitleRenderPolicy.RenderOnRun;
 
         public virtual Title MenuTitle => Title + " Menu";
 
         public virtual IEnumerable<Routine> Menu { get; }
 
-        public virtual bool AutoAppendExitRoutineMenuItem { get; } = true;
+        public virtual bool AutoAppendExitRoutineMenuItem => true;
 
         public virtual bool AutoAppendRestartRoutineMenuItem { get; }
 
-        public virtual Action<MenuSelection<Routine>> OnMenuSelection { get; }
+        public virtual Action<MenuSelection<Routine>> OnMenuSelecting { get; }
+
+        public virtual Action<MenuSelection<Routine>> OnMenuSelectionRunComplete { get; }
 
         public virtual Action Action { get; }
 
         public virtual string Command { get; }
 
-        public virtual bool ContinuousDisplay { get; } = true;
+        public virtual bool ContinuousDisplay => true;
 
         public virtual bool Looping { get; }
 
-        public virtual LoopingPolicy LoopingPolicy { get; }
+        public virtual bool ClearScreenOnLoop { get; }
 
-        public virtual int SpacesAfterLoop { get; } = 1;
+        public virtual int SpacesAfterLoop => 1;
 
         private bool RoutineRestarted { get; set; }
 
@@ -49,8 +51,7 @@ namespace Horseshoe.NET.ConsoleX
             while ((Looping || RoutineRestarted || firstRun) && !RoutineExited)
             {
                 RoutineRestarted = false;
-                firstRun = false;
-                if ((LoopingPolicy & LoopingPolicy.ClearScreen) == LoopingPolicy.ClearScreen)
+                if (ClearScreenOnLoop)
                 {
                     Console.Clear();
                 }
@@ -61,11 +62,12 @@ namespace Horseshoe.NET.ConsoleX
                         Console.WriteLine();
                     }
                 }
-                if (RenderTitleOnRun)
+                if ((firstRun && RenderTitlePolicy == RoutineTitleRenderPolicy.RenderOnRun) || RenderTitlePolicy == RoutineTitleRenderPolicy.RenderOnLoop)
                 {
                     RenderRoutineTitle();
                 }
                 _RunImpl();
+                firstRun = false;
             }
         }
 
@@ -84,7 +86,8 @@ namespace Horseshoe.NET.ConsoleX
                         Menu, 
                         title: MenuTitle,
                         autoAppendExitRoutineMenuItem: true,
-                        onMenuSelection: OnMenuSelection
+                        onMenuSelecting: OnMenuSelecting,
+                        onMenuSelectionRunComplete: OnMenuSelectionRunComplete
                     );
                 }
             }
@@ -173,7 +176,8 @@ namespace Horseshoe.NET.ConsoleX
             bool allowArbitraryInput = false,
             bool allowMultipleSelection = false,
             bool allowExitApplication = true,
-            Action<MenuSelection<E>> onMenuSelection = null
+            Action<MenuSelection<E>> onMenuSelecting = null,
+            Action<MenuSelection<E>> onMenuSelectionRunComplete = null
         ) where E : class
         {
             return ConsoleUtil.PromptMenu
@@ -189,7 +193,8 @@ namespace Horseshoe.NET.ConsoleX
                 allowArbitraryInput: allowArbitraryInput,
                 allowMultipleSelection: allowMultipleSelection,
                 allowExitApplication: allowExitApplication,
-                onMenuSelection: onMenuSelection
+                onMenuSelecting: onMenuSelecting,
+                onMenuSelectionRunComplete: onMenuSelectionRunComplete
             );
         }
 
@@ -256,32 +261,14 @@ namespace Horseshoe.NET.ConsoleX
             ConsoleUtil.RenderRoutineTitle(title, padBefore: padBefore, padAfter: padAfter);
         }
 
-        protected static Routine CreateRestartRoutineMenuItem(string command = "R", string text = "Restart", Action beforeRestart = null)
+        protected static Routine CreateRestartRoutineMenuItem(string title = "Restart", string command = "R", Action beforeRestart = null)
         {
-            return BuildCustom
-            (
-                text,
-                () =>
-                {
-                    beforeRestart?.Invoke();
-                    Restart();  // restart routine
-                },
-                command: command
-            );
+            return new _RestartRoutineImpl(title, command, beforeRestart);
         }
 
-        protected static Routine CreateExitRoutineMenuItem(string command = "/", string text = "Go Back", Action beforeExit = null)
+        protected static Routine CreateExitRoutineMenuItem(string title = "Go Back", string command = "/", Action beforeExit = null)
         {
-            return BuildCustom
-            (
-                text,
-                () =>
-                {
-                    beforeExit?.Invoke();
-                    Exit();  // exit routine
-                },
-                command: command
-            );
+            return new _ExitRoutineImpl(title, command, beforeExit);
         }
 
         public override string ToString()
@@ -303,19 +290,65 @@ namespace Horseshoe.NET.ConsoleX
         {
             public override Title Title { get; }
 
-            public override bool RenderTitleOnRun => false;
+            public override RoutineTitleRenderPolicy RenderTitlePolicy => RoutineTitleRenderPolicy.NoRender;
 
             public override Action Action { get; }
 
             public override string Command { get; }
-
-            public override bool Looping => false;  // redundant
 
             internal _BuildImpl(string title, Action action, string command = null)
             {
                 Title = title;
                 Action = action;
                 Command = command;
+            }
+        }
+
+        internal class _RestartRoutineImpl : Routine
+        {
+            public override Title Title { get; }
+
+            public override RoutineTitleRenderPolicy RenderTitlePolicy => RoutineTitleRenderPolicy.NoRender;
+
+            public override string Command { get; }
+
+            Action BeforeRestart { get; }
+
+            internal _RestartRoutineImpl(string title, string command, Action beforeRestart)
+            {
+                Title = title;
+                Command = command;
+                BeforeRestart = beforeRestart;
+            }
+
+            public override void Run()
+            {
+                BeforeRestart?.Invoke();
+                Restart();
+            }
+        }
+
+        internal class _ExitRoutineImpl : Routine
+        {
+            public override Title Title { get; }
+
+            public override RoutineTitleRenderPolicy RenderTitlePolicy => RoutineTitleRenderPolicy.NoRender;
+
+            public override string Command { get; }
+
+            Action BeforeExit { get; }
+
+            internal _ExitRoutineImpl(string title, string command, Action beforeExit)
+            {
+                Title = title;
+                Command = command;
+                BeforeExit = beforeExit;
+            }
+
+            public override void Run()
+            {
+                BeforeExit?.Invoke();
+                Exit();
             }
         }
     }
