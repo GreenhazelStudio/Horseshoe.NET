@@ -318,7 +318,7 @@ namespace Horseshoe.NET.IO.Http
             return serviceURL;
         }
 
-        static void ProcessHeaders(HttpWebRequest request, object headers)
+        internal static void ProcessHeaders(HttpWebRequest request, object headers)
         {
             if (headers == null) return;
             if (headers is IDictionary<HttpRequestHeader, string> httpHeaders)
@@ -355,7 +355,7 @@ namespace Horseshoe.NET.IO.Http
             }
         }
 
-        static void ProcessCredentials(HttpWebRequest request, Credential? credentials)
+        internal static void ProcessCredentials(HttpWebRequest request, Credential? credentials)
         {
             credentials = credentials ?? WebServiceSettings.DefaultWebServiceCredentials;
             if (credentials.HasValue)

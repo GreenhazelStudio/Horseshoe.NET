@@ -296,7 +296,7 @@ namespace Horseshoe.NET.IO.Http
             return e;
         }
 
-        public static async Task<E> DeleteJsonAsync<E>(string serviceURL, object content = null, string contentType = "application/json", object id = null, object headers = null, Credential? credentials = null, bool zapBackingFields = false, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
+        public static async Task<E> DeleteJsonAsync<E>(string serviceURL, object content = null, string contentType = "application/json", object id = null, object headers = null, Credential ? credentials = null, bool zapBackingFields = false, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
         {
             var json = await DeleteAsync(serviceURL, content: content, contentType: contentType, id: id, headers: headers, credentials: credentials, customizeRequest: customizeRequest, returnMetadata: returnMetadata);
             var e = zapBackingFields
@@ -318,7 +318,7 @@ namespace Horseshoe.NET.IO.Http
             return serviceURL;
         }
 
-        static void ProcessHeaders(HttpWebRequest request, object headers)
+        internal static void ProcessHeaders(HttpWebRequest request, object headers)
         {
             if (headers == null) return;
             if (headers is IDictionary<HttpRequestHeader, string> httpHeaders)
@@ -355,7 +355,7 @@ namespace Horseshoe.NET.IO.Http
             }
         }
 
-        static void ProcessCredentials(HttpWebRequest request, Credential? credentials)
+        internal static void ProcessCredentials(HttpWebRequest request, Credential? credentials)
         {
             credentials = credentials ?? WebServiceSettings.DefaultWebServiceCredentials;
             if (credentials.HasValue)

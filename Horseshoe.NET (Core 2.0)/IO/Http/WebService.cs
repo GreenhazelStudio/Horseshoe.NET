@@ -20,7 +20,7 @@ namespace Horseshoe.NET.IO.Http
             var _securityProtocol = ServicePointManager.SecurityProtocol;
             if (serviceURL.ToLower().StartsWith("https://"))
             {
-                ServicePointManager.SecurityProtocol = securityProtocol ?? (SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12);
+                ServicePointManager.SecurityProtocol = securityProtocol ?? (SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12);
             }
             var request = (HttpWebRequest)WebRequest.Create(serviceURL);
             ServicePointManager.SecurityProtocol = _securityProtocol;
@@ -53,7 +53,7 @@ namespace Horseshoe.NET.IO.Http
             var _securityProtocol = ServicePointManager.SecurityProtocol;
             if (serviceURL.ToLower().StartsWith("https://"))
             {
-                ServicePointManager.SecurityProtocol = securityProtocol ?? (SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12);
+                ServicePointManager.SecurityProtocol = securityProtocol ?? (SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12);
             }
             var request = (HttpWebRequest)WebRequest.Create(serviceURL);
             ServicePointManager.SecurityProtocol = _securityProtocol;
@@ -105,7 +105,7 @@ namespace Horseshoe.NET.IO.Http
             var _securityProtocol = ServicePointManager.SecurityProtocol;
             if (serviceURL.ToLower().StartsWith("https://"))
             {
-                ServicePointManager.SecurityProtocol = securityProtocol ?? (SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12);
+                ServicePointManager.SecurityProtocol = securityProtocol ?? (SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12);
             }
             var request = (HttpWebRequest)WebRequest.Create(serviceURL);
             ServicePointManager.SecurityProtocol = _securityProtocol;
@@ -165,7 +165,7 @@ namespace Horseshoe.NET.IO.Http
             var _securityProtocol = ServicePointManager.SecurityProtocol;
             if (serviceURL.ToLower().StartsWith("https://"))
             {
-                ServicePointManager.SecurityProtocol = securityProtocol ?? (SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12);
+                ServicePointManager.SecurityProtocol = securityProtocol ?? (SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12);
             }
             var request = (HttpWebRequest)WebRequest.Create(serviceURL);
             ServicePointManager.SecurityProtocol = _securityProtocol;
@@ -318,7 +318,7 @@ namespace Horseshoe.NET.IO.Http
             return serviceURL;
         }
 
-        static void ProcessHeaders(HttpWebRequest request, object headers)
+        internal static void ProcessHeaders(HttpWebRequest request, object headers)
         {
             if (headers == null) return;
             if (headers is IDictionary<HttpRequestHeader, string> httpHeaders)
@@ -355,7 +355,7 @@ namespace Horseshoe.NET.IO.Http
             }
         }
 
-        static void ProcessCredentials(HttpWebRequest request, Credential? credentials)
+        internal static void ProcessCredentials(HttpWebRequest request, Credential? credentials)
         {
             credentials = credentials ?? WebServiceSettings.DefaultWebServiceCredentials;
             if (credentials.HasValue)

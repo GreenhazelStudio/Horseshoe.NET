@@ -11,6 +11,9 @@ using Horseshoe.NET.IO.ReportingServices;
 using Horseshoe.NET.IO.Http;
 using Horseshoe.NET.SecureIO.Sftp;
 using Horseshoe.NET.IO.Http.Enums;
+using Horseshoe.NET.Text.Extensions;
+using Horseshoe.NET.Text;
+using System.Net;
 
 namespace TestConsole
 {
@@ -280,6 +283,23 @@ namespace TestConsole
                     int status = 0;
                     var response = WebService.Get(wshUrl, headers: headers, returnMetadata: (meta) => { status = meta.StatusCode; });
                     Console.WriteLine("(" + status + ") " + response);
+                }
+            ),
+            Routine.Build
+            (
+                "Download document as string",
+                () =>
+                {
+                    var docUrl = "https://www.example.com/index.html";
+                    Console.WriteLine("downloading " + docUrl + "...");
+                    int status = 0;
+                    var text = WebDocument.Get
+                    (
+                        docUrl, 
+                        returnMetadata: (meta) => { status = meta.StatusCode; }
+                    );
+                    Console.WriteLine("(HTTP " + status + ")");
+                    Console.WriteLine(text.Crop(500, truncateMarker: TruncateMarker.LongEllipsis));
                 }
             )
         };

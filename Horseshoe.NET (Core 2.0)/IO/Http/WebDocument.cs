@@ -13,12 +13,73 @@ namespace Horseshoe.NET.IO.Http
 {
     public static class WebDocument
     {
-        public static string Get(string serviceURL, string method = "GET", object id = null, object headers = null, Action<HttpResponseMetadata> returnMetadata = null)
+        public static byte[] GetBytes(string documentURL, string method = "GET", object id = null, object headers = null, Credential? credentials = null, SecurityProtocolType? securityProtocol = null, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
         {
-            serviceURL = GetFinalURL(serviceURL, id);
-            var request = (HttpWebRequest)WebRequest.Create(serviceURL);
+            var bytes = new List<byte>();
+            var buf = new byte[1024];
+            using (var stream = GetStream(documentURL, method: method, id: id, headers: headers, credentials: credentials, returnMetadata: returnMetadata))
+            {
+                while(true)
+                {
+                    var result = stream.Read(buf, 0, buf.Length);
+                    if (result == buf.Length)
+                    {
+                        bytes.AddRange(buf);
+                    }
+                    else if (result > 0)
+                    {
+                        var minibuf = new byte[0];
+                        Array.Copy(buf, minibuf, result);
+                        bytes.AddRange(minibuf);
+                    }
+                    else break;
+                }
+            }
+            return bytes.ToArray();
+        }
+
+        public static Stream GetStream(string documentURL, string method = "GET", object id = null, object headers = null, Credential? credentials = null, SecurityProtocolType? securityProtocol = null, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
+        {
+            documentURL = GetFinalURL(documentURL, id);
+            var _securityProtocol = ServicePointManager.SecurityProtocol;
+            if (documentURL.ToLower().StartsWith("https://"))
+            {
+                ServicePointManager.SecurityProtocol = securityProtocol ?? (SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12);
+            }
+            var request = (HttpWebRequest)WebRequest.Create(documentURL);
+            ServicePointManager.SecurityProtocol = _securityProtocol;
             request.Method = method;
-            ProcessHeaders(request, headers);
+            WebService.ProcessHeaders(request, headers);
+            WebService.ProcessCredentials(request, credentials);
+            customizeRequest?.Invoke(request);
+
+            var response = (HttpWebResponse)request.GetResponse();
+            returnMetadata?.Invoke
+            (
+                new HttpResponseMetadata
+                {
+                    StatusCode = (int)response.StatusCode,
+                    Headers = response.Headers.ToOwinDictionary(),
+                    Body = null
+                }
+            );
+            return response.GetResponseStream();
+        }
+
+        public static string Get(string documentURL, string method = "GET", object id = null, object headers = null, Credential? credentials = null, SecurityProtocolType? securityProtocol = null, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
+        {
+            documentURL = GetFinalURL(documentURL, id);
+            var _securityProtocol = ServicePointManager.SecurityProtocol;
+            if (documentURL.ToLower().StartsWith("https://"))
+            {
+                ServicePointManager.SecurityProtocol = securityProtocol ?? (SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12);
+            }
+            var request = (HttpWebRequest)WebRequest.Create(documentURL);
+            ServicePointManager.SecurityProtocol = _securityProtocol;
+            request.Method = method;
+            WebService.ProcessHeaders(request, headers);
+            WebService.ProcessCredentials(request, credentials);
+            customizeRequest?.Invoke(request);
 
             var response = (HttpWebResponse)request.GetResponse();
             string rawResponse;
@@ -38,12 +99,20 @@ namespace Horseshoe.NET.IO.Http
             return rawResponse;
         }
 
-        public static async Task<string> GetAsync(string serviceURL, string method = "GET", object id = null, object headers = null, Action<HttpResponseMetadata> returnMetadata = null)
+        public static async Task<string> GetAsync(string documentURL, string method = "GET", object id = null, object headers = null, Credential? credentials = null, SecurityProtocolType? securityProtocol = null, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
         {
-            serviceURL = GetFinalURL(serviceURL, id);
-            var request = (HttpWebRequest)WebRequest.Create(serviceURL);
+            documentURL = GetFinalURL(documentURL, id);
+            var _securityProtocol = ServicePointManager.SecurityProtocol;
+            if (documentURL.ToLower().StartsWith("https://"))
+            {
+                ServicePointManager.SecurityProtocol = securityProtocol ?? (SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12);
+            }
+            var request = (HttpWebRequest)WebRequest.Create(documentURL);
+            ServicePointManager.SecurityProtocol = _securityProtocol;
             request.Method = method;
-            ProcessHeaders(request, headers);
+            WebService.ProcessHeaders(request, headers);
+            WebService.ProcessCredentials(request, credentials);
+            customizeRequest?.Invoke(request);
 
             var response = await request.GetResponseAsync() as HttpWebResponse;
             string rawResponse;
@@ -63,72 +132,35 @@ namespace Horseshoe.NET.IO.Http
             return rawResponse;
         }
 
-        public static E Get<E>(string serviceURL, string method = "GET", object id = null, object headers = null, bool zapBackingFields = false, Action<HttpResponseMetadata> returnMetadata = null)
+        public static E Get<E>(string documentURL, string method = "GET", object id = null, object headers = null, Credential? credentials = null, SecurityProtocolType? securityProtocol = null, Action<HttpWebRequest> customizeRequest = null, bool zapBackingFields = false, Action<HttpResponseMetadata> returnMetadata = null)
         {
-            var json = Get(serviceURL, method: method, id: id, headers: headers, returnMetadata: returnMetadata);
+            var json = Get(documentURL, method: method, id: id, headers: headers, credentials: credentials, returnMetadata: returnMetadata);
             var e = zapBackingFields
                 ? Deserialize.Json<E>(json, preDeserializationFunc: WebServiceUtil.ZapBackingFields)
                 : Deserialize.Json<E>(json);
             return e;
         }
 
-        public static async Task<E> GetAsync<E>(string serviceURL, string method = "GET", object id = null, object headers = null, bool zapBackingFields = false, Action<HttpResponseMetadata> returnMetadata = null)
+        public static async Task<E> GetAsync<E>(string documentURL, string method = "GET", object id = null, object headers = null, Credential? credentials = null, SecurityProtocolType? securityProtocol = null, Action<HttpWebRequest> customizeRequest = null, bool zapBackingFields = false, Action<HttpResponseMetadata> returnMetadata = null)
         {
-            var json = await GetAsync(serviceURL, method: method, id: id, headers: headers, returnMetadata: returnMetadata);
+            var json = await GetAsync(documentURL, method: method, id: id, headers: headers, credentials: credentials, returnMetadata: returnMetadata);
             var e = zapBackingFields
                 ? Deserialize.Json<E>(json, preDeserializationFunc: WebServiceUtil.ZapBackingFields)
                 : Deserialize.Json<E>(json);
             return e;
         }
 
-        static string GetFinalURL(string serviceURL, object id)
+        static string GetFinalURL(string documentURL, object id)
         {
             if (id != null)
             {
-                if (!serviceURL.EndsWith("/"))
+                if (!documentURL.EndsWith("/"))
                 {
-                    serviceURL += "/";
+                    documentURL += "/";
                 }
-                serviceURL += id;
+                documentURL += id;
             }
-            return serviceURL;
-        }
-
-        static void ProcessHeaders(HttpWebRequest request, object headers)
-        {
-            if (headers == null) return;
-            if (headers is IDictionary<HttpRequestHeader, string> httpHeaders)
-            {
-                foreach (var kvp in httpHeaders)
-                {
-                    request.Headers.Add(kvp.Key, kvp.Value);
-                }
-            }
-            else if (headers is IDictionary<HttpRequestHeader, string[]> httpMHeaders)
-            {
-                foreach (var kvp in httpMHeaders)
-                {
-                    request.Headers.Add(kvp.Key, string.Join(",", kvp.Value));
-                }
-            }
-            else if (headers is IDictionary<string, string> stringHeaders)
-            {
-                foreach (var kvp in stringHeaders)
-                {
-                    request.Headers.Add(kvp.Key, kvp.Value);
-                }
-            }
-            else if (headers is IDictionary<string, string[]> stringMHeaders)
-            {
-                foreach (var kvp in stringMHeaders)
-                {
-                    request.Headers.Add(kvp.Key, string.Join(",", kvp.Value));
-                }
-            }
-            else
-            {
-                throw new ArgumentException("headers - unsupported type: " + headers.GetType().FullName + "(try one of these: IDictionary<HttpRequestHeader, string> IDictionary<HttpRequestHeader, string[]>, IDictionary<string, string>, IDictionary<string, string[]>)");
-            }
+            return documentURL;
         }
     }
 }
