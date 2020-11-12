@@ -36,9 +36,9 @@ namespace Horseshoe.NET
 
         public bool HasValidationMessages =>  ValidationMessages?.Any() ?? false;
 
-        public ValidationException() : this("Validation failed") { }
+        public ValidationException() : base("Validation failed") { }
         public ValidationException(string message) : base(message) { }
         public ValidationException(string message, Exception innerException) : base(message, innerException) { }
-        public ValidationException(Exception innerException) : this("Validation failed", innerException) { }
+        public ValidationException(Exception innerException) : base("Validation failed", innerException) { }
     }
 }

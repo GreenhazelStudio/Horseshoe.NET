@@ -26,12 +26,12 @@ namespace Horseshoe.NET.Application
         {
             if (Configuration == null)
             {
-                throw new UtilityException("Configuration service not loaded: see Config.LoadConfigurationService()");
+                throw new ConfigurationException("Configuration service not loaded: see Config.LoadConfigurationService()");
             }
             var value = Configuration[key];
             if (value == null && required)
             {
-                throw new UtilityException("Required configuration not found: " + key);
+                throw new ConfigurationException("Required configuration not found: " + key);
             }
             return value;
         }
@@ -73,7 +73,7 @@ namespace Horseshoe.NET.Application
             }
             if (required)
             {
-                throw new UtilityException("Required configuration not found: " + key);
+                throw new ConfigurationException("Required configuration not found: " + key);
             }
             return null;
         }
@@ -107,7 +107,7 @@ namespace Horseshoe.NET.Application
             }
             if (required)
             {
-                throw new UtilityException("Required configuration not found: " + key);
+                throw new ConfigurationException("Required configuration not found: " + key);
             }
             return null;
         }
@@ -140,7 +140,7 @@ namespace Horseshoe.NET.Application
         {
             if (Configuration == null)
             {
-                throw new UtilityException("Configuration service not loaded: see Config.LoadConfigurationService()");
+                throw new ConfigurationException("Configuration service not loaded: see Config.LoadConfigurationService()");
             }
             name = name?.Trim();
             if (string.IsNullOrEmpty(name))
@@ -152,7 +152,7 @@ namespace Horseshoe.NET.Application
             {
                 if (required)
                 {
-                    throw new UtilityException("Connection string not found: " + name);
+                    throw new ConfigurationException("Connection string not found: " + name);
                 }
                 return null;
             }

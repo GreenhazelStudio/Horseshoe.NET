@@ -202,6 +202,8 @@
     <Compile Include="Text\TextUtil.cs" />
     <Compile Include="Text\TruncateMarker.cs" />
     <Compile Include="UtilityException.cs" />
+    <Compile Include="ConfigurationException.cs" />
+    <Compile Include="AuthenticationException.cs" />
     <Compile Include="ValidationException.cs" />
     <Compile Include="WebForms\Extensions\Extensions.cs" />
     <Compile Include="WebForms\WebFormsBootstrap3Alert.cs" />

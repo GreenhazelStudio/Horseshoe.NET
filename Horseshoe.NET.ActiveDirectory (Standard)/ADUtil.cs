@@ -35,7 +35,7 @@ namespace Horseshoe.NET.ActiveDirectory
         {
             if (string.IsNullOrEmpty(samAccountName))
             {
-                throw new ADException("Please supply a user name");
+                throw new AuthenticationException("Please supply a user name");
             }
             try
             {
@@ -47,7 +47,7 @@ namespace Horseshoe.NET.ActiveDirectory
                         return userInfo;
                     }
                 }
-                throw new ADException("Login failed");
+                throw new AuthenticationException("Login failed");
             }
             catch (ADException)
             {
@@ -66,7 +66,7 @@ namespace Horseshoe.NET.ActiveDirectory
         {
             if (string.IsNullOrEmpty(userSearchTerm))
             {
-                throw new ADException("Please supply a search term");
+                throw new AuthenticationException("Please supply a search term");
             }
             var userInfo = LookupUser(userSearchTerm, userProperty: userProperty, domain: domain);
             return Authenticate(userInfo.SAMAccountName, plainTextPassword, domain: domain);

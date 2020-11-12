@@ -19,7 +19,7 @@ namespace Horseshoe.NET.Application
             var value = ConfigurationManager.AppSettings[key];
             if (value == null && required)
             {
-                throw new UtilityException("Required configuration not found: " + key);
+                throw new ConfigurationException("Required configuration not found: " + key);
             }
             return value;
         }
@@ -61,7 +61,7 @@ namespace Horseshoe.NET.Application
             }
             if (required)
             {
-                throw new UtilityException("Required configuration not found: " + key);
+                throw new ConfigurationException("Required configuration not found: " + key);
             }
             return null;
         }
@@ -95,7 +95,7 @@ namespace Horseshoe.NET.Application
             }
             if (required)
             {
-                throw new UtilityException("Required configuration not found: " + key);
+                throw new ConfigurationException("Required configuration not found: " + key);
             }
             return null;
         }
@@ -129,14 +129,14 @@ namespace Horseshoe.NET.Application
             name = name?.Trim();
             if (string.IsNullOrEmpty(name))
             {
-                throw new ArgumentException("Invalid connection string name: " + (name == null ? "[null]" : "[blank]"));
+                throw new ConfigurationException("Invalid connection string name: " + (name == null ? "[null]" : "[blank]"));
             }
             var connectionString = ConfigurationManager.ConnectionStrings[name];
             if (connectionString == null)
             {
                 if (required)
                 {
-                    throw new UtilityException("Connection string not found: " + name);
+                    throw new ConfigurationException("Connection string not found: " + name);
                 }
                 return null;
             }
