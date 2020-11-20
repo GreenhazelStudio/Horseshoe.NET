@@ -22,14 +22,14 @@ namespace Horseshoe.NET.Crypto
                 {
                     _defaultSymmetricAlgorithm = CryptoUtil.BuildSymmetricAlgorithm
                     (
-                        Config.Get<SymmetricAlgorithm>("Horseshoe.NET:Crypto.SymmetricAlgorithm"),   // e.g. "System.Security.Cryptography.AesCryptoServiceProvider"
-                        Config.GetBytes("Horseshoe.NET:Crypto.SymmetricKey", encoding: DefaultEncoding),
+                        Config.Get<SymmetricAlgorithm>("Horseshoe.NET:Crypto.SymmetricAlgorithm", doNotRequireConfiguration: true),   // e.g. "System.Security.Cryptography.AesCryptoServiceProvider"
+                        Config.GetBytes("Horseshoe.NET:Crypto.SymmetricKey", encoding: DefaultEncoding, doNotRequireConfiguration: true),
                         false,
-                        Config.GetBytes("Horseshoe.NET:Crypto.SymmetricIV", encoding: DefaultEncoding),
+                        Config.GetBytes("Horseshoe.NET:Crypto.SymmetricIV", encoding: DefaultEncoding, doNotRequireConfiguration: true),
                         true,
-                        Config.GetNInt("Horseshoe.NET:Crypto.SymmetricBlockSize"),
-                        Config.GetNEnum<CipherMode>("Horseshoe.NET:Crypto.SymmetricCipherMode"),
-                        Config.GetNEnum<PaddingMode>("Horseshoe.NET:Crypto.SymmetricPadding")
+                        Config.GetNInt("Horseshoe.NET:Crypto.SymmetricBlockSize", doNotRequireConfiguration: true),
+                        Config.GetNEnum<CipherMode>("Horseshoe.NET:Crypto.SymmetricCipherMode", doNotRequireConfiguration: true),
+                        Config.GetNEnum<PaddingMode>("Horseshoe.NET:Crypto.SymmetricPadding", doNotRequireConfiguration: true)
                     )
                     ?? OrganizationalDefaultSettings.Get<SymmetricAlgorithm>("Crypto.SymmetricAlgorithm")
                     ?? CryptoUtil.BuildSymmetricAlgorithm(new RijndaelManaged(), DefaultEncoding.GetBytes("k+ (&tw!tBv~$6u7"), false, null, true, null, null, null);
@@ -52,7 +52,7 @@ namespace Horseshoe.NET.Crypto
             get
             {
                 return _defaultHashAlgorithm  // example "System.Security.Cryptography.SHA256CryptoServiceProvider"
-                    ?? Config.Get<HashAlgorithm>("Horseshoe.NET:Crypto.HashAlgorithm")
+                    ?? Config.Get<HashAlgorithm>("Horseshoe.NET:Crypto.HashAlgorithm", doNotRequireConfiguration: true)
                     ?? OrganizationalDefaultSettings.Get<HashAlgorithm>("Crypto.HashAlgorithm")
                     ?? new SHA1CryptoServiceProvider();
             }
@@ -72,7 +72,7 @@ namespace Horseshoe.NET.Crypto
             get
             {
                 return _defaultHashSalt
-                    ?? Config.GetNByte("Horseshoe.NET:Crypto.HashSalt")    // example: 240 or HashSalt[hex] F0
+                    ?? Config.GetNByte("Horseshoe.NET:Crypto.HashSalt", doNotRequireConfiguration: true)    // example: 240 or HashSalt[hex] F0
                     ?? OrganizationalDefaultSettings.GetNByte("Crypto.HashSalt");
             }
             set
@@ -91,7 +91,7 @@ namespace Horseshoe.NET.Crypto
             get
             {
                 return _defaultEncoding
-                    ?? ObjectUtil.GetInstance<Encoding>(Config.Get("Horseshoe.NET:Crypto.Encoding"), suppressErrors: true)   // example: "System.Text.UTF8Encoding"
+                    ?? ObjectUtil.GetInstance<Encoding>(Config.Get("Horseshoe.NET:Crypto.Encoding", doNotRequireConfiguration: true), suppressErrors: true)   // example: "System.Text.UTF8Encoding"
                     ?? OrganizationalDefaultSettings.Get<Encoding>("Crypto.Encoding")
                     ?? Encoding.Default;
             }

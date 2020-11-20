@@ -7,7 +7,7 @@
     <Authors>Carl Thomas</Authors>
     <Company>Greenhazel Studio</Company>
     <Copyright>Copyright © 2020 Greenhazel Studio</Copyright>
-    <Version>1.1.0.5</Version>
+    <Version>1.1.0.6</Version>
     <Product>Horseshoe.NET (Standard)</Product>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>assembly-signing-key.snk</AssemblyOriginatorKeyFile>

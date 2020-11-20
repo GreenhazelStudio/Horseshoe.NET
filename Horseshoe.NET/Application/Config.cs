@@ -126,7 +126,6 @@ namespace Horseshoe.NET.Application
 
         public static string GetConnectionString(string name, bool required = false)
         {
-            name = name?.Trim();
             if (string.IsNullOrEmpty(name))
             {
                 throw new ConfigurationException("Invalid connection string name: " + (name == null ? "[null]" : "[blank]"));
