@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <RootNamespace>Horseshoe.NET</RootNamespace>
-    <Version>1.1.0.6</Version>
+    <Version>1.1.1</Version>
     <Authors>Carl Thomas</Authors>
     <Company>Greenhazel Studio</Company>
     <Description>A suite of .NET utilities with a dual purpose: simplify coding tasks and offer a variety of new and unique features</Description>
