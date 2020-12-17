@@ -21,6 +21,11 @@ namespace Horseshoe.NET.IO.Http
             string certificatePfxPath = null,
             string certificatePfxPassword = null,
             X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            string proxyAddress = null,
+            int? proxyPort = null,
+            bool proxyBypassOnLocal = false,
+            string[] proxyBypassList = null,
+            Credential? proxyCredentials = null,
             Action<HttpWebRequest> customizeRequest = null
         )
         {
@@ -30,13 +35,17 @@ namespace Horseshoe.NET.IO.Http
                 documentURL,
                 method: "GET",
                 headers: headers,
-                id: null,
                 credentials: credentials,
                 securityProtocol: securityProtocol,
                 certificatePath: certificatePath,
                 certificatePfxPath: certificatePfxPath,
                 certificatePfxPassword: certificatePfxPassword,
                 certificateX509KeyStorageFlags: certificateX509KeyStorageFlags,
+                proxyAddress: proxyAddress,
+                proxyPort: proxyPort,
+                proxyBypassOnLocal: proxyBypassOnLocal,
+                proxyBypassList: proxyBypassList,
+                proxyCredentials: proxyCredentials,
                 customizeRequest: customizeRequest,
                 handleResponse: (metadata, _stream) => { stream = _stream; metadata.KeepStreamOpen = true; }
             );
@@ -53,6 +62,11 @@ namespace Horseshoe.NET.IO.Http
             string certificatePfxPath = null,
             string certificatePfxPassword = null,
             X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            string proxyAddress = null,
+            int? proxyPort = null,
+            bool proxyBypassOnLocal = false,
+            string[] proxyBypassList = null,
+            Credential? proxyCredentials = null,
             Action<HttpWebRequest> customizeRequest = null
         )
         {
@@ -66,6 +80,11 @@ namespace Horseshoe.NET.IO.Http
                 certificatePfxPath: certificatePfxPath,
                 certificatePfxPassword: certificatePfxPassword,
                 certificateX509KeyStorageFlags: certificateX509KeyStorageFlags,
+                proxyAddress: proxyAddress,
+                proxyPort: proxyPort,
+                proxyBypassOnLocal: proxyBypassOnLocal,
+                proxyBypassList: proxyBypassList,
+                proxyCredentials: proxyCredentials,
                 customizeRequest: customizeRequest
             );
             var bytes = new List<byte>();
@@ -102,6 +121,11 @@ namespace Horseshoe.NET.IO.Http
             string certificatePfxPath = null,
             string certificatePfxPassword = null,
             X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            string proxyAddress = null,
+            int? proxyPort = null,
+            bool proxyBypassOnLocal = false,
+            string[] proxyBypassList = null,
+            Credential? proxyCredentials = null,
             Action<HttpWebRequest> customizeRequest = null
         )
         {
@@ -115,6 +139,11 @@ namespace Horseshoe.NET.IO.Http
                 certificatePfxPath: certificatePfxPath,
                 certificatePfxPassword: certificatePfxPassword,
                 certificateX509KeyStorageFlags: certificateX509KeyStorageFlags,
+                proxyAddress: proxyAddress,
+                proxyPort: proxyPort,
+                proxyBypassOnLocal: proxyBypassOnLocal,
+                proxyBypassList: proxyBypassList,
+                proxyCredentials: proxyCredentials,
                 customizeRequest: customizeRequest
             );
             using (var writer = new FileStream(filePath, FileMode.Create))
@@ -137,6 +166,11 @@ namespace Horseshoe.NET.IO.Http
             string certificatePfxPath = null,
             string certificatePfxPassword = null,
             X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            string proxyAddress = null,
+            int? proxyPort = null,
+            bool proxyBypassOnLocal = false,
+            string[] proxyBypassList = null,
+            Credential? proxyCredentials = null,
             Action<HttpWebRequest> customizeRequest = null,
             Action<HttpResponseMetadata, Stream> handleResponse = null
         )
@@ -146,13 +180,17 @@ namespace Horseshoe.NET.IO.Http
                 documentURL,
                 method: "GET",
                 headers: headers,
-                id: null,
                 credentials: credentials,
                 securityProtocol: securityProtocol,
                 certificatePath: certificatePath,
                 certificatePfxPath: certificatePfxPath,
                 certificatePfxPassword: certificatePfxPassword,
                 certificateX509KeyStorageFlags: certificateX509KeyStorageFlags,
+                proxyAddress: proxyAddress,
+                proxyPort: proxyPort,
+                proxyBypassOnLocal: proxyBypassOnLocal,
+                proxyBypassList: proxyBypassList,
+                proxyCredentials: proxyCredentials,
                 customizeRequest: customizeRequest,
                 handleResponse: handleResponse
             );
@@ -169,6 +207,11 @@ namespace Horseshoe.NET.IO.Http
             string certificatePfxPath = null,
             string certificatePfxPassword = null,
             X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            string proxyAddress = null,
+            int? proxyPort = null,
+            bool proxyBypassOnLocal = false,
+            string[] proxyBypassList = null,
+            Credential? proxyCredentials = null,
             Action<HttpWebRequest> customizeRequest = null
         )
         {
@@ -178,13 +221,17 @@ namespace Horseshoe.NET.IO.Http
                 documentURL,
                 method: "GET",
                 headers: headers,
-                id: null,
                 credentials: credentials,
                 securityProtocol: securityProtocol,
                 certificatePath: certificatePath,
                 certificatePfxPath: certificatePfxPath,
                 certificatePfxPassword: certificatePfxPassword,
                 certificateX509KeyStorageFlags: certificateX509KeyStorageFlags,
+                proxyAddress: proxyAddress,
+                proxyPort: proxyPort,
+                proxyBypassOnLocal: proxyBypassOnLocal,
+                proxyBypassList: proxyBypassList,
+                proxyCredentials: proxyCredentials,
                 customizeRequest: customizeRequest,
                 handleResponse: (metadata, _stream) => { stream = _stream; metadata.KeepStreamOpen = true; }
             );
@@ -202,6 +249,11 @@ namespace Horseshoe.NET.IO.Http
             string certificatePfxPath = null,
             string certificatePfxPassword = null,
             X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            string proxyAddress = null,
+            int? proxyPort = null,
+            bool proxyBypassOnLocal = false,
+            string[] proxyBypassList = null,
+            Credential? proxyCredentials = null,
             Action<HttpWebRequest> customizeRequest = null
         )
         {
@@ -215,6 +267,11 @@ namespace Horseshoe.NET.IO.Http
                 certificatePfxPath: certificatePfxPath,
                 certificatePfxPassword: certificatePfxPassword,
                 certificateX509KeyStorageFlags: certificateX509KeyStorageFlags,
+                proxyAddress: proxyAddress,
+                proxyPort: proxyPort,
+                proxyBypassOnLocal: proxyBypassOnLocal,
+                proxyBypassList: proxyBypassList,
+                proxyCredentials: proxyCredentials,
                 customizeRequest: customizeRequest
             );
             var bytes = new List<byte>();
@@ -251,6 +308,11 @@ namespace Horseshoe.NET.IO.Http
             string certificatePfxPath = null,
             string certificatePfxPassword = null,
             X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            string proxyAddress = null,
+            int? proxyPort = null,
+            bool proxyBypassOnLocal = false,
+            string[] proxyBypassList = null,
+            Credential? proxyCredentials = null,
             Action<HttpWebRequest> customizeRequest = null
         )
         {
@@ -264,6 +326,11 @@ namespace Horseshoe.NET.IO.Http
                 certificatePfxPath: certificatePfxPath,
                 certificatePfxPassword: certificatePfxPassword,
                 certificateX509KeyStorageFlags: certificateX509KeyStorageFlags,
+                proxyAddress: proxyAddress,
+                proxyPort: proxyPort,
+                proxyBypassOnLocal: proxyBypassOnLocal,
+                proxyBypassList: proxyBypassList,
+                proxyCredentials: proxyCredentials,
                 customizeRequest: customizeRequest
             );
             using (var writer = new FileStream(filePath, FileMode.Create))
@@ -286,6 +353,11 @@ namespace Horseshoe.NET.IO.Http
             string certificatePfxPath = null,
             string certificatePfxPassword = null,
             X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            string proxyAddress = null,
+            int? proxyPort = null,
+            bool proxyBypassOnLocal = false,
+            string[] proxyBypassList = null,
+            Credential? proxyCredentials = null,
             Action<HttpWebRequest> customizeRequest = null,
             Action<HttpResponseMetadata, Stream> handleResponse = null
         )
@@ -295,13 +367,17 @@ namespace Horseshoe.NET.IO.Http
                 documentURL,
                 method: "GET",
                 headers: headers,
-                id: null,
                 credentials: credentials,
                 securityProtocol: securityProtocol,
                 certificatePath: certificatePath,
                 certificatePfxPath: certificatePfxPath,
                 certificatePfxPassword: certificatePfxPassword,
                 certificateX509KeyStorageFlags: certificateX509KeyStorageFlags,
+                proxyAddress: proxyAddress,
+                proxyPort: proxyPort,
+                proxyBypassOnLocal: proxyBypassOnLocal,
+                proxyBypassList: proxyBypassList,
+                proxyCredentials: proxyCredentials,
                 customizeRequest: customizeRequest,
                 handleResponse: handleResponse
             );

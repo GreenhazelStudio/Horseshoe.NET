@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -13,8 +14,6 @@ using Horseshoe.NET.SecureIO.Sftp;
 using Horseshoe.NET.IO.Http.Enums;
 using Horseshoe.NET.Text.Extensions;
 using Horseshoe.NET.Text;
-using System.Net;
-using System.IO;
 
 namespace TestConsole
 {
@@ -240,38 +239,47 @@ namespace TestConsole
             ),
             Routine.Build
             (
-                "Web Service",
+                "Web Service GET",
                 () =>
                 {
-                     try
+                    try
                     {
-                        var apiResponse = WebService.Get<WebServiceResponse<IEnumerable<string>>>
+                        var apiResponse = WebService.Get
                         (
-                            "http://localhost:58917/fake/path",
+                            "https://k8sdev.lgeenergy.int/api/chshistory/values",
                             headers: new Dictionary<object, string>
                             {
                                 { HttpRequestHeader.Authorization, "Bearer " + "blabla" }
                             }
                         );
-
-                        switch (apiResponse.Status)
-                        {
-                            case WebServiceResponseStatus.Ok:
-                                var data = apiResponse.Data;
-                                Console.WriteLine("Response: " + string.Join(", ", data));
-                                break;
-                            case WebServiceResponseStatus.Error:
-                                RenderException(apiResponse.Exception);
-                                break;
-                            default:
-                                throw new WebServiceException("Invalid web service response status: " + apiResponse.Status + " (This should never happen.)");
-                        }
+                        Console.WriteLine("Response: " + apiResponse);
                     }
                     catch(Exception ex)
                     {
                         RenderException(ex);
                     }
-               }
+                }
+            ),
+            Routine.Build
+            (
+                "Web Service GET w/ Proxy",
+                () =>
+                {
+                    try
+                    {
+                        var apiResponse = WebService.Get
+                        (
+                            "https://jsonplaceholder.typicode.com/todos/1",
+                            proxyAddress: "http://proxypool:9119",
+                            proxyCredentials: new Horseshoe.NET.Credential("E029791", "go-LDS-12igletSTEW")
+                        );
+                        Console.WriteLine("Response: " + apiResponse);
+                    }
+                    catch(Exception ex)
+                    {
+                        RenderException(ex);
+                    }
+                }
             ),
             Routine.Build
             (
