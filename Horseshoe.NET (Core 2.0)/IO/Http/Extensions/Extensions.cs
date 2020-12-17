@@ -30,26 +30,29 @@ namespace Horseshoe.NET.IO.Http.Extensions
 
         internal static void ProcessHeaders(this HttpWebRequest request, IDictionary<object, string> headers, string contentType = null)
         {
-            if (headers == null) return;
-            foreach (object key in headers.Keys)
+            if (headers != null)
             {
-                if (key is string stringKey)
+                foreach (object key in headers.Keys)
                 {
-                    request.Headers.Add(stringKey, headers[key]);
-                }
-                else if (key is HttpRequestHeader requestHeaderKey)
-                {
-                    request.Headers.Add(requestHeaderKey, headers[key]);
-                }
-                else if (key is HttpResponseHeader responseHeaderKey)
-                {
-                    request.Headers.Add(responseHeaderKey, headers[key]);
-                }
-                else
-                {
-                    request.Headers.Add(key.ToString(), headers[key]);
+                    if (key is string stringKey)
+                    {
+                        request.Headers.Add(stringKey, headers[key]);
+                    }
+                    else if (key is HttpRequestHeader requestHeaderKey)
+                    {
+                        request.Headers.Add(requestHeaderKey, headers[key]);
+                    }
+                    else if (key is HttpResponseHeader responseHeaderKey)
+                    {
+                        request.Headers.Add(responseHeaderKey, headers[key]);
+                    }
+                    else
+                    {
+                        request.Headers.Add(key.ToString(), headers[key]);
+                    }
                 }
             }
+
             if (contentType != null)
             {
                 request.ContentType = contentType;

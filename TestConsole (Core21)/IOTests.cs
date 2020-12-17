@@ -10,9 +10,10 @@ using Horseshoe.NET.IO;
 using Horseshoe.NET.IO.Ftp;
 using Horseshoe.NET.IO.ReportingServices;
 using Horseshoe.NET.IO.Http;
+using Horseshoe.NET.IO.Http.Enums;
 using Horseshoe.NET.SecureIO.Sftp;
-using Horseshoe.NET.Text.Extensions;
 using Horseshoe.NET.Text;
+using Horseshoe.NET.Text.Extensions;
 
 namespace TestConsole
 {
@@ -291,6 +292,26 @@ namespace TestConsole
                     int status = 0;
                     string text = WebService.Get(wshUrl, headers: headers, handleResponse: (meta, stream) => { status = (int)meta.StatusCode; });
                     Console.WriteLine("(" + status + ") " + text);
+                }
+            ),
+            Routine.Build
+            (
+                "Web Service POST",
+                () =>
+                {
+                    var response = WebService.PostJson<WebServiceResponse<string>>
+                    (
+                        "http://localhost:58917/fake/path",
+                        new { ApiName = "TESTAPI1", CallingEntityName = "TESTAPI2", ApiKey = "abcdefghijklm" }
+                    );
+                    if (response.Status == WebServiceResponseStatus.Ok)
+                    {
+                        Console.WriteLine("response: " + response.Data);
+                    }
+                    else
+                    {
+                        Console.WriteLine("exception: " + response.Exception.Message);
+                    }
                 }
             ),
             Routine.Build
