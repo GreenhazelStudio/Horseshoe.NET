@@ -11,6 +11,10 @@ using Horseshoe.NET.IO.ReportingServices;
 using Horseshoe.NET.IO.Http;
 using Horseshoe.NET.SecureIO.Sftp;
 using Horseshoe.NET.IO.Http.Enums;
+using Horseshoe.NET.Text.Extensions;
+using Horseshoe.NET.Text;
+using System.Net;
+using System.IO;
 
 namespace TestConsole
 {
@@ -243,10 +247,10 @@ namespace TestConsole
                     {
                         var apiResponse = WebService.Get<WebServiceResponse<IEnumerable<string>>>
                         (
-                            "https://k.lkedev.com/noauthapi/chshistory/values",
-                            headers: new Dictionary<string, string>
+                            "http://localhost:58917/fake/path",
+                            headers: new Dictionary<object, string>
                             {
-                                { "Authorization", "Bearer " + "blabla" }
+                                { HttpRequestHeader.Authorization, "Bearer " + "blabla" }
                             }
                         );
 
@@ -275,11 +279,28 @@ namespace TestConsole
                 () =>
                 {
                     var wshUrl = "http://localhost:58917/fake/path";
-                    var headers = new Dictionary<string, string> { { "My-Custom-Header", "Frankenstein" } };
+                    var headers = new Dictionary<object, string> { { "My-Custom-Header", "Frankenstein" } };
                     Console.WriteLine("calling " + wshUrl + "...");
                     int status = 0;
-                    var response = WebService.Get(wshUrl, headers: headers, returnMetadata: (meta) => { status = meta.StatusCode; });
-                    Console.WriteLine("(" + status + ") " + response);
+                    string text = WebService.Get(wshUrl, headers: headers, handleResponse: (meta, stream) => { status = (int)meta.StatusCode; });
+                    Console.WriteLine("(" + status + ") " + text);
+                }
+            ),
+            Routine.Build
+            (
+                "Download document as string",
+                () =>
+                {
+                    var docUrl = "https://www.example.com/index.html";
+                    Console.WriteLine("downloading " + docUrl + "...");
+                    int status = 0;
+                    string text = WebDocument.GetText
+                    (
+                        docUrl,
+                        handleResponse: (meta, stream) => { status = (int)meta.StatusCode; }
+                    );
+                    Console.WriteLine("(HTTP " + status + ")");
+                    Console.WriteLine(text.Crop(500, truncateMarker: TruncateMarker.LongEllipsis));
                 }
             )
         };

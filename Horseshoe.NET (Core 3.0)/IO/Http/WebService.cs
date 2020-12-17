@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,294 +15,650 @@ namespace Horseshoe.NET.IO.Http
 {
     public static class WebService
     {
-        public static string Get(string serviceURL, string method = "GET", object id = null, object headers = null, Credential? credentials = null, SecurityProtocolType? securityProtocol = null, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
+        public static string Get
+        (
+            string serviceURL,
+            string method = "GET",
+            IDictionary<object,string> headers = null,
+            object id = null,
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.SystemDefault,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            Action<HttpWebRequest> customizeRequest = null,
+            Action<HttpResponseMetadata, Stream> handleResponse = null
+        )
         {
             serviceURL = GetFinalURL(serviceURL, id);
             var _securityProtocol = ServicePointManager.SecurityProtocol;
             if (serviceURL.ToLower().StartsWith("https://"))
             {
-                ServicePointManager.SecurityProtocol = securityProtocol ?? (SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12);
+                ServicePointManager.SecurityProtocol = securityProtocol;
             }
             var request = (HttpWebRequest)WebRequest.Create(serviceURL);
             ServicePointManager.SecurityProtocol = _securityProtocol;
             request.Method = method;
             ProcessHeaders(request, headers);
             ProcessCredentials(request, credentials);
+            ProcessCertificates(request, certificatePath, certificatePfxPath, certificatePfxPassword, certificateX509KeyStorageFlags);
             customizeRequest?.Invoke(request);
 
-            var response = (HttpWebResponse)request.GetResponse();
-            string rawResponse;
-            using (var reader = new StreamReader(response.GetResponseStream()))
+            var response = request.GetResponse() as HttpWebResponse;
+            var responseStream = response.GetResponseStream();
+            if (handleResponse != null)
             {
-                rawResponse = reader.ReadToEnd();
-                returnMetadata?.Invoke
-                (
-                    new HttpResponseMetadata
-                    {
-                        StatusCode = (int)response.StatusCode,
-                        Headers = response.Headers.ToOwinDictionary(),
-                        Body = rawResponse
-                    }
-                );
+                var responseMetadata = new HttpResponseMetadata(response.StatusCode, response.StatusDescription, response.Headers.ToOwinDictionary());
+                handleResponse.Invoke(responseMetadata, responseStream);
+                responseStream.Seek(0, SeekOrigin.Begin);
             }
-            return rawResponse;
+            using (var reader = new StreamReader(responseStream))
+            {
+                return reader.ReadToEnd();
+            }
         }
 
-        public static async Task<string> GetAsync(string serviceURL, string method = "GET", object id = null, object headers = null, Credential? credentials = null, SecurityProtocolType? securityProtocol = null, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
+        public static E Get<E>
+        (
+            string serviceURL, 
+            string method = "GET", 
+            IDictionary<object,string> headers = null, 
+            object id = null, 
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.SystemDefault,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            Action<HttpWebRequest> customizeRequest = null,
+            Func<string, E> responseParser = null,
+            Action<HttpResponseMetadata, Stream> handleResponse = null
+        )
+        {
+            var result = Get(serviceURL, method: method, headers: headers, id: id, credentials: credentials, securityProtocol: securityProtocol, certificatePath: certificatePath, certificatePfxPath: certificatePfxPath, certificatePfxPassword: certificatePfxPassword, certificateX509KeyStorageFlags: certificateX509KeyStorageFlags, customizeRequest: customizeRequest, handleResponse: handleResponse);
+            
+            return responseParser == null
+                ? throw new ValidationException("response parser was not supplied")
+                : responseParser.Invoke(result);
+        }
+
+        public static E GetJson<E>
+        (
+            string serviceURL,
+            string method = "GET",
+            IDictionary<object,string> headers = null,
+            object id = null,
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.SystemDefault,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            bool zapBackingFields = false,
+            Action<HttpWebRequest> customizeRequest = null,
+            Action<HttpResponseMetadata, Stream> handleResponse = null
+        )
+        {
+            var e = Get<E>(serviceURL, method: method, headers: headers, id: id, credentials: credentials, securityProtocol: securityProtocol, certificatePath: certificatePath, certificatePfxPath: certificatePfxPath, certificatePfxPassword: certificatePfxPassword, certificateX509KeyStorageFlags: certificateX509KeyStorageFlags, customizeRequest: customizeRequest, responseParser: GetJsonDeserializer<E>(zapBackingFields), handleResponse: handleResponse);
+            return e;
+        }
+
+        public static async Task<string> GetAsync
+        (
+            string serviceURL,
+            string method = "GET",
+            IDictionary<object,string> headers = null,
+            object id = null,
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.SystemDefault,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            Action<HttpWebRequest> customizeRequest = null,
+            Action<HttpResponseMetadata, Stream> handleResponse = null
+        )
         {
             serviceURL = GetFinalURL(serviceURL, id);
             var _securityProtocol = ServicePointManager.SecurityProtocol;
             if (serviceURL.ToLower().StartsWith("https://"))
             {
-                ServicePointManager.SecurityProtocol = securityProtocol ?? (SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12);
+                ServicePointManager.SecurityProtocol = securityProtocol;
             }
             var request = (HttpWebRequest)WebRequest.Create(serviceURL);
             ServicePointManager.SecurityProtocol = _securityProtocol;
             request.Method = method;
             ProcessHeaders(request, headers);
             ProcessCredentials(request, credentials);
+            ProcessCertificates(request, certificatePath, certificatePfxPath, certificatePfxPassword, certificateX509KeyStorageFlags);
             customizeRequest?.Invoke(request);
 
             var response = await request.GetResponseAsync() as HttpWebResponse;
-            string rawResponse;
-            using (var reader = new StreamReader(response.GetResponseStream()))
+            var responseStream = response.GetResponseStream();
+            if (handleResponse != null)
             {
-                rawResponse = reader.ReadToEnd();
-                returnMetadata?.Invoke
-                (
-                    new HttpResponseMetadata
-                    {
-                        StatusCode = (int)response.StatusCode,
-                        Headers = response.Headers.ToOwinDictionary(),
-                        Body = rawResponse
-                    }
-                );
+                var responseMetadata = new HttpResponseMetadata(response.StatusCode, response.StatusDescription, response.Headers.ToOwinDictionary());
+                handleResponse.Invoke(responseMetadata, responseStream);
+                responseStream.Seek(0, SeekOrigin.Begin);
             }
-            return rawResponse;
+            using (var reader = new StreamReader(responseStream))
+            {
+                return reader.ReadToEnd();
+            }
         }
 
-        public static E Get<E>(string serviceURL, string method = "GET", object id = null, object headers = null, Credential? credentials = null, bool zapBackingFields = false, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
+        public static async Task<E> GetAsync<E>
+        (
+            string serviceURL,
+            string method = "GET", 
+            IDictionary<object,string> headers = null, 
+            object id = null, 
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.SystemDefault,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            Action<HttpWebRequest> customizeRequest = null, 
+            Func<string, E> responseParser = null,
+            Action<HttpResponseMetadata, Stream> handleResponse = null
+        )
         {
-            var json = Get(serviceURL, method: method, id: id, headers: headers, credentials: credentials, customizeRequest: customizeRequest, returnMetadata: returnMetadata);
-            var e = zapBackingFields
-                ? Deserialize.Json<E>(json, preDeserializationFunc: WebServiceUtil.ZapBackingFields)
-                : Deserialize.Json<E>(json);
+            var result = await GetAsync(serviceURL, method: method, headers: headers, id: id, credentials: credentials, securityProtocol: securityProtocol, certificatePath: certificatePath, certificatePfxPath: certificatePfxPath, certificatePfxPassword: certificatePfxPassword, certificateX509KeyStorageFlags: certificateX509KeyStorageFlags, customizeRequest: customizeRequest, handleResponse: handleResponse);
+            return responseParser == null
+                ? throw new ValidationException("response parser was not supplied")
+                : responseParser.Invoke(result);
+        }
+
+        public static async Task<E> GetJsonAsync<E>
+        (
+            string serviceURL,
+            string method = "GET",
+            IDictionary<object,string> headers = null,
+            object id = null,
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.SystemDefault,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            bool zapBackingFields = false,
+            Action<HttpWebRequest> customizeRequest = null,
+            Action<HttpResponseMetadata, Stream> handleResponse = null
+        )
+        {
+            var e = await GetAsync<E>(serviceURL, method: method, headers: headers, id: id, credentials: credentials, securityProtocol: securityProtocol, certificatePath: certificatePath, certificatePfxPath: certificatePfxPath, certificatePfxPassword: certificatePfxPassword, certificateX509KeyStorageFlags: certificateX509KeyStorageFlags, customizeRequest: customizeRequest, responseParser: GetJsonDeserializer<E>(zapBackingFields), handleResponse: handleResponse);
             return e;
         }
 
-        public static async Task<E> GetAsync<E>(string serviceURL, string method = "GET", object id = null, object headers = null, Credential? credentials = null, bool zapBackingFields = false, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
-        {
-            var json = await GetAsync(serviceURL, method: method, id: id, headers: headers, credentials: credentials, customizeRequest: customizeRequest, returnMetadata: returnMetadata);
-            var e = zapBackingFields
-                ? Deserialize.Json<E>(json, preDeserializationFunc: WebServiceUtil.ZapBackingFields)
-                : Deserialize.Json<E>(json);
-            return e;
-        }
-
+        // alt content type: application/json
         // alt content type: application/x-www-form-urlencoded
-        public static string Post(string serviceURL, string method = "POST", object content = null, string contentType = "application/json", object id = null, Func<object, string> contentSerializer = null, object headers = null, Credential? credentials = null, SecurityProtocolType? securityProtocol = null, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
+        public static string Post
+        (
+            string serviceURL, 
+            object content, 
+            string contentType = null,
+            Func<object, string> contentSerializer = null, 
+            string method = "POST", 
+            IDictionary<object,string> headers = null, 
+            object id = null, 
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.SystemDefault,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            Action<HttpWebRequest> customizeRequest = null, 
+            Action<HttpResponseMetadata, Stream> handleResponse = null
+        )
         {
             serviceURL = GetFinalURL(serviceURL, id);
             var _securityProtocol = ServicePointManager.SecurityProtocol;
             if (serviceURL.ToLower().StartsWith("https://"))
             {
-                ServicePointManager.SecurityProtocol = securityProtocol ?? (SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12);
+                ServicePointManager.SecurityProtocol = securityProtocol;
             }
             var request = (HttpWebRequest)WebRequest.Create(serviceURL);
             ServicePointManager.SecurityProtocol = _securityProtocol;
             request.ContentType = contentType;
             request.Method = method;
             ProcessHeaders(request, headers);
+            ProcessContent(request, content, contentSerializer);
             ProcessCredentials(request, credentials);
+            ProcessCertificates(request, certificatePath, certificatePfxPath, certificatePfxPassword, certificateX509KeyStorageFlags);
             customizeRequest?.Invoke(request);
 
-            if (content != null || contentSerializer != null)
+            var response = request.GetResponse() as HttpWebResponse;
+            var responseStream = response.GetResponseStream();
+            if (handleResponse != null)
             {
-                string serialized = "";
-                if (contentSerializer != null)
-                {
-                    serialized = contentSerializer.Invoke(content);
-                }
-                else if (content != null)
-                {
-                    if (contentType.ToLower().Contains("json"))
-                    {
-                        serialized = Serialize.Json(content);
-                    }
-                    else
-                    {
-                        serialized = content.ToString();
-                    }
-                }
-                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
-                {
-                    streamWriter.Write(serialized);
-                    streamWriter.Flush();
-                    streamWriter.Close();
-                }
+                var responseMetadata = new HttpResponseMetadata(response.StatusCode, response.StatusDescription, response.Headers.ToOwinDictionary());
+                handleResponse.Invoke(responseMetadata, responseStream);
+                responseStream.Seek(0, SeekOrigin.Begin);
             }
-
-            var response = (HttpWebResponse)request.GetResponse();
-            string rawResponse;
-            using (var reader = new StreamReader(response.GetResponseStream()))
+            using (var reader = new StreamReader(responseStream))
             {
-                rawResponse = reader.ReadToEnd();
-                returnMetadata?.Invoke
-                (
-                    new HttpResponseMetadata
-                    {
-                        StatusCode = (int)response.StatusCode,
-                        Headers = response.Headers.ToOwinDictionary(),
-                        Body = rawResponse
-                    }
-                );
+                return reader.ReadToEnd();
             }
-            return rawResponse;
         }
 
-        public async static Task<string> PostAsync(string serviceURL, string method = "POST", object content = null, string contentType = "application/json", object id = null, Func<object, string> contentSerializer = null, object headers = null, Credential? credentials = null, SecurityProtocolType? securityProtocol = null, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
+        public static E Post<E>
+        (
+            string serviceURL,
+            object content,
+            string contentType = null,
+            Func<object, string> contentSerializer = null,
+            string method = "POST",
+            IDictionary<object,string> headers = null,
+            object id = null,
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.SystemDefault,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            Action<HttpWebRequest> customizeRequest = null,
+            Func<string, E> responseParser = null,
+            Action<HttpResponseMetadata, Stream> handleResponse = null
+        )
+        {
+            var result = Post(serviceURL, content, contentType: contentType, contentSerializer: contentSerializer, method: method, headers: headers, id: id, credentials: credentials, securityProtocol: securityProtocol, certificatePath: certificatePath, certificatePfxPath: certificatePfxPath, certificatePfxPassword: certificatePfxPassword, certificateX509KeyStorageFlags: certificateX509KeyStorageFlags, customizeRequest: customizeRequest, handleResponse: handleResponse);
+            return responseParser == null
+                ? throw new ValidationException("response parser was not supplied")
+                : responseParser.Invoke(result);
+        }
+
+        public static E PostJson<E>
+        (
+            string serviceURL,
+            object content,
+            string method = "POST",
+            IDictionary<object,string> headers = null,
+            object id = null,
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.SystemDefault,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            bool zapBackingFields = false,
+            Action<HttpWebRequest> customizeRequest = null,
+            Action<HttpResponseMetadata, Stream> handleResponse = null
+        )
+        {
+            var e = Post<E>(serviceURL, content, contentType: "application/json", contentSerializer: JsonContentSerializer, method: method, headers: headers, id: id, credentials: credentials, securityProtocol: securityProtocol, certificatePath: certificatePath, certificatePfxPath: certificatePfxPath, certificatePfxPassword: certificatePfxPassword, certificateX509KeyStorageFlags: certificateX509KeyStorageFlags, customizeRequest: customizeRequest, responseParser: GetJsonDeserializer<E>(zapBackingFields), handleResponse: handleResponse);
+            return e;
+        }
+
+        public async static Task<string> PostAsync
+        (
+            string serviceURL,
+            object content,
+            string contentType = null,
+            Func<object, string> contentSerializer = null,
+            string method = "POST",
+            IDictionary<object,string> headers = null,
+            object id = null,
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.SystemDefault,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            Action<HttpWebRequest> customizeRequest = null,
+            Action<HttpResponseMetadata, Stream> handleResponse = null
+        )
         {
             serviceURL = GetFinalURL(serviceURL, id);
             var _securityProtocol = ServicePointManager.SecurityProtocol;
             if (serviceURL.ToLower().StartsWith("https://"))
             {
-                ServicePointManager.SecurityProtocol = securityProtocol ?? (SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12);
+                ServicePointManager.SecurityProtocol = securityProtocol;
             }
             var request = (HttpWebRequest)WebRequest.Create(serviceURL);
             ServicePointManager.SecurityProtocol = _securityProtocol;
             request.ContentType = contentType;
             request.Method = method;
             ProcessHeaders(request, headers);
+            ProcessContent(request, content, contentSerializer);
             ProcessCredentials(request, credentials);
+            ProcessCertificates(request, certificatePath, certificatePfxPath, certificatePfxPassword, certificateX509KeyStorageFlags);
             customizeRequest?.Invoke(request);
-
-            if (content != null || contentSerializer != null)
-            {
-                string serialized = "";
-                if (contentSerializer != null)
-                {
-                    serialized = contentSerializer.Invoke(content);
-                }
-                else if (content != null)
-                {
-                    if (contentType.ToLower().Contains("json"))
-                    {
-                        serialized = Serialize.Json(content);
-                    }
-                    else
-                    {
-                        serialized = content.ToString();
-                    }
-                }
-                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
-                {
-                    streamWriter.Write(serialized);
-                    streamWriter.Flush();
-                    streamWriter.Close();
-                }
-            }
 
             var response = await request.GetResponseAsync() as HttpWebResponse;
-            string rawResponse;
-            using (var reader = new StreamReader(response.GetResponseStream()))
+            var responseStream = response.GetResponseStream();
+            if (handleResponse != null)
             {
-                rawResponse = reader.ReadToEnd();
-                returnMetadata?.Invoke
-                (
-                    new HttpResponseMetadata
-                    {
-                        StatusCode = (int)response.StatusCode,
-                        Headers = response.Headers.ToOwinDictionary(),
-                        Body = rawResponse
-                    }
-                );
+                var responseMetadata = new HttpResponseMetadata(response.StatusCode, response.StatusDescription, response.Headers.ToOwinDictionary());
+                handleResponse.Invoke(responseMetadata, responseStream);
+                responseStream.Seek(0, SeekOrigin.Begin);
             }
-            return rawResponse;
-        }
-
-        public static E Post<E>(string serviceURL, string method = "POST", object content = null, string contentType = "application/json", object headers = null, Credential? credentials = null, bool zapBackingFields = false, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
-        {
-            var json = Post(serviceURL, method: method, content: content, contentType: contentType, headers: headers, credentials: credentials, customizeRequest: customizeRequest, returnMetadata: returnMetadata);
-            var e = zapBackingFields
-                ? Deserialize.Json<E>(json, preDeserializationFunc: WebServiceUtil.ZapBackingFields)
-                : Deserialize.Json<E>(json);
-            return e;
-        }
-
-        public static async Task<E> PostAsync<E>(string serviceURL, string method = "POST", object content = null, string contentType = "application/json", object headers = null, Credential? credentials = null, bool zapBackingFields = false, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
-        {
-            var json = await PostAsync(serviceURL, method: method, content: content, contentType: contentType, headers: headers, credentials: credentials, customizeRequest: customizeRequest, returnMetadata: returnMetadata);
-            var e = zapBackingFields
-                ? Deserialize.Json<E>(json, preDeserializationFunc: WebServiceUtil.ZapBackingFields)
-                : Deserialize.Json<E>(json);
-            return e;
-        }
-
-        public static string Put(string serviceURL, object content, string contentType = "application/json", object id = null, Func<object, string> contentSerializer = null, object headers = null, Credential? credentials = null, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
-        {
-            if (content == null) throw new ArgumentNullException(nameof(content), "cannot be null");
-            return Post(serviceURL, method: "PUT", content: content, contentType: contentType, id: id, contentSerializer: contentSerializer, headers: headers, credentials: credentials, customizeRequest: customizeRequest, returnMetadata: returnMetadata);
-        }
-
-        public async static Task<string> PutAsync(string serviceURL, object content, string contentType = "application/json", object id = null, Func<object, string> contentSerializer = null, object headers = null, Credential? credentials = null, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
-        {
-            if (content == null) throw new ArgumentNullException(nameof(content), "cannot be null");
-            return await PostAsync(serviceURL, method: "PUT", content: content, contentType: contentType, id: id, contentSerializer: contentSerializer, headers: headers, credentials: credentials, customizeRequest: customizeRequest, returnMetadata: returnMetadata);
-        }
-
-        public static E Put<E>(string serviceURL, object content, string contentType = "application/json", object id = null, object headers = null, Credential? credentials = null, bool zapBackingFields = false, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
-        {
-            if (content == null) throw new ArgumentNullException(nameof(content), "cannot be null");
-            var json = Put(serviceURL, content, contentType: contentType, id: id, headers: headers, credentials: credentials, customizeRequest: customizeRequest, returnMetadata: returnMetadata);
-            var e = zapBackingFields
-                ? Deserialize.Json<E>(json, preDeserializationFunc: WebServiceUtil.ZapBackingFields)
-                : Deserialize.Json<E>(json);
-            return e;
-        }
-
-        public static async Task<E> PutAsync<E>(string serviceURL, object content, string contentType = "application/json", object id = null, object headers = null, Credential? credentials = null, bool zapBackingFields = false, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
-        {
-            if (content == null) throw new ArgumentNullException(nameof(content), "cannot be null");
-            var json = await PutAsync(serviceURL, content, contentType: contentType, id: id, headers: headers, credentials: credentials, customizeRequest: customizeRequest, returnMetadata: returnMetadata);
-            var e = zapBackingFields
-                ? Deserialize.Json<E>(json, preDeserializationFunc: WebServiceUtil.ZapBackingFields)
-                : Deserialize.Json<E>(json);
-            return e;
-        }
-
-        public static string Delete(string serviceURL, object content = null, string contentType = "application/json", object id = null, Func<object, string> contentSerializer = null, object headers = null, Credential? credentials = null, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
-        {
-            if (content != null)
+            using (var reader = new StreamReader(responseStream))
             {
-                return Post(serviceURL, method: "DELETE", content: content, contentType: contentType, id: id, contentSerializer: contentSerializer, headers: headers, credentials: credentials, customizeRequest: customizeRequest, returnMetadata: returnMetadata);
+                return reader.ReadToEnd();
             }
-            return Get(serviceURL, method: "DELETE", id: id, headers: headers, credentials: credentials, customizeRequest: customizeRequest, returnMetadata: returnMetadata);
         }
 
-        public static async Task<string> DeleteAsync(string serviceURL, string contentType = "application/json", object content = null, object id = null, Func<object, string> contentSerializer = null, object headers = null, Credential? credentials = null, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
+        public static async Task<E> PostAsync<E>
+        (
+            string serviceURL,
+            object content,
+            string contentType = null,
+            Func<object, string> contentSerializer = null,
+            string method = "POST",
+            IDictionary<object,string> headers = null,
+            object id = null,
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.SystemDefault,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            Action<HttpWebRequest> customizeRequest = null,
+            Func<string, E> responseParser = null,
+            Action<HttpResponseMetadata, Stream> handleResponse = null
+        )
         {
-            if (content != null)
-            {
-                return await PostAsync(serviceURL, method: "DELETE", content: content, contentType: contentType, id: id, contentSerializer: contentSerializer, headers: headers, credentials: credentials, customizeRequest: customizeRequest, returnMetadata: returnMetadata);
-            }
-            return await GetAsync(serviceURL, method: "DELETE", id: id, headers: headers, credentials: credentials, customizeRequest: customizeRequest, returnMetadata: returnMetadata);
+            var result = await PostAsync(serviceURL, content, contentType: contentType, contentSerializer: contentSerializer, method: method, headers: headers, id: id, credentials: credentials, securityProtocol: securityProtocol, certificatePath: certificatePath, certificatePfxPath: certificatePfxPath, certificatePfxPassword: certificatePfxPassword, certificateX509KeyStorageFlags: certificateX509KeyStorageFlags, customizeRequest: customizeRequest, handleResponse: handleResponse);
+            return responseParser == null
+                ? throw new ValidationException("response parser was not supplied")
+                : responseParser.Invoke(result);
         }
 
-        public static E Delete<E>(string serviceURL, object content = null, string contentType = "application/json", object id = null, object headers = null, Credential? credentials = null, bool zapBackingFields = false, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
+        public static async Task<E> PostJsonAsync<E>
+        (
+            string serviceURL,
+            object content,
+            string method = "POST",
+            IDictionary<object,string> headers = null,
+            object id = null,
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.SystemDefault,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            bool zapBackingFields = false,
+            Action<HttpWebRequest> customizeRequest = null,
+            Action<HttpResponseMetadata, Stream> handleResponse = null
+        )
         {
-            var json = Delete(serviceURL, content: content, contentType: contentType, id: id, headers: headers, credentials: credentials, customizeRequest: customizeRequest, returnMetadata: returnMetadata);
-            var e = zapBackingFields
-                ? Deserialize.Json<E>(json, preDeserializationFunc: WebServiceUtil.ZapBackingFields)
-                : Deserialize.Json<E>(json);
+            var e = await PostAsync<E>(serviceURL, content, contentType: "application/json", contentSerializer: JsonContentSerializer, method: method, headers: headers, id: id, credentials: credentials, securityProtocol: securityProtocol, certificatePath: certificatePath, certificatePfxPath: certificatePfxPath, certificatePfxPassword: certificatePfxPassword, certificateX509KeyStorageFlags: certificateX509KeyStorageFlags, customizeRequest: customizeRequest, responseParser: GetJsonDeserializer<E>(zapBackingFields), handleResponse: handleResponse);
             return e;
         }
 
-        public static async Task<E> DeleteJsonAsync<E>(string serviceURL, object content = null, string contentType = "application/json", object id = null, object headers = null, Credential ? credentials = null, bool zapBackingFields = false, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
+        public static string Put
+        (
+            string serviceURL, 
+            object content, 
+            string contentType = null, 
+            Func<object, string> contentSerializer = null, 
+            IDictionary<object,string> headers = null, 
+            object id = null, 
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.SystemDefault,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            Action<HttpWebRequest> customizeRequest = null, 
+            Action<HttpResponseMetadata, Stream> handleResponse = null
+        )
         {
-            var json = await DeleteAsync(serviceURL, content: content, contentType: contentType, id: id, headers: headers, credentials: credentials, customizeRequest: customizeRequest, returnMetadata: returnMetadata);
-            var e = zapBackingFields
-                ? Deserialize.Json<E>(json, preDeserializationFunc: WebServiceUtil.ZapBackingFields)
-                : Deserialize.Json<E>(json);
+            if (content == null) throw new ArgumentNullException(nameof(content), "cannot be null");
+            return Post(serviceURL, content, contentType: contentType, contentSerializer: contentSerializer, method: "PUT", headers: headers, id: id, credentials: credentials, securityProtocol: securityProtocol, certificatePath: certificatePath, certificatePfxPath: certificatePfxPath, certificatePfxPassword: certificatePfxPassword, certificateX509KeyStorageFlags: certificateX509KeyStorageFlags, customizeRequest: customizeRequest, handleResponse: handleResponse);
+        }
+
+        public static E Put<E>
+        (
+            string serviceURL,
+            object content,
+            string contentType = null,
+            Func<object, string> contentSerializer = null,
+            IDictionary<object,string> headers = null,
+            object id = null,
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.SystemDefault,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            Action<HttpWebRequest> customizeRequest = null,
+            Func<string, E> responseParser = null,
+            Action<HttpResponseMetadata, Stream> handleResponse = null
+        )
+        {
+            if (content == null) throw new ArgumentNullException(nameof(content), "cannot be null");
+            var e = Post<E>(serviceURL, content, contentType: contentType, contentSerializer: contentSerializer, method: "PUT", headers: headers, id: id, credentials: credentials, securityProtocol: securityProtocol, certificatePath: certificatePath, certificatePfxPath: certificatePfxPath, certificatePfxPassword: certificatePfxPassword, certificateX509KeyStorageFlags: certificateX509KeyStorageFlags, customizeRequest: customizeRequest, responseParser: responseParser, handleResponse: handleResponse);
+            return e;
+        }
+
+        public static E PutJson<E>
+        (
+            string serviceURL,
+            object content,
+            IDictionary<object,string> headers = null,
+            object id = null,
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.SystemDefault,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            bool zapBackingFields = false,
+            Action<HttpWebRequest> customizeRequest = null,
+            Action<HttpResponseMetadata, Stream> handleResponse = null
+        )
+        {
+            if (content == null) throw new ArgumentNullException(nameof(content), "cannot be null");
+            var e = PostJson<E>(serviceURL, content, method: "PUT", headers: headers, id: id, credentials: credentials, securityProtocol: securityProtocol, certificatePath: certificatePath, certificatePfxPath: certificatePfxPath, certificatePfxPassword: certificatePfxPassword, certificateX509KeyStorageFlags: certificateX509KeyStorageFlags, zapBackingFields: zapBackingFields, customizeRequest: customizeRequest, handleResponse: handleResponse);
+            return e;
+        }
+
+        public async static Task<string> PutAsync
+        (
+            string serviceURL,
+            object content,
+            string contentType = null,
+            Func<object, string> contentSerializer = null,
+            IDictionary<object,string> headers = null,
+            object id = null,
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.SystemDefault,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            Action<HttpWebRequest> customizeRequest = null,
+            Action<HttpResponseMetadata, Stream> handleResponse = null
+        )
+        {
+            if (content == null) throw new ArgumentNullException(nameof(content), "cannot be null");
+            return await PostAsync(serviceURL, content, contentType: contentType, contentSerializer: contentSerializer, method: "PUT", headers: headers, id: id, credentials: credentials, securityProtocol: securityProtocol, certificatePath: certificatePath, certificatePfxPath: certificatePfxPath, certificatePfxPassword: certificatePfxPassword, certificateX509KeyStorageFlags: certificateX509KeyStorageFlags, customizeRequest: customizeRequest, handleResponse: handleResponse);
+        }
+
+        public static async Task<E> PutAsync<E>
+        (
+            string serviceURL,
+            object content,
+            string contentType = null,
+            Func<object, string> contentSerializer = null,
+            object id = null,
+            IDictionary<object,string> headers = null,
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.SystemDefault,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            Action<HttpWebRequest> customizeRequest = null,
+            Func<string, E> responseParser = null,
+            Action<HttpResponseMetadata, Stream> handleResponse = null
+        )
+        {
+            var e = await PostAsync<E>(serviceURL, content, contentType: contentType, contentSerializer: contentSerializer, method: "PUT", headers: headers, id: id, credentials: credentials, securityProtocol: securityProtocol, certificatePath: certificatePath, certificatePfxPath: certificatePfxPath, certificatePfxPassword: certificatePfxPassword, certificateX509KeyStorageFlags: certificateX509KeyStorageFlags, customizeRequest: customizeRequest, responseParser: responseParser, handleResponse: handleResponse);
+            return e;
+        }
+
+        public static async Task<E> PutJsonAsync<E>
+        (
+            string serviceURL,
+            object content,
+            object id = null,
+            IDictionary<object,string> headers = null,
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.SystemDefault,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            bool zapBackingFields = false,
+            Action<HttpWebRequest> customizeRequest = null,
+            Action<HttpResponseMetadata, Stream> handleResponse = null
+        )
+        {
+            var e = await PostJsonAsync<E>(serviceURL, content, method: "PUT", headers: headers, id: id, credentials: credentials, securityProtocol: securityProtocol, certificatePath: certificatePath, certificatePfxPath: certificatePfxPath, certificatePfxPassword: certificatePfxPassword, certificateX509KeyStorageFlags: certificateX509KeyStorageFlags, zapBackingFields: zapBackingFields, customizeRequest: customizeRequest, handleResponse: handleResponse);
+            return e;
+        }
+
+        public static string Delete
+        (
+            string serviceURL, 
+            object content = null, 
+            string contentType = null, 
+            Func<object, string> contentSerializer = null, 
+            IDictionary<object,string> headers = null, 
+            object id = null, 
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.SystemDefault,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            Action<HttpWebRequest> customizeRequest = null, 
+            Action<HttpResponseMetadata, Stream> handleResponse = null
+        )
+        {
+            return content != null
+                ? Post(serviceURL, content, contentType: contentType, contentSerializer: contentSerializer, method: "DELETE", headers: headers, id: id, credentials: credentials, securityProtocol: securityProtocol, certificatePath: certificatePath, certificatePfxPath: certificatePfxPath, certificatePfxPassword: certificatePfxPassword, certificateX509KeyStorageFlags: certificateX509KeyStorageFlags, customizeRequest: customizeRequest, handleResponse: handleResponse)
+                : Get(serviceURL, method: "DELETE", headers: headers, id: id, credentials: credentials, securityProtocol: securityProtocol, certificatePath: certificatePath, certificatePfxPath: certificatePfxPath, certificatePfxPassword: certificatePfxPassword, certificateX509KeyStorageFlags: certificateX509KeyStorageFlags, customizeRequest: customizeRequest, handleResponse: handleResponse);
+        }
+
+        public static E Delete<E>
+        (
+            string serviceURL,
+            object content = null,
+            string contentType = "application/json",
+            Func<object, string> contentSerializer = null,
+            IDictionary<object,string> headers = null,
+            object id = null,
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.SystemDefault,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            Action<HttpWebRequest> customizeRequest = null,
+            Action<HttpResponseMetadata, Stream> handleResponse = null
+        )
+        {
+            var e = content != null
+                ? Post<E>(serviceURL, content, contentType: contentType, contentSerializer: contentSerializer, method: "DELETE", headers: headers, id: id, credentials: credentials, securityProtocol: securityProtocol, certificatePath: certificatePath, certificatePfxPath: certificatePfxPath, certificatePfxPassword: certificatePfxPassword, certificateX509KeyStorageFlags: certificateX509KeyStorageFlags, customizeRequest: customizeRequest, handleResponse: handleResponse)
+                : Get<E>(serviceURL, method: "DELETE", headers: headers, id: id, credentials: credentials, securityProtocol: securityProtocol, certificatePath: certificatePath, certificatePfxPath: certificatePfxPath, certificatePfxPassword: certificatePfxPassword, certificateX509KeyStorageFlags: certificateX509KeyStorageFlags, customizeRequest: customizeRequest, handleResponse: handleResponse);
+            return e;
+        }
+
+        public static E DeleteJson<E>
+        (
+            string serviceURL,
+            object content = null,
+            IDictionary<object,string> headers = null,
+            object id = null,
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.SystemDefault,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            bool zapBackingFields = false,
+            Action<HttpWebRequest> customizeRequest = null,
+            Action<HttpResponseMetadata, Stream> handleResponse = null
+        )
+        {
+            var e = content != null
+                ? PostJson<E>(serviceURL, content, method: "DELETE", headers: headers, id: id, credentials: credentials, securityProtocol: securityProtocol, certificatePath: certificatePath, certificatePfxPath: certificatePfxPath, certificatePfxPassword: certificatePfxPassword, certificateX509KeyStorageFlags: certificateX509KeyStorageFlags, zapBackingFields: zapBackingFields, customizeRequest: customizeRequest, handleResponse: handleResponse)
+                : GetJson<E>(serviceURL, method: "DELETE", headers: headers, id: id, credentials: credentials, securityProtocol: securityProtocol, certificatePath: certificatePath, certificatePfxPath: certificatePfxPath, certificatePfxPassword: certificatePfxPassword, certificateX509KeyStorageFlags: certificateX509KeyStorageFlags, zapBackingFields: zapBackingFields, customizeRequest: customizeRequest, handleResponse: handleResponse);
+            return e;
+        }
+
+        public static async Task<string> DeleteAsync
+        (
+            string serviceURL, 
+            object content = null, 
+            string contentType = null, 
+            Func<object, string> contentSerializer = null, 
+            IDictionary<object,string> headers = null, 
+            object id = null, 
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.SystemDefault,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            Action<HttpWebRequest> customizeRequest = null, 
+            Action<HttpResponseMetadata, Stream> handleResponse = null
+        )
+        {
+            return content != null
+                ? await PostAsync(serviceURL, content, contentType: contentType, contentSerializer: contentSerializer, method: "DELETE", headers: headers, id: id, credentials: credentials, securityProtocol: securityProtocol, certificatePath: certificatePath, certificatePfxPath: certificatePfxPath, certificatePfxPassword: certificatePfxPassword, certificateX509KeyStorageFlags: certificateX509KeyStorageFlags, customizeRequest: customizeRequest, handleResponse: handleResponse)
+                : await GetAsync(serviceURL, method: "DELETE", headers: headers, id: id, securityProtocol: securityProtocol, certificatePath: certificatePath, certificatePfxPath: certificatePfxPath, certificatePfxPassword: certificatePfxPassword, certificateX509KeyStorageFlags: certificateX509KeyStorageFlags, customizeRequest: customizeRequest, handleResponse: handleResponse);
+        }
+
+        public static async Task<E> DeleteAsync<E>
+        (
+            string serviceURL,
+            object content = null,
+            string contentType = null,
+            Func<object, string> contentSerializer = null,
+            IDictionary<object,string> headers = null,
+            object id = null,
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.SystemDefault,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            Action<HttpWebRequest> customizeRequest = null,
+            Action<HttpResponseMetadata, Stream> handleResponse = null
+        )
+        {
+            var e = content != null
+                ? await PostAsync<E>(serviceURL, content, contentType: contentType, contentSerializer: contentSerializer, method: "DELETE", headers: headers, id: id, credentials: credentials, securityProtocol: securityProtocol, certificatePath: certificatePath, certificatePfxPath: certificatePfxPath, certificatePfxPassword: certificatePfxPassword, certificateX509KeyStorageFlags: certificateX509KeyStorageFlags, customizeRequest: customizeRequest, handleResponse: handleResponse)
+                : await GetAsync<E>(serviceURL, method: "DELETE", headers: headers, id: id, credentials: credentials, securityProtocol: securityProtocol, certificatePath: certificatePath, certificatePfxPath: certificatePfxPath, certificatePfxPassword: certificatePfxPassword, certificateX509KeyStorageFlags: certificateX509KeyStorageFlags, customizeRequest: customizeRequest, handleResponse: handleResponse);
+            return e;
+        }
+
+        public static async Task<E> DeleteJsonAsync<E>
+        (
+            string serviceURL,
+            object content = null,
+            IDictionary<object,string> headers = null,
+            object id = null,
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.SystemDefault,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            bool zapBackingFields = false,
+            Action<HttpWebRequest> customizeRequest = null,
+            Action<HttpResponseMetadata, Stream> handleResponse = null
+        )
+        {
+            var e = content != null
+                ? await PostJsonAsync<E>(serviceURL, content, method: "DELETE", headers: headers, id: id, credentials: credentials, securityProtocol: securityProtocol, certificatePath: certificatePath, certificatePfxPath: certificatePfxPath, certificatePfxPassword: certificatePfxPassword, certificateX509KeyStorageFlags: certificateX509KeyStorageFlags, zapBackingFields: zapBackingFields, customizeRequest: customizeRequest, handleResponse: handleResponse)
+                : await GetJsonAsync<E>(serviceURL, method: "DELETE", headers: headers, id: id, securityProtocol: securityProtocol, certificatePath: certificatePath, certificatePfxPath: certificatePfxPath, certificatePfxPassword: certificatePfxPassword, certificateX509KeyStorageFlags: certificateX509KeyStorageFlags, zapBackingFields: zapBackingFields, customizeRequest: customizeRequest, handleResponse: handleResponse);
             return e;
         }
 
@@ -318,40 +675,49 @@ namespace Horseshoe.NET.IO.Http
             return serviceURL;
         }
 
-        internal static void ProcessHeaders(HttpWebRequest request, object headers)
+        internal static void ProcessHeaders(HttpWebRequest request, IDictionary<object,string> headers)
         {
             if (headers == null) return;
-            if (headers is IDictionary<HttpRequestHeader, string> httpHeaders)
+            foreach (object key in headers.Keys)
             {
-                foreach (var kvp in httpHeaders)
+                if (key is string stringKey)
                 {
-                    request.Headers.Add(kvp.Key, kvp.Value);
+                    request.Headers.Add(stringKey, headers[key]);
+                }
+                else if (key is HttpRequestHeader requestHeaderKey)
+                {
+                    request.Headers.Add(requestHeaderKey, headers[key]);
+                }
+                else if (key is HttpResponseHeader responseHeaderKey)
+                {
+                    request.Headers.Add(responseHeaderKey, headers[key]);
+                }
+                else
+                {
+                    request.Headers.Add(key.ToString(), headers[key]);
                 }
             }
-            else if (headers is IDictionary<HttpRequestHeader, string[]> httpMHeaders)
+        }
+
+        internal static void ProcessContent(HttpWebRequest request, object content, Func<object, string> contentSerializer)
+        {
+            if (content != null)
             {
-                foreach (var kvp in httpMHeaders)
+                string _content;
+                if (contentSerializer != null)
                 {
-                    request.Headers.Add(kvp.Key, string.Join(",", kvp.Value));
+                    _content = contentSerializer.Invoke(content);
                 }
-            }
-            else if (headers is IDictionary<string, string> stringHeaders)
-            {
-                foreach (var kvp in stringHeaders)
+                else
                 {
-                    request.Headers.Add(kvp.Key, kvp.Value);
+                    _content = content.ToString();
                 }
-            }
-            else if (headers is IDictionary<string, string[]> stringMHeaders)
-            {
-                foreach (var kvp in stringMHeaders)
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
                 {
-                    request.Headers.Add(kvp.Key, string.Join(",", kvp.Value));
+                    streamWriter.Write(_content);
+                    streamWriter.Flush();
+                    streamWriter.Close();
                 }
-            }
-            else
-            {
-                throw new ArgumentException("headers - unsupported type: " + headers.GetType().FullName + "(try one of these: IDictionary<HttpRequestHeader, string> IDictionary<HttpRequestHeader, string[]>, IDictionary<string, string>, IDictionary<string, string[]>)");
             }
         }
 
@@ -386,5 +752,33 @@ namespace Horseshoe.NET.IO.Http
                 }
             }
         }
+
+        internal static void ProcessCertificates(HttpWebRequest request, string certificatePath, string certificatePfxPath, string certificatePfxPassword, X509KeyStorageFlags? certificateX509KeyStorageFlags)
+        {
+            if (certificatePath == null && certificatePfxPath == null) return;
+            var certificates = new X509Certificate2Collection();
+            if (certificatePath != null)
+            {
+                if (certificatePfxPath != null) throw new ValidationException("Please supply only a certificate or pfx, not both");
+                certificates.Import(certificatePath);
+            }
+            else if (certificatePfxPath != null)
+            {
+                if (certificatePfxPassword == null) throw new ValidationException("Please supply the pfx password");
+                certificates.Import(certificatePfxPath, certificatePfxPassword, certificateX509KeyStorageFlags ?? X509KeyStorageFlags.DefaultKeySet);
+            }
+            request.ClientCertificates = certificates;
+        }
+
+        private static Func<string, E> GetJsonDeserializer<E>(bool zapBackingFields)
+        {
+            if (zapBackingFields)
+            {
+                return (json) => Deserialize.Json<E>(json, preDeserializationFunc: WebServiceUtil.ZapBackingFields);
+            }
+            return (json) => Deserialize.Json<E>(json);
+        }
+
+        private static Func<object, string> JsonContentSerializer => (obj) => Serialize.Json(obj);
     }
 }

@@ -3,23 +3,76 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
-
-using Horseshoe.NET.IO.Http.Extensions;
-using Horseshoe.NET.Text;
 
 namespace Horseshoe.NET.IO.Http
 {
     public static class WebDocument
     {
-        public static byte[] GetBytes(string documentURL, string method = "GET", object id = null, object headers = null, Credential? credentials = null, SecurityProtocolType? securityProtocol = null, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
+        public static Stream GetStream
+        (
+            string documentURL,
+            IDictionary<object, string> headers = null,
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            Action<HttpWebRequest> customizeRequest = null
+        )
         {
+            Stream stream = null;
+            WebService.Get
+            (
+                documentURL,
+                method: "GET",
+                headers: headers,
+                id: null,
+                credentials: credentials,
+                securityProtocol: securityProtocol,
+                certificatePath: certificatePath,
+                certificatePfxPath: certificatePfxPath,
+                certificatePfxPassword: certificatePfxPassword,
+                certificateX509KeyStorageFlags: certificateX509KeyStorageFlags,
+                customizeRequest: customizeRequest,
+                handleResponse: (metadata, _stream) => { stream = _stream; metadata.KeepStreamOpen = true; }
+            );
+            return stream;
+        }
+
+        public static byte[] GetBytes
+        (
+            string documentURL,
+            IDictionary<object, string> headers = null,
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            Action<HttpWebRequest> customizeRequest = null
+        )
+        {
+            Stream stream = GetStream
+            (
+                documentURL,
+                headers: headers,
+                credentials: credentials,
+                securityProtocol: securityProtocol,
+                certificatePath: certificatePath,
+                certificatePfxPath: certificatePfxPath,
+                certificatePfxPassword: certificatePfxPassword,
+                certificateX509KeyStorageFlags: certificateX509KeyStorageFlags,
+                customizeRequest: customizeRequest
+            );
             var bytes = new List<byte>();
-            var buf = new byte[1024];
-            using (var stream = GetStream(documentURL, method: method, id: id, headers: headers, credentials: credentials, returnMetadata: returnMetadata))
+            var buf = new byte[10240];
+            using (stream)
             {
-                while(true)
+                while (true)
                 {
                     var result = stream.Read(buf, 0, buf.Length);
                     if (result == buf.Length)
@@ -28,7 +81,7 @@ namespace Horseshoe.NET.IO.Http
                     }
                     else if (result > 0)
                     {
-                        var minibuf = new byte[0];
+                        var minibuf = Array.Empty<byte>();
                         Array.Copy(buf, minibuf, result);
                         bytes.AddRange(minibuf);
                     }
@@ -38,129 +91,221 @@ namespace Horseshoe.NET.IO.Http
             return bytes.ToArray();
         }
 
-        public static Stream GetStream(string documentURL, string method = "GET", object id = null, object headers = null, Credential? credentials = null, SecurityProtocolType? securityProtocol = null, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
+        public static bool Download
+        (
+            string documentURL,
+            string filePath,
+            IDictionary<object, string> headers = null,
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            Action<HttpWebRequest> customizeRequest = null
+        )
         {
-            documentURL = GetFinalURL(documentURL, id);
-            var _securityProtocol = ServicePointManager.SecurityProtocol;
-            if (documentURL.ToLower().StartsWith("https://"))
-            {
-                ServicePointManager.SecurityProtocol = securityProtocol ?? (SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12);
-            }
-            var request = (HttpWebRequest)WebRequest.Create(documentURL);
-            ServicePointManager.SecurityProtocol = _securityProtocol;
-            request.Method = method;
-            WebService.ProcessHeaders(request, headers);
-            WebService.ProcessCredentials(request, credentials);
-            customizeRequest?.Invoke(request);
-
-            var response = (HttpWebResponse)request.GetResponse();
-            returnMetadata?.Invoke
+            Stream stream = GetStream
             (
-                new HttpResponseMetadata
-                {
-                    StatusCode = (int)response.StatusCode,
-                    Headers = response.Headers.ToOwinDictionary(),
-                    Body = null
-                }
+                documentURL,
+                headers: headers,
+                credentials: credentials,
+                securityProtocol: securityProtocol,
+                certificatePath: certificatePath,
+                certificatePfxPath: certificatePfxPath,
+                certificatePfxPassword: certificatePfxPassword,
+                certificateX509KeyStorageFlags: certificateX509KeyStorageFlags,
+                customizeRequest: customizeRequest
             );
-            return response.GetResponseStream();
-        }
-
-        public static string Get(string documentURL, string method = "GET", object id = null, object headers = null, Credential? credentials = null, SecurityProtocolType? securityProtocol = null, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
-        {
-            documentURL = GetFinalURL(documentURL, id);
-            var _securityProtocol = ServicePointManager.SecurityProtocol;
-            if (documentURL.ToLower().StartsWith("https://"))
+            using (var writer = new FileStream(filePath, FileMode.Create))
             {
-                ServicePointManager.SecurityProtocol = securityProtocol ?? (SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12);
-            }
-            var request = (HttpWebRequest)WebRequest.Create(documentURL);
-            ServicePointManager.SecurityProtocol = _securityProtocol;
-            request.Method = method;
-            WebService.ProcessHeaders(request, headers);
-            WebService.ProcessCredentials(request, credentials);
-            customizeRequest?.Invoke(request);
-
-            var response = (HttpWebResponse)request.GetResponse();
-            string rawResponse;
-            using (var reader = new StreamReader(response.GetResponseStream()))
-            {
-                rawResponse = reader.ReadToEnd();
-                returnMetadata?.Invoke
-                (
-                    new HttpResponseMetadata
-                    {
-                        StatusCode = (int)response.StatusCode,
-                        Headers = response.Headers.ToOwinDictionary(),
-                        Body = rawResponse
-                    }
-                );
-            }
-            return rawResponse;
-        }
-
-        public static async Task<string> GetAsync(string documentURL, string method = "GET", object id = null, object headers = null, Credential? credentials = null, SecurityProtocolType? securityProtocol = null, Action<HttpWebRequest> customizeRequest = null, Action<HttpResponseMetadata> returnMetadata = null)
-        {
-            documentURL = GetFinalURL(documentURL, id);
-            var _securityProtocol = ServicePointManager.SecurityProtocol;
-            if (documentURL.ToLower().StartsWith("https://"))
-            {
-                ServicePointManager.SecurityProtocol = securityProtocol ?? (SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12);
-            }
-            var request = (HttpWebRequest)WebRequest.Create(documentURL);
-            ServicePointManager.SecurityProtocol = _securityProtocol;
-            request.Method = method;
-            WebService.ProcessHeaders(request, headers);
-            WebService.ProcessCredentials(request, credentials);
-            customizeRequest?.Invoke(request);
-
-            var response = await request.GetResponseAsync() as HttpWebResponse;
-            string rawResponse;
-            using (var reader = new StreamReader(response.GetResponseStream()))
-            {
-                rawResponse = reader.ReadToEnd();
-                returnMetadata?.Invoke
-                (
-                    new HttpResponseMetadata
-                    {
-                        StatusCode = (int)response.StatusCode,
-                        Headers = response.Headers.ToOwinDictionary(),
-                        Body = rawResponse
-                    }
-                );
-            }
-            return rawResponse;
-        }
-
-        public static E Get<E>(string documentURL, string method = "GET", object id = null, object headers = null, Credential? credentials = null, SecurityProtocolType? securityProtocol = null, Action<HttpWebRequest> customizeRequest = null, bool zapBackingFields = false, Action<HttpResponseMetadata> returnMetadata = null)
-        {
-            var json = Get(documentURL, method: method, id: id, headers: headers, credentials: credentials, returnMetadata: returnMetadata);
-            var e = zapBackingFields
-                ? Deserialize.Json<E>(json, preDeserializationFunc: WebServiceUtil.ZapBackingFields)
-                : Deserialize.Json<E>(json);
-            return e;
-        }
-
-        public static async Task<E> GetAsync<E>(string documentURL, string method = "GET", object id = null, object headers = null, Credential? credentials = null, SecurityProtocolType? securityProtocol = null, Action<HttpWebRequest> customizeRequest = null, bool zapBackingFields = false, Action<HttpResponseMetadata> returnMetadata = null)
-        {
-            var json = await GetAsync(documentURL, method: method, id: id, headers: headers, credentials: credentials, returnMetadata: returnMetadata);
-            var e = zapBackingFields
-                ? Deserialize.Json<E>(json, preDeserializationFunc: WebServiceUtil.ZapBackingFields)
-                : Deserialize.Json<E>(json);
-            return e;
-        }
-
-        static string GetFinalURL(string documentURL, object id)
-        {
-            if (id != null)
-            {
-                if (!documentURL.EndsWith("/"))
+                using (stream)
                 {
-                    documentURL += "/";
+                    stream.CopyTo(writer, 10240);
                 }
-                documentURL += id;
             }
-            return documentURL;
+            return true;
+        }
+
+        public static string GetText
+        (
+            string documentURL,
+            IDictionary<object, string> headers = null,
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            Action<HttpWebRequest> customizeRequest = null,
+            Action<HttpResponseMetadata, Stream> handleResponse = null
+        )
+        {
+            var text = WebService.Get
+            (
+                documentURL,
+                method: "GET",
+                headers: headers,
+                id: null,
+                credentials: credentials,
+                securityProtocol: securityProtocol,
+                certificatePath: certificatePath,
+                certificatePfxPath: certificatePfxPath,
+                certificatePfxPassword: certificatePfxPassword,
+                certificateX509KeyStorageFlags: certificateX509KeyStorageFlags,
+                customizeRequest: customizeRequest,
+                handleResponse: handleResponse
+            );
+            return text;
+        }
+
+        public static async Task<Stream> GetStreamAsync
+        (
+            string documentURL,
+            IDictionary<object, string> headers = null,
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            Action<HttpWebRequest> customizeRequest = null
+        )
+        {
+            Stream stream = null;
+            await WebService.GetAsync
+            (
+                documentURL,
+                method: "GET",
+                headers: headers,
+                id: null,
+                credentials: credentials,
+                securityProtocol: securityProtocol,
+                certificatePath: certificatePath,
+                certificatePfxPath: certificatePfxPath,
+                certificatePfxPassword: certificatePfxPassword,
+                certificateX509KeyStorageFlags: certificateX509KeyStorageFlags,
+                customizeRequest: customizeRequest,
+                handleResponse: (metadata, _stream) => { stream = _stream; metadata.KeepStreamOpen = true; }
+            );
+            return stream;
+        }
+
+
+        public static async Task<byte[]> GetBytesAsync
+        (
+            string documentURL,
+            IDictionary<object, string> headers = null,
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            Action<HttpWebRequest> customizeRequest = null
+        )
+        {
+            Stream stream = await GetStreamAsync
+            (
+                documentURL,
+                headers: headers,
+                credentials: credentials,
+                securityProtocol: securityProtocol,
+                certificatePath: certificatePath,
+                certificatePfxPath: certificatePfxPath,
+                certificatePfxPassword: certificatePfxPassword,
+                certificateX509KeyStorageFlags: certificateX509KeyStorageFlags,
+                customizeRequest: customizeRequest
+            );
+            var bytes = new List<byte>();
+            var buf = new byte[10240];
+            using (stream)
+            {
+                while (true)
+                {
+                    var result = stream.Read(buf, 0, buf.Length);
+                    if (result == buf.Length)
+                    {
+                        bytes.AddRange(buf);
+                    }
+                    else if (result > 0)
+                    {
+                        var minibuf = Array.Empty<byte>();
+                        Array.Copy(buf, minibuf, result);
+                        bytes.AddRange(minibuf);
+                    }
+                    else break;
+                }
+            }
+            return bytes.ToArray();
+        }
+
+        public static async Task<bool> DownloadAsync
+        (
+            string documentURL,
+            string filePath,
+            IDictionary<object, string> headers = null,
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            Action<HttpWebRequest> customizeRequest = null
+        )
+        {
+            Stream stream = await GetStreamAsync
+            (
+                documentURL,
+                headers: headers,
+                credentials: credentials,
+                securityProtocol: securityProtocol,
+                certificatePath: certificatePath,
+                certificatePfxPath: certificatePfxPath,
+                certificatePfxPassword: certificatePfxPassword,
+                certificateX509KeyStorageFlags: certificateX509KeyStorageFlags,
+                customizeRequest: customizeRequest
+            );
+            using (var writer = new FileStream(filePath, FileMode.Create))
+            {
+                using (stream)
+                {
+                    await stream.CopyToAsync(writer, 10240);
+                }
+            }
+            return true;
+        }
+
+        public static async Task<string> GetTextAsync
+        (
+            string documentURL,
+            IDictionary<object, string> headers = null,
+            Credential? credentials = null,
+            SecurityProtocolType securityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12,
+            string certificatePath = null,
+            string certificatePfxPath = null,
+            string certificatePfxPassword = null,
+            X509KeyStorageFlags? certificateX509KeyStorageFlags = null,
+            Action<HttpWebRequest> customizeRequest = null,
+            Action<HttpResponseMetadata, Stream> handleResponse = null
+        )
+        {
+            var text = await WebService.GetAsync
+            (
+                documentURL,
+                method: "GET",
+                headers: headers,
+                id: null,
+                credentials: credentials,
+                securityProtocol: securityProtocol,
+                certificatePath: certificatePath,
+                certificatePfxPath: certificatePfxPath,
+                certificatePfxPassword: certificatePfxPassword,
+                certificateX509KeyStorageFlags: certificateX509KeyStorageFlags,
+                customizeRequest: customizeRequest,
+                handleResponse: handleResponse
+            );
+            return text;
         }
     }
 }
