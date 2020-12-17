@@ -11,7 +11,6 @@ using Horseshoe.NET.IO.Ftp;
 using Horseshoe.NET.IO.ReportingServices;
 using Horseshoe.NET.IO.Http;
 using Horseshoe.NET.SecureIO.Sftp;
-using Horseshoe.NET.IO.Http.Enums;
 using Horseshoe.NET.Text.Extensions;
 using Horseshoe.NET.Text;
 
@@ -270,8 +269,8 @@ namespace TestConsole
                         var apiResponse = WebService.Get
                         (
                             "https://jsonplaceholder.typicode.com/todos/1",
-                            proxyAddress: "http://proxypool:9119",
-                            proxyCredentials: new Horseshoe.NET.Credential("E029791", "go-LDS-12igletSTEW")
+                            proxyAddress: "http://proxy:80",
+                            proxyCredentials: new Horseshoe.NET.Credential("me", "mypass")
                         );
                         Console.WriteLine("Response: " + apiResponse);
                     }
