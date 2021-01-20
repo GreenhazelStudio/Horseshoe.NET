@@ -5,7 +5,7 @@
     <RootNamespace>Horseshoe.NET.ActiveDirectory</RootNamespace>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>assembly-signing-key.snk</AssemblyOriginatorKeyFile>
-    <Version>1.1.1</Version>
+    <Version>1.1.3</Version>
     <Authors>Carl Thomas</Authors>
     <Company>Greenhazel Studio</Company>
     <Description>Services for Active Directory authentication and LDAP querying</Description>

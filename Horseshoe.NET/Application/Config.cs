@@ -46,22 +46,14 @@ namespace Horseshoe.NET.Application
 
         public static byte? GetNByte(string key, bool required = false, NumberStyles? numberStyles = null, IFormatProvider provider = null)
         {
-            var value = Get(key);
-            if (value != null)
+            if (Get(key, required: required) is string stringValue)
             {
-                return Zap.NByte(value, numberStyles: numberStyles, provider: provider);
-            }
-            if (!numberStyles.HasValue && provider == null)
-            {
-                value = Get(key + "[hex]");
-                if (value != null)
+                if (stringValue.EndsWith("[hex]"))
                 {
-                    return Zap.NByte(value, numberStyles: NumberStyles.HexNumber);
+                    stringValue = stringValue.Substring(0, stringValue.Length - 5);
+                    numberStyles = numberStyles ?? NumberStyles.HexNumber;
                 }
-            }
-            if (required)
-            {
-                throw new ConfigurationException("Required configuration not found: " + key);
+                return Zap.NByte(stringValue, numberStyles: numberStyles, provider: provider);
             }
             return null;
         }
@@ -80,22 +72,14 @@ namespace Horseshoe.NET.Application
 
         public static int? GetNInt(string key, bool required = false, NumberStyles? numberStyles = null, IFormatProvider provider = null)
         {
-            var value = Get(key);
-            if (value != null)
+            if (Get(key, required: required) is string stringValue)
             {
-                return Zap.NInt(value, numberStyles: numberStyles, provider: provider);
-            }
-            if (!numberStyles.HasValue && provider == null)
-            {
-                value = Get(key + "[hex]");
-                if (value != null)
+                if (stringValue.EndsWith("[hex]"))
                 {
-                    return Zap.NInt(value, numberStyles: NumberStyles.HexNumber);
+                    stringValue = stringValue.Substring(0, stringValue.Length - 5);
+                    numberStyles = numberStyles ?? NumberStyles.HexNumber;
                 }
-            }
-            if (required)
-            {
-                throw new ConfigurationException("Required configuration not found: " + key);
+                return Zap.NInt(stringValue, numberStyles: numberStyles, provider: provider);
             }
             return null;
         }
@@ -122,6 +106,20 @@ namespace Horseshoe.NET.Application
         {
             var value = Get(key, required: required);
             return Zap.NEnum<T>(value, ignoreCase: ignoreCase, suppressErrors: suppressErrors);
+        }
+
+        public static T GetSection<T>(string path, bool required = false) where T : ConfigurationSection
+        {
+            var collection = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None).GetSection(path) as T;
+            if (collection == null)
+            {
+                if (required)
+                {
+                    throw new ConfigurationException("Required configuration section not found: " + path);
+                }
+                return null;
+            }
+            return collection;
         }
 
         public static string GetConnectionString(string name, bool required = false)
