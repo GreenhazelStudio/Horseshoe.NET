@@ -9,11 +9,11 @@
     <Authors>Carl Thomas</Authors>
     <Company>Greenhazel Studio</Company>
     <Description>An Excel file import utility for .NET (uses NPOI)</Description>
-    <Copyright>Copyright © 2020 Greenhazel Studio</Copyright>
+    <Copyright>Copyright © 2021 Greenhazel Studio</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NPOI" Version="2.5.1" />
+    <PackageReference Include="NPOI" Version="2.5.2" />
   </ItemGroup>
 
   <ItemGroup>

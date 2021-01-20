@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Greenhazel Studio")]
 [assembly: AssemblyProduct("Horseshoe.NET.SecureIO")]
-[assembly: AssemblyCopyright("Copyright © 2020 Greenhazel Studio")]
+[assembly: AssemblyCopyright("Copyright © 2021 Greenhazel Studio")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

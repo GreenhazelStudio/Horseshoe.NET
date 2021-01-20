@@ -9,7 +9,7 @@
     <Authors>Carl Thomas</Authors>
     <Company>Greenhazel Studio</Company>
     <Description>A typesafe, object-oriented ADO.NET-based ODBC data access utility</Description>
-    <Copyright>Copyright © 2020 Greenhazel Studio</Copyright>
+    <Copyright>Copyright © 2021 Greenhazel Studio</Copyright>
   </PropertyGroup>
 
   <ItemGroup>

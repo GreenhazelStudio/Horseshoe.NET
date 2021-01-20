@@ -9,11 +9,11 @@
     <Authors>Carl Thomas</Authors>
     <Company>Greenhazel Studio</Company>
     <Description>A typesafe, object-oriented ADO.NET-based native Oracle data access utility</Description>
-    <Copyright>Copyright © 2020 Greenhazel Studio</Copyright>
+    <Copyright>Copyright © 2021 Greenhazel Studio</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="2.19.90" />
+    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="2.19.101" />
   </ItemGroup>
 
   <ItemGroup>

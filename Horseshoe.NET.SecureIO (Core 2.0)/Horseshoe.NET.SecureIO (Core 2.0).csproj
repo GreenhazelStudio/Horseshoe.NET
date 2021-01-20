@@ -9,7 +9,7 @@
     <Authors>Carl Thomas</Authors>
     <Company>Greenhazel Studio</Company>
     <Description>Adds SFTP to the Horseshoe.NET suite (uses SSH.NET)</Description>
-    <Copyright>Copyright © 2020 Greenhazel Studio</Copyright>
+    <Copyright>Copyright © 2021 Greenhazel Studio</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
