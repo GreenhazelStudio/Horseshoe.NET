@@ -7,6 +7,8 @@ using System.Runtime.Versioning;
 using System.Text;
 using System.Threading.Tasks;
 
+using Microsoft.Extensions.Configuration;
+
 using Horseshoe.NET;
 using Horseshoe.NET.ConsoleX;
 using Horseshoe.NET.Objects;
@@ -30,6 +32,10 @@ namespace TestConsole
 
         static void Main(string[] args)
         {
+            var root = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();
+            Horseshoe.NET.Application.Config.LoadConfigurationService(root);
             StartConsoleApp<Program>();
         }
     }

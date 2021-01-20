@@ -21,7 +21,7 @@ namespace Horseshoe.NET.Text
             {
                 if (!_jsonProvider.HasValue)
                 {
-                    _jsonProvider = Config.GetNEnum<JsonProvider>("Horseshoe.NET:Text.JsonProvider", doNotRequireConfiguration: true)
+                    _jsonProvider = Config.GetNEnum<JsonProvider>("Horseshoe.NET:Text.JsonProvider", suppressErrorIfConfigurationServiceNotLoaded: true)
                         ?? OrganizationalDefaultSettings.GetNullable<JsonProvider>("Text.JsonProvider")
                         ?? (IsLoadable("Newtonsoft.Json") ? JsonProvider.NewtonsoftJson as JsonProvider? : null)
                         ?? (IsLoadable("System.Text.Json") ? JsonProvider.SystemTextJson as JsonProvider? : null)

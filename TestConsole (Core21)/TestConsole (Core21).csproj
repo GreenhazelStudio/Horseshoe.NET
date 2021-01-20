@@ -7,6 +7,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Horseshoe.NET (Core 2.0)\Horseshoe.NET (Core 2.0).csproj" />
     <ProjectReference Include="..\Horseshoe.NET.ActiveDirectory (Core 2.0)\Horseshoe.NET.ActiveDirectory (Core 2.0).csproj" />
     <ProjectReference Include="..\Horseshoe.NET.Excel (Core 2.0)\Horseshoe.NET.Excel (Core 2.0).csproj" />

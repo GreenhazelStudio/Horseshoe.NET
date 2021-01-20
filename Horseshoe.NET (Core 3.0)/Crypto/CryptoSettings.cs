@@ -22,14 +22,14 @@ namespace Horseshoe.NET.Crypto
                 {
                     _defaultSymmetricAlgorithm = CryptoUtil.BuildSymmetricAlgorithm
                     (
-                        Config.Get<SymmetricAlgorithm>("Horseshoe.NET:Crypto.SymmetricAlgorithm", doNotRequireConfiguration: true),   // e.g. "System.Security.Cryptography.AesCryptoServiceProvider"
-                        Config.GetBytes("Horseshoe.NET:Crypto.SymmetricKey", encoding: DefaultEncoding, doNotRequireConfiguration: true),
+                        Config.Get<SymmetricAlgorithm>("Horseshoe.NET:Crypto.SymmetricAlgorithm", suppressErrorIfConfigurationServiceNotLoaded: true),   // e.g. "System.Security.Cryptography.AesCryptoServiceProvider"
+                        Config.GetBytes("Horseshoe.NET:Crypto.SymmetricKey", encoding: DefaultEncoding, suppressErrorIfConfigurationServiceNotLoaded: true),
                         false,
-                        Config.GetBytes("Horseshoe.NET:Crypto.SymmetricIV", encoding: DefaultEncoding, doNotRequireConfiguration: true),
+                        Config.GetBytes("Horseshoe.NET:Crypto.SymmetricIV", encoding: DefaultEncoding, suppressErrorIfConfigurationServiceNotLoaded: true),
                         true,
-                        Config.GetNInt("Horseshoe.NET:Crypto.SymmetricBlockSize", doNotRequireConfiguration: true),
-                        Config.GetNEnum<CipherMode>("Horseshoe.NET:Crypto.SymmetricCipherMode", doNotRequireConfiguration: true),
-                        Config.GetNEnum<PaddingMode>("Horseshoe.NET:Crypto.SymmetricPadding", doNotRequireConfiguration: true)
+                        Config.GetNInt("Horseshoe.NET:Crypto.SymmetricBlockSize", suppressErrorIfConfigurationServiceNotLoaded: true),
+                        Config.GetNEnum<CipherMode>("Horseshoe.NET:Crypto.SymmetricCipherMode", suppressErrorIfConfigurationServiceNotLoaded: true),
+                        Config.GetNEnum<PaddingMode>("Horseshoe.NET:Crypto.SymmetricPadding", suppressErrorIfConfigurationServiceNotLoaded: true)
                     )
                     ?? OrganizationalDefaultSettings.Get<SymmetricAlgorithm>("Crypto.SymmetricAlgorithm")
                     ?? CryptoUtil.BuildSymmetricAlgorithm(new RijndaelManaged(), DefaultEncoding.GetBytes("k+ (&tw!tBv~$6u7"), false, null, true, null, null, null);
@@ -52,7 +52,7 @@ namespace Horseshoe.NET.Crypto
             get
             {
                 return _defaultHashAlgorithm  // example "System.Security.Cryptography.SHA256CryptoServiceProvider"
-                    ?? Config.Get<HashAlgorithm>("Horseshoe.NET:Crypto.HashAlgorithm", doNotRequireConfiguration: true)
+                    ?? Config.Get<HashAlgorithm>("Horseshoe.NET:Crypto.HashAlgorithm", suppressErrorIfConfigurationServiceNotLoaded: true)
                     ?? OrganizationalDefaultSettings.Get<HashAlgorithm>("Crypto.HashAlgorithm")
                     ?? new SHA1CryptoServiceProvider();
             }
@@ -72,7 +72,7 @@ namespace Horseshoe.NET.Crypto
             get
             {
                 return _defaultHashSalt
-                    ?? Config.GetNByte("Horseshoe.NET:Crypto.HashSalt", doNotRequireConfiguration: true)    // example: 240 or HashSalt[hex] F0
+                    ?? Config.GetNByte("Horseshoe.NET:Crypto.HashSalt", suppressErrorIfConfigurationServiceNotLoaded: true)    // example: 240 or HashSalt[hex] F0
                     ?? OrganizationalDefaultSettings.GetNByte("Crypto.HashSalt");
             }
             set
@@ -91,7 +91,7 @@ namespace Horseshoe.NET.Crypto
             get
             {
                 return _defaultEncoding
-                    ?? ObjectUtil.GetInstance<Encoding>(Config.Get("Horseshoe.NET:Crypto.Encoding", doNotRequireConfiguration: true), suppressErrors: true)   // example: "System.Text.UTF8Encoding"
+                    ?? ObjectUtil.GetInstance<Encoding>(Config.Get("Horseshoe.NET:Crypto.Encoding", suppressErrorIfConfigurationServiceNotLoaded: true), suppressErrors: true)   // example: "System.Text.UTF8Encoding"
                     ?? OrganizationalDefaultSettings.Get<Encoding>("Crypto.Encoding")
                     ?? Encoding.Default;
             }
